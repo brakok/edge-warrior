@@ -1,0 +1,18 @@
+{
+	"name": "Edge Warrior",
+	"version": "0.0.0.2",
+	"manifest_version" : 2,
+	"description": "A competitive game based on players crushing others by dropping blocks on their head. The goal is to climb to the 'Winner Star'.",
+	"icons": {
+				"128" : "assets/icons/128.png" 
+	},
+	"app": {	
+		"background": {
+			"scripts": ["source/launcher.js"],
+			"persistent" : false
+		}
+	},	
+	"offline_enabled": false,
+	"permissions": ["unlimitedStorage"]
+	
+}
