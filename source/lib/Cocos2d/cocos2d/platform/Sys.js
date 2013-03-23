@@ -27,7 +27,7 @@ var sys = sys || {};
 
 /** LocalStorage is a local storage component.
 */
-sys.localStorage = window.localStorage;
+sys.localStorage = chrome.storage.local;
 
 
 /** Capabilities

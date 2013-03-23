@@ -8,11 +8,11 @@
 	},
 	"app": {	
 		"background": {
-			"scripts": ["background.js"],
+			"scripts": ["launcher.js"],
 			"persistent" : false
 		}
 	},	
 	"offline_enabled": false,
-	"permissions": ["unlimitedStorage"]
+	"permissions": ["storage","unlimitedStorage"]
 	
 }
