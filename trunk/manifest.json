@@ -8,7 +8,7 @@
 	},
 	"app": {	
 		"background": {
-			"scripts": ["source/launcher.js"],
+			"scripts": ["background.js"],
 			"persistent" : false
 		}
 	},	
