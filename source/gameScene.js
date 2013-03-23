@@ -4,7 +4,7 @@ var Game = cc.Layer.extend({
 		this._super();
 		
 		var s = cc.Director.getInstance().getWinSize();
-		var playGroundLayer = cc.LayerColor.create(new cc.Color4B(255, 255, 0, 255), s.width, s.height);
+		var playGroundLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 255), s.width, s.height);
 		playGroundLayer.setAnchorPoint(new cc.Point(0.5,0.5));
 		
 		var helloLabel = cc.LabelTTF.create('Hello world!', 'Arial', 30);
@@ -25,6 +25,9 @@ var Game = cc.Layer.extend({
 				scale = 1;
 		});
 		
+		var block = new Block(100, 100, 'red');
+		
+		playGroundLayer.addChild(block.sprite);
 		playGroundLayer.addChild(helloLabel);
 		this.addChild(playGroundLayer);
 		

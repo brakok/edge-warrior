@@ -21,7 +21,7 @@ var cocosApp = cc.Application.extend({
 		cc.COCOS2D_DEBUG = this.config['COCOS2D_DEBUG'];
 		cc.setup(this.config['tag']);
 		cc.Loader.getInstance().onloading = function () {
-			cc.Loader.shareLoaderScene().draw();
+			cc.LoaderScene.getInstance().draw();
 		};
 		cc.Loader.getInstance().onload = function (){
 			cc.AppController.shareAppController().didFinishLaunchingWithOptions();

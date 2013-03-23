@@ -11,7 +11,8 @@
 		engineDir:'source/lib/Cocos2d/cocos2d/',
 		appFiles:['source/block.js',
 				  'source/player.js',
-				  'source/gameScene.js']
+				  'source/gameScene.js',
+				  'source/world.js']
 	};
 	
 	//Add event that load everything needed by Cocos2d.
