@@ -26,7 +26,7 @@ var cocosApp = cc.Application.extend({
 		cc.Loader.getInstance().onload = function (){
 			cc.AppController.shareAppController().didFinishLaunchingWithOptions();
 		};
-		cc.Loader.getInstance().preload([]);
+		cc.Loader.getInstance().preload(assets);
 	},
 	applicationDidFinishLaunching: function (){
 		var director = cc.Director.getInstance();
@@ -38,4 +38,5 @@ var cocosApp = cc.Application.extend({
 	}
 });
 
+//Launch the first scene.
 var myApp = new cocosApp(gameScene);
