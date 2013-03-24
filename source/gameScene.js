@@ -25,18 +25,19 @@ var Game = cc.Layer.extend({
 			if(scale > 10)
 				scale = 1;
 		});
-		
-		
+					
+		//Init world.
 		GameContainer.init(playGroundLayer);
 		
 		playGroundLayer.addChild(helloLabel);
 		
 		//Set the game layer (middle ground).
 		this.addChild(playGroundLayer);
-		
 		this.setKeyboardEnabled(true);
-		this.schedule(function(){
-			GameContainer.update();
+				
+		//This should be automaticaly called, but it's not.
+		this.schedule(function(dt){
+			this.update(dt);
 		});
 		
 		return this;
@@ -51,7 +52,7 @@ var Game = cc.Layer.extend({
 
 		if(GameContainer.currentState == GameState.PLAYING)
 		{
-			GameContainer.update(dt);
+			GameContainer.update();
 		}
 	}
 });
@@ -61,7 +62,6 @@ var GameScene = cc.Scene.extend({
 		this._super();
 		var layer = new Game();
 		layer.init();
-		console.log(layer);
 		this.addChild(layer);
 	}
 });
