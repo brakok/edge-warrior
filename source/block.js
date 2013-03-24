@@ -11,6 +11,5 @@ var Block = function (x, y, color) {
 	this.sprite.schedule(function (){
 		testScale += 0.05;
 		this.setScale(testScale, 1);
-	});
-	*/
+	}); */
 }

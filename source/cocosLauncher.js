@@ -12,7 +12,7 @@
 		appFiles:['source/block.js',
 				  'source/player.js',
 				  'source/gameScene.js',
-				  'source/world.js',
+				  'source/gameContainer.js',
 				  'source/Resources.js']
 	};
 	

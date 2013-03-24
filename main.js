@@ -39,4 +39,4 @@ var cocosApp = cc.Application.extend({
 });
 
 //Launch the first scene.
-var myApp = new cocosApp(gameScene);
+var myApp = new cocosApp(GameScene);
