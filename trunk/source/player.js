@@ -38,7 +38,5 @@ var Player = function (x, y, color) {
 			var pos = this.runningCycle.getPosition();
 			this.runningCycle.setPosition(new cc.Point(pos.x + nextX, pos.y));
 		}
-			
-			
 	}
 }
