@@ -26,12 +26,16 @@ var Game = cc.Layer.extend({
 		});
 		
 		var block = new Block(100, 100, 'red');
+		var player = new Player(200,200);
 		
 		playGroundLayer.addChild(block.sprite);
 		playGroundLayer.addChild(helloLabel);
+		playGroundLayer.addChild(player.currentFrame);
 		this.addChild(playGroundLayer);
 		
-		return true;
+		this.setKeyboardEnabled(true);
+		
+		return this;
 	}
 });
 
