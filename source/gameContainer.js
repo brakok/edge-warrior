@@ -22,7 +22,7 @@ var GameContainer = new function() {
 	this.keys = new Array();
 	this.players = new Array();
 	this.blocks = new Array();
-
+	
 	this.addPlayer = function (player){
 		this.players.push(player);
 	};
@@ -34,9 +34,12 @@ var GameContainer = new function() {
 	//Update elements contained in the container.
 	this.update = function (){
 
+		this.you.update();
+	
 		for(var i in this.players)
 		{
-			this.players[i].update();
+			//TODO: Update from server.
+			//this.players[i].update();
 		}
 	};
 	
@@ -44,11 +47,14 @@ var GameContainer = new function() {
 	this.init = function (layer) {
 		
 		this.currentState = GameState.PLAYING;
-	
+		
+		this.you = new Player(400, 200, Color.BLUE);
+		
 		this.addPlayer(new Player(200,200, Color.RED));
 		this.addBlock(new Block(100, 100, Color.RED));
 		
 		layer.addChild(GameContainer.blocks[0].sprite);
-		layer.addChild(GameContainer.players[0].runningCycle);
+		layer.addChild(GameContainer.you.currentAnimation);
+		layer.addChild(GameContainer.players[0].currentAnimation);
 	};
 };

@@ -2,8 +2,8 @@ var Player = function (x, y, color) {
 	this.color = color;
 	
     cc.SpriteFrameCache.getInstance().addSpriteFrames("placeholders/player_run.plist", "placeholders/player_run.png");
-	this.runningCycle = cc.Sprite.createWithSpriteFrameName("player_run_01.png");
-	this.runningCycle.setPosition(new cc.Point(x, y));
+	this.currentAnimation = cc.Sprite.createWithSpriteFrameName("player_run_01.png");
+	this.currentAnimation.setPosition(new cc.Point(x, y));
 		
 	//Running cycle.
 	var animFrames = [];
@@ -16,8 +16,7 @@ var Player = function (x, y, color) {
 		
 	var animation = cc.Animation.create(animFrames, 0.3);
 	var animate = cc.Animate.create(animation);
-	this.runningCycle.runAction(cc.RepeatForever.create(animate));
-	
+	this.currentAnimation.runAction(cc.RepeatForever.create(animate));
 	
 	this.update = function(){
 
@@ -35,8 +34,8 @@ var Player = function (x, y, color) {
 		
 		if(nextX != 0)
 		{
-			var pos = this.runningCycle.getPosition();
-			this.runningCycle.setPosition(new cc.Point(pos.x + nextX, pos.y));
+			var pos = this.currentAnimation.getPosition();
+			this.currentAnimation.setPosition(new cc.Point(pos.x + nextX, pos.y));
 		}
 	}
 }
