@@ -10,7 +10,7 @@
 		tag:'gameCanvas',
 		engineDir:'source/lib/Cocos2d/cocos2d/',
 		appFiles:['source/network/socket.io.js',
-				  'source/network/socket.js',
+				  'source/network/client.js',
 				  'source/block.js',
 				  'source/player.js',
 				  'source/gameScene.js',

@@ -23,22 +23,27 @@ var GameContainer = new function() {
 	this.players = new Array();
 	this.blocks = new Array();
 	this.you = null;
+	this.currentState = GameState.PLAYING;
 	
 	//Initialize the Game container.
 	this.init = function (layer) {
 		
-		this.currentState = GameState.PLAYING;
+		this.layer = layer;
+		this.ready = false;
 		
 		//Creating client and connecting to server.
 		this.client = new Client();
 		this.client.connect();
-		
-		this.addPlayer(new Player(200,200, Color.RED));
+				
 		this.addBlock(new Block(100, 100, Color.RED));
+	};
+	
+	this.initLayer = function(){
+		this.layer.addChild(GameContainer.blocks[0].sprite);
+		this.layer.addChild(GameContainer.you.currentAnimation);
+		this.layer.addChild(GameContainer.players[0].currentAnimation);
 		
-		layer.addChild(GameContainer.blocks[0].sprite);
-		layer.addChild(GameContainer.you.currentAnimation);
-		layer.addChild(GameContainer.players[0].currentAnimation);
+		this.ready = true;
 	};
 	
 	this.addPlayer = function (player){
@@ -52,8 +57,16 @@ var GameContainer = new function() {
 	//Update elements contained in the container.
 	this.update = function (){
 
-		this.you.update();
-	
+		if(this.you != null && this.you != 'undefined')
+			this.you.update();
+		
+		//Update info from the server.
+		if(this.ready)
+		{
+			this.client.push();
+			this.client.pull();
+		}
+
 		for(var i in this.players)
 		{
 			//TODO: Update from server.
