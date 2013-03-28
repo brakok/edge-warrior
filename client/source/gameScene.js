@@ -27,7 +27,7 @@ var Game = cc.Layer.extend({
 		});
 					
 		//Init world.
-		GameContainer.init(playGroundLayer);
+		Client.init(playGroundLayer);
 		
 		playGroundLayer.addChild(helloLabel);
 		
@@ -43,16 +43,16 @@ var Game = cc.Layer.extend({
 		return this;
 	},
 	onKeyDown: function(e){
-		GameContainer.keys[e] = true;
+		Client.keys[e] = true;
 	},
 	onKeyUp: function(e){
-		GameContainer.keys[e] = false;
+		Client.keys[e] = false;
 	},
 	update: function(dt){
 
-		if(GameContainer.currentState == GameState.PLAYING)
+		if(Client.currentState == GameState.PLAYING)
 		{
-			GameContainer.update();
+			Client.update();
 		}
 	}
 });

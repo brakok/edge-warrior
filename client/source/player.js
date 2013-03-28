@@ -46,16 +46,17 @@ var Player = function (x, y, color) {
 
 		var nextX = 0;
 	
-		if(GameContainer.keys[cc.KEY.a])
+		if(Client.keys[cc.KEY.a])
 			nextX -= 5;
 			
-		if(GameContainer.keys[cc.KEY.d])
+		if(Client.keys[cc.KEY.d])
 			nextX += 5;
 		
 		if(nextX != 0)
 		{
 			var pos = this.getPosition();
 			this.currentAnimation.setPosition(new cc.Point(pos.x + nextX, pos.y));
+			Client.needPush = true;
 		}
 	}
 }
