@@ -10,6 +10,7 @@ var Color = {
 	BLACK: 'black'
 };
 
+//Used to assign a color.
 var assignColor = [];
 assignColor[0] = Color.RED;
 assignColor[1] = Color.BLUE;
@@ -39,7 +40,9 @@ var Player = function(x, y, color){
 var Game = {
 	id: 1,
 	players: [],
-	blocks: []
+	blocks: [],
+	connectedPlayers: 0,
+	connectingPlayers:0
 };
 
 var connectedPlayers = 0;
@@ -57,18 +60,26 @@ io.sockets.on('connection', function (socket){
 	//Room.
 	socket.join(Game.id);
 	
+	var enemies = [];
+	for(var i in Game.players)
+		enemies.push(Game.players[i]);
+	
+	//Value initiating a player.
 	var initData = {
-		player: new Player(spawnX*(connectedPlayers+1), spawnY, assignColor[connectedPlayers]),
-		enemies: Game.players
+		player: new Player(spawnX*(Game.connectingPlayers+1), spawnY, assignColor[Game.connectingPlayers]),
+		enemies: enemies
 	};
 	
-	//TODO: Broadcast needed information to all players at the beginning.
-	socket.emit('init', initData);
 	Game.players[socket.id] = initData.player;
+	Game.connectingPlayers++;
 
+	//Start initiation.
+	socket.emit('init', initData);
+
+	//Continue when player connected.
 	socket.on('connected', function(){
 		console.log('Connected player');
-		connectedPlayers++;		
+		Game.connectedPlayers++;		
 		
 		//Send connected player to others.
 		for(var i in io.sockets.in(Game.id).sockets)
@@ -77,18 +88,17 @@ io.sockets.on('connection', function (socket){
 				io.sockets.sockets[i].emit('newPlayer', Game.players[socket.id]);
 		}
 		
-		if(connectedPlayers == 2)
+		if(Game.connectedPlayers == 2)
 		{
 			console.log('Game launching!');
 			io.sockets.in(Game.id).emit('launch');
-			connectedPlayers = 0;
 		}
 	});
 	
 	//Retrieving information from players.
 	socket.on('push', function(inputs){
 
-		console.log(Game.players[socket.id].color + ': ' + inputs.right);
+		//console.log(Game.players[socket.id].color + ': ' + inputs.right);
 	});
 	
 	//Sending information upon pull request.
