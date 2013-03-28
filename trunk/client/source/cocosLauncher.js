@@ -14,7 +14,6 @@
 				  'source/block.js',
 				  'source/player.js',
 				  'source/gameScene.js',
-				  'source/gameContainer.js',
 				  'source/Resources.js']
 	};
 	
