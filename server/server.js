@@ -17,7 +17,6 @@ assignColor[1] = Color.BLUE;
 assignColor[2] = Color.YELLOW;
 assignColor[3] = Color.WHITE;
 
-
 var http = require('http');
 
 //Create server.
@@ -34,6 +33,24 @@ var Player = function(x, y, color){
 	this.x = x;
 	this.y = y;
 	this.color = color;
+
+	this.update = function(inputs){
+
+		var nextX = 0;
+		var nextY = 0;
+		
+		if(inputs.right)
+			nextX += 5;
+			
+		if(inputs.left)
+			nextX -= 5;
+			
+		if(inputs.jump)
+			nextY += 5;
+			
+		this.x += nextX;
+		this.y += nextY;
+	};
 };
 
 //Game container server-side.
@@ -42,7 +59,10 @@ var Game = {
 	players: [],
 	blocks: [],
 	connectedPlayers: 0,
-	connectingPlayers:0
+	connectingPlayers:0,
+	maxPlayers: 2,
+	keys: [],
+	ready: false
 };
 
 var connectedPlayers = 0;
@@ -71,6 +91,12 @@ io.sockets.on('connection', function (socket){
 	};
 	
 	Game.players[socket.id] = initData.player;
+	Game.keys[socket.id] = {
+		right: false,
+		left: false,
+		jump: false
+	};
+	
 	Game.connectingPlayers++;
 
 	//Start initiation.
@@ -88,17 +114,18 @@ io.sockets.on('connection', function (socket){
 				io.sockets.sockets[i].emit('newPlayer', Game.players[socket.id]);
 		}
 		
-		if(Game.connectedPlayers == 2)
+		if(Game.connectedPlayers == Game.maxPlayers)
 		{
 			console.log('Game launching!');
 			io.sockets.in(Game.id).emit('launch');
+			
+			Game.ready = true;
 		}
 	});
 	
 	//Retrieving information from players.
 	socket.on('push', function(inputs){
-
-		//console.log(Game.players[socket.id].color + ': ' + inputs.right);
+		Game.keys[socket.id] = inputs;
 	});
 	
 	//Sending information upon pull request.
@@ -109,9 +136,7 @@ io.sockets.on('connection', function (socket){
 		for(var i in Game.players)
 		{
 			if(i != socket.id)
-			{
 				enemies.push(Game.players[i]);
-			}
 		}
 		
 		var data = {
@@ -122,5 +147,19 @@ io.sockets.on('connection', function (socket){
 		socket.emit('pull', data);
 	});
 });
+
+setInterval(function(){updateWorld(Game)}, 17);
+
+//Game loop.
+function updateWorld(game)
+{
+	//When world's ready...
+	if(game.ready)
+	{	
+		for(var i in io.sockets.in(game.id).sockets)
+			game.players[i].update(game.keys[i]);
+	}
+}
+
 
 console.log('Server created');
