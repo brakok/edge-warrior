@@ -67,13 +67,11 @@ var Client = new function(){
 		this.ready = false;
 		
 		var socket = io.connect('http://localhost:80');
-		socket.parent = this;
 		
 		//Init.
 		socket.on('init', function (data) {
 			console.log('Initialize');				
 				
-			console.log(data);
 			//Server positioning and giving color to player.
 			Client.player = new Player(data.player.x, data.player.y, data.player.color);	
 
