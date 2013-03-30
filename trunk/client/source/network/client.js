@@ -71,7 +71,7 @@ var Client = new function(){
 		//Init.
 		socket.on('init', function (data) {
 			console.log('Initialize');				
-				
+			
 			//Server positioning and giving color to player.
 			Client.player = new Player(data.player.x, data.player.y, data.player.color);	
 
