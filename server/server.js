@@ -1,4 +1,4 @@
-//Enum of possible colors.
+//Enums
 var Color = {
 	RED: 'red',
 	BLUE: 'blue',
@@ -8,6 +8,13 @@ var Color = {
 	PURPLE: 'purple',
 	ORANGE: 'orange',
 	BLACK: 'black'
+};
+
+var timeStep = 1/60;
+
+var PhysicConstants = {
+	FRICTION: 0.5,
+	MASS: 10
 };
 
 //Used to assign a color.
@@ -21,10 +28,7 @@ var http = require('http');
 var chipmunk = require('chipmunk');
 
 //Create server.
-var server = http.createServer(function(req, res){
-	res.writeHead(200, {'Content-type' : 'text/plain'});
-	res.end('Hello World');
-});
+var server = http.createServer(function(req, res){});
 
 //Port.
 server.listen(80); //localhost
@@ -34,23 +38,42 @@ var Player = function(x, y, color){
 	this.x = x;
 	this.y = y;
 	this.color = color;
+	this.keys = {
+		right: false,
+		left: false,
+		jump: false
+	};
+	
+	//Physic shape.
+	this.body = null;
+	
+	this.update = function(){
 
-	this.update = function(inputs){
-
+		this.x = this.body.getPos().x;
+		this.y = this.body.getPos().y;
+	
 		var nextX = 0;
 		var nextY = 0;
 		
-		if(inputs.right)
+		if(this.keys.right)
 			nextX += 5;
 			
-		if(inputs.left)
+		if(this.keys.left)
 			nextX -= 5;
 			
-		if(inputs.jump)
+		if(this.keys.jump)
 			nextY += 5;
 			
 		this.x += nextX;
 		this.y += nextY;
+	};
+	
+	this.toClient = function(){
+		return {
+			x: this.x,
+			y: this.y,
+			color: this.color
+		};
 	};
 };
 
@@ -59,12 +82,75 @@ var Game = {
 	id: 1,
 	players: [],
 	blocks: [],
+	width: 1200,
+	height: 800,
 	connectedPlayers: 0,
 	connectingPlayers:0,
 	maxPlayers: 2,
 	keys: [],
-	ready: false,
-	space: null
+	state: false,
+	space: null,
+	createWorld: function() {
+	
+		if(this.space == null || this.space == 'undefined')
+		{
+			this.space = new chipmunk.Space();
+			this.space.gravity.y = -10;
+									
+			var ground = new chipmunk.SegmentShape(this.space.staticBody,
+													new chipmunk.Vect(0, 0),
+													new chipmunk.Vect(this.width, 0),
+													1);
+			
+			
+			var leftWall = new chipmunk.SegmentShape(this.space.staticBody,
+													new chipmunk.Vect(0, 0),
+													new chipmunk.Vect(0, this.height*3),
+													1);
+													
+			var rightWall = new chipmunk.SegmentShape(this.space.staticBody,
+														new chipmunk.Vect(this.width, 0),
+														new chipmunk.Vect(this.width, this.height*3),
+														1);							
+														
+			//Set friction on 3.
+			ground.setFriction(PhysicConstants.FRICTION);
+			leftWall.setFriction(PhysicConstants.FRICTION);
+			rightWall.setFriction(PhysicConstants.FRICTION);
+			
+			this.space.addShape(ground);
+			this.space.addShape(leftWall);
+			this.space.addShape(rightWall);
+			
+			var moment = chipmunk.momentForBox(PhysicConstants.MASS, 40, 40);
+			
+			/*
+			//Add players.
+			for(var i in this.players)
+			{
+				//Body creation.
+				this.players[i].body = this.space.addBody(new chipmunk.Body(PhysicConstants.MASS, moment));
+				this.players[i].body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));
+				
+				//Create a shape associated with the body.
+				var shape = this.space.addShape(new chipmunk.BoxShape(this.players[i].body, 40, 40));
+				shape.setFriction(PhysicConstants.FRICTION);
+			}*/
+			
+			console.log(this.space);
+		}
+	},
+	update: function() {
+		//When world's ready...
+		if(this.ready)
+		{	
+			for(var i in io.sockets.in(this.id).sockets)
+				this.players[i].update();
+				
+			/*if(this.space != null)
+				this.space.step(timeStep);*/
+		}
+	}
 };
 
 var spawnX = 100;
@@ -83,21 +169,17 @@ io.sockets.on('connection', function (socket){
 	
 	var enemies = [];
 	for(var i in Game.players)
-		enemies.push(Game.players[i]);
+		enemies.push(Game.players[i].toClient());
+	
+	var player = new Player(spawnX*(Game.connectingPlayers+1), spawnY, assignColor[Game.connectingPlayers]);
 	
 	//Value initiating a player.
 	var initData = {
-		player: new Player(spawnX*(Game.connectingPlayers+1), spawnY, assignColor[Game.connectingPlayers]),
+		player: player.toClient(),
 		enemies: enemies
 	};
 	
-	Game.players[socket.id] = initData.player;
-	Game.keys[socket.id] = {
-		right: false,
-		left: false,
-		jump: false
-	};
-	
+	Game.players[socket.id] = player;
 	Game.connectingPlayers++;
 
 	//Start initiation.
@@ -112,11 +194,15 @@ io.sockets.on('connection', function (socket){
 		for(var i in io.sockets.in(Game.id).sockets)
 		{			
 			if(i != socket.id)
-				io.sockets.sockets[i].emit('newPlayer', Game.players[socket.id]);
+				io.sockets.sockets[i].emit('newPlayer', Game.players[socket.id].toClient());
 		}
 		
 		if(Game.connectedPlayers == Game.maxPlayers)
 		{
+			//Init physic world.
+			Game.createWorld();
+			setInterval(function(){Game.update()}, 17);
+		
 			console.log('Game launching!');
 			io.sockets.in(Game.id).emit('launch');
 			
@@ -126,7 +212,7 @@ io.sockets.on('connection', function (socket){
 	
 	//Retrieving information from players.
 	socket.on('push', function(inputs){
-		Game.keys[socket.id] = inputs;
+		Game.players[socket.id].keys = inputs;
 	});
 	
 	//Sending information upon pull request.
@@ -137,38 +223,16 @@ io.sockets.on('connection', function (socket){
 		for(var i in Game.players)
 		{
 			if(i != socket.id)
-				enemies.push(Game.players[i]);
+				enemies.push(Game.players[i].toClient());
 		}
 		
 		var data = {
-			player: Game.players[socket.id],
+			player: Game.players[socket.id].toClient(),
 			enemies: enemies
 		};
 		
 		socket.emit('pull', data);
 	});
 });
-
-setInterval(function(){updateWorld(Game)}, 17);
-
-//Game loop.
-function updateWorld(game)
-{
-	//When world's ready...
-	if(game.ready)
-	{	
-		/*
-		//Create the physic world.
-		if(game.space == null || game.space == 'undefined')
-		{
-			game.space = new Space();
-			game.space.setGravity(new Vect(0, -10));
-		}*/
-			
-		for(var i in io.sockets.in(game.id).sockets)
-			game.players[i].update(game.keys[i]);
-	}
-}
-
 
 console.log('Server created');
