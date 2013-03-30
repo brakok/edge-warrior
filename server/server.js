@@ -10,7 +10,7 @@ var Color = {
 	BLACK: 'black'
 };
 
-var timeStep = 1/60;
+var timeStep = 1/30;
 
 var PhysicConstants = {
 	FRICTION: 0.5,
@@ -51,7 +51,7 @@ var Player = function(x, y, color){
 
 		this.x = this.body.getPos().x;
 		this.y = this.body.getPos().y;
-	
+		
 		var nextX = 0;
 		var nextY = 0;
 		
@@ -63,9 +63,9 @@ var Player = function(x, y, color){
 			
 		if(this.keys.jump)
 			nextY += 5;
-			
-		this.x += nextX;
-		this.y += nextY;
+		
+		if(nextX != 0 || nextY != 0)
+			this.body.applyImpulse(new chipmunk.Vect(nextX, nextY), new chipmunk.Vect(0,0));
 	};
 	
 	this.toClient = function(){
@@ -95,7 +95,7 @@ var Game = {
 		if(this.space == null || this.space == 'undefined')
 		{
 			this.space = new chipmunk.Space();
-			this.space.gravity.y = -10;
+			this.space.gravity = new chipmunk.Vect(0, -10);
 									
 			var ground = new chipmunk.SegmentShape(this.space.staticBody,
 													new chipmunk.Vect(0, 0),
@@ -118,13 +118,13 @@ var Game = {
 			leftWall.setFriction(PhysicConstants.FRICTION);
 			rightWall.setFriction(PhysicConstants.FRICTION);
 			
+			
 			this.space.addShape(ground);
 			this.space.addShape(leftWall);
 			this.space.addShape(rightWall);
 			
 			var moment = chipmunk.momentForBox(PhysicConstants.MASS, 40, 40);
 			
-			/*
 			//Add players.
 			for(var i in this.players)
 			{
@@ -135,9 +135,7 @@ var Game = {
 				//Create a shape associated with the body.
 				var shape = this.space.addShape(new chipmunk.BoxShape(this.players[i].body, 40, 40));
 				shape.setFriction(PhysicConstants.FRICTION);
-			}*/
-			
-			console.log(this.space);
+			}
 		}
 	},
 	update: function() {
@@ -147,8 +145,8 @@ var Game = {
 			for(var i in io.sockets.in(this.id).sockets)
 				this.players[i].update();
 				
-			/*if(this.space != null)
-				this.space.step(timeStep);*/
+			if(this.space != null)
+				this.space.step(timeStep);
 		}
 	}
 };
