@@ -18,6 +18,7 @@ assignColor[2] = Color.YELLOW;
 assignColor[3] = Color.WHITE;
 
 var http = require('http');
+var chipmunk = require('chipmunk');
 
 //Create server.
 var server = http.createServer(function(req, res){
@@ -62,10 +63,10 @@ var Game = {
 	connectingPlayers:0,
 	maxPlayers: 2,
 	keys: [],
-	ready: false
+	ready: false,
+	space: null
 };
 
-var connectedPlayers = 0;
 var spawnX = 100;
 var spawnY = 100;
 
@@ -156,6 +157,14 @@ function updateWorld(game)
 	//When world's ready...
 	if(game.ready)
 	{	
+		/*
+		//Create the physic world.
+		if(game.space == null || game.space == 'undefined')
+		{
+			game.space = new Space();
+			game.space.setGravity(new Vect(0, -10));
+		}*/
+			
 		for(var i in io.sockets.in(game.id).sockets)
 			game.players[i].update(game.keys[i]);
 	}
