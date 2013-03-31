@@ -1,28 +1,27 @@
 //Enums
 var Color = {
-	RED: 'red',
-	BLUE: 'blue',
-	YELLOW: 'yellow',
-	WHITE: 'white',
-	GREEN: 'green',
-	PURPLE: 'purple',
-	ORANGE: 'orange',
-	BLACK: 'black'
+	RED: 0,
+	BLUE: 1,
+	YELLOW: 2,
+	WHITE: 3,
+	GREEN: 4,
+	PURPLE: 5,
+	ORANGE: 6,
+	BLACK: 7
 };
 
-var timeStep = 1/30;
-
+//Constants
 var PhysicConstants = {
-	FRICTION: 0.5,
-	MASS: 10
+	FRICTION: 0.99,
+	MASS: 10,
+	TIME_STEP: 1/30
 };
 
-//Used to assign a color.
-var assignColor = [];
-assignColor[0] = Color.RED;
-assignColor[1] = Color.BLUE;
-assignColor[2] = Color.YELLOW;
-assignColor[3] = Color.WHITE;
+var CollisionType = {
+	STATIC: 0,
+	PLAYER: 1,
+	GROUND_SENSOR: 2
+};
 
 var http = require('http');
 var chipmunk = require('chipmunk');
@@ -56,13 +55,13 @@ var Player = function(x, y, color){
 		var nextY = 0;
 		
 		if(this.keys.right)
-			nextX += 5;
+			nextX += 40;
 			
 		if(this.keys.left)
-			nextX -= 5;
+			nextX -= 40;
 			
 		if(this.keys.jump)
-			nextY += 5;
+			nextY += 100;
 		
 		if(nextX != 0 || nextY != 0)
 			this.body.applyImpulse(new chipmunk.Vect(nextX, nextY), new chipmunk.Vect(0,0));
@@ -95,13 +94,15 @@ var Game = {
 		if(this.space == null || this.space == 'undefined')
 		{
 			this.space = new chipmunk.Space();
-			this.space.gravity = new chipmunk.Vect(0, -10);
+			this.space.gravity = new chipmunk.Vect(0, -50);
+			
+			//TODO: add ground sensor callback.
+			//this.space.addCollisionHandler(CollisionType.STATIC, CollisionType.GROUND_SENSOR, begin, preSolve, postSolve, separate)
 									
 			var ground = new chipmunk.SegmentShape(this.space.staticBody,
 													new chipmunk.Vect(0, 0),
 													new chipmunk.Vect(this.width, 0),
 													1);
-			
 			
 			var leftWall = new chipmunk.SegmentShape(this.space.staticBody,
 													new chipmunk.Vect(0, 0),
@@ -118,23 +119,23 @@ var Game = {
 			leftWall.setFriction(PhysicConstants.FRICTION);
 			rightWall.setFriction(PhysicConstants.FRICTION);
 			
-			
 			this.space.addShape(ground);
 			this.space.addShape(leftWall);
 			this.space.addShape(rightWall);
-			
-			var moment = chipmunk.momentForBox(PhysicConstants.MASS, 40, 40);
-			
+						
 			//Add players.
 			for(var i in this.players)
 			{
 				//Body creation.
-				this.players[i].body = this.space.addBody(new chipmunk.Body(PhysicConstants.MASS, moment));
+				this.players[i].body = this.space.addBody(new chipmunk.Body(PhysicConstants.MASS, Infinity));
 				this.players[i].body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));
 				
 				//Create a shape associated with the body.
 				var shape = this.space.addShape(new chipmunk.BoxShape(this.players[i].body, 40, 40));
 				shape.setFriction(PhysicConstants.FRICTION);
+				shape.setCollisionType(1);
+				
+				//TODO: Add ground sensor.
 			}
 		}
 	},
@@ -146,7 +147,7 @@ var Game = {
 				this.players[i].update();
 				
 			if(this.space != null)
-				this.space.step(timeStep);
+				this.space.step(PhysicConstants.TIME_STEP);
 		}
 	}
 };
@@ -169,7 +170,7 @@ io.sockets.on('connection', function (socket){
 	for(var i in Game.players)
 		enemies.push(Game.players[i].toClient());
 	
-	var player = new Player(spawnX*(Game.connectingPlayers+1), spawnY, assignColor[Game.connectingPlayers]);
+	var player = new Player(spawnX*(Game.connectingPlayers+1), spawnY, Game.connectingPlayers);
 	
 	//Value initiating a player.
 	var initData = {
