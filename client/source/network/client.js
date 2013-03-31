@@ -5,14 +5,14 @@ var GameState = {
 
 //Enum of possible colors.
 var Color = {
-	RED: 'red',
-	BLUE: 'blue',
-	YELLOW: 'yellow',
-	WHITE: 'white',
-	GREEN: 'green',
-	PURPLE: 'purple',
-	ORANGE: 'orange',
-	BLACK: 'black'
+	RED: 0,
+	BLUE: 1,
+	YELLOW: 2,
+	WHITE: 3,
+	GREEN: 4,
+	PURPLE: 5,
+	ORANGE: 6,
+	BLACK: 7
 };
 
 //Object containing network information.
