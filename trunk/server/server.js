@@ -32,10 +32,30 @@ var server = http.createServer(function(req, res){});
 //Port.
 server.listen(80); //localhost
 
+//Ground listener.
+var GroundListener = {
+	begin: function(arbiter, space){
+	
+		var player = (arbiter.body_a.userdata != null ? arbiter.body_a.userdata : arbiter.body_b.userdata);
+		player.groundContact++;
+	},
+	separate: function(arbiter, space){
+	
+		var player = (arbiter.body_a.userdata != null ? arbiter.body_a.userdata : arbiter.body_b.userdata);
+		player.groundContact--;
+	}
+};
+
 //Server version of the player.
 var Player = function(x, y, color){
 	this.x = x;
 	this.y = y;
+	
+	this.width = 40;
+	this.height = 40;
+	
+	this.groundContact = 0;
+	
 	this.color = color;
 	this.keys = {
 		right: false,
@@ -43,11 +63,11 @@ var Player = function(x, y, color){
 		jump: false
 	};
 	
-	//Physic shape.
+	//Physic body.
 	this.body = null;
 	
 	this.update = function(){
-
+	
 		this.x = this.body.getPos().x;
 		this.y = this.body.getPos().y;
 		
@@ -60,8 +80,8 @@ var Player = function(x, y, color){
 		if(this.keys.left)
 			nextX -= 40;
 			
-		if(this.keys.jump)
-			nextY += 100;
+		if(this.keys.jump && this.groundContact > 0)
+			nextY += 350;
 		
 		if(nextX != 0 || nextY != 0)
 			this.body.applyImpulse(new chipmunk.Vect(nextX, nextY), new chipmunk.Vect(0,0));
@@ -96,8 +116,13 @@ var Game = {
 			this.space = new chipmunk.Space();
 			this.space.gravity = new chipmunk.Vect(0, -50);
 			
-			//TODO: add ground sensor callback.
-			//this.space.addCollisionHandler(CollisionType.STATIC, CollisionType.GROUND_SENSOR, begin, preSolve, postSolve, separate)
+			//Add ground sensor callback.
+			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
+										   CollisionType.STATIC, 
+										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   function(arbiter, space){GroundListener.separate(arbiter, space);});
 									
 			var ground = new chipmunk.SegmentShape(this.space.staticBody,
 													new chipmunk.Vect(0, 0),
@@ -112,30 +137,41 @@ var Game = {
 			var rightWall = new chipmunk.SegmentShape(this.space.staticBody,
 														new chipmunk.Vect(this.width, 0),
 														new chipmunk.Vect(this.width, this.height*3),
-														1);							
-														
+														1);																
+			
 			//Set friction on 3.
 			ground.setFriction(PhysicConstants.FRICTION);
-			leftWall.setFriction(PhysicConstants.FRICTION);
-			rightWall.setFriction(PhysicConstants.FRICTION);
 			
 			this.space.addShape(ground);
 			this.space.addShape(leftWall);
-			this.space.addShape(rightWall);
-						
+			this.space.addShape(rightWall);			
+				
 			//Add players.
 			for(var i in this.players)
 			{
 				//Body creation.
 				this.players[i].body = this.space.addBody(new chipmunk.Body(PhysicConstants.MASS, Infinity));
 				this.players[i].body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));
-				
+									
+				this.players[i].body.userdata = this.players[i];
+									
 				//Create a shape associated with the body.
-				var shape = this.space.addShape(new chipmunk.BoxShape(this.players[i].body, 40, 40));
+				var shape = this.space.addShape(chipmunk.BoxShape(this.players[i].body, this.players[i].width, this.players[i].height));
 				shape.setFriction(PhysicConstants.FRICTION);
-				shape.setCollisionType(1);
+				shape.setCollisionType(CollisionType.PLAYER);
 				
-				//TODO: Add ground sensor.
+				var groundSensorHalfWidth = (this.players[i].width*0.33);
+				var playerHalfHeight = this.players[i].height*0.5;
+				var groundSensorHeight = 2;
+				
+				//Add ground sensor.
+				var groundSensor = this.space.addShape(chipmunk.BoxShape2(this.players[i].body, 
+																			new chipmunk.BB(-(groundSensorHalfWidth), 
+																							-(playerHalfHeight+groundSensorHeight), 
+																							(groundSensorHalfWidth), 
+																							-(playerHalfHeight))))
+				groundSensor.setCollisionType(CollisionType.GROUND_SENSOR);
+				groundSensor.sensor = true;
 			}
 		}
 	},
