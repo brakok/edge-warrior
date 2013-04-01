@@ -10,17 +10,34 @@ var Color = {
 	BLACK: 7
 };
 
-//Constants
-var PhysicConstants = {
-	FRICTION: 0.99,
-	MASS: 10,
-	TIME_STEP: 1/30
-};
-
 var CollisionType = {
 	STATIC: 0,
 	PLAYER: 1,
 	GROUND_SENSOR: 2
+};
+
+var Facing = {
+	RIGHT:  0,
+	LEFT: 1
+};
+
+//Constants
+var PhysicConstants = {
+	GRAVITY: -70,
+	FRICTION: 0.99,
+	MASS: 10,
+	TIME_STEP: 1/30,
+	FRICTION_FACTOR_ONGROUND: 0.9,
+	TURN_FRICTION_FACTOR: 0.05
+};
+
+var PlayerConstants = {
+	JUMP_POWER: 850,
+	RUN_POWER_ONGROUND: 250,
+	RUN_POWER_OFFGROUND: 15,
+	WIDTH: 40,
+	HEIGHT: 40,
+	MAX_SPEED_FACTOR: 0.065
 };
 
 var http = require('http');
@@ -51,10 +68,14 @@ var Player = function(x, y, color){
 	this.x = x;
 	this.y = y;
 	
-	this.width = 40;
-	this.height = 40;
+	this.width = PlayerConstants.WIDTH;
+	this.height = PlayerConstants.HEIGHT;
 	
 	this.groundContact = 0;
+	this.doubleJumpEnabled = false;
+	this.doubleJumpUsed = true;
+	
+	this.facing = Facing.RIGHT;
 	
 	this.color = color;
 	this.keys = {
@@ -67,24 +88,74 @@ var Player = function(x, y, color){
 	this.body = null;
 	
 	this.update = function(){
-	
+		
 		this.x = this.body.getPos().x;
 		this.y = this.body.getPos().y;
 		
 		var nextX = 0;
-		var nextY = 0;
+		var impulse = 0;
 		
+		if(this.keys.right || this.keys.left)
+		{
+			var factor = Math.abs(this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
+			impulse = PlayerConstants.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
+		}
+			
+		
+		//Move
 		if(this.keys.right)
-			nextX += 40;
+			nextX += impulse;
 			
 		if(this.keys.left)
-			nextX -= 40;
-			
-		if(this.keys.jump && this.groundContact > 0)
-			nextY += 350;
+			nextX -= impulse;
 		
-		if(nextX != 0 || nextY != 0)
-			this.body.applyImpulse(new chipmunk.Vect(nextX, nextY), new chipmunk.Vect(0,0));
+		if(this.groundContact > 0 && this.doubleJumpUsed)
+			this.doubleJumpUsed = false;
+		
+		//Jump
+		if(this.keys.jump && this.groundContact > 0)
+			this.jump();
+			
+		//Double jump
+		if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
+			this.doubleJump();
+			
+		//Allow double jump.
+		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
+			this.doubleJumpEnabled = true;
+		
+		if(nextX != 0)
+		{
+			var lastFacing = this.facing;
+			this.facing = (nextX > 0 ? Facing.RIGHT : Facing.LEFT);
+			
+			if(lastFacing != this.facing)
+				this.turn();
+				
+			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
+		}
+		else
+		{
+			//Artificial friction for players when on ground and pressing no key.
+			if(this.groundContact > 0)
+				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
+		}
+	};
+	
+	this.turn = function(){
+		this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.TURN_FRICTION_FACTOR, this.body.getVel().y));
+	};
+	
+	this.jump = function(){
+		this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
+		this.body.applyImpulse(new chipmunk.Vect(0, PlayerConstants.JUMP_POWER), new chipmunk.Vect(0,0));
+	};
+	
+	this.doubleJump = function(){
+		this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
+		this.body.applyImpulse(new chipmunk.Vect(0, PlayerConstants.JUMP_POWER), new chipmunk.Vect(0,0));
+		this.doubleJumpUsed = true;
+		this.doubleJumpEnabled = false;
 	};
 	
 	this.toClient = function(){
@@ -114,7 +185,7 @@ var Game = {
 		if(this.space == null || this.space == 'undefined')
 		{
 			this.space = new chipmunk.Space();
-			this.space.gravity = new chipmunk.Vect(0, -50);
+			this.space.gravity = new chipmunk.Vect(0, PhysicConstants.GRAVITY);
 			
 			//Add ground sensor callback.
 			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
@@ -146,6 +217,10 @@ var Game = {
 			this.space.addShape(leftWall);
 			this.space.addShape(rightWall);			
 				
+			var groundSensorHalfWidth = PlayerConstants.WIDTH*0.33;
+			var playerHalfHeight = PlayerConstants.HEIGHT*0.5;
+			var groundSensorHeight = 2;
+				
 			//Add players.
 			for(var i in this.players)
 			{
@@ -153,16 +228,12 @@ var Game = {
 				this.players[i].body = this.space.addBody(new chipmunk.Body(PhysicConstants.MASS, Infinity));
 				this.players[i].body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));
 									
+				//Assign custom data to body.
 				this.players[i].body.userdata = this.players[i];
 									
 				//Create a shape associated with the body.
 				var shape = this.space.addShape(chipmunk.BoxShape(this.players[i].body, this.players[i].width, this.players[i].height));
-				shape.setFriction(PhysicConstants.FRICTION);
 				shape.setCollisionType(CollisionType.PLAYER);
-				
-				var groundSensorHalfWidth = (this.players[i].width*0.33);
-				var playerHalfHeight = this.players[i].height*0.5;
-				var groundSensorHeight = 2;
 				
 				//Add ground sensor.
 				var groundSensor = this.space.addShape(chipmunk.BoxShape2(this.players[i].body, 
