@@ -1,6 +1,14 @@
 var Player = function (x, y, color) {
 	this.color = color;
 	
+	this.currentBlock = BlockType.NEUTRAL;
+	this.nextBlock = BlockType.COLORED;
+	
+	this.blockStorage = {
+		option1: null,
+		option2: null
+	};
+	
     cc.SpriteFrameCache.getInstance().addSpriteFrames("placeholders/player_run.plist", "placeholders/player_run.png");	
 	this.currentAnimation = cc.Sprite.createWithSpriteFrameName("player_run_01.png");
 	this.currentAnimation.setPosition(new cc.Point(x, y));
