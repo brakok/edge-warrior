@@ -10,6 +10,11 @@ var Color = {
 	BLACK: 7
 };
 
+var UserDataType = {
+	PLAYER: 0,
+	BLOCK: 1
+};
+
 var BlockType = {
 	NEUTRAL: 0,
 	COLORED: 1,
@@ -20,7 +25,8 @@ var BlockType = {
 var CollisionType = {
 	STATIC: 0,
 	PLAYER: 1,
-	GROUND_SENSOR: 2
+	GROUND_SENSOR: 2,
+	BLOCK: 3
 };
 
 var Facing = {
@@ -32,14 +38,15 @@ var Facing = {
 var PhysicConstants = {
 	GRAVITY: -90,
 	FRICTION: 0.99,
-	MASS: 10,
+	MASS_PLAYER: 10,
+	MASS_BLOCK: 9999999,
 	TIME_STEP: 1/30,
 	FRICTION_FACTOR_ONGROUND: 0.9,
 	TURN_FRICTION_FACTOR: 0.05
 };
 
 var PlayerConstants = {
-	JUMP_POWER: 850,
+	JUMP_POWER: 1050,
 	RUN_POWER_ONGROUND: 250,
 	RUN_POWER_OFFGROUND: 15,
 	WIDTH: 40,
@@ -47,6 +54,13 @@ var PlayerConstants = {
 	MAX_SPEED_FACTOR: 0.08
 };
 
+var BlockConstants = {
+	WIDTH: 80,
+	HEIGHT: 20,
+	LAUNCHING_SPEED: -50
+};
+
+//Modules.
 var http = require('http');
 var chipmunk = require('chipmunk');
 
@@ -59,15 +73,93 @@ server.listen(80); //localhost
 //Ground listener.
 var GroundListener = {
 	begin: function(arbiter, space){
-	
-		var player = (arbiter.body_a.userdata != null ? arbiter.body_a.userdata : arbiter.body_b.userdata);
-		player.groundContact++;
+			
+		var player = null;
+		
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_a.userdata.object;
+
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_b.userdata.object;
+		
+		if(player != null){
+			player.groundContact++;
+		}
+		
 	},
 	separate: function(arbiter, space){
-	
-		var player = (arbiter.body_a.userdata != null ? arbiter.body_a.userdata : arbiter.body_b.userdata);
-		player.groundContact--;
+
+		var player = null;
+		
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_a.userdata.object;
+
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_b.userdata.object;
+			
+		if(player != null){
+			player.groundContact--;
+		}
 	}
+};
+
+var BlockListener = {
+	begin: function(arbiter, space){
+		var block = null;
+		
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.BLOCK)
+			block = arbiter.body_a.userdata.object;
+
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.BLOCK)
+			block = arbiter.body_b.userdata.object;
+			
+		if(block != null)
+			block.launched = false;
+	}
+};
+
+//Server version of the block.
+var Block = function(id, x, y, type, color){
+	this.id = id;
+	this.launched = false;
+	
+	this.width = BlockConstants.WIDTH;
+	this.height = BlockConstants.HEIGHT;
+	
+	this.x = x;
+	this.y = y;
+	this.type = type;
+	this.color = color;
+	
+	//Body creation.
+	this.body = Game.space.addBody(new chipmunk.Body(PhysicConstants.MASS_BLOCK, Infinity));
+	this.body.setPos(new chipmunk.Vect(this.x, this.y));
+						
+	//Assign custom data to body.
+	this.body.userdata = {
+		type: UserDataType.BLOCK,
+		object: this
+	};
+						
+	//Create a shape associated with the body.
+	var shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	shape.setCollisionType(CollisionType.BLOCK);
+	shape.setFriction(1);
+			
+	this.launch = function(){
+		this.body.setVel(new chipmunk.Vect(0, BlockConstants.LAUNCHING_SPEED));
+		this.launched = true;
+	};
+	
+	this.toClient = function(){
+		return {
+			id: this.id,
+			x: this.body.getPos().x,
+			y: this.body.getPos().y,
+			type: this.type,
+			color: this.color
+		};
+	};
 };
 
 //Server version of the player.
@@ -166,6 +258,15 @@ var Player = function(id, x, y, color){
 	this.doubleJump = function(){
 		this.jump();
 		
+		//Create a block and launch it.
+		var block = new Block(Game.blocks.length, 
+							  this.x, 
+							  this.y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
+							  this.currentBlock, 
+							  (this.currentBlock != BlockType.NEUTRAL ? this.color : null));
+		Game.blocks.push(block);
+		block.launch();
+		
 		io.sockets.sockets[this.id].emit('nextBlock');
 		
 		this.doubleJumpUsed = true;
@@ -208,11 +309,18 @@ var Game = {
 										   null, 
 										   null, 
 										   function(arbiter, space){GroundListener.separate(arbiter, space);});
+			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
+										   CollisionType.BLOCK, 
+										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   function(arbiter, space){GroundListener.separate(arbiter, space);});						   
 									
+			//Create floor and walls.
 			var ground = new chipmunk.SegmentShape(this.space.staticBody,
 													new chipmunk.Vect(0, 0),
 													new chipmunk.Vect(this.width, 0),
-													1);
+													10);
 			
 			var leftWall = new chipmunk.SegmentShape(this.space.staticBody,
 													new chipmunk.Vect(0, 0),
@@ -239,11 +347,14 @@ var Game = {
 			for(var i in this.players)
 			{
 				//Body creation.
-				this.players[i].body = this.space.addBody(new chipmunk.Body(PhysicConstants.MASS, Infinity));
+				this.players[i].body = this.space.addBody(new chipmunk.Body(PhysicConstants.MASS_PLAYER, Infinity));
 				this.players[i].body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));
 									
 				//Assign custom data to body.
-				this.players[i].body.userdata = this.players[i];
+				this.players[i].body.userdata = {
+					type: UserDataType.PLAYER,
+					object: this.players[i]
+				};
 									
 				//Create a shape associated with the body.
 				var shape = this.space.addShape(chipmunk.BoxShape(this.players[i].body, this.players[i].width, this.players[i].height));
@@ -270,6 +381,12 @@ var Game = {
 			if(this.space != null)
 				this.space.step(PhysicConstants.TIME_STEP);
 		}
+	},
+	addBlock: function(command){
+	
+	},
+	deleteBlock: function(id){
+	
 	}
 };
 
@@ -332,7 +449,6 @@ io.sockets.on('connection', function (socket){
 	
 	socket.on('nextBlock', function(command){
 		Game.players[socket.id].currentBlock = command;
-		console.log(command);
 	});
 	
 	//Retrieving information from players.
@@ -343,7 +459,7 @@ io.sockets.on('connection', function (socket){
 	//Sending information upon pull request.
 	socket.on('pull', function(){
 	
-		var enemies = new Array();
+		var enemies = [];
 		
 		for(var i in Game.players)
 		{
@@ -351,9 +467,14 @@ io.sockets.on('connection', function (socket){
 				enemies.push(Game.players[i].toClient());
 		}
 		
+		var blocks = [];
+		for(var i in Game.blocks)
+			blocks.push(Game.blocks[i].toClient());
+		
 		var data = {
 			player: Game.players[socket.id].toClient(),
-			enemies: enemies
+			enemies: enemies,
+			blocks: blocks
 		};
 		
 		socket.emit('pull', data);
