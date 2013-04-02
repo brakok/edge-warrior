@@ -10,6 +10,13 @@ var Color = {
 	BLACK: 7
 };
 
+var BlockType = {
+	NEUTRAL: 0,
+	COLORED: 1,
+	SPAWN: 2,
+	SKILLED: 3
+};
+
 var CollisionType = {
 	STATIC: 0,
 	PLAYER: 1,
@@ -23,7 +30,7 @@ var Facing = {
 
 //Constants
 var PhysicConstants = {
-	GRAVITY: -70,
+	GRAVITY: -90,
 	FRICTION: 0.99,
 	MASS: 10,
 	TIME_STEP: 1/30,
@@ -37,7 +44,7 @@ var PlayerConstants = {
 	RUN_POWER_OFFGROUND: 15,
 	WIDTH: 40,
 	HEIGHT: 40,
-	MAX_SPEED_FACTOR: 0.065
+	MAX_SPEED_FACTOR: 0.08
 };
 
 var http = require('http');
@@ -64,7 +71,8 @@ var GroundListener = {
 };
 
 //Server version of the player.
-var Player = function(x, y, color){
+var Player = function(id, x, y, color){
+	this.id = id;
 	this.x = x;
 	this.y = y;
 	
@@ -74,6 +82,8 @@ var Player = function(x, y, color){
 	this.groundContact = 0;
 	this.doubleJumpEnabled = false;
 	this.doubleJumpUsed = true;
+	
+	this.currentBlock = BlockType.NEUTRAL;
 	
 	this.facing = Facing.RIGHT;
 	
@@ -99,8 +109,7 @@ var Player = function(x, y, color){
 		{
 			var factor = Math.abs(this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
 			impulse = PlayerConstants.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
-		}
-			
+		}	
 		
 		//Move
 		if(this.keys.right)
@@ -114,7 +123,10 @@ var Player = function(x, y, color){
 		
 		//Jump
 		if(this.keys.jump && this.groundContact > 0)
+		{
 			this.jump();
+			this.doubleJumpEnabled = false;
+		}
 			
 		//Double jump
 		if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
@@ -152,8 +164,10 @@ var Player = function(x, y, color){
 	};
 	
 	this.doubleJump = function(){
-		this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
-		this.body.applyImpulse(new chipmunk.Vect(0, PlayerConstants.JUMP_POWER), new chipmunk.Vect(0,0));
+		this.jump();
+		
+		io.sockets.sockets[this.id].emit('nextBlock');
+		
 		this.doubleJumpUsed = true;
 		this.doubleJumpEnabled = false;
 	};
@@ -277,7 +291,7 @@ io.sockets.on('connection', function (socket){
 	for(var i in Game.players)
 		enemies.push(Game.players[i].toClient());
 	
-	var player = new Player(spawnX*(Game.connectingPlayers+1), spawnY, Game.connectingPlayers);
+	var player = new Player(socket.id, spawnX*(Game.connectingPlayers+1), spawnY, Game.connectingPlayers);
 	
 	//Value initiating a player.
 	var initData = {
@@ -314,6 +328,11 @@ io.sockets.on('connection', function (socket){
 			
 			Game.ready = true;
 		}
+	});
+	
+	socket.on('nextBlock', function(command){
+		Game.players[socket.id].currentBlock = command;
+		console.log(command);
 	});
 	
 	//Retrieving information from players.
