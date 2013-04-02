@@ -15,6 +15,13 @@ var Color = {
 	BLACK: 7
 };
 
+var BlockType = {
+	NEUTRAL: 0,
+	COLORED: 1,
+	SPAWN: 2,
+	SKILLED: 3
+};
+
 //Object containing network information.
 var Client = new function(){
 
@@ -30,6 +37,9 @@ var Client = new function(){
 	this.keys[cc.KEY.d] = false;
 	this.keys[cc.KEY.a] = false;
 	this.keys[cc.KEY.space] = false;
+	
+	this.blockTypeAvailable = [];
+	this.blockTypeAvailable[0] = new BlockOption(BlockType.COLORED, 25, 100);
 	
 	//Initialize the game client.
 	this.init = function (layer) {
@@ -49,6 +59,30 @@ var Client = new function(){
 			this.layer.addChild(this.enemies[i].currentAnimation);
 		
 		this.ready = true;
+	};
+	
+	//Randomize next block and emit the command related to the current block.
+	this.randomBlock = function(){
+		
+		this.player.currentBlock = this.player.nextBlock;
+		
+		var rnd = Math.round(Math.random()*100);
+		var found = false;
+		
+		for(var i in this.blockTypeAvailable)
+		{
+			if(rnd >= this.blockTypeAvailable[i].min && this.blockTypeAvailable[i].max >= rnd)
+			{
+				this.player.nextBlock = this.blockTypeAvailable[i].type;
+				found = true;
+			}
+		}
+		
+		if(!found)
+			this.player.nextBlock = BlockType.NEUTRAL;
+		
+		console.log(rnd);
+		this.socket.emit('nextBlock', this.player.currentBlock);
 	};
 	
 	//Update elements contained in the container.
@@ -103,6 +137,10 @@ var Client = new function(){
 		//Pulling info from server.
 		socket.on('pull', function (data){	
 			Client.updateFromServer(data.player, data.enemies);
+		});
+		
+		socket.on('nextBlock', function(data){
+			Client.randomBlock();
 		});
 		
 		//Once defined, preserved the socket.
