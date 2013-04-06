@@ -259,14 +259,17 @@ var Player = function(id, x, y, color){
 		this.jump();
 		
 		//Create a block and launch it.
-		var block = new Block(Game.blocks.length, 
+		var block = new Block(Game.blockSequence, 
 							  this.x, 
 							  this.y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
 							  this.currentBlock, 
 							  (this.currentBlock != BlockType.NEUTRAL ? this.color : null));
 		Game.blocks.push(block);
 		block.launch();
+		Game.blockSequence++;
 		
+		//Emit the new block to all players and ask for next block of current player.
+		io.sockets.in(Game.id).emit('newBlock', block.toClient());
 		io.sockets.sockets[this.id].emit('nextBlock');
 		
 		this.doubleJumpUsed = true;
@@ -287,6 +290,7 @@ var Game = {
 	id: 1,
 	players: [],
 	blocks: [],
+	blockSequence: 0,
 	width: 1200,
 	height: 800,
 	connectedPlayers: 0,
