@@ -42,9 +42,11 @@ var Client = new function(){
 	this.blockTypeAvailable[0] = new BlockOption(BlockType.COLORED, 25, 100);
 	
 	//Initialize the game client.
-	this.init = function (layer) {
+	this.init = function (layer, hud) {
 	
 		this.layer = layer;
+		this.hud = hud;
+		
 		this.ready = false;
 		
 		//Creating client and connecting to server.
@@ -52,13 +54,16 @@ var Client = new function(){
 	};
 	
 	//Add elements on layer.
-	this.initLayer = function(){
+	this.initLayers = function(){
 	
 		this.layer.addChild(this.player.currentAnimation);
 		
 		for(var i in this.enemies)
 			this.layer.addChild(this.enemies[i].currentAnimation);
 				
+		//Set first blocks to the HUD.
+		this.hud.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), new Block(0,0, this.player.nextBlock, this.player.color));
+		
 		this.ready = true;
 	};
 	
@@ -83,7 +88,8 @@ var Client = new function(){
 		//Neutral if not found.
 		if(!found)
 			this.player.nextBlock = BlockType.NEUTRAL;
-		
+
+		this.hud.pushBlock(new Block(0,0,this.player.nextBlock, this.player.color));
 		this.socket.emit('nextBlock', this.player.currentBlock);
 	};
 	
@@ -133,7 +139,12 @@ var Client = new function(){
 		socket.on('launch', function(){
 			console.log('Launching!');
 			//Add received elements to the layer (render).
-			Client.initLayer();
+			Client.initLayers();
+		});
+		
+		socket.on('newBlock', function(block){
+			//Add a new block.
+			Client.addNewBlock(block); 
 		});
 		
 		//Pulling info from server.
@@ -151,23 +162,26 @@ var Client = new function(){
 	
 	//Update positions from server ones.
 	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks){
+		
+		//Update player.
 		this.player.fromServer(remotePlayer);
 		
+		//Update enemies.
 		for(var i in this.enemies)
 			for(var j in remoteEnemies)
 				if(this.enemies[i].color == remoteEnemies[j].color)
 					this.enemies[i].fromServer(remoteEnemies[j]);
 			
+		//Update blocks.
 		for(var i in remoteBlocks)
-		{
 			if(this.blocks[remoteBlocks[i].id] != null)
 				this.blocks[remoteBlocks[i].id].fromServer(remoteBlocks[i]);
-			else
-			{
-				this.blocks[remoteBlocks[i].id] = new Block(remoteBlocks[i].x, remoteBlocks[i].y, remoteBlocks[i].type, remoteBlocks[i].color);
-				this.layer.addChild(this.blocks[remoteBlocks[i].id].sprite);
-			}
-		}
+	};
+	
+	//Add a new block from the server.
+	this.addNewBlock = function(remoteBlock){
+		this.blocks[remoteBlock.id] = new Block(remoteBlock.x, remoteBlock.y, remoteBlock.type, remoteBlock.color);
+		this.layer.addChild(this.blocks[remoteBlock.id].sprite);
 	};
 	
 	//Pushing info to server.

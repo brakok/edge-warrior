@@ -26,11 +26,4 @@ var Block = function (x, y, type, color) {
 		
 		this.setPosition(data.x, data.y);
 	};
-	
-	/*
-	var testScale = 3;
-	this.sprite.schedule(function (){
-		testScale += 0.05;
-		this.setScale(testScale, 1);
-	}); */
 }

@@ -25,14 +25,18 @@ var Game = cc.Layer.extend({
 			if(scale > 10)
 				scale = 1;
 		});
-					
+		
+		var hud = HUD.create(s.width, s.height);
+		
 		//Init world.
-		Client.init(playGroundLayer);
+		Client.init(playGroundLayer, hud);
 		
 		playGroundLayer.addChild(helloLabel);
 		
 		//Set the game layer (middle ground).
 		this.addChild(playGroundLayer);
+		this.addChild(hud.layer);
+		
 		this.setKeyboardEnabled(true);
 				
 		//This should be automaticaly called, but it's not.
