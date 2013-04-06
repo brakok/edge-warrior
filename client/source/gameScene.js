@@ -35,7 +35,7 @@ var Game = cc.Layer.extend({
 		
 		//Set the game layer (middle ground).
 		this.addChild(playGroundLayer);
-		this.addChild(hud.layer);
+		this.addChild(hud);
 		
 		this.setKeyboardEnabled(true);
 				
