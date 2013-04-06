@@ -15,7 +15,8 @@
 				  'source/block.js',
 				  'source/player.js',
 				  'source/gameScene.js',
-				  'source/Resources.js']
+				  'source/Resources.js',
+				  'source/hud.js']
 	};
 	
 	//Add event that load everything needed by Cocos2d.
