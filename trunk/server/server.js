@@ -34,30 +34,35 @@ var Facing = {
 	LEFT: 1
 };
 
+var BlockState = {
+	STATIC: 0,
+	DYNAMIC: 1
+};
+
 //Constants
 var PhysicConstants = {
-	GRAVITY: -90,
+	GRAVITY: -150,
 	FRICTION: 0.99,
 	MASS_PLAYER: 10,
-	MASS_BLOCK: 9999999,
-	TIME_STEP: 1/30,
+	MASS_BLOCK: 999999999,
+	TIME_STEP: 1/60,
 	FRICTION_FACTOR_ONGROUND: 0.9,
 	TURN_FRICTION_FACTOR: 0.05
 };
 
 var PlayerConstants = {
-	JUMP_POWER: 1050,
-	RUN_POWER_ONGROUND: 250,
+	JUMP_POWER: 1350,
+	RUN_POWER_ONGROUND: 1000,
 	RUN_POWER_OFFGROUND: 15,
 	WIDTH: 40,
 	HEIGHT: 40,
-	MAX_SPEED_FACTOR: 0.08
+	MAX_SPEED_FACTOR: 0.01
 };
 
 var BlockConstants = {
 	WIDTH: 80,
 	HEIGHT: 20,
-	LAUNCHING_SPEED: -50
+	LAUNCHING_SPEED: -500
 };
 
 //Modules.
@@ -85,7 +90,6 @@ var GroundListener = {
 		if(player != null){
 			player.groundContact++;
 		}
-		
 	},
 	separate: function(arbiter, space){
 
@@ -99,29 +103,43 @@ var GroundListener = {
 			
 		if(player != null){
 			player.groundContact--;
+			return;
 		}
 	}
 };
 
 var BlockListener = {
 	begin: function(arbiter, space){
-		var block = null;
 		
+		var block1 = null;
+		var block2 = null;
+				
 		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.BLOCK)
-			block = arbiter.body_a.userdata.object;
+			block1 = arbiter.body_a.userdata.object;
 
 		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.BLOCK)
-			block = arbiter.body_b.userdata.object;
-			
-		if(block != null)
-			block.launched = false;
+			block2 = arbiter.body_b.userdata.object;
+
+		if(block1 != null)
+		{
+			//State can't be changed during callback.
+			block1.toggleState = true;
+			block1.isStatic = true;
+		}	
+		if(block2 != null)
+		{
+			block2.toggleState = true;
+			block2.isStatic = true;
+		}
+	},
+	separate: function(arbiter, space){
+	
 	}
 };
 
 //Server version of the block.
 var Block = function(id, x, y, type, color){
 	this.id = id;
-	this.launched = false;
 	
 	this.width = BlockConstants.WIDTH;
 	this.height = BlockConstants.HEIGHT;
@@ -131,24 +149,80 @@ var Block = function(id, x, y, type, color){
 	this.type = type;
 	this.color = color;
 	
-	//Body creation.
+	//Needed to indicate during update if state is changed. Cannot be done during a space step (callback).
+	this.toggleState = false;
+	this.isStatic = false;
+	
+	this.state = BlockState.DYNAMIC;
+	
+	//Body creation (when static).
+	this.staticBody = new chipmunk.Body(Infinity, Infinity);
+	this.staticBody.nodeIdleTime = Infinity;
+	
+	this.staticShape = chipmunk.BoxShape(this.staticBody, this.width, this.height);
+	this.staticShape.setCollisionType(CollisionType.BLOCK);
+	this.staticShape.setFriction(1);
+	
+	//Body creation (when not static).
 	this.body = Game.space.addBody(new chipmunk.Body(PhysicConstants.MASS_BLOCK, Infinity));
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 						
 	//Assign custom data to body.
-	this.body.userdata = {
+	this.body.userdata = this.staticBody.userdata = {
 		type: UserDataType.BLOCK,
 		object: this
 	};
-						
-	//Create a shape associated with the body.
-	var shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
-	shape.setCollisionType(CollisionType.BLOCK);
-	shape.setFriction(1);
 			
+	//Create a shape associated with the body.
+	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.shape.setCollisionType(CollisionType.BLOCK);
+	this.shape.setFriction(1);
+	
 	this.launch = function(){
+		this.active(true);
 		this.body.setVel(new chipmunk.Vect(0, BlockConstants.LAUNCHING_SPEED));
-		this.launched = true;
+	};
+	
+	//Toggle between static and dynamic bodies.
+	this.active = function(flag){
+	
+		if(flag)
+		{
+			//Block become dynamic.
+			if(this.state != BlockState.DYNAMIC)
+			{
+				this.state = BlockState.DYNAMIC;
+				Game.space.removeShape(this.staticShape);
+				//Game.space.removeBody(this.staticBody);
+				
+				Game.space.addBody(this.body);
+				Game.space.addShape(this.shape);
+				
+				this.body.setPos(this.staticBody.getPos());
+			}
+		}
+		else
+		{
+			//Block become static.
+			if(this.state != BlockState.STATIC)
+			{
+				this.state = BlockState.STATIC;
+				
+				Game.space.removeShape(this.shape);
+				Game.space.removeBody(this.body);
+				
+				this.staticBody.setPos(this.body.getPos());
+				Game.space.addShape(this.staticShape);
+				
+				
+			}
+		}
+	};
+	
+	this.update = function(){
+		//TODO: Upgrade precision on landing.
+		if(this.toggleState)
+			this.active(!this.isStatic);		
 	};
 	
 	this.toClient = function(){
@@ -199,7 +273,7 @@ var Player = function(id, x, y, color){
 		
 		if(this.keys.right || this.keys.left)
 		{
-			var factor = Math.abs(this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
+			var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
 			impulse = PlayerConstants.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
 		}	
 		
@@ -276,6 +350,38 @@ var Player = function(id, x, y, color){
 		this.doubleJumpEnabled = false;
 	};
 	
+	//Init the physical part of the player.
+	this.initBody = function(space){
+	
+		var groundSensorHalfWidth = PlayerConstants.WIDTH*0.33;
+		var playerHalfHeight = PlayerConstants.HEIGHT*0.5;
+		var groundSensorHeight = 2;
+	
+		//Body creation.
+		this.body = space.addBody(new chipmunk.Body(PhysicConstants.MASS_PLAYER, Infinity));
+		this.body.setPos(new chipmunk.Vect(this.x, this.y));
+							
+		//Assign custom data to body.
+		this.body.userdata = {
+			type: UserDataType.PLAYER,
+			object: this
+		};
+							
+		//Create a shape associated with the body.
+		var shape = space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+		shape.setCollisionType(CollisionType.PLAYER);
+		
+		//Add ground sensor.
+		var groundSensor = space.addShape(chipmunk.BoxShape2(this.body, 
+															new chipmunk.BB(-(groundSensorHalfWidth), 
+																			-(playerHalfHeight+groundSensorHeight), 
+																			(groundSensorHalfWidth), 
+																			-(playerHalfHeight))))
+		groundSensor.setCollisionType(CollisionType.GROUND_SENSOR);
+		groundSensor.sensor = true;
+	};
+	
+	//Format for client.
 	this.toClient = function(){
 		return {
 			x: this.x,
@@ -315,10 +421,26 @@ var Game = {
 										   function(arbiter, space){GroundListener.separate(arbiter, space);});
 			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
 										   CollisionType.BLOCK, 
-										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
+										   function(arbiter, space){ GroundListener.begin(arbiter, space); }, 
 										   null, 
 										   null, 
-										   function(arbiter, space){GroundListener.separate(arbiter, space);});						   
+										   function(arbiter, space){GroundListener.separate(arbiter, space);});		
+			
+			//Add block listener callback.
+			this.space.addCollisionHandler(CollisionType.BLOCK, 
+										   CollisionType.STATIC, 
+										   function(arbiter, space){ BlockListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   function(arbiter, space){BlockListener.separate(arbiter, space);});
+			this.space.addCollisionHandler(CollisionType.BLOCK, 
+										   CollisionType.BLOCK, 
+										   function(arbiter, space){ BlockListener.begin(arbiter, space); }, 
+										   null, 
+										   null, 
+										   function(arbiter, space){BlockListener.separate(arbiter, space);});	
+										   
+										   
 									
 			//Create floor and walls.
 			var ground = new chipmunk.SegmentShape(this.space.staticBody,
@@ -336,61 +458,35 @@ var Game = {
 														new chipmunk.Vect(this.width, this.height*3),
 														1);																
 			
-			//Set friction on 3.
+			//Set friction on ground.
 			ground.setFriction(PhysicConstants.FRICTION);
 			
 			this.space.addShape(ground);
 			this.space.addShape(leftWall);
 			this.space.addShape(rightWall);			
 				
-			var groundSensorHalfWidth = PlayerConstants.WIDTH*0.33;
-			var playerHalfHeight = PlayerConstants.HEIGHT*0.5;
-			var groundSensorHeight = 2;
-				
-			//Add players.
+			//Init players' bodies.
 			for(var i in this.players)
-			{
-				//Body creation.
-				this.players[i].body = this.space.addBody(new chipmunk.Body(PhysicConstants.MASS_PLAYER, Infinity));
-				this.players[i].body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));
-									
-				//Assign custom data to body.
-				this.players[i].body.userdata = {
-					type: UserDataType.PLAYER,
-					object: this.players[i]
-				};
-									
-				//Create a shape associated with the body.
-				var shape = this.space.addShape(chipmunk.BoxShape(this.players[i].body, this.players[i].width, this.players[i].height));
-				shape.setCollisionType(CollisionType.PLAYER);
-				
-				//Add ground sensor.
-				var groundSensor = this.space.addShape(chipmunk.BoxShape2(this.players[i].body, 
-																			new chipmunk.BB(-(groundSensorHalfWidth), 
-																							-(playerHalfHeight+groundSensorHeight), 
-																							(groundSensorHalfWidth), 
-																							-(playerHalfHeight))))
-				groundSensor.setCollisionType(CollisionType.GROUND_SENSOR);
-				groundSensor.sensor = true;
-			}
+				this.players[i].initBody(this.space);
 		}
 	},
 	update: function() {
 		//When world's ready...
 		if(this.ready)
 		{	
-			for(var i in io.sockets.in(this.id).sockets)
+			for(var i in this.players)
 				this.players[i].update();
 				
 			if(this.space != null)
 				this.space.step(PhysicConstants.TIME_STEP);
+				
+			for(var i in this.blocks)
+				this.blocks[i].update();
 		}
 	},
-	addBlock: function(command){
-	
-	},
-	deleteBlock: function(id){
-	
+	launch: function(){
+		//17 milliseconds = 60 FPS
+		setInterval(function(){Game.update()}, 8);
 	}
 };
 
@@ -442,7 +538,7 @@ io.sockets.on('connection', function (socket){
 		{
 			//Init physic world.
 			Game.createWorld();
-			setInterval(function(){Game.update()}, 17);
+			Game.launch();
 		
 			console.log('Game launching!');
 			io.sockets.in(Game.id).emit('launch');
