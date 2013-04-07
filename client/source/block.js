@@ -9,14 +9,14 @@ var Block = function (x, y, type, color) {
 	else
 		this.sprite = cc.Sprite.create('placeholders/block.png');
 	
-	this.sprite.setPosition(new cc.Point(x, y));
+	this.sprite.setPosition(new cc.Point(x, y));	
 	this.sprite.setScale(2, 0.5);
-
 	
 	this.setPosition = function(x, y){
 		this.sprite.setPosition(new cc.Point(x, y));
 	};
 	
+	//Update block information from server.
 	this.fromServer = function(data){
 
 		this.x = data.x;
