@@ -5,8 +5,8 @@ var Color = {
 	YELLOW: 2,
 	WHITE: 3,
 	GREEN: 4,
-	PURPLE: 5,
-	ORANGE: 6,
+	ORANGE: 5,
+	PURPLE: 6,
 	BLACK: 7
 };
 
@@ -37,6 +37,10 @@ var Facing = {
 var BlockState = {
 	STATIC: 0,
 	DYNAMIC: 1
+};
+
+var BlockDestructionType = {
+	COLOR_CONTACT: 0
 };
 
 //Constants
@@ -120,6 +124,34 @@ var BlockListener = {
 		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.BLOCK)
 			block2 = arbiter.body_b.userdata.object;
 
+				/*
+		//Special process for collision with two blocks.
+		if(block1 != null && block2 != null)
+		{
+			console.log(block1.id + ': ' + block1.color);
+			console.log(block2.id + ': ' + block2.color);
+		
+			if(block1.color != null && block2.color != null && block1.color == block2.color)
+			{			
+				//If blocks are touching a third one, destroy them all.
+				if(block1.linkedBlockId != null || block2.linkedBlockId != null)
+				{
+					block1.explode(BlockDestructionType.COLOR_CONTACT);
+					block2.explode(BlockDestructionType.COLOR_CONTACT);
+					Game.blocks[(block1.linkedBlockId != null ? block1.linkedBlockId : block2.linkedBlockId)].explode(BlockDestructionType.COLOR_CONTACT);	
+
+					block1 = null;
+					block2 = null;
+				}
+				else
+				{
+					block1.linkedBlockId = block2.id;
+					block2.linkedBlockId = block1.id;
+				}
+			}
+		}*/
+			
+		//Check if blocks land.
 		if(block1 != null && !block1.isStatic)
 		{
 			//State can't be changed during callback.
@@ -139,7 +171,9 @@ var BlockListener = {
 
 //Server version of the block.
 var Block = function(id, x, y, type, color){
+	
 	this.id = id;
+	this.linkedBlockId = null;
 	
 	this.width = BlockConstants.WIDTH;
 	this.height = BlockConstants.HEIGHT;
@@ -178,6 +212,7 @@ var Block = function(id, x, y, type, color){
 	this.shape.setCollisionType(CollisionType.STATIC);
 	this.shape.setFriction(1);
 	
+	//Sensor allowing shape to be defined as block, because listener overrides collision behavior.
 	var blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	blockSensor.setCollisionType(CollisionType.BLOCK);
 	blockSensor.sensor = true;
@@ -222,6 +257,7 @@ var Block = function(id, x, y, type, color){
 	
 	this.update = function(){
 	
+		//Activate or desactivate a block to become static or dynamic.
 		if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
 		{
 			this.active(!this.isStatic);
@@ -238,6 +274,23 @@ var Block = function(id, x, y, type, color){
 			type: this.type,
 			color: this.color
 		};
+	};
+	
+	this.explode = function(cause){
+	
+		var data = {
+			cause: cause,
+			id: this.id
+		};
+		
+		//Unreference from game's blocks list.
+		for(var i in Game.blocks)
+		{
+			if(Game.blocks[i].id == this.id)
+				Game.blocks[i] = null;
+		}
+		
+		io.sockets.in(Game.id).emit('deleteBlock', data);
 	};
 };
 
@@ -336,7 +389,7 @@ var Player = function(id, x, y, color){
 	
 	this.doubleJump = function(){
 		this.jump();
-		
+				
 		//Create a block and launch it.
 		var block = new Block(Game.blockSequence, 
 							  this.x, 
@@ -345,7 +398,7 @@ var Player = function(id, x, y, color){
 							  (this.currentBlock != BlockType.NEUTRAL ? this.color : null));
 		Game.blocks.push(block);
 		block.launch();
-		Game.blockSequence++;
+		Game.blockSequence++;		
 		
 		//Emit the new block to all players and ask for next block of current player.
 		io.sockets.in(Game.id).emit('newBlock', block.toClient());
