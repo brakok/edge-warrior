@@ -26,7 +26,8 @@ var CollisionType = {
 	STATIC: 0,
 	PLAYER: 1,
 	GROUND_SENSOR: 2,
-	BLOCK: 3
+	BLOCK: 3,
+	DROP_SENSOR: 4
 };
 
 var Facing = {
@@ -79,6 +80,36 @@ var server = http.createServer(function(req, res){});
 
 //Port.
 server.listen(80); //localhost
+
+//DropListener.
+var DropListener = {
+	begin: function(arbiter, space){
+		var player = null;
+		
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_a.userdata.object;
+
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_b.userdata.object;
+		
+		if(player != null){
+			player.obstruction++;
+		}
+	},
+	separate: function(arbiter, space){
+		var player = null;
+		
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_a.userdata.object;
+
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_b.userdata.object;
+		
+		if(player != null){
+			player.obstruction--;
+		}
+	}
+};
 
 //Ground listener.
 var GroundListener = {
@@ -209,79 +240,78 @@ var Block = function(id, x, y, type, color){
 	var blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	blockSensor.setCollisionType(CollisionType.BLOCK);
 	blockSensor.sensor = true;
+
+};
+
+Block.prototype.launch = function(){
+	this.body.setVel(new chipmunk.Vect(0, BlockConstants.LAUNCHING_SPEED));
+};
+
+Block.prototype.active = function(flag){
 	
-	this.launch = function(){
-		//this.active(true);
-		this.body.setVel(new chipmunk.Vect(0, BlockConstants.LAUNCHING_SPEED));
-	};
-	
-	//Toggle between static and dynamic bodies.
-	this.active = function(flag){
-	
-		if(flag)
+	if(flag)
+	{
+		//Block become dynamic.
+		if(this.state != BlockState.DYNAMIC)
 		{
-			//Block become dynamic.
-			if(this.state != BlockState.DYNAMIC)
-			{
-				this.state = BlockState.DYNAMIC;
-				
-				this.body.nodeIdleTime = 0;
-				this.body.setMass(PhysicConstants.MASS_BLOCK);
-				Game.space.addBody(this.body);
-			}
+			this.state = BlockState.DYNAMIC;
+			
+			this.body.nodeIdleTime = 0;
+			this.body.setMass(PhysicConstants.MASS_BLOCK);
+			Game.space.addBody(this.body);
 		}
-		else
+	}
+	else
+	{
+		//Block become static.
+		if(this.state != BlockState.STATIC)
 		{
-			//Block become static.
-			if(this.state != BlockState.STATIC)
-			{
-				this.state = BlockState.STATIC;
-				
-				Game.space.removeBody(this.body);
-				this.body.nodeIdleTime = Infinity;
-				this.body.setMass(PhysicConstants.MASS_BLOCK_STATIC);
-			}
+			this.state = BlockState.STATIC;
+			
+			Game.space.removeBody(this.body);
+			this.body.nodeIdleTime = Infinity;
+			this.body.setMass(PhysicConstants.MASS_BLOCK_STATIC);
 		}
-	};
+	}
+};
+
+Block.prototype.update = function(){
 	
-	this.update = function(){
-	
-		//Activate or desactivate a block to become static or dynamic.
-		if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
-		{
-			this.active(!this.isStatic);
-			this.toggleState = false;
-		}
-					
-	};
-	
-	this.toClient = function(){
-		return {
-			id: this.id,
-			x: this.body.getPos().x,
-			y: this.body.getPos().y,
-			type: this.type,
-			color: this.color
-		};
-	};
-	
-	this.explode = function(cause){
-	
-		var data = {
-			cause: cause,
-			id: this.id
-		};
-		
-		//Unreference from game's blocks list.
-		for(var i in Game.blocks)
-		{
-			if(Game.blocks[i].id == this.id)
-				Game.blocks[i] = null;
-		}
-		
-		io.sockets.in(Game.id).emit('deleteBlock', data);
+	//Activate or desactivate a block to become static or dynamic.
+	if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
+	{
+		this.active(!this.isStatic);
+		this.toggleState = false;
+	}			
+};
+
+Block.prototype.toClient = function(){
+	return {
+		id: this.id,
+		x: this.body.getPos().x,
+		y: this.body.getPos().y,
+		type: this.type,
+		color: this.color
 	};
 };
+
+Block.prototype.explode = function(cause){
+	
+	var data = {
+		cause: cause,
+		id: this.id
+	};
+	
+	//Unreference from game's blocks list.
+	for(var i in Game.blocks)
+	{
+		if(Game.blocks[i].id == this.id)
+			Game.blocks[i] = null;
+	}
+	
+	io.sockets.in(Game.id).emit('deleteBlock', data);
+};
+
 
 //Server version of the player.
 var Player = function(id, x, y, color){
@@ -293,6 +323,8 @@ var Player = function(id, x, y, color){
 	this.height = PlayerConstants.HEIGHT;
 	
 	this.groundContact = 0;
+	this.obstruction = 0;
+	
 	this.doubleJumpEnabled = false;
 	this.doubleJumpUsed = true;
 	
@@ -308,77 +340,80 @@ var Player = function(id, x, y, color){
 	};
 	
 	//Physic body.
-	this.body = null;
+	this.body = null;	
+};
+
+Player.prototype.update = function(){
+		
+	this.x = this.body.getPos().x;
+	this.y = this.body.getPos().y;
 	
-	this.update = function(){
-		
-		this.x = this.body.getPos().x;
-		this.y = this.body.getPos().y;
-		
-		var nextX = 0;
-		var impulse = 0;
-		
-		if(this.keys.right || this.keys.left)
-		{
-			var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
-			impulse = PlayerConstants.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
-		}	
-		
-		//Move
-		if(this.keys.right)
-			nextX += impulse;
-			
-		if(this.keys.left)
-			nextX -= impulse;
-		
-		if(this.groundContact > 0 && this.doubleJumpUsed)
-			this.doubleJumpUsed = false;
-		
-		//Jump
-		if(this.keys.jump && this.groundContact > 0)
-		{
-			this.jump();
-			this.doubleJumpEnabled = false;
-		}
-			
-		//Double jump
-		if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
-			this.doubleJump();
-			
-		//Allow double jump.
-		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
-			this.doubleJumpEnabled = true;
-		
-		if(nextX != 0)
-		{
-			var lastFacing = this.facing;
-			this.facing = (nextX > 0 ? Facing.RIGHT : Facing.LEFT);
-			
-			if(lastFacing != this.facing)
-				this.turn();
-				
-			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
-		}
-		else
-		{
-			//Artificial friction for players when on ground and pressing no key.
-			if(this.groundContact > 0)
-				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
-		}
-	};
+	var nextX = 0;
+	var impulse = 0;
 	
-	this.turn = function(){
-		this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.TURN_FRICTION_FACTOR, this.body.getVel().y));
-	};
+	if(this.keys.right || this.keys.left)
+	{
+		var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
+		impulse = PlayerConstants.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
+	}	
 	
-	this.jump = function(){
-		this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
-		this.body.applyImpulse(new chipmunk.Vect(0, PlayerConstants.JUMP_POWER), new chipmunk.Vect(0,0));
-	};
+	//Move
+	if(this.keys.right)
+		nextX += impulse;
+		
+	if(this.keys.left)
+		nextX -= impulse;
 	
-	this.doubleJump = function(){
+	if(this.groundContact > 0 && this.doubleJumpUsed)
+		this.doubleJumpUsed = false;
+	
+	//Jump
+	if(this.keys.jump && this.groundContact > 0)
+	{
 		this.jump();
-				
+		this.doubleJumpEnabled = false;
+	}
+		
+	//Double jump
+	if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
+		this.doubleJump();
+		
+	//Allow double jump.
+	if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
+		this.doubleJumpEnabled = true;
+	
+	if(nextX != 0)
+	{
+		var lastFacing = this.facing;
+		this.facing = (nextX > 0 ? Facing.RIGHT : Facing.LEFT);
+		
+		if(lastFacing != this.facing)
+			this.turn();
+			
+		this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
+	}
+	else
+	{
+		//Artificial friction for players when on ground and pressing no key.
+		if(this.groundContact > 0)
+			this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
+	}
+};
+
+Player.prototype.turn = function(){
+	this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.TURN_FRICTION_FACTOR, this.body.getVel().y));
+};
+
+Player.prototype.jump = function(){
+	this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
+	this.body.applyImpulse(new chipmunk.Vect(0, PlayerConstants.JUMP_POWER), new chipmunk.Vect(0,0));
+};
+
+Player.prototype.doubleJump = function(){
+	this.jump();
+	
+	//Spawn a block if drop zone isn't obstructed.
+	if(this.obstruction == 0){
 		//Create a block and launch it.
 		var block = new Block(Game.blockSequence, 
 							  this.x, 
@@ -392,13 +427,14 @@ var Player = function(id, x, y, color){
 		//Emit the new block to all players and ask for next block of current player.
 		io.sockets.in(Game.id).emit('newBlock', block.toClient());
 		io.sockets.sockets[this.id].emit('nextBlock');
-		
-		this.doubleJumpUsed = true;
-		this.doubleJumpEnabled = false;
-	};
+	}
 	
-	//Init the physical part of the player.
-	this.initBody = function(space){
+	this.doubleJumpUsed = true;
+	this.doubleJumpEnabled = false;
+};
+
+//Init the physical part of the player.
+Player.prototype.initBody = function(space){
 	
 		var groundSensorHalfWidth = PlayerConstants.WIDTH*0.33;
 		var playerHalfHeight = PlayerConstants.HEIGHT*0.5;
@@ -423,18 +459,27 @@ var Player = function(id, x, y, color){
 															new chipmunk.BB(-(groundSensorHalfWidth), 
 																			-(playerHalfHeight+groundSensorHeight), 
 																			(groundSensorHalfWidth), 
-																			-(playerHalfHeight))))
+																			-(playerHalfHeight))));
 		groundSensor.setCollisionType(CollisionType.GROUND_SENSOR);
 		groundSensor.sensor = true;
+		
+		//Add drop sensor to prevent double jump when drop zone is obstructed.
+		var dropSensor = space.addShape(chipmunk.BoxShape2(this.body, 
+															new chipmunk.BB(-(BlockConstants.WIDTH*0.5), 
+																			-(playerHalfHeight+BlockConstants.HEIGHT), 
+																			(BlockConstants.WIDTH*0.5), 
+																			-(playerHalfHeight))));
+																	
+		dropSensor.setCollisionType(CollisionType.DROP_SENSOR);
+		dropSensor.sensor = true;
 	};
-	
-	//Format for client.
-	this.toClient = function(){
-		return {
-			x: this.x,
-			y: this.y,
-			color: this.color
-		};
+
+//Format for client.
+Player.prototype.toClient = function(){
+	return {
+		x: this.x,
+		y: this.y,
+		color: this.color
 	};
 };
 
@@ -466,12 +511,6 @@ var Game = {
 										   null, 
 										   null, 
 										   function(arbiter, space){GroundListener.separate(arbiter, space);});
-			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
-										   CollisionType.BLOCK, 
-										   function(arbiter, space){ GroundListener.begin(arbiter, space); }, 
-										   null, 
-										   null, 
-										   function(arbiter, space){GroundListener.separate(arbiter, space);});		
 						
 			//Add block listener callback.
 			this.space.addCollisionHandler(CollisionType.BLOCK, 
@@ -485,7 +524,15 @@ var Game = {
 										   function(arbiter, space){ BlockListener.begin(arbiter, space); }, 
 										   null, 
 										   null, 
-										   function(arbiter, space){BlockListener.separate(arbiter, space);});	
+										   function(arbiter, space){BlockListener.separate(arbiter, space);});
+
+			//Add drop zone listener callback.
+			this.space.addCollisionHandler(CollisionType.DROP_SENSOR, 
+										   CollisionType.STATIC, 
+										   function(arbiter, space){ DropListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   function(arbiter, space){DropListener.separate(arbiter, space);});
 			
 			//Force bodies to sleep when idle after 0.5 second.
 			this.space.sleepTimeThreshold = 0.5;
