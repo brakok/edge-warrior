@@ -48,7 +48,8 @@ var PhysicConstants = {
 	GRAVITY: -150,
 	FRICTION: 0.99,
 	MASS_PLAYER: 10,
-	MASS_BLOCK: 999999999,
+	MASS_BLOCK: 99999999,
+	MASS_BLOCK_STATIC: 99999999999,
 	TIME_STEP: 1/60,
 	FRICTION_FACTOR_ONGROUND: 0.9,
 	TURN_FRICTION_FACTOR: 0.05
@@ -124,7 +125,7 @@ var BlockListener = {
 		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.BLOCK)
 			block2 = arbiter.body_b.userdata.object;
 
-				/*
+		/*
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
 		{
@@ -188,21 +189,13 @@ var Block = function(id, x, y, type, color){
 	this.isStatic = false;
 	
 	this.state = BlockState.DYNAMIC;
-	
-	//Body creation (when static).
-	this.staticBody = new chipmunk.Body(Infinity, Infinity);
-	this.staticBody.nodeIdleTime = Infinity;
-	
-	this.staticShape = chipmunk.BoxShape(this.staticBody, this.width, this.height);
-	this.staticShape.setCollisionType(CollisionType.STATIC);
-	this.staticShape.setFriction(1);
-	
+		
 	//Body creation (when not static).
 	this.body = Game.space.addBody(new chipmunk.Body(PhysicConstants.MASS_BLOCK, Infinity));
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 						
 	//Assign custom data to body.
-	this.body.userdata = this.staticBody.userdata = {
+	this.body.userdata = {
 		type: UserDataType.BLOCK,
 		object: this
 	};
@@ -218,7 +211,7 @@ var Block = function(id, x, y, type, color){
 	blockSensor.sensor = true;
 	
 	this.launch = function(){
-		this.active(true);
+		//this.active(true);
 		this.body.setVel(new chipmunk.Vect(0, BlockConstants.LAUNCHING_SPEED));
 	};
 	
@@ -231,12 +224,10 @@ var Block = function(id, x, y, type, color){
 			if(this.state != BlockState.DYNAMIC)
 			{
 				this.state = BlockState.DYNAMIC;
-				Game.space.removeShape(this.staticShape);
 				
+				this.body.nodeIdleTime = 0;
+				this.body.setMass(PhysicConstants.MASS_BLOCK);
 				Game.space.addBody(this.body);
-				Game.space.addShape(this.shape);
-				
-				this.body.setPos(this.staticBody.getPos());
 			}
 		}
 		else
@@ -246,11 +237,9 @@ var Block = function(id, x, y, type, color){
 			{
 				this.state = BlockState.STATIC;
 				
-				Game.space.removeShape(this.shape);
 				Game.space.removeBody(this.body);
-			
-				this.staticBody.setPos(this.body.getPos());
-				Game.space.addShape(this.staticShape);
+				this.body.nodeIdleTime = Infinity;
+				this.body.setMass(PhysicConstants.MASS_BLOCK_STATIC);
 			}
 		}
 	};
