@@ -27,16 +27,16 @@ var Player = function (x, y, color) {
 	this.runningAnimation = cc.Animate.create(animation);
 	
 	this.currentAnimation.runAction(cc.RepeatForever.create(this.runningAnimation));
-	
-	this.getPosition = function(){
-		return this.currentAnimation.getPosition();
-	};
-	
-	this.setPosition = function(x, y){
-		this.currentAnimation.setPosition(new cc.Point(x, y));
-	};
-		
-	this.fromServer = function(data){
-		this.setPosition(data.x, data.y);
-	};
 }
+
+Player.prototype.getPosition = function(){
+	return this.currentAnimation.getPosition();
+};
+
+Player.prototype.setPosition = function(x, y){
+	this.currentAnimation.setPosition(new cc.Point(x, y));
+};
+
+Player.prototype.fromServer = function(data){
+	this.setPosition(data.x, data.y);
+};
