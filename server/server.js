@@ -120,20 +120,20 @@ var BlockListener = {
 		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.BLOCK)
 			block2 = arbiter.body_b.userdata.object;
 
-		if(block1 != null)
+		if(block1 != null && !block1.isStatic)
 		{
 			//State can't be changed during callback.
 			block1.toggleState = true;
 			block1.isStatic = true;
 		}	
-		if(block2 != null)
+		if(block2 != null && !block2.isStatic)
 		{
 			block2.toggleState = true;
 			block2.isStatic = true;
 		}
 	},
 	separate: function(arbiter, space){
-	
+		
 	}
 };
 
@@ -160,7 +160,7 @@ var Block = function(id, x, y, type, color){
 	this.staticBody.nodeIdleTime = Infinity;
 	
 	this.staticShape = chipmunk.BoxShape(this.staticBody, this.width, this.height);
-	this.staticShape.setCollisionType(CollisionType.BLOCK);
+	this.staticShape.setCollisionType(CollisionType.STATIC);
 	this.staticShape.setFriction(1);
 	
 	//Body creation (when not static).
@@ -175,8 +175,12 @@ var Block = function(id, x, y, type, color){
 			
 	//Create a shape associated with the body.
 	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
-	this.shape.setCollisionType(CollisionType.BLOCK);
+	this.shape.setCollisionType(CollisionType.STATIC);
 	this.shape.setFriction(1);
+	
+	var blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	blockSensor.setCollisionType(CollisionType.BLOCK);
+	blockSensor.sensor = true;
 	
 	this.launch = function(){
 		this.active(true);
@@ -193,7 +197,6 @@ var Block = function(id, x, y, type, color){
 			{
 				this.state = BlockState.DYNAMIC;
 				Game.space.removeShape(this.staticShape);
-				//Game.space.removeBody(this.staticBody);
 				
 				Game.space.addBody(this.body);
 				Game.space.addShape(this.shape);
@@ -210,19 +213,21 @@ var Block = function(id, x, y, type, color){
 				
 				Game.space.removeShape(this.shape);
 				Game.space.removeBody(this.body);
-				
+			
 				this.staticBody.setPos(this.body.getPos());
 				Game.space.addShape(this.staticShape);
-				
-				
 			}
 		}
 	};
 	
 	this.update = function(){
-		//TODO: Upgrade precision on landing.
-		if(this.toggleState)
-			this.active(!this.isStatic);		
+	
+		if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
+		{
+			this.active(!this.isStatic);
+			this.toggleState = false;
+		}
+					
 	};
 	
 	this.toClient = function(){
@@ -425,7 +430,7 @@ var Game = {
 										   null, 
 										   null, 
 										   function(arbiter, space){GroundListener.separate(arbiter, space);});		
-			
+						
 			//Add block listener callback.
 			this.space.addCollisionHandler(CollisionType.BLOCK, 
 										   CollisionType.STATIC, 
@@ -439,9 +444,11 @@ var Game = {
 										   null, 
 										   null, 
 										   function(arbiter, space){BlockListener.separate(arbiter, space);});	
-										   
-										   
-									
+			
+			//Force bodies to sleep when idle after 0.5 second.
+			this.space.sleepTimeThreshold = 0.5;
+			this.space.collisionBias = 0;
+			
 			//Create floor and walls.
 			var ground = new chipmunk.SegmentShape(this.space.staticBody,
 													new chipmunk.Vect(0, 0),
