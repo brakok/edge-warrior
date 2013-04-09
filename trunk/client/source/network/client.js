@@ -10,9 +10,13 @@ var Color = {
 	YELLOW: 2,
 	WHITE: 3,
 	GREEN: 4,
-	PURPLE: 5,
-	ORANGE: 6,
+	ORANGE: 5,
+	PURPLE: 6,
 	BLACK: 7
+};
+
+var BlockDestructionType = {
+	COLOR_CONTACT: 0
 };
 
 var BlockType = {
@@ -147,6 +151,11 @@ var Client = new function(){
 			Client.addNewBlock(block); 
 		});
 		
+		socket.on('deleteBlock', function(data){
+			//Delete a block.
+			Client.deleteBlock(data.id, data.cause);
+		});
+		
 		//Pulling info from server.
 		socket.on('pull', function (data){	
 			Client.updateFromServer(data.player, data.enemies, data.blocks);
@@ -182,6 +191,16 @@ var Client = new function(){
 	this.addNewBlock = function(remoteBlock){
 		this.blocks[remoteBlock.id] = new Block(remoteBlock.x, remoteBlock.y, remoteBlock.type, remoteBlock.color);
 		this.layer.addChild(this.blocks[remoteBlock.id].sprite);
+	};
+	
+	//Delete a block.
+	this.deleteBlock = function(remoteBlockId, cause){
+	
+		if(this.blocks[remoteBlockId] != null)
+		{
+			this.layer.removeChild(this.blocks[remoteBlockId].sprite);
+			this.blocks[remoteBlockId] = null;
+		}
 	};
 	
 	//Pushing info to server.
