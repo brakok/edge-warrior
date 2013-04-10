@@ -156,22 +156,25 @@ var BlockListener = {
 		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.BLOCK)
 			block2 = arbiter.body_b.userdata.object;
 
-		/*
+		
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
-		{
-			console.log(block1.id + ': ' + block1.color);
-			console.log(block2.id + ': ' + block2.color);
-		
+		{	
 			if(block1.color != null && block2.color != null && block1.color == block2.color)
 			{			
 				//If blocks are touching a third one, destroy them all.
-				if(block1.linkedBlockId != null || block2.linkedBlockId != null)
+				if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
+					|| (block2.linkedBlockId != null && block2.linkedBlockId != block1.id))
 				{
-					block1.explode(BlockDestructionType.COLOR_CONTACT);
-					block2.explode(BlockDestructionType.COLOR_CONTACT);
-					Game.blocks[(block1.linkedBlockId != null ? block1.linkedBlockId : block2.linkedBlockId)].explode(BlockDestructionType.COLOR_CONTACT);	
-
+					block1.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+					block2.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+					
+					//Destroy linked leaves.
+					if(block1.linkedBlockId != null)
+						this.destroyLeaves(block1.linkedBlockId, block1.id);
+					if(block2.linkedBlockId != null)
+						this.destroyLeaves(block2.linkedBlockId, block2.id);
+									
 					block1 = null;
 					block2 = null;
 				}
@@ -181,7 +184,7 @@ var BlockListener = {
 					block2.linkedBlockId = block1.id;
 				}
 			}
-		}*/
+		}
 			
 		//Check if blocks land.
 		if(block1 != null && !block1.isStatic)
@@ -198,6 +201,18 @@ var BlockListener = {
 	},
 	separate: function(arbiter, space){
 		
+	},
+	destroyLeaves: function(blockId, previousId){
+		
+		var block = Game.blocks[blockId];
+		
+		if(block != null)
+		{
+			block.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+			
+			if(block.linkedBlockId != null && block.linkedBlockId != previousId)
+				this.destroyLeaves(block.linkedBlockId, blockId);
+		}
 	}
 };
 
@@ -218,6 +233,8 @@ var Block = function(id, x, y, type, color){
 	//Needed to indicate during update if state is changed. Cannot be done during a space step (callback).
 	this.toggleState = false;
 	this.isStatic = false;
+	this.toBeDestroy = false;
+	this.destroyCause = null;
 	
 	this.state = BlockState.DYNAMIC;
 		
@@ -237,10 +254,15 @@ var Block = function(id, x, y, type, color){
 	this.shape.setFriction(1);
 	
 	//Sensor allowing shape to be defined as block, because listener overrides collision behavior.
-	var blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
-	blockSensor.setCollisionType(CollisionType.BLOCK);
-	blockSensor.sensor = true;
+	this.blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.blockSensor.setCollisionType(CollisionType.BLOCK);
+	this.blockSensor.sensor = true;
 
+};
+
+Block.prototype.markToDestroy = function(cause){
+	this.toBeDestroy = true;
+	this.destroyCause = cause;
 };
 
 Block.prototype.launch = function(){
@@ -277,12 +299,16 @@ Block.prototype.active = function(flag){
 
 Block.prototype.update = function(){
 	
-	//Activate or desactivate a block to become static or dynamic.
-	if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
-	{
-		this.active(!this.isStatic);
-		this.toggleState = false;
-	}			
+	if(this.toBeDestroy)
+		this.explode(this.destroyCause);
+	else{
+		//Activate or desactivate a block to become static or dynamic.
+		if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
+		{
+			this.active(!this.isStatic);
+			this.toggleState = false;
+		}	
+	}	
 };
 
 Block.prototype.toClient = function(){
@@ -302,10 +328,16 @@ Block.prototype.explode = function(cause){
 		id: this.id
 	};
 	
+	//Strange behavior when trying to remove a static shape. Works fine when reactivate first.
+	this.active(true);
+	Game.space.removeShape(this.blockSensor);
+	Game.space.removeShape(this.shape);
+	Game.space.removeBody(this.body);
+
 	//Unreference from game's blocks list.
 	for(var i in Game.blocks)
 	{
-		if(Game.blocks[i].id == this.id)
+		if(Game.blocks[i] != null && Game.blocks[i].id == this.id)
 			Game.blocks[i] = null;
 	}
 	
@@ -577,7 +609,10 @@ var Game = {
 				this.space.step(PhysicConstants.TIME_STEP);
 				
 			for(var i in this.blocks)
-				this.blocks[i].update();
+			{
+				if(this.blocks[i] != null)
+					this.blocks[i].update();
+			}
 		}
 	},
 	launch: function(){
@@ -665,7 +700,10 @@ io.sockets.on('connection', function (socket){
 		
 		var blocks = [];
 		for(var i in Game.blocks)
-			blocks.push(Game.blocks[i].toClient());
+		{
+			if(Game.blocks[i] != null)
+				blocks.push(Game.blocks[i].toClient());
+		}
 		
 		var data = {
 			player: Game.players[socket.id].toClient(),
