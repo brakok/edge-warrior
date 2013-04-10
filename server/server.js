@@ -156,7 +156,6 @@ var BlockListener = {
 		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.BLOCK)
 			block2 = arbiter.body_b.userdata.object;
 
-		
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
 		{	
@@ -185,6 +184,35 @@ var BlockListener = {
 				}
 			}
 		}
+		
+		//Treament for player within contact.
+		var player = null;
+		
+		if(block1 == null && arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_a.userdata.object;
+
+		if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_b.userdata.object;
+			
+		if(player != null)
+		{
+			var killingBlock = (block1 !=  null ? block1 : block2);
+			if(killingBlock != null && !killingBlock.landed)
+			{
+				//Find killing player.
+				var killingPlayer = null;
+				
+				for(var i in Game.players)
+				{
+					if(Game.players[i].color == killingBlock.color)
+						killingPlayer = Game.players[i];
+				}
+				
+				//If found, mark the player to be inserted in the next update in the killer blocks list.
+				if(killingPlayer != null)
+					killingPlayer.kill(player);
+			}
+		}
 			
 		//Check if blocks land.
 		if(block1 != null && !block1.isStatic)
@@ -192,11 +220,13 @@ var BlockListener = {
 			//State can't be changed during callback.
 			block1.toggleState = true;
 			block1.isStatic = true;
+			block1.landed = true;
 		}	
 		if(block2 != null && !block2.isStatic)
 		{
 			block2.toggleState = true;
 			block2.isStatic = true;
+			block2.landed = true;
 		}
 	},
 	separate: function(arbiter, space){
@@ -224,6 +254,7 @@ var Block = function(id, x, y, type, color){
 	
 	this.width = BlockConstants.WIDTH;
 	this.height = BlockConstants.HEIGHT;
+	this.landed = false;
 	
 	this.x = x;
 	this.y = y;
@@ -266,6 +297,7 @@ Block.prototype.markToDestroy = function(cause){
 };
 
 Block.prototype.launch = function(){
+	this.landed = false;
 	this.body.setVel(new chipmunk.Vect(0, BlockConstants.LAUNCHING_SPEED));
 };
 
@@ -276,6 +308,7 @@ Block.prototype.active = function(flag){
 		//Block become dynamic.
 		if(this.state != BlockState.DYNAMIC)
 		{
+			this.landed = false;
 			this.state = BlockState.DYNAMIC;
 			
 			this.body.nodeIdleTime = 0;
@@ -373,6 +406,12 @@ var Player = function(id, x, y, color){
 	
 	//Physic body.
 	this.body = null;	
+};
+
+Player.prototype.kill = function(killed){
+	//TODO: Process to kill.
+	console.log('KILLER: ' + this.color);
+	console.log('KILLED: ' + killed.color);
 };
 
 Player.prototype.update = function(){
@@ -553,6 +592,12 @@ var Game = {
 										   function(arbiter, space){BlockListener.separate(arbiter, space);});
 			this.space.addCollisionHandler(CollisionType.BLOCK, 
 										   CollisionType.BLOCK, 
+										   function(arbiter, space){ BlockListener.begin(arbiter, space); }, 
+										   null, 
+										   null, 
+										   function(arbiter, space){BlockListener.separate(arbiter, space);});
+			this.space.addCollisionHandler(CollisionType.BLOCK, 
+										   CollisionType.PLAYER, 
 										   function(arbiter, space){ BlockListener.begin(arbiter, space); }, 
 										   null, 
 										   null, 
