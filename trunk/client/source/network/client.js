@@ -161,12 +161,38 @@ var Client = new function(){
 			Client.updateFromServer(data.player, data.enemies, data.blocks);
 		});
 		
+		//Ask for next block.
 		socket.on('nextBlock', function(data){
 			Client.randomBlock();
+		});
+		
+		//Received dead people information.
+		socket.on('playerKilled', function(killed){
+			Client.kill(killed);
+		});
+		
+		//Received information to build spawn block.
+		socket.on('spawnBlock', function(killed){
+		
 		});
 				
 		//Once defined, preserved the socket.
 		this.socket = socket;
+	};
+	
+	//Kill a player and remove it from the layer.
+	this.kill = function(killed){
+	
+		var playerKilled = null;
+		
+		if(killed.color == this.player.color)
+			playerKilled = this.player;
+		else
+			for(var i in this.enemies)
+				if(this.enemies[i].color == killed.color)
+					playerKilled = this.enemies[i];
+		
+		this.layer.removeChild(playerKilled.currentAnimation);
 	};
 	
 	//Update positions from server ones.
@@ -198,7 +224,7 @@ var Client = new function(){
 	
 		if(this.blocks[remoteBlockId] != null)
 		{
-			this.layer.removeChild(this.blocks[remoteBlockId].sprite);
+			this.blocks[remoteBlockId].explode(cause);
 			this.blocks[remoteBlockId] = null;
 		}
 	};

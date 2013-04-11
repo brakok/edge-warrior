@@ -17,6 +17,10 @@ Block.prototype.setPosition = function(x, y){
 	this.sprite.setPosition(new cc.Point(x, y));
 };
 
+Block.prototype.explode = function(cause){
+	Client.layer.removeChild(this.sprite);
+};
+
 //Update block information from server.
 Block.prototype.fromServer = function(data){
 
