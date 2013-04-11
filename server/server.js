@@ -159,7 +159,9 @@ var BlockListener = {
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
 		{	
-			if(block1.color != null && block2.color != null && block1.color == block2.color)
+			if(block1.color != null && block2.color != null 
+			&& block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
+			&& block1.color == block2.color)
 			{			
 				//If blocks are touching a third one, destroy them all.
 				if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
@@ -195,7 +197,7 @@ var BlockListener = {
 			player = arbiter.body_b.userdata.object;
 			
 		if(player != null)
-		{
+		{		
 			var killingBlock = (block1 !=  null ? block1 : block2);
 			if(killingBlock != null && !killingBlock.landed)
 			{
@@ -207,7 +209,7 @@ var BlockListener = {
 					if(Game.players[i].color == killingBlock.color)
 						killingPlayer = Game.players[i];
 				}
-				
+
 				//If found, mark the player to be inserted in the next update in the killer blocks list.
 				if(killingPlayer != null)
 					killingPlayer.kill(player);
@@ -384,6 +386,9 @@ var Player = function(id, x, y, color){
 	this.x = x;
 	this.y = y;
 	
+	this.isAlive = true;
+	this.toBeDestroy = false;
+	
 	this.width = PlayerConstants.WIDTH;
 	this.height = PlayerConstants.HEIGHT;
 	
@@ -409,65 +414,85 @@ var Player = function(id, x, y, color){
 };
 
 Player.prototype.kill = function(killed){
-	//TODO: Process to kill.
-	console.log('KILLER: ' + this.color);
-	console.log('KILLED: ' + killed.color);
+
+	killed.toBeDestroy = true;
+
+	//TODO: Add spawn block in player temporary block.
+		
+	io.sockets.in(Game.id).emit('playerKilled', killed.toClient());
+	io.sockets.sockets[this.id].emit('spawnBlock', killed.toClient());
 };
 
 Player.prototype.update = function(){
+	
+	if(this.toBeDestroy)
+	{	
+		//Remove physical presence.
+		Game.space.removeShape(this.shape);
+		Game.space.removeShape(this.groundSensor);
+		Game.space.removeShape(this.dropSensor);
+		Game.space.removeBody(this.body);
 		
-	this.x = this.body.getPos().x;
-	this.y = this.body.getPos().y;
-	
-	var nextX = 0;
-	var impulse = 0;
-	
-	if(this.keys.right || this.keys.left)
-	{
-		var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
-		impulse = PlayerConstants.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
-	}	
-	
-	//Move
-	if(this.keys.right)
-		nextX += impulse;
-		
-	if(this.keys.left)
-		nextX -= impulse;
-	
-	if(this.groundContact > 0 && this.doubleJumpUsed)
-		this.doubleJumpUsed = false;
-	
-	//Jump
-	if(this.keys.jump && this.groundContact > 0)
-	{
-		this.jump();
-		this.doubleJumpEnabled = false;
+		this.isAlive = false;
+		this.toBeDestroy = false;
+		return;
 	}
-		
-	//Double jump
-	if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
-		this.doubleJump();
-		
-	//Allow double jump.
-	if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
-		this.doubleJumpEnabled = true;
 	
-	if(nextX != 0)
+	if(this.isAlive)
 	{
-		var lastFacing = this.facing;
-		this.facing = (nextX > 0 ? Facing.RIGHT : Facing.LEFT);
+		this.x = this.body.getPos().x;
+		this.y = this.body.getPos().y;
 		
-		if(lastFacing != this.facing)
-			this.turn();
+		var nextX = 0;
+		var impulse = 0;
+		
+		if(this.keys.right || this.keys.left)
+		{
+			var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
+			impulse = PlayerConstants.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
+		}	
+		
+		//Move
+		if(this.keys.right)
+			nextX += impulse;
 			
-		this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
-	}
-	else
-	{
-		//Artificial friction for players when on ground and pressing no key.
-		if(this.groundContact > 0)
-			this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
+		if(this.keys.left)
+			nextX -= impulse;
+		
+		if(this.groundContact > 0 && this.doubleJumpUsed)
+			this.doubleJumpUsed = false;
+		
+		//Jump
+		if(this.keys.jump && this.groundContact > 0)
+		{
+			this.jump();
+			this.doubleJumpEnabled = false;
+		}
+			
+		//Double jump
+		if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
+			this.doubleJump();
+			
+		//Allow double jump.
+		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
+			this.doubleJumpEnabled = true;
+		
+		if(nextX != 0)
+		{
+			var lastFacing = this.facing;
+			this.facing = (nextX > 0 ? Facing.RIGHT : Facing.LEFT);
+			
+			if(lastFacing != this.facing)
+				this.turn();
+				
+			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
+		}
+		else
+		{
+			//Artificial friction for players when on ground and pressing no key.
+			if(this.groundContact > 0)
+				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
+		}
 	}
 };
 
@@ -490,7 +515,7 @@ Player.prototype.doubleJump = function(){
 							  this.x, 
 							  this.y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
 							  this.currentBlock, 
-							  (this.currentBlock != BlockType.NEUTRAL ? this.color : null));
+							  this.color);
 		Game.blocks.push(block);
 		block.launch();
 		Game.blockSequence++;		
@@ -512,7 +537,7 @@ Player.prototype.initBody = function(space){
 		var groundSensorHeight = 2;
 	
 		//Body creation.
-		this.body = space.addBody(new chipmunk.Body(PhysicConstants.MASS_PLAYER, Infinity));
+		this.body = Game.space.addBody(new chipmunk.Body(PhysicConstants.MASS_PLAYER, Infinity));
 		this.body.setPos(new chipmunk.Vect(this.x, this.y));
 							
 		//Assign custom data to body.
@@ -522,27 +547,27 @@ Player.prototype.initBody = function(space){
 		};
 							
 		//Create a shape associated with the body.
-		var shape = space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
-		shape.setCollisionType(CollisionType.PLAYER);
+		this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+		this.shape.setCollisionType(CollisionType.PLAYER);
 		
 		//Add ground sensor.
-		var groundSensor = space.addShape(chipmunk.BoxShape2(this.body, 
+		this.groundSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
 															new chipmunk.BB(-(groundSensorHalfWidth), 
 																			-(playerHalfHeight+groundSensorHeight), 
 																			(groundSensorHalfWidth), 
 																			-(playerHalfHeight))));
-		groundSensor.setCollisionType(CollisionType.GROUND_SENSOR);
-		groundSensor.sensor = true;
+		this.groundSensor.setCollisionType(CollisionType.GROUND_SENSOR);
+		this.groundSensor.sensor = true;
 		
 		//Add drop sensor to prevent double jump when drop zone is obstructed.
-		var dropSensor = space.addShape(chipmunk.BoxShape2(this.body, 
+		this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
 															new chipmunk.BB(-(BlockConstants.WIDTH*0.5), 
 																			-(playerHalfHeight+BlockConstants.HEIGHT), 
 																			(BlockConstants.WIDTH*0.5), 
 																			-(playerHalfHeight))));
 																	
-		dropSensor.setCollisionType(CollisionType.DROP_SENSOR);
-		dropSensor.sensor = true;
+		this.dropSensor.setCollisionType(CollisionType.DROP_SENSOR);
+		this.dropSensor.sensor = true;
 	};
 
 //Format for client.
@@ -640,7 +665,7 @@ var Game = {
 				
 			//Init players' bodies.
 			for(var i in this.players)
-				this.players[i].initBody(this.space);
+				this.players[i].initBody();
 		}
 	},
 	update: function() {
@@ -739,7 +764,7 @@ io.sockets.on('connection', function (socket){
 		
 		for(var i in Game.players)
 		{
-			if(i != socket.id)
+			if(i != socket.id && Game.players[i].isAlive)
 				enemies.push(Game.players[i].toClient());
 		}
 		
