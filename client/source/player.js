@@ -40,3 +40,4 @@ Player.prototype.setPosition = function(x, y){
 Player.prototype.fromServer = function(data){
 	this.setPosition(data.x, data.y);
 };
+
