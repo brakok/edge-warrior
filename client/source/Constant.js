@@ -14,5 +14,6 @@ var Message = {
 	CONNECTED: 'connected',
 	NEW_PLAYER: 'newPlayer',
 	PLAYER_KILLED: 'playerKilled',
+	PLAYER_SPAWNED: 'playerSpawned',
 	LAUNCH: 'launch'
 };
