@@ -4,8 +4,10 @@ var Block = function (x, y, type, color) {
 	this.color = color;
 	
 	//Create sprite associated.
-	if(type != BlockType.NEUTRAL && color != null)
+	if(type == BlockType.COLORED && color != null)
 		this.sprite = cc.Sprite.create('placeholders/block_' + color + '.png');
+	else if(type == BlockType.SPAWN)
+		this.sprite = cc.Sprite.create('placeholders/block_spawn.png');
 	else
 		this.sprite = cc.Sprite.create('placeholders/block.png');
 	
