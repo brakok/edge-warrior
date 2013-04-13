@@ -41,7 +41,8 @@ var BlockState = {
 };
 
 var BlockDestructionType = {
-	COLOR_CONTACT: 0
+	COLOR_CONTACT: 0,
+	SPAWN: 1
 };
 
 //Constants
@@ -84,5 +85,6 @@ var Message = {
 	CONNECTION: 'connection',
 	NEW_PLAYER: 'newPlayer',
 	PLAYER_KILLED: 'playerKilled',
+	PLAYER_SPAWNED: 'playerSpawned',
 	LAUNCH: 'launch'
 };

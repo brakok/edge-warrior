@@ -63,7 +63,9 @@ io.sockets.on(Message.CONNECTION, function (socket){
 	});
 	
 	socket.on(Message.NEXT_BLOCK, function(command){
-		Game.players[socket.id].currentBlock = command;
+		//Do not override if server has given a special block to player (as a Spawn Block).
+		if(!Game.players[socket.id].hasGivenBlock)
+			Game.players[socket.id].currentBlock = command;
 	});
 	
 	//Retrieving information from players.

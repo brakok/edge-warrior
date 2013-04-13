@@ -41,7 +41,8 @@ var BlockState = {
 };
 
 var BlockDestructionType = {
-	COLOR_CONTACT: 0
+	COLOR_CONTACT: 0,
+	SPAWN: 1
 };
 
 //Constants
@@ -84,6 +85,7 @@ var Message = {
 	CONNECTION: 'connection',
 	NEW_PLAYER: 'newPlayer',
 	PLAYER_KILLED: 'playerKilled',
+	PLAYER_SPAWNED: 'playerSpawned',
 	LAUNCH: 'launch'
 };//Drop listener.
 var DropListener = {
@@ -164,8 +166,7 @@ var BlockListener = {
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
 		{	
-			if(block1.color != null && block2.color != null 
-			&& block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
+			if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
 			&& block1.color == block2.color)
 			{			
 				//If blocks are touching a third one, destroy them all.
@@ -201,9 +202,15 @@ var BlockListener = {
 		if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
+		//Trigger spawn.
+		if(block1 != null && player == null && block1.type == BlockType.SPAWN)
+			block1.mustTrigger = true;
+		if(block2 != null && player == null && block2.type == BlockType.SPAWN)
+			block2.mustTrigger = true;
+		
 		if(player != null)
 		{		
-			var killingBlock = (block1 !=  null ? block1 : block2);
+			var killingBlock = (block1 != null ? block1 : block2);
 			if(killingBlock != null && !killingBlock.landed)
 			{
 				//Find killing player.
@@ -219,6 +226,9 @@ var BlockListener = {
 				if(killingPlayer != null)
 					killingPlayer.kill(player);
 			}
+			
+			block1 = null;
+			block2 = null;
 		}
 			
 		//Check if blocks land.
@@ -270,6 +280,10 @@ var Player = function(id, x, y, color){
 	this.doubleJumpUsed = true;
 	
 	this.currentBlock = BlockType.NEUTRAL;
+	this.hasGivenBlock = false;
+	
+	//Id list of people killed by player.
+	this.killedList = null;
 	
 	this.facing = Facing.RIGHT;
 	
@@ -287,9 +301,35 @@ var Player = function(id, x, y, color){
 Player.prototype.kill = function(killed){
 
 	killed.toBeDestroy = true;
-
-	//TODO: Add spawn block in player temporary block.
+	
+	//Assign spawn block.
+	this.currentBlock = BlockType.SPAWN;
+		
+	if(this.killedList == null)
+		this.killedList = [];
+	
+	this.killedList.push(killed.id);
+	this.hasGivenBlock = true;
+	
 	io.sockets.sockets[this.id].emit(Message.SEND_BLOCK, BlockType.SPAWN);
+};
+
+Player.prototype.spawn = function(x, y){
+
+	console.log('X: ' + x + ' Y: ' + y);
+
+	//Set new position.
+	this.body.setPos(new chipmunk.Vect(x, y));
+
+	//Add physical presence.
+	Game.space.addBody(this.body);
+	Game.space.addShape(this.shape);
+	Game.space.addShape(this.groundSensor);
+	Game.space.addShape(this.dropSensor);
+	
+	this.isAlive = true;
+	
+	io.sockets.in(Game.id).emit(Message.PLAYER_SPAWNED, this.toClient());
 };
 
 Player.prototype.die = function(){
@@ -306,6 +346,11 @@ Player.prototype.die = function(){
 	io.sockets.in(Game.id).emit(Message.PLAYER_KILLED, this.toClient());
 };
 
+Player.prototype.getPosition = function(){
+	
+	return (this.body != null ? this.body.getPos() : new chipmunk.Vect(this.x, this.y));
+};
+
 Player.prototype.update = function(){
 	
 	if(this.toBeDestroy)
@@ -316,8 +361,8 @@ Player.prototype.update = function(){
 	
 	if(this.isAlive)
 	{
-		this.x = this.body.getPos().x;
-		this.y = this.body.getPos().y;
+		this.x = this.getPosition().x;
+		this.y = this.getPosition().y;
 		
 		var nextX = 0;
 		var impulse = 0;
@@ -391,16 +436,21 @@ Player.prototype.doubleJump = function(){
 
 Player.prototype.dropBlock = function(){
 	//Spawn a block if drop zone isn't obstructed.
-	if(this.obstruction == 0){
+	if(this.obstruction == 0){	
+	
 		//Create a block and launch it.
 		var block = new Block(Game.blockSequence, 
-							  this.x, 
-							  this.y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
+							  this.getPosition().x, 
+							  this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
 							  this.currentBlock, 
-							  this.color);
+							  this.color,
+							  this.id);
+		
 		Game.blocks.push(block);
 		block.launch();
+		
 		Game.blockSequence++;		
+		this.hasGivenBlock = false;
 		
 		//Emit the new block to all players and ask for next block of current player.
 		io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
@@ -452,15 +502,16 @@ Player.prototype.initBody = function(space){
 //Format for client.
 Player.prototype.toClient = function(){
 	return {
-		x: this.x,
-		y: this.y,
+		x: this.getPosition().x,
+		y: this.getPosition().y,
 		color: this.color
 	};
 };//Server version of the block.
-var Block = function(id, x, y, type, color){
+var Block = function(id, x, y, type, color, ownerId){
 	
 	this.id = id;
 	this.linkedBlockId = null;
+	this.ownerId = ownerId;
 	
 	this.width = BlockConstants.WIDTH;
 	this.height = BlockConstants.HEIGHT;
@@ -471,7 +522,9 @@ var Block = function(id, x, y, type, color){
 	this.type = type;
 	this.color = color;
 	
-	//Needed to indicate during update if state is changed. Cannot be done during a space step (callback).
+	this.mustTrigger = false;
+	
+	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
 	this.toggleState = false;
 	this.isStatic = false;
 	this.toBeDestroy = false;
@@ -545,12 +598,24 @@ Block.prototype.update = function(){
 	if(this.toBeDestroy)
 		this.explode(this.destroyCause);
 	else{
-		//Activate or desactivate a block to become static or dynamic.
-		if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
+		
+		var stillExist = true;
+		
+		//Trigger effect (can't during space step).
+		if(this.mustTrigger)
+			stillExist = this.spawn();
+	
+		this.mustTrigger = false;
+		
+		if(stillExist)
 		{
-			this.active(!this.isStatic);
-			this.toggleState = false;
-		}	
+			//Activate or desactivate a block to become static or dynamic.
+			if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
+			{
+				this.active(!this.isStatic);
+				this.toggleState = false;
+			}	
+		}
 	}	
 };
 
@@ -562,6 +627,36 @@ Block.prototype.toClient = function(){
 		type: this.type,
 		color: this.color
 	};
+};
+
+Block.prototype.trigger = function(){
+	
+	var stillExist = true;
+	
+	if(this.type == BlockType.SPAWN)
+		stillExist = this.spawn();
+	
+	return stillExist;
+};
+
+//Return indicates if block still exists after his effect triggered.
+Block.prototype.spawn = function(){
+	var player = Game.players[this.ownerId];
+	
+	if(player != null && player.killedList != null)
+	{
+		var posY = PlayerConstants.HEIGHT*0.5;
+	
+		//Respawn enemies killed by player.
+		for(var i in player.killedList)
+			Game.players[player.killedList[i]].spawn(this.body.getPos().x, this.body.getPos().y + posY);
+	}
+	
+	player.killedList = null;
+	
+	this.explode(BlockDestructionType.SPAWN);
+	
+	return false;
 };
 
 Block.prototype.explode = function(cause){
@@ -762,7 +857,9 @@ io.sockets.on(Message.CONNECTION, function (socket){
 	});
 	
 	socket.on(Message.NEXT_BLOCK, function(command){
-		Game.players[socket.id].currentBlock = command;
+		//Do not override if server has given a special block to player (as a Spawn Block).
+		if(!Game.players[socket.id].hasGivenBlock)
+			Game.players[socket.id].currentBlock = command;
 	});
 	
 	//Retrieving information from players.
