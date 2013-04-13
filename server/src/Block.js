@@ -1,8 +1,9 @@
 //Server version of the block.
-var Block = function(id, x, y, type, color){
+var Block = function(id, x, y, type, color, ownerId){
 	
 	this.id = id;
 	this.linkedBlockId = null;
+	this.ownerId = ownerId;
 	
 	this.width = BlockConstants.WIDTH;
 	this.height = BlockConstants.HEIGHT;
@@ -13,7 +14,9 @@ var Block = function(id, x, y, type, color){
 	this.type = type;
 	this.color = color;
 	
-	//Needed to indicate during update if state is changed. Cannot be done during a space step (callback).
+	this.mustTrigger = false;
+	
+	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
 	this.toggleState = false;
 	this.isStatic = false;
 	this.toBeDestroy = false;
@@ -87,12 +90,24 @@ Block.prototype.update = function(){
 	if(this.toBeDestroy)
 		this.explode(this.destroyCause);
 	else{
-		//Activate or desactivate a block to become static or dynamic.
-		if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
+		
+		var stillExist = true;
+		
+		//Trigger effect (can't during space step).
+		if(this.mustTrigger)
+			stillExist = this.spawn();
+	
+		this.mustTrigger = false;
+		
+		if(stillExist)
 		{
-			this.active(!this.isStatic);
-			this.toggleState = false;
-		}	
+			//Activate or desactivate a block to become static or dynamic.
+			if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
+			{
+				this.active(!this.isStatic);
+				this.toggleState = false;
+			}	
+		}
 	}	
 };
 
@@ -104,6 +119,36 @@ Block.prototype.toClient = function(){
 		type: this.type,
 		color: this.color
 	};
+};
+
+Block.prototype.trigger = function(){
+	
+	var stillExist = true;
+	
+	if(this.type == BlockType.SPAWN)
+		stillExist = this.spawn();
+	
+	return stillExist;
+};
+
+//Return indicates if block still exists after his effect triggered.
+Block.prototype.spawn = function(){
+	var player = Game.players[this.ownerId];
+	
+	if(player != null && player.killedList != null)
+	{
+		var posY = PlayerConstants.HEIGHT*0.5;
+	
+		//Respawn enemies killed by player.
+		for(var i in player.killedList)
+			Game.players[player.killedList[i]].spawn(this.body.getPos().x, this.body.getPos().y + posY);
+	}
+	
+	player.killedList = null;
+	
+	this.explode(BlockDestructionType.SPAWN);
+	
+	return false;
 };
 
 Block.prototype.explode = function(cause){

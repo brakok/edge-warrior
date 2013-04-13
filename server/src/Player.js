@@ -17,6 +17,10 @@ var Player = function(id, x, y, color){
 	this.doubleJumpUsed = true;
 	
 	this.currentBlock = BlockType.NEUTRAL;
+	this.hasGivenBlock = false;
+	
+	//Id list of people killed by player.
+	this.killedList = null;
 	
 	this.facing = Facing.RIGHT;
 	
@@ -34,9 +38,33 @@ var Player = function(id, x, y, color){
 Player.prototype.kill = function(killed){
 
 	killed.toBeDestroy = true;
-
-	//TODO: Add spawn block in player temporary block.
+	
+	//Assign spawn block.
+	this.currentBlock = BlockType.SPAWN;
+		
+	if(this.killedList == null)
+		this.killedList = [];
+	
+	this.killedList.push(killed.id);
+	this.hasGivenBlock = true;
+	
 	io.sockets.sockets[this.id].emit(Message.SEND_BLOCK, BlockType.SPAWN);
+};
+
+Player.prototype.spawn = function(x, y){
+
+	//Set new position.
+	this.body.setPos(new chipmunk.Vect(x, y));
+
+	//Add physical presence.
+	Game.space.addBody(this.body);
+	Game.space.addShape(this.shape);
+	Game.space.addShape(this.groundSensor);
+	Game.space.addShape(this.dropSensor);
+	
+	this.isAlive = true;
+	
+	io.sockets.in(Game.id).emit(Message.PLAYER_SPAWNED, this.toClient());
 };
 
 Player.prototype.die = function(){
@@ -53,6 +81,11 @@ Player.prototype.die = function(){
 	io.sockets.in(Game.id).emit(Message.PLAYER_KILLED, this.toClient());
 };
 
+Player.prototype.getPosition = function(){
+	
+	return (this.body != null ? this.body.getPos() : new chipmunk.Vect(this.x, this.y));
+};
+
 Player.prototype.update = function(){
 	
 	if(this.toBeDestroy)
@@ -63,8 +96,8 @@ Player.prototype.update = function(){
 	
 	if(this.isAlive)
 	{
-		this.x = this.body.getPos().x;
-		this.y = this.body.getPos().y;
+		this.x = this.getPosition().x;
+		this.y = this.getPosition().y;
 		
 		var nextX = 0;
 		var impulse = 0;
@@ -138,16 +171,21 @@ Player.prototype.doubleJump = function(){
 
 Player.prototype.dropBlock = function(){
 	//Spawn a block if drop zone isn't obstructed.
-	if(this.obstruction == 0){
+	if(this.obstruction == 0){	
+	
 		//Create a block and launch it.
 		var block = new Block(Game.blockSequence, 
-							  this.x, 
-							  this.y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
+							  this.getPosition().x, 
+							  this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
 							  this.currentBlock, 
-							  this.color);
+							  this.color,
+							  this.id);
+		
 		Game.blocks.push(block);
 		block.launch();
+		
 		Game.blockSequence++;		
+		this.hasGivenBlock = false;
 		
 		//Emit the new block to all players and ask for next block of current player.
 		io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
@@ -199,8 +237,8 @@ Player.prototype.initBody = function(space){
 //Format for client.
 Player.prototype.toClient = function(){
 	return {
-		x: this.x,
-		y: this.y,
+		x: this.getPosition().x,
+		y: this.getPosition().y,
 		color: this.color
 	};
 };

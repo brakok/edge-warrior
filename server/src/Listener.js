@@ -77,8 +77,7 @@ var BlockListener = {
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
 		{	
-			if(block1.color != null && block2.color != null 
-			&& block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
+			if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
 			&& block1.color == block2.color)
 			{			
 				//If blocks are touching a third one, destroy them all.
@@ -114,9 +113,15 @@ var BlockListener = {
 		if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
+		//Trigger spawn.
+		if(block1 != null && player == null && block1.type == BlockType.SPAWN)
+			block1.mustTrigger = true;
+		if(block2 != null && player == null && block2.type == BlockType.SPAWN)
+			block2.mustTrigger = true;
+		
 		if(player != null)
 		{		
-			var killingBlock = (block1 !=  null ? block1 : block2);
+			var killingBlock = (block1 != null ? block1 : block2);
 			if(killingBlock != null && !killingBlock.landed)
 			{
 				//Find killing player.
@@ -132,6 +137,9 @@ var BlockListener = {
 				if(killingPlayer != null)
 					killingPlayer.kill(player);
 			}
+			
+			block1 = null;
+			block2 = null;
 		}
 			
 		//Check if blocks land.
