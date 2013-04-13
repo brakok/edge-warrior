@@ -71,6 +71,22 @@ var BlockConstants = {
 	LAUNCHING_SPEED: -500
 };
 
+//Socket messages.
+var Message = {
+	NEXT_BLOCK: 'nextBlock',
+	NEW_BLOCK: 'newBlock',
+	SEND_BLOCK: 'sendBlock',
+	DELETE_BLOCK: 'deleteBlock',
+	PULL: 'pull',
+	PUSH: 'push',
+	INIT: 'init',
+	CONNECTED: 'connected',
+	CONNECTION: 'connection',
+	NEW_PLAYER: 'newPlayer',
+	PLAYER_KILLED: 'playerKilled',
+	LAUNCH: 'launch'
+};
+
 //Modules.
 var http = require('http');
 var chipmunk = require('chipmunk');
@@ -376,7 +392,7 @@ Block.prototype.explode = function(cause){
 			Game.blocks[i] = null;
 	}
 	
-	io.sockets.in(Game.id).emit('deleteBlock', data);
+	io.sockets.in(Game.id).emit(Message.DELETE_BLOCK, data);
 };
 
 
@@ -418,23 +434,28 @@ Player.prototype.kill = function(killed){
 	killed.toBeDestroy = true;
 
 	//TODO: Add spawn block in player temporary block.
-		
-	io.sockets.in(Game.id).emit('playerKilled', killed.toClient());
-	io.sockets.sockets[this.id].emit('spawnBlock', killed.toClient());
+	io.sockets.sockets[this.id].emit(Message.SEND_BLOCK, BlockType.SPAWN);
+};
+
+Player.prototype.die = function(){
+
+	//Remove physical presence.
+	Game.space.removeShape(this.shape);
+	Game.space.removeShape(this.groundSensor);
+	Game.space.removeShape(this.dropSensor);
+	Game.space.removeBody(this.body);
+	
+	this.isAlive = false;
+	this.toBeDestroy = false;
+	
+	io.sockets.in(Game.id).emit(Message.PLAYER_KILLED, this.toClient());
 };
 
 Player.prototype.update = function(){
 	
 	if(this.toBeDestroy)
 	{	
-		//Remove physical presence.
-		Game.space.removeShape(this.shape);
-		Game.space.removeShape(this.groundSensor);
-		Game.space.removeShape(this.dropSensor);
-		Game.space.removeBody(this.body);
-		
-		this.isAlive = false;
-		this.toBeDestroy = false;
+		this.die();
 		return;
 	}
 	
@@ -507,7 +528,13 @@ Player.prototype.jump = function(){
 
 Player.prototype.doubleJump = function(){
 	this.jump();
+	this.dropBlock();
 	
+	this.doubleJumpUsed = true;
+	this.doubleJumpEnabled = false;
+};
+
+Player.prototype.dropBlock = function(){
 	//Spawn a block if drop zone isn't obstructed.
 	if(this.obstruction == 0){
 		//Create a block and launch it.
@@ -521,12 +548,9 @@ Player.prototype.doubleJump = function(){
 		Game.blockSequence++;		
 		
 		//Emit the new block to all players and ask for next block of current player.
-		io.sockets.in(Game.id).emit('newBlock', block.toClient());
-		io.sockets.sockets[this.id].emit('nextBlock');
+		io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
+		io.sockets.sockets[this.id].emit(Message.NEXT_BLOCK);
 	}
-	
-	this.doubleJumpUsed = true;
-	this.doubleJumpEnabled = false;
 };
 
 //Init the physical part of the player.
@@ -698,7 +722,7 @@ var spawnY = 100;
 var io = require('socket.io').listen(server).set('log level', 1);
 
 //Bind listeners on sockets.
-io.sockets.on('connection', function (socket){
+io.sockets.on(Message.CONNECTION, function (socket){
 
 	console.log('Connection to client established');
 	
@@ -721,10 +745,10 @@ io.sockets.on('connection', function (socket){
 	Game.connectingPlayers++;
 
 	//Start initiation.
-	socket.emit('init', initData);
+	socket.emit(Message.INIT, initData);
 
 	//Continue when player connected.
-	socket.on('connected', function(){
+	socket.on(Message.CONNECTED, function(){
 		console.log('Connected player');
 		Game.connectedPlayers++;		
 		
@@ -732,7 +756,7 @@ io.sockets.on('connection', function (socket){
 		for(var i in io.sockets.in(Game.id).sockets)
 		{			
 			if(i != socket.id)
-				io.sockets.sockets[i].emit('newPlayer', Game.players[socket.id].toClient());
+				io.sockets.sockets[i].emit(Message.NEW_PLAYER, Game.players[socket.id].toClient());
 		}
 		
 		if(Game.connectedPlayers == Game.maxPlayers)
@@ -742,23 +766,23 @@ io.sockets.on('connection', function (socket){
 			Game.launch();
 		
 			console.log('Game launching!');
-			io.sockets.in(Game.id).emit('launch');
+			io.sockets.in(Game.id).emit(Message.LAUNCH);
 			
 			Game.ready = true;
 		}
 	});
 	
-	socket.on('nextBlock', function(command){
+	socket.on(Message.NEXT_BLOCK, function(command){
 		Game.players[socket.id].currentBlock = command;
 	});
 	
 	//Retrieving information from players.
-	socket.on('push', function(inputs){
+	socket.on(Message.PUSH, function(inputs){
 		Game.players[socket.id].keys = inputs;
 	});
 	
 	//Sending information upon pull request.
-	socket.on('pull', function(){
+	socket.on(Message.PULL, function(){
 	
 		var enemies = [];
 		
@@ -781,7 +805,7 @@ io.sockets.on('connection', function (socket){
 			blocks: blocks
 		};
 		
-		socket.emit('pull', data);
+		socket.emit(Message.PULL, data);
 	});
 });
 
