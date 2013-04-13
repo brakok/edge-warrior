@@ -87,3 +87,8 @@ Player.prototype.die = function() {
 	Client.layer.removeChild(this.currentAnimation);
 };
 
+Player.prototype.spawn = function(x, y){
+	this.setPosition(x, y);
+	Client.layer.addChild(this.currentAnimation);
+};
+

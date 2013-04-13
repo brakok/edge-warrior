@@ -126,6 +126,10 @@ var Client = new function(){
 		socket.on(Message.SEND_BLOCK, function(blockType){
 			Client.player.addNextBlock(blockType);
 		});
+		
+		socket.on(Message.PLAYER_SPAWNED, function(remotePlayer){
+			Client.spawnPlayer(remotePlayer);
+		});
 				
 		//Once defined, preserved the socket.
 		this.socket = socket;
@@ -158,6 +162,17 @@ var Client = new function(){
 		for(var i in remoteBlocks)
 			if(this.blocks[remoteBlocks[i].id] != null)
 				this.blocks[remoteBlocks[i].id].fromServer(remoteBlocks[i]);
+	};
+	
+	//Spawn player.
+	this.spawnPlayer = function(remotePlayer){
+		
+		if(remotePlayer.color == this.player.color)
+			this.player.spawn(remotePlayer.x, remotePlayer.y);
+		else
+			for(var i in this.enemies)
+				if(this.enemies[i].color == remotePlayer.color)
+					this.enemies[i].spawn(remotePlayer.x, remotePlayer.y);
 	};
 	
 	//Add a new block from the server.
