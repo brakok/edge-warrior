@@ -316,8 +316,6 @@ Player.prototype.kill = function(killed){
 
 Player.prototype.spawn = function(x, y){
 
-	console.log('X: ' + x + ' Y: ' + y);
-
 	//Set new position.
 	this.body.setPos(new chipmunk.Vect(x, y));
 
@@ -516,6 +514,7 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.width = BlockConstants.WIDTH;
 	this.height = BlockConstants.HEIGHT;
 	this.landed = false;
+	this.stillExist = true;
 	
 	this.x = x;
 	this.y = y;
@@ -597,17 +596,14 @@ Block.prototype.update = function(){
 	
 	if(this.toBeDestroy)
 		this.explode(this.destroyCause);
-	else{
-		
-		var stillExist = true;
-		
+	else{	
 		//Trigger effect (can't during space step).
 		if(this.mustTrigger)
-			stillExist = this.spawn();
+			this.trigger();
 	
 		this.mustTrigger = false;
 		
-		if(stillExist)
+		if(this.stillExist)
 		{
 			//Activate or desactivate a block to become static or dynamic.
 			if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
@@ -630,13 +626,13 @@ Block.prototype.toClient = function(){
 };
 
 Block.prototype.trigger = function(){
+
+	if(this.stillExist)
+	{
+		if(this.type == BlockType.SPAWN)
+			this.spawn();
+	}
 	
-	var stillExist = true;
-	
-	if(this.type == BlockType.SPAWN)
-		stillExist = this.spawn();
-	
-	return stillExist;
 };
 
 //Return indicates if block still exists after his effect triggered.
@@ -655,8 +651,6 @@ Block.prototype.spawn = function(){
 	player.killedList = null;
 	
 	this.explode(BlockDestructionType.SPAWN);
-	
-	return false;
 };
 
 Block.prototype.explode = function(cause){
@@ -678,6 +672,9 @@ Block.prototype.explode = function(cause){
 		if(Game.blocks[i] != null && Game.blocks[i].id == this.id)
 			Game.blocks[i] = null;
 	}
+	
+	this.stillExist = false;
+	this.toBeDestroy = false;
 	
 	io.sockets.in(Game.id).emit(Message.DELETE_BLOCK, data);
 };//Game container server-side.
