@@ -69,7 +69,9 @@ var PlayerConstants = {
 var BlockConstants = {
 	WIDTH: 80,
 	HEIGHT: 20,
-	LAUNCHING_SPEED: -500
+	LAUNCHING_SPEED: -500,
+	SPAWN_MAXLAUNCHING_Y: 500,
+	SPAWN_MAXLAUNCHING_X: 500
 };
 
 //Socket messages.
@@ -121,6 +123,7 @@ var DropListener = {
 var GroundListener = {
 	begin: function(arbiter, space){
 			
+		console.log('ICI');
 		var player = null;
 		
 		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
@@ -224,7 +227,7 @@ var BlockListener = {
 
 				//If found, mark the player to be inserted in the next update in the killer blocks list.
 				if(killingPlayer != null)
-					killingPlayer.kill(player);
+					killingPlayer.kill(player, killingBlock.type);
 			}
 			
 			block1 = null;
@@ -298,20 +301,31 @@ var Player = function(id, x, y, color){
 	this.body = null;	
 };
 
-Player.prototype.kill = function(killed){
+Player.prototype.kill = function(killed, blockType){
 
 	killed.toBeDestroy = true;
 	
 	//Assign spawn block.
-	this.currentBlock = BlockType.SPAWN;
+	if(blockType != BlockType.SPAWN)
+	{
+		this.currentBlock = BlockType.SPAWN;
+		io.sockets.sockets[this.id].emit(Message.SEND_BLOCK, BlockType.SPAWN);
+		this.hasGivenBlock = true;
+	}
 		
 	if(this.killedList == null)
 		this.killedList = [];
 	
 	this.killedList.push(killed.id);
-	this.hasGivenBlock = true;
 	
-	io.sockets.sockets[this.id].emit(Message.SEND_BLOCK, BlockType.SPAWN);
+	//Steal killed killeds' list to killer.
+	if(killed.killedList != null)
+	{
+		for(var i in killed.killedList)
+			this.killedList.push(killed.killedList[i]);
+			
+		killed.killedList = null;
+	}
 };
 
 Player.prototype.spawn = function(x, y){
@@ -635,20 +649,31 @@ Block.prototype.trigger = function(){
 	
 };
 
-//Return indicates if block still exists after his effect triggered.
 Block.prototype.spawn = function(){
 	var player = Game.players[this.ownerId];
 	
 	if(player != null && player.killedList != null)
 	{
-		var posY = PlayerConstants.HEIGHT*0.5;
+		var posY = PlayerConstants.HEIGHT;
 	
 		//Respawn enemies killed by player.
 		for(var i in player.killedList)
-			Game.players[player.killedList[i]].spawn(this.body.getPos().x, this.body.getPos().y + posY);
+		{
+			var factor = Math.PI*(Math.random()*2);
+		
+			var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
+			var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+			
+			//Spawn the player.
+			Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
+			
+			//Launch the player to random position.
+			Game.players[player.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
+			Game.players[player.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+		}
+		
+		player.killedList = null;
 	}
-	
-	player.killedList = null;
 	
 	this.explode(BlockDestructionType.SPAWN);
 };
@@ -703,6 +728,12 @@ var Game = {
 			//Add ground sensor callback.
 			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
 										   CollisionType.STATIC, 
+										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   function(arbiter, space){GroundListener.separate(arbiter, space);});
+			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
+										   CollisionType.PLAYER, 
 										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 

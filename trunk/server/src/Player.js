@@ -35,20 +35,31 @@ var Player = function(id, x, y, color){
 	this.body = null;	
 };
 
-Player.prototype.kill = function(killed){
+Player.prototype.kill = function(killed, blockType){
 
 	killed.toBeDestroy = true;
 	
 	//Assign spawn block.
-	this.currentBlock = BlockType.SPAWN;
+	if(blockType != BlockType.SPAWN)
+	{
+		this.currentBlock = BlockType.SPAWN;
+		io.sockets.sockets[this.id].emit(Message.SEND_BLOCK, BlockType.SPAWN);
+		this.hasGivenBlock = true;
+	}
 		
 	if(this.killedList == null)
 		this.killedList = [];
 	
 	this.killedList.push(killed.id);
-	this.hasGivenBlock = true;
 	
-	io.sockets.sockets[this.id].emit(Message.SEND_BLOCK, BlockType.SPAWN);
+	//Steal killed killeds' list to killer.
+	if(killed.killedList != null)
+	{
+		for(var i in killed.killedList)
+			this.killedList.push(killed.killedList[i]);
+			
+		killed.killedList = null;
+	}
 };
 
 Player.prototype.spawn = function(x, y){

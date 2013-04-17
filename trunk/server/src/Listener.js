@@ -135,7 +135,7 @@ var BlockListener = {
 
 				//If found, mark the player to be inserted in the next update in the killer blocks list.
 				if(killingPlayer != null)
-					killingPlayer.kill(player);
+					killingPlayer.kill(player, killingBlock.type);
 			}
 			
 			block1 = null;
