@@ -69,7 +69,9 @@ var PlayerConstants = {
 var BlockConstants = {
 	WIDTH: 80,
 	HEIGHT: 20,
-	LAUNCHING_SPEED: -500
+	LAUNCHING_SPEED: -500,
+	SPAWN_MAXLAUNCHING_Y: 500,
+	SPAWN_MAXLAUNCHING_X: 500
 };
 
 //Socket messages.
