@@ -187,7 +187,7 @@ var Client = new function(){
 		if(this.blocks[remoteBlockId] != null)
 		{
 			this.blocks[remoteBlockId].explode(cause);
-			this.blocks[remoteBlockId] = null;
+			delete this.blocks[remoteBlockId];
 		}
 	};
 	
