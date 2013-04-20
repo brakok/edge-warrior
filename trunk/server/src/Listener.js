@@ -77,8 +77,8 @@ var BlockListener = {
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
 		{	
-			if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
-			&& block1.color == block2.color)
+			if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED
+			&& block1.color == block2.color && block1.color < Color.GREEN)
 			{			
 				//If blocks are touching a third one, destroy them all.
 				if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
@@ -101,6 +101,16 @@ var BlockListener = {
 					block1.linkedBlockId = block2.id;
 					block2.linkedBlockId = block1.id;
 				}
+			}
+			else if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
+					&& Math.abs(block1.color - block2.color) == 4)
+			{
+				//Destroy complementary blocks on contact.
+				block1.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+				block2.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+				
+				block1 = null;
+				block2 = null;
 			}
 		}
 		

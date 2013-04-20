@@ -68,7 +68,7 @@ var PlayerConstants = {
 
 var BlockConstants = {
 	WIDTH: 80,
-	HEIGHT: 20,
+	HEIGHT: 40,
 	LAUNCHING_SPEED: -500,
 	SPAWN_MAXLAUNCHING_Y: 500,
 	SPAWN_MAXLAUNCHING_X: 500
@@ -123,7 +123,6 @@ var DropListener = {
 var GroundListener = {
 	begin: function(arbiter, space){
 			
-		console.log('ICI');
 		var player = null;
 		
 		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
@@ -169,8 +168,8 @@ var BlockListener = {
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
 		{	
-			if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
-			&& block1.color == block2.color)
+			if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED
+			&& block1.color == block2.color && block1.color < Color.GREEN)
 			{			
 				//If blocks are touching a third one, destroy them all.
 				if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
@@ -193,6 +192,16 @@ var BlockListener = {
 					block1.linkedBlockId = block2.id;
 					block2.linkedBlockId = block1.id;
 				}
+			}
+			else if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
+					&& Math.abs(block1.color - block2.color) == 4)
+			{
+				//Destroy complementary blocks on contact.
+				block1.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+				block2.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+				
+				block1 = null;
+				block2 = null;
 			}
 		}
 		
@@ -325,6 +334,17 @@ Player.prototype.kill = function(killed, blockType){
 			this.killedList.push(killed.killedList[i]);
 			
 		killed.killedList = null;
+	}
+	
+	//Swap killer colored blocks to killed complementary one.
+	for(var i in Game.blocks)
+	{
+		if(Game.blocks[i] != null 
+		   && Game.blocks[i].type != BlockType.NEUTRAL 
+		   && Game.blocks[i].color == this.color)
+	    {
+			Game.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
+		}
 	}
 };
 
@@ -502,9 +522,9 @@ Player.prototype.initBody = function(space){
 		
 		//Add drop sensor to prevent double jump when drop zone is obstructed.
 		this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
-															new chipmunk.BB(-(BlockConstants.WIDTH*0.5), 
-																			-(playerHalfHeight+BlockConstants.HEIGHT), 
-																			(BlockConstants.WIDTH*0.5), 
+															new chipmunk.BB(-(BlockConstants.WIDTH*0.33), 
+																			-(playerHalfHeight+(BlockConstants.HEIGHT*0.5)), 
+																			(BlockConstants.WIDTH*0.33), 
 																			-(playerHalfHeight))));
 																	
 		this.dropSensor.setCollisionType(CollisionType.DROP_SENSOR);
@@ -732,12 +752,6 @@ var Game = {
 										   null, 
 										   null, 
 										   function(arbiter, space){GroundListener.separate(arbiter, space);});
-			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
-										   CollisionType.PLAYER, 
-										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
-										   null, 
-										   null, 
-										   function(arbiter, space){GroundListener.separate(arbiter, space);});
 						
 			//Add block listener callback.
 			this.space.addCollisionHandler(CollisionType.BLOCK, 
@@ -767,8 +781,8 @@ var Game = {
 										   null, 
 										   function(arbiter, space){DropListener.separate(arbiter, space);});
 			
-			//Force bodies to sleep when idle after 0.5 second.
-			this.space.sleepTimeThreshold = 0.5;
+			//Force bodies to sleep when idle after 0.2 second.
+			this.space.sleepTimeThreshold = 0.2;
 			this.space.collisionBias = 0;
 			
 			//Create floor and walls.

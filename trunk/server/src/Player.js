@@ -60,6 +60,17 @@ Player.prototype.kill = function(killed, blockType){
 			
 		killed.killedList = null;
 	}
+	
+	//Swap killer colored blocks to killed complementary one.
+	for(var i in Game.blocks)
+	{
+		if(Game.blocks[i] != null 
+		   && Game.blocks[i].type != BlockType.NEUTRAL 
+		   && Game.blocks[i].color == this.color)
+	    {
+			Game.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
+		}
+	}
 };
 
 Player.prototype.spawn = function(x, y){
@@ -236,9 +247,9 @@ Player.prototype.initBody = function(space){
 		
 		//Add drop sensor to prevent double jump when drop zone is obstructed.
 		this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
-															new chipmunk.BB(-(BlockConstants.WIDTH*0.5), 
-																			-(playerHalfHeight+BlockConstants.HEIGHT), 
-																			(BlockConstants.WIDTH*0.5), 
+															new chipmunk.BB(-(BlockConstants.WIDTH*0.33), 
+																			-(playerHalfHeight+(BlockConstants.HEIGHT*0.5)), 
+																			(BlockConstants.WIDTH*0.33), 
 																			-(playerHalfHeight))));
 																	
 		this.dropSensor.setCollisionType(CollisionType.DROP_SENSOR);

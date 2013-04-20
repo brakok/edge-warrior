@@ -57,8 +57,8 @@ var Game = {
 										   null, 
 										   function(arbiter, space){DropListener.separate(arbiter, space);});
 			
-			//Force bodies to sleep when idle after 0.5 second.
-			this.space.sleepTimeThreshold = 0.5;
+			//Force bodies to sleep when idle after 0.2 second.
+			this.space.sleepTimeThreshold = 0.2;
 			this.space.collisionBias = 0;
 			
 			//Create floor and walls.
