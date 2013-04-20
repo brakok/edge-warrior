@@ -6,7 +6,7 @@ var Player = function (x, y, color) {
 	this.givenBlock = null;
 	
 	this.blockTypeAvailable = [];
-	this.blockTypeAvailable[0] = new BlockOption(BlockType.COLORED, 25, 100);
+	this.blockTypeAvailable.push(new BlockOption(BlockType.NEUTRAL, 25));
 	
 	this.blockStorage = {
 		option1: null,
@@ -49,20 +49,27 @@ Player.prototype.pushNextBlock = function(){
 			
 		var rnd = Math.round(Math.random()*100);
 		var found = false;
+		var min = 0;
+		
+		var end = this.blockTypeAvailable.length;
+		var i = 0;
 		
 		//Loop through block types available to the player to initiate next command.
-		for(var i in this.blockTypeAvailable)
+		while(i < end && !found)
 		{
-			if(rnd >= this.blockTypeAvailable[i].min && this.blockTypeAvailable[i].max >= rnd)
+			if(rnd <= (this.blockTypeAvailable[i].percent + min))
 			{
 				this.nextBlock = this.blockTypeAvailable[i].type;
 				found = true;
 			}
+			
+			min += this.blockTypeAvailable[i].percent;
+			i++;
 		}
 		
-		//Neutral if not found.
+		//Colored if not found.
 		if(!found)
-			this.nextBlock = BlockType.NEUTRAL;
+			this.nextBlock = BlockType.COLORED;
 	}
 	else
 		this.givenBlock = null;

@@ -1,5 +1,4 @@
-var BlockOption = function(type, min, max){
+var BlockOption = function(type, percent){
 	this.type = type;
-	this.min = min;
-	this.max = max;
+	this.percent = percent;
 };
