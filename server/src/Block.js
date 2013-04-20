@@ -175,7 +175,7 @@ Block.prototype.explode = function(cause){
 	for(var i in Game.blocks)
 	{
 		if(Game.blocks[i] != null && Game.blocks[i].id == this.id)
-			Game.blocks[i] = null;
+			delete Game.blocks[i];
 	}
 	
 	this.stillExist = false;
