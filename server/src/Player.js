@@ -22,7 +22,8 @@ var Player = function(id, x, y, color){
 	//Id list of people killed by player.
 	this.killedList = null;
 	
-	this.facing = Facing.RIGHT;
+	this.facing = Facing.LEFT;
+	this.currentAction = ActionType.STANDING;
 	
 	this.color = color;
 	this.keys = {
@@ -155,6 +156,15 @@ Player.prototype.update = function(){
 		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
 			this.doubleJumpEnabled = true;
 		
+		//Look if player is falling.
+		if(this.groundContact == 0)
+		{
+			if(this.currentAction != ActionType.JUMPING)
+				this.currentAction = ActionType.FALLING;
+			else
+				this.currentAction = ActionType.NONE;
+		} 
+		
 		if(nextX != 0)
 		{
 			var lastFacing = this.facing;
@@ -164,12 +174,21 @@ Player.prototype.update = function(){
 				this.turn();
 				
 			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
+			
+			//Switch current action to running if player is on the ground.
+			if(this.groundContact > 0 && this.currentAction != ActionType.RUNNING && this.currentAction != ActionType.JUMPING)
+				this.currentAction = ActionType.RUNNING;
 		}
 		else
 		{
 			//Artificial friction for players when on ground and pressing no key.
 			if(this.groundContact > 0)
+			{
 				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
+				
+				if(this.currentAction != ActionType.STANDING && this.currentAction != ActionType.JUMPING)
+					this.currentAction = ActionType.STANDING;
+			}
 		}
 	}
 };
@@ -179,6 +198,7 @@ Player.prototype.turn = function(){
 };
 
 Player.prototype.jump = function(){
+	this.currentAction = ActionType.JUMPING;
 	this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
 	this.body.applyImpulse(new chipmunk.Vect(0, PlayerConstants.JUMP_POWER), new chipmunk.Vect(0,0));
 };
@@ -186,7 +206,7 @@ Player.prototype.jump = function(){
 Player.prototype.doubleJump = function(){
 	this.jump();
 	this.dropBlock();
-	
+
 	this.doubleJumpUsed = true;
 	this.doubleJumpEnabled = false;
 };
@@ -261,6 +281,8 @@ Player.prototype.toClient = function(){
 	return {
 		x: this.getPosition().x,
 		y: this.getPosition().y,
-		color: this.color
+		color: this.color,
+		action: this.currentAction,
+		facing: this.facing
 	};
 };

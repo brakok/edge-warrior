@@ -74,6 +74,15 @@ var BlockConstants = {
 	SPAWN_MAXLAUNCHING_X: 500
 };
 
+var ActionType = {
+	NONE: -1,
+	STANDING: 0,
+	RUNNING: 1,
+	JUMPING: 2,
+	FALLING: 3,
+	DOUBLE_JUMPING: 4
+};
+
 //Socket messages.
 var Message = {
 	NEXT_BLOCK: 'nextBlock',
