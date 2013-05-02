@@ -27,6 +27,13 @@ var HUD = cc.LayerColor.extend({
 		this.addChild(this.fieldset);
 	},
 	setBlocks: function(current, next){
+	
+		if(this.currentBlock != null)
+			this.removeChild(this.currentBlock);
+			
+		if(this.nextBlock != null)
+			this.removeChild(this.nextBlock);
+	
 		this.currentBlock = current.sprite;
 		this.nextBlock = next.sprite;		
 		

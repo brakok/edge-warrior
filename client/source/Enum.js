@@ -26,3 +26,21 @@ var BlockType = {
 	SKILLED: 3
 };
 
+var AnimType = {
+	IDLE: 0,
+	RUNNING: 1,
+	JUMPING: 2,
+	FALLING: 3
+};
+
+var ActionType = {
+	STANDING: 0,
+	RUNNING: 1,
+	JUMPING: 2,
+	FALLING: 3
+};
+
+var Facing = {
+	RIGHT:  0,
+	LEFT: 1
+};
