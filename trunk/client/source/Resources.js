@@ -1,5 +1,6 @@
 var assestsPlaceHolderDir = 'placeholders/';
 var assetsBlockDir = 'assets/blocks/';
+var assetsPlayerDir = 'assets/players/';
 
 var assets = [
 	{type:'image', src: assetsBlockDir + 'block.png'},
@@ -12,8 +13,14 @@ var assets = [
 	{type:'image', src: assetsBlockDir + 'block_6.png'},
 	{type:'image', src: assetsBlockDir + 'block_7.png'},
 	{type:'image', src: assetsBlockDir + 'block_spawn.png'},
-	{type:'image', src: assestsPlaceHolderDir + 'player_run.png'},
+	
+	{type:'image', src: assetsPlayerDir + 'yellow_idle.png'},
+	{type:'image', src: assetsPlayerDir + 'yellow_running.png'},
+	{type:'image', src: assetsPlayerDir + 'yellow_jumping.png'},
+	
 	{type:'image', src: assestsPlaceHolderDir + 'fieldset.png'},
 	
-	{type:"plist", src: assestsPlaceHolderDir + 'player_run.plist'}
+	{type:"plist", src: assetsPlayerDir + 'yellow_idle.plist'},
+	{type:"plist", src: assetsPlayerDir + 'yellow_running.plist'},
+	{type:"plist", src: assetsPlayerDir + 'yellow_jumping.plist'}
 ];
