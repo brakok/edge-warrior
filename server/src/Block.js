@@ -165,7 +165,7 @@ Block.prototype.explode = function(cause){
 		id: this.id
 	};
 	
-	//Strange behavior when trying to remove a static shape. Works fine when reactivate first.
+	//Strange behavior when trying to remove a static shape. Works fine when reactivated first.
 	this.active(true);
 	Game.space.removeShape(this.blockSensor);
 	Game.space.removeShape(this.shape);

@@ -132,7 +132,7 @@ var BlockListener = {
 		if(player != null)
 		{		
 			var killingBlock = (block1 != null ? block1 : block2);
-			if(killingBlock != null && !killingBlock.landed)
+			if(killingBlock != null && !killingBlock.landed && killingBlock.ownerId != player.id)
 			{
 				//Find killing player.
 				var killingPlayer = null;

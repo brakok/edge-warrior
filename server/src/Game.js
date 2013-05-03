@@ -109,5 +109,29 @@ var Game = {
 	launch: function(){
 		//17 milliseconds = 60 FPS
 		setInterval(function(){Game.update()}, 8);
+	},
+	assignKill: function(killed){
+		var killerIndex = Math.round((Math.random()*(this.connectedPlayers-1))-0.5);
+		var otherPlayers = [];
+		
+		for(var i in this.players)
+		{
+			if(this.players[i].id != killed.id)
+				otherPlayers.push(this.players[i]);
+		}
+		
+		//Keep track of killed victims.
+		var tmpKilledList = (!otherPlayers[killerIndex].isAlive ? killed.killedList : null);
+		
+		//Assign the kill.
+		otherPlayers[killerIndex].kill(killed, BlockType.NEUTRAL);
+		
+		if(tmpKilledList != null)
+		{
+			otherPlayers[killerIndex].killedList = [];
+			otherPlayers[killerIndex].killedList.push(killed.id);
+			
+			killed.killedList = tmpKilledList;
+		}
 	}
 };

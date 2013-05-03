@@ -83,6 +83,10 @@ var ActionType = {
 	DOUBLE_JUMPING: 4
 };
 
+var BlockRestriction = {
+	SPAWN_TIMER: 7
+};
+
 //Socket messages.
 var Message = {
 	NEXT_BLOCK: 'nextBlock',
@@ -232,7 +236,7 @@ var BlockListener = {
 		if(player != null)
 		{		
 			var killingBlock = (block1 != null ? block1 : block2);
-			if(killingBlock != null && !killingBlock.landed)
+			if(killingBlock != null && !killingBlock.landed && killingBlock.ownerId != player.id)
 			{
 				//Find killing player.
 				var killingPlayer = null;
@@ -291,10 +295,15 @@ var Player = function(id, x, y, color){
 	this.isAlive = true;
 	this.toBeDestroy = false;
 	
+	//Timer indicating how long a player may keep a spawn block in his inventory.
+	this.spawnTimer = BlockRestriction.SPAWN_TIMER;
+	
 	this.width = PlayerConstants.WIDTH;
 	this.height = PlayerConstants.HEIGHT;
 	
 	this.groundContact = 0;
+	
+	//Used to prevent player to drop a block if obstructed.
 	this.obstruction = 0;
 	
 	this.doubleJumpEnabled = false;
@@ -386,6 +395,10 @@ Player.prototype.die = function(){
 	this.toBeDestroy = false;
 	
 	io.sockets.in(Game.id).emit(Message.PLAYER_KILLED, this.toClient());
+	
+	//Ask for the next block if player is currently holding a spawn block.
+	if(this.currentBlock == BlockType.SPAWN)
+		io.sockets.sockets[this.id].emit(Message.NEXT_BLOCK);
 };
 
 Player.prototype.getPosition = function(){
@@ -441,7 +454,7 @@ Player.prototype.update = function(){
 			this.doubleJumpEnabled = true;
 		
 		//Look if player is falling.
-		if(this.groundContact == 0)
+		if(this.groundContact == 0 && this.currentAction != ActionType.DOUBLE_JUMPING)
 		{
 			if(this.currentAction != ActionType.JUMPING)
 				this.currentAction = ActionType.FALLING;
@@ -475,6 +488,25 @@ Player.prototype.update = function(){
 			}
 		}
 	}
+	
+	//Prevent player to keep a spawn block (kill him and drop spawn block). 
+	if(this.currentBlock == BlockType.SPAWN && this.isAlive)
+	{
+		this.spawnTimer -= PhysicConstants.TIME_STEP*0.5;
+		
+		if(this.spawnTimer < 0)
+		{
+			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
+			
+			//Assign kill to a random player.
+			Game.assignKill(this);
+		}
+	}
+	else
+	{
+		if(this.spawnTimer < BlockRestriction.SPAWN_TIMER)
+			this.spawnTimer = BlockRestriction.SPAWN_TIMER;
+	}
 };
 
 Player.prototype.turn = function(){
@@ -491,18 +523,24 @@ Player.prototype.doubleJump = function(){
 	this.jump();
 	this.dropBlock();
 
+	this.currentAction = ActionType.DOUBLE_JUMPING;
 	this.doubleJumpUsed = true;
 	this.doubleJumpEnabled = false;
 };
 
-Player.prototype.dropBlock = function(){
+Player.prototype.dropBlock = function(x, y, checkDropzone){
+
 	//Spawn a block if drop zone isn't obstructed.
-	if(this.obstruction == 0){	
+	if((this.obstruction == 0 && (checkDropzone == null || checkDropzone))
+	  ||(!checkDropzone)){	
+	
+		var tmpX = (x != null ? x : this.getPosition().x);
+		var tmpY = (y != null ? y : this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
 		var block = new Block(Game.blockSequence, 
-							  this.getPosition().x, 
-							  this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
+							  tmpX, 
+							  tmpY, 
 							  this.currentBlock, 
 							  this.color,
 							  this.id);
@@ -736,7 +774,7 @@ Block.prototype.explode = function(cause){
 		id: this.id
 	};
 	
-	//Strange behavior when trying to remove a static shape. Works fine when reactivate first.
+	//Strange behavior when trying to remove a static shape. Works fine when reactivated first.
 	this.active(true);
 	Game.space.removeShape(this.blockSensor);
 	Game.space.removeShape(this.shape);
@@ -864,6 +902,30 @@ var Game = {
 	launch: function(){
 		//17 milliseconds = 60 FPS
 		setInterval(function(){Game.update()}, 8);
+	},
+	assignKill: function(killed){
+		var killerIndex = Math.round((Math.random()*(this.connectedPlayers-1))-0.5);
+		var otherPlayers = [];
+		
+		for(var i in this.players)
+		{
+			if(this.players[i].id != killed.id)
+				otherPlayers.push(this.players[i]);
+		}
+		
+		//Keep track of killed victims.
+		var tmpKilledList = (!otherPlayers[killerIndex].isAlive ? killed.killedList : null);
+		
+		//Assign the kill.
+		otherPlayers[killerIndex].kill(killed, BlockType.NEUTRAL);
+		
+		if(tmpKilledList != null)
+		{
+			otherPlayers[killerIndex].killedList = [];
+			otherPlayers[killerIndex].killedList.push(killed.id);
+			
+			killed.killedList = tmpKilledList;
+		}
 	}
 };//Modules.
 var http = require('http');
