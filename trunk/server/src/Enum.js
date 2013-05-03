@@ -83,6 +83,10 @@ var ActionType = {
 	DOUBLE_JUMPING: 4
 };
 
+var BlockRestriction = {
+	SPAWN_TIMER: 7
+};
+
 //Socket messages.
 var Message = {
 	NEXT_BLOCK: 'nextBlock',

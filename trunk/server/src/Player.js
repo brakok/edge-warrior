@@ -7,10 +7,15 @@ var Player = function(id, x, y, color){
 	this.isAlive = true;
 	this.toBeDestroy = false;
 	
+	//Timer indicating how long a player may keep a spawn block in his inventory.
+	this.spawnTimer = BlockRestriction.SPAWN_TIMER;
+	
 	this.width = PlayerConstants.WIDTH;
 	this.height = PlayerConstants.HEIGHT;
 	
 	this.groundContact = 0;
+	
+	//Used to prevent player to drop a block if obstructed.
 	this.obstruction = 0;
 	
 	this.doubleJumpEnabled = false;
@@ -102,6 +107,10 @@ Player.prototype.die = function(){
 	this.toBeDestroy = false;
 	
 	io.sockets.in(Game.id).emit(Message.PLAYER_KILLED, this.toClient());
+	
+	//Ask for the next block if player is currently holding a spawn block.
+	if(this.currentBlock == BlockType.SPAWN)
+		io.sockets.sockets[this.id].emit(Message.NEXT_BLOCK);
 };
 
 Player.prototype.getPosition = function(){
@@ -157,7 +166,7 @@ Player.prototype.update = function(){
 			this.doubleJumpEnabled = true;
 		
 		//Look if player is falling.
-		if(this.groundContact == 0)
+		if(this.groundContact == 0 && this.currentAction != ActionType.DOUBLE_JUMPING)
 		{
 			if(this.currentAction != ActionType.JUMPING)
 				this.currentAction = ActionType.FALLING;
@@ -191,6 +200,25 @@ Player.prototype.update = function(){
 			}
 		}
 	}
+	
+	//Prevent player to keep a spawn block (kill him and drop spawn block). 
+	if(this.currentBlock == BlockType.SPAWN && this.isAlive)
+	{
+		this.spawnTimer -= PhysicConstants.TIME_STEP*0.5;
+		
+		if(this.spawnTimer < 0)
+		{
+			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
+			
+			//Assign kill to a random player.
+			Game.assignKill(this);
+		}
+	}
+	else
+	{
+		if(this.spawnTimer < BlockRestriction.SPAWN_TIMER)
+			this.spawnTimer = BlockRestriction.SPAWN_TIMER;
+	}
 };
 
 Player.prototype.turn = function(){
@@ -207,18 +235,24 @@ Player.prototype.doubleJump = function(){
 	this.jump();
 	this.dropBlock();
 
+	this.currentAction = ActionType.DOUBLE_JUMPING;
 	this.doubleJumpUsed = true;
 	this.doubleJumpEnabled = false;
 };
 
-Player.prototype.dropBlock = function(){
+Player.prototype.dropBlock = function(x, y, checkDropzone){
+
 	//Spawn a block if drop zone isn't obstructed.
-	if(this.obstruction == 0){	
+	if((this.obstruction == 0 && (checkDropzone == null || checkDropzone))
+	  ||(!checkDropzone)){	
+	
+		var tmpX = (x != null ? x : this.getPosition().x);
+		var tmpY = (y != null ? y : this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
 		var block = new Block(Game.blockSequence, 
-							  this.getPosition().x, 
-							  this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5, 
+							  tmpX, 
+							  tmpY, 
 							  this.currentBlock, 
 							  this.color,
 							  this.id);
