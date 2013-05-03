@@ -143,6 +143,7 @@ Player.prototype.fromServer = function(data){
 				this.swapAnimation(AnimType.RUNNING);
 				break;
 			case ActionType.JUMPING:
+			case ActionType.DOUBLE_JUMPING:
 				this.swapAnimation(AnimType.JUMPING);
 				break;
 			case ActionType.FALLING:
