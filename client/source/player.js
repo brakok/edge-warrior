@@ -133,7 +133,7 @@ Player.prototype.fromServer = function(data){
 		
 	if(data.action != this.currentAction)
 	{
-		console.log(data.action);
+		//Assign good animation to the right action.
 		switch(data.action)
 		{
 			case ActionType.STANDING:
