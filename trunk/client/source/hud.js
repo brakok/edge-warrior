@@ -1,6 +1,6 @@
 var DefaultPosition = {
-	currentY: 50,
-	nextY: 75
+	current: {x :0, y: 65, offset: 140 },
+	next: { x :0, y : 95, offset: 85 }
 };
 
 //HUD needs to be add to the GameScene.
@@ -10,7 +10,6 @@ var HUD = cc.LayerColor.extend({
 	nextBlock: null,
 	option1: null,
 	option2: null,
-	blockDefaultX: 0,
 	layer: null,
 	init: function(width, height){
 	
@@ -18,11 +17,13 @@ var HUD = cc.LayerColor.extend({
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
 		//Add the fieldset containing player blocks.
-		this.fieldset = cc.Sprite.create('placeholders/fieldset.png');
+		this.fieldset = cc.Sprite.create(assetsHudDir + 'fieldset.png');
 		
 		//Set the fieldset in the right corner.
-		this.fieldset.setPosition(new cc.Point(width - 150, 100));	
-		this.blockDefaultX = width - 100;
+		this.fieldset.setPosition(new cc.Point(width - 125, 75));	
+		
+		DefaultPosition.current.x = width - DefaultPosition.current.offset;
+		DefaultPosition.next.x = width - DefaultPosition.next.offset;
 		
 		this.addChild(this.fieldset);
 	},
@@ -37,8 +38,13 @@ var HUD = cc.LayerColor.extend({
 		this.currentBlock = current.sprite;
 		this.nextBlock = next.sprite;		
 		
-		this.currentBlock.setPosition(new cc.Point(this.blockDefaultX, DefaultPosition.currentY));
-		this.nextBlock.setPosition(new cc.Point(this.blockDefaultX, DefaultPosition.nextY));
+		this.currentBlock.setPosition(new cc.Point(DefaultPosition.current.x, DefaultPosition.current.y));
+		this.nextBlock.setPosition(new cc.Point(DefaultPosition.next.x, DefaultPosition.next.y));
+		
+		//Place current above next.
+		this.currentBlock._zOrder = 1;
+		this.currentBlock.setScale(1.6);
+		this.nextBlock.setScale(1.2);
 		
 		this.addChild(this.currentBlock);
 		this.addChild(this.nextBlock);
@@ -51,8 +57,14 @@ var HUD = cc.LayerColor.extend({
 		this.currentBlock = this.nextBlock;
 		this.nextBlock = block.sprite;
 		
-		this.currentBlock.setPosition(new cc.Point(this.blockDefaultX, DefaultPosition.currentY));
-		this.nextBlock.setPosition(new cc.Point(this.blockDefaultX, DefaultPosition.nextY));
+		//Set correct scale and good z-index on current.
+		this.currentBlock._zOrder = 1;
+		this.currentBlock.setScale(1.6);
+		this.nextBlock.setScale(1.2);
+		
+		//Set their position.
+		this.currentBlock.setPosition(new cc.Point(DefaultPosition.current.x, DefaultPosition.current.y));
+		this.nextBlock.setPosition(new cc.Point(DefaultPosition.next.x, DefaultPosition.next.y));
 		
 		this.addChild(this.nextBlock);
 	}
@@ -61,6 +73,9 @@ var HUD = cc.LayerColor.extend({
 HUD.create = function(width, height) {
 
 	var hud = new HUD();
+	
+	//Infront of everything.
+	hud._zOrder = 1000;
 	hud.init(width, height);
 	
 	return hud;
