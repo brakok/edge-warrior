@@ -499,7 +499,7 @@ Player.prototype.update = function(){
 			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
 			
 			//Assign kill to a random player.
-			Game.assignKill(this);
+			Overlord.assignKill(this);
 		}
 	}
 	else
@@ -902,15 +902,17 @@ var Game = {
 	launch: function(){
 		//17 milliseconds = 60 FPS
 		setInterval(function(){Game.update()}, 8);
-	},
+	}
+};
+var Overlord = {
 	assignKill: function(killed){
-		var killerIndex = Math.round((Math.random()*(this.connectedPlayers-1))-0.5);
+		var killerIndex = Math.round((Math.random()*(Game.connectedPlayers-1))-0.5);
 		var otherPlayers = [];
 		
-		for(var i in this.players)
+		for(var i in Game.players)
 		{
-			if(this.players[i].id != killed.id)
-				otherPlayers.push(this.players[i]);
+			if(Game.players[i].id != killed.id)
+				otherPlayers.push(Game.players[i]);
 		}
 		
 		//Keep track of killed victims.

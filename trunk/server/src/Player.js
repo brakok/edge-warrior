@@ -211,7 +211,7 @@ Player.prototype.update = function(){
 			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
 			
 			//Assign kill to a random player.
-			Game.assignKill(this);
+			Overlord.assignKill(this);
 		}
 	}
 	else
