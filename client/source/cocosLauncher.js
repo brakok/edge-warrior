@@ -18,6 +18,7 @@
 				  'source/player.js',
 				  'source/gameScene.js',
 				  'source/Resources.js',
+				  'source/Inventory.js',
 				  'source/hud.js']
 	};
 	

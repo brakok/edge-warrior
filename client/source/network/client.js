@@ -35,7 +35,7 @@ var Client = new function(){
 			this.layer.addChild(this.enemies[i].currentAnimation);
 				
 		//Set first blocks to the HUD.
-		this.hud.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), new Block(0,0, this.player.nextBlock, this.player.color));
+		this.hud.inventory.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), new Block(0,0, this.player.nextBlock, this.player.color));
 		
 		this.ready = true;
 	};
