@@ -79,7 +79,7 @@ var Player = function (x, y, color) {
 //Add a block as the current block from an extern source.
 Player.prototype.addNextBlock = function(blockType){
 	this.givenBlock = blockType;
-	Client.hud.setBlocks(new Block(0,0, this.givenBlock, this.color), new Block(0,0, this.currentBlock, this.color));
+	Client.hud.inventory.setBlocks(new Block(0,0, this.givenBlock, this.color), new Block(0,0, this.currentBlock, this.color));
 };
 
 //Ask player to randomize next block in the list.
@@ -117,7 +117,7 @@ Player.prototype.pushNextBlock = function(){
 		this.givenBlock = null;
 
 	//Push the new block to the HUD.
-	Client.hud.pushBlock(new Block(0,0,this.nextBlock, this.color));
+	Client.hud.inventory.pushBlock(new Block(0,0,this.nextBlock, this.color));
 };
 
 Player.prototype.getPosition = function(){
