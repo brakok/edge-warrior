@@ -3,6 +3,9 @@ var Player = function(id, x, y, color){
 	this.id = id;
 	this.x = x;
 	this.y = y;
+		
+	this.killTime = 0;	
+	this.stepReached = StepReached.NONE;
 	
 	this.isAlive = true;
 	this.toBeDestroy = false;
@@ -105,6 +108,9 @@ Player.prototype.die = function(){
 	
 	this.isAlive = false;
 	this.toBeDestroy = false;
+		
+	this.stepReached = 0;
+	this.killTime = 0;
 	
 	io.sockets.in(Game.id).emit(Message.PLAYER_KILLED, this.toClient());
 	
@@ -186,7 +192,7 @@ Player.prototype.update = function(){
 			
 			//Switch current action to running if player is on the ground.
 			if(this.groundContact > 0 && this.currentAction != ActionType.RUNNING && this.currentAction != ActionType.JUMPING)
-				this.currentAction = ActionType.RUNNING;
+				this.currentAction = ActionType.RUNNING;	
 		}
 		else
 		{
@@ -197,7 +203,69 @@ Player.prototype.update = function(){
 				
 				if(this.currentAction != ActionType.STANDING && this.currentAction != ActionType.JUMPING)
 					this.currentAction = ActionType.STANDING;
+					
+				//Calculate standing time to a limit of 1 min.
+				if(this.isAlive)
+				{
+					var addTime = false;
+					var sendMessage = false;
+				
+					if(this.killTime < KillCommandTime.FIRST_STEP)
+						addTime = true;
+				
+					//Standing phase.
+					if(this.killTime == 0)
+					{
+						sendMessage = true;
+						this.stepReached = StepReached.STANDING;
+					}
+									
+					//Assign to a player phase.
+					if(this.killTime >= KillCommandTime.FIRST_STEP && this.keys.kill)
+					{
+						addTime = true;
+						
+						if(this.stepReached < StepReached.PLAYER)
+						{
+							sendMessage = true;
+							this.stepReached = StepReached.PLAYER;
+						}
+					}
+					
+					//Assign to the overlord phase.
+					if(this.killTime >= KillCommandTime.SECOND_STEP && this.keys.kill && this.stepReached < StepReached.OVERLORD)
+						this.stepReached = StepReached.OVERLORD;
+				
+					if(sendMessage)
+						io.sockets.sockets[this.id].emit(Message.KILL_COMMAND, this.stepReached);
+				
+					if(addTime)
+						this.killTime += PhysicConstants.TIME_STEP*0.5;	
+				}			
 			}
+		}
+		
+		//Reset kill command timer.
+		if(this.killTime > 0 && (nextX != 0 || this.keys.jump))
+		{
+			this.killTime = 0;
+			this.stepReached = 0;
+			
+			io.sockets.sockets[this.id].emit(Message.KILL_COMMAND, StepReached.NONE);
+		}	
+	}
+	
+	//Manage kill command.
+	if(this.stepReached > StepReached.STANDING && (!this.keys.kill || this.stepReached == StepReached.OVERLORD))
+	{
+		switch(this.stepReached)
+		{
+			case StepReached.PLAYER:
+				Overlord.assignKill(this);
+				break;
+			case StepReached.OVERLORD:
+				Overlord.kill(this);
+				break;
 		}
 	}
 	

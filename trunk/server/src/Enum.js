@@ -84,7 +84,20 @@ var ActionType = {
 };
 
 var BlockRestriction = {
-	SPAWN_TIMER: 7
+	SPAWN_TIMER: 6
+};
+
+//Who get the kill for a kill command.
+var StepReached = {
+	NONE: 0,
+	STANDING: 1,
+	PLAYER: 2,
+	OVERLORD: 3
+};
+
+var KillCommandTime = {
+	FIRST_STEP: 5,
+	SECOND_STEP: 10
 };
 
 //Socket messages.
@@ -101,5 +114,6 @@ var Message = {
 	NEW_PLAYER: 'newPlayer',
 	PLAYER_KILLED: 'playerKilled',
 	PLAYER_SPAWNED: 'playerSpawned',
-	LAUNCH: 'launch'
+	LAUNCH: 'launch',
+	KILL_COMMAND: 'killCommand'
 };

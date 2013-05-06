@@ -130,14 +130,11 @@ Block.prototype.trigger = function(){
 };
 
 Block.prototype.spawn = function(){
-	var player = Game.players[this.ownerId];
-	
-	if(player != null && player.killedList != null)
+
+	//Check if spawn block is overlord's one.
+	if(this.ownerId == null)
 	{
-		var posY = PlayerConstants.HEIGHT;
-	
-		//Respawn enemies killed by player.
-		for(var i in player.killedList)
+		for(var i in Overlord.killedList)
 		{
 			var factor = Math.PI*(Math.random()*2);
 		
@@ -145,14 +142,43 @@ Block.prototype.spawn = function(){
 			var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
 			
 			//Spawn the player.
-			Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
+			Game.players[Overlord.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
 			
 			//Launch the player to random position.
-			Game.players[player.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
-			Game.players[player.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+			Game.players[Overlord.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
+			Game.players[Overlord.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
 		}
 		
-		player.killedList = null;
+		Overlord.hasActiveSpawnBlock = false;
+		Overlord.killedList = null;
+	}
+	else
+	{
+		//Spawn killeds related to killer.
+		var player = Game.players[this.ownerId];
+		
+		if(player != null && player.killedList != null)
+		{
+			var posY = PlayerConstants.HEIGHT;
+		
+			//Respawn enemies killed by player.
+			for(var i in player.killedList)
+			{
+				var factor = Math.PI*(Math.random()*2);
+			
+				var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
+				var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+				
+				//Spawn the player.
+				Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
+				
+				//Launch the player to random position.
+				Game.players[player.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
+				Game.players[player.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+			}
+			
+			player.killedList = null;
+		}
 	}
 	
 	this.explode(BlockDestructionType.SPAWN);
