@@ -84,7 +84,20 @@ var ActionType = {
 };
 
 var BlockRestriction = {
-	SPAWN_TIMER: 7
+	SPAWN_TIMER: 6
+};
+
+//Who get the kill for a kill command.
+var StepReached = {
+	NONE: 0,
+	STANDING: 1,
+	PLAYER: 2,
+	OVERLORD: 3
+};
+
+var KillCommandTime = {
+	FIRST_STEP: 5,
+	SECOND_STEP: 10
 };
 
 //Socket messages.
@@ -101,7 +114,8 @@ var Message = {
 	NEW_PLAYER: 'newPlayer',
 	PLAYER_KILLED: 'playerKilled',
 	PLAYER_SPAWNED: 'playerSpawned',
-	LAUNCH: 'launch'
+	LAUNCH: 'launch',
+	KILL_COMMAND: 'killCommand'
 };//Drop listener.
 var DropListener = {
 	begin: function(arbiter, space){
@@ -291,6 +305,9 @@ var Player = function(id, x, y, color){
 	this.id = id;
 	this.x = x;
 	this.y = y;
+		
+	this.killTime = 0;	
+	this.stepReached = StepReached.NONE;
 	
 	this.isAlive = true;
 	this.toBeDestroy = false;
@@ -393,6 +410,9 @@ Player.prototype.die = function(){
 	
 	this.isAlive = false;
 	this.toBeDestroy = false;
+		
+	this.stepReached = 0;
+	this.killTime = 0;
 	
 	io.sockets.in(Game.id).emit(Message.PLAYER_KILLED, this.toClient());
 	
@@ -474,7 +494,7 @@ Player.prototype.update = function(){
 			
 			//Switch current action to running if player is on the ground.
 			if(this.groundContact > 0 && this.currentAction != ActionType.RUNNING && this.currentAction != ActionType.JUMPING)
-				this.currentAction = ActionType.RUNNING;
+				this.currentAction = ActionType.RUNNING;	
 		}
 		else
 		{
@@ -485,7 +505,69 @@ Player.prototype.update = function(){
 				
 				if(this.currentAction != ActionType.STANDING && this.currentAction != ActionType.JUMPING)
 					this.currentAction = ActionType.STANDING;
+					
+				//Calculate standing time to a limit of 1 min.
+				if(this.isAlive)
+				{
+					var addTime = false;
+					var sendMessage = false;
+				
+					if(this.killTime < KillCommandTime.FIRST_STEP)
+						addTime = true;
+				
+					//Standing phase.
+					if(this.killTime == 0)
+					{
+						sendMessage = true;
+						this.stepReached = StepReached.STANDING;
+					}
+									
+					//Assign to a player phase.
+					if(this.killTime >= KillCommandTime.FIRST_STEP && this.keys.kill)
+					{
+						addTime = true;
+						
+						if(this.stepReached < StepReached.PLAYER)
+						{
+							sendMessage = true;
+							this.stepReached = StepReached.PLAYER;
+						}
+					}
+					
+					//Assign to the overlord phase.
+					if(this.killTime >= KillCommandTime.SECOND_STEP && this.keys.kill && this.stepReached < StepReached.OVERLORD)
+						this.stepReached = StepReached.OVERLORD;
+				
+					if(sendMessage)
+						io.sockets.sockets[this.id].emit(Message.KILL_COMMAND, this.stepReached);
+				
+					if(addTime)
+						this.killTime += PhysicConstants.TIME_STEP*0.5;	
+				}			
 			}
+		}
+		
+		//Reset kill command timer.
+		if(this.killTime > 0 && (nextX != 0 || this.keys.jump))
+		{
+			this.killTime = 0;
+			this.stepReached = 0;
+			
+			io.sockets.sockets[this.id].emit(Message.KILL_COMMAND, StepReached.NONE);
+		}	
+	}
+	
+	//Manage kill command.
+	if(this.stepReached > StepReached.STANDING && (!this.keys.kill || this.stepReached == StepReached.OVERLORD))
+	{
+		switch(this.stepReached)
+		{
+			case StepReached.PLAYER:
+				Overlord.assignKill(this);
+				break;
+			case StepReached.OVERLORD:
+				Overlord.kill(this);
+				break;
 		}
 	}
 	
@@ -739,14 +821,11 @@ Block.prototype.trigger = function(){
 };
 
 Block.prototype.spawn = function(){
-	var player = Game.players[this.ownerId];
-	
-	if(player != null && player.killedList != null)
+
+	//Check if spawn block is overlord's one.
+	if(this.ownerId == null)
 	{
-		var posY = PlayerConstants.HEIGHT;
-	
-		//Respawn enemies killed by player.
-		for(var i in player.killedList)
+		for(var i in Overlord.killedList)
 		{
 			var factor = Math.PI*(Math.random()*2);
 		
@@ -754,14 +833,43 @@ Block.prototype.spawn = function(){
 			var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
 			
 			//Spawn the player.
-			Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
+			Game.players[Overlord.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
 			
 			//Launch the player to random position.
-			Game.players[player.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
-			Game.players[player.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+			Game.players[Overlord.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
+			Game.players[Overlord.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
 		}
 		
-		player.killedList = null;
+		Overlord.hasActiveSpawnBlock = false;
+		Overlord.killedList = null;
+	}
+	else
+	{
+		//Spawn killeds related to killer.
+		var player = Game.players[this.ownerId];
+		
+		if(player != null && player.killedList != null)
+		{
+			var posY = PlayerConstants.HEIGHT;
+		
+			//Respawn enemies killed by player.
+			for(var i in player.killedList)
+			{
+				var factor = Math.PI*(Math.random()*2);
+			
+				var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
+				var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+				
+				//Spawn the player.
+				Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
+				
+				//Launch the player to random position.
+				Game.players[player.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
+				Game.players[player.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+			}
+			
+			player.killedList = null;
+		}
 	}
 	
 	this.explode(BlockDestructionType.SPAWN);
@@ -905,6 +1013,8 @@ var Game = {
 	}
 };
 var Overlord = {
+	hasActiveSpawnBlock: false,
+	killedList: null,
 	assignKill: function(killed){
 		var killerIndex = Math.round((Math.random()*(Game.connectedPlayers-1))-0.5);
 		var otherPlayers = [];
@@ -928,6 +1038,38 @@ var Overlord = {
 			
 			killed.killedList = tmpKilledList;
 		}
+	},
+	kill: function(killed){
+		
+		//Spawn block falls from the sky.
+		if(!this.hasActiveSpawnBlock)
+		{
+			var spawnY = Game.height + 100;
+			var spawnX = BlockConstants.WIDTH*0.5 + (Math.random()*(Game.width-BlockConstants.WIDTH));
+			
+			//Create a block and launch it.
+			var block = new Block(Game.blockSequence, 
+								  spawnX, 
+								  spawnY, 
+								  BlockType.SPAWN, 
+								  null,
+								  null);
+			
+			Game.blocks.push(block);
+			block.launch();
+			
+			Game.blockSequence++;	
+			io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
+		}
+		
+		if(this.killedList == null)
+			this.killedList = [];
+		
+		//Assign killed id to list.
+		this.killedList.push(killed.id);
+		
+		//Force player to die.
+		killed.die();
 	}
 };//Modules.
 var http = require('http');
