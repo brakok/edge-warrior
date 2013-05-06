@@ -13,6 +13,7 @@ var Client = new function(){
 	this.keys[cc.KEY.d] = false;
 	this.keys[cc.KEY.a] = false;
 	this.keys[cc.KEY.space] = false;
+	this.keys[cc.KEY.q] = false;
 	
 	//Initialize the game client.
 	this.init = function (layer, hud) {
@@ -130,16 +131,31 @@ var Client = new function(){
 		socket.on(Message.PLAYER_SPAWNED, function(remotePlayer){
 			Client.spawnPlayer(remotePlayer);
 		});
+		
+		socket.on(Message.KILL_COMMAND, function(stepReached){
+			Client.changeStep(stepReached);
+		});
 				
 		//Once defined, preserved the socket.
 		this.socket = socket;
+	};
+	
+	this.changeStep = function(stepReached){
+	
+		if(stepReached == StepReached.NONE)
+			this.hud.killCommand.reset();
+		else
+			this.hud.killCommand.start(stepReached);
 	};
 	
 	//Kill a player and remove it from the layer.
 	this.kill = function(killed){
 		
 		if(killed.color == this.player.color)
+		{
+			this.hud.killCommand.reset();
 			this.player.die();
+		}
 		else
 			for(var i in this.enemies)
 				if(this.enemies[i].color == killed.color)
@@ -197,7 +213,8 @@ var Client = new function(){
 		var inputs = {
 			right: this.keys[cc.KEY.d],
 			left: this.keys[cc.KEY.a],
-			jump: this.keys[cc.KEY.space]
+			jump: this.keys[cc.KEY.space],
+			kill: this.keys[cc.KEY.q]
 		};
 	
 		//Send key pressed to server.

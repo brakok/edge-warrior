@@ -15,5 +15,6 @@ var Message = {
 	NEW_PLAYER: 'newPlayer',
 	PLAYER_KILLED: 'playerKilled',
 	PLAYER_SPAWNED: 'playerSpawned',
-	LAUNCH: 'launch'
+	LAUNCH: 'launch',
+	KILL_COMMAND: 'killCommand'
 };

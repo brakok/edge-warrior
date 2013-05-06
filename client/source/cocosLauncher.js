@@ -18,7 +18,8 @@
 				  'source/player.js',
 				  'source/gameScene.js',
 				  'source/Resources.js',
-				  'source/Inventory.js',
+				  'source/inventory.js',
+				  'source/killCommand.js',
 				  'source/hud.js']
 	};
 	

@@ -22,6 +22,9 @@ var assets = [
 	
 	{type:'image', src: assetsHudDir + 'fieldset.png'},
 	
+	{type:'image', src: assetsHudDir + 'killCommand.png'},
+	{type:'plist', src: assetsHudDir + 'killCommand.plist'},
+	
 	{type:"plist", src: assetsPlayerDir + 'yellow_idle.plist'},
 	{type:"plist", src: assetsPlayerDir + 'yellow_running.plist'},
 	{type:"plist", src: assetsPlayerDir + 'yellow_jumping.plist'}
