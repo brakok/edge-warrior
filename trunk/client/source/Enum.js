@@ -45,3 +45,11 @@ var Facing = {
 	RIGHT:  0,
 	LEFT: 1
 };
+
+//Who get the kill for a kill command.
+var StepReached = {
+	NONE: 0,
+	STANDING: 1,
+	PLAYER: 2,
+	OVERLORD: 3
+};
