@@ -131,16 +131,22 @@ Block.prototype.trigger = function(){
 
 Block.prototype.spawn = function(){
 
+	var posY = PlayerConstants.HEIGHT;
+	var factor = Math.PI*(Math.random()*2);
+	
+	var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
+	var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+	
+	//Prevent block to spawn player on the world edges.
+	if((this.body.getPos().x < SpawnLimit.OFFSET && launchPowerX < 0)
+	|| (this.body.getPos().x > Game.width - SpawnLimit.OFFSET && launchPowerX > 0))
+		launchPowerX *= -1;
+	
 	//Check if spawn block is overlord's one.
 	if(this.ownerId == null)
 	{
 		for(var i in Overlord.killedList)
 		{
-			var factor = Math.PI*(Math.random()*2);
-		
-			var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-			var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
-			
 			//Spawn the player.
 			Game.players[Overlord.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
 			
@@ -158,17 +164,10 @@ Block.prototype.spawn = function(){
 		var player = Game.players[this.ownerId];
 		
 		if(player != null && player.killedList != null)
-		{
-			var posY = PlayerConstants.HEIGHT;
-		
+		{		
 			//Respawn enemies killed by player.
 			for(var i in player.killedList)
-			{
-				var factor = Math.PI*(Math.random()*2);
-			
-				var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-				var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
-				
+			{				
 				//Spawn the player.
 				Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
 				

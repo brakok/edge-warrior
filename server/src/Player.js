@@ -261,10 +261,10 @@ Player.prototype.update = function(){
 		switch(this.stepReached)
 		{
 			case StepReached.PLAYER:
-				Overlord.assignKill(this);
+				Overlord.assignKill(this, null);
 				break;
 			case StepReached.OVERLORD:
-				Overlord.kill(this);
+				Overlord.kill(this, null);
 				break;
 		}
 	}
@@ -311,9 +311,8 @@ Player.prototype.doubleJump = function(){
 Player.prototype.dropBlock = function(x, y, checkDropzone){
 
 	//Spawn a block if drop zone isn't obstructed.
-	if((this.obstruction == 0 && (checkDropzone == null || checkDropzone))
-	  ||(!checkDropzone)){	
-	
+	if(this.obstruction == 0 || (checkDropzone != null && !checkDropzone)){	
+
 		var tmpX = (x != null ? x : this.getPosition().x);
 		var tmpY = (y != null ? y : this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5);
 	
@@ -370,7 +369,7 @@ Player.prototype.initBody = function(space){
 		//Add drop sensor to prevent double jump when drop zone is obstructed.
 		this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
 															new chipmunk.BB(-(BlockConstants.WIDTH*0.33), 
-																			-(playerHalfHeight+(BlockConstants.HEIGHT*0.5)), 
+																			-(playerHalfHeight+(BlockConstants.HEIGHT*0.75)), 
 																			(BlockConstants.WIDTH*0.33), 
 																			-(playerHalfHeight))));
 																	

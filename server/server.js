@@ -50,11 +50,15 @@ var PhysicConstants = {
 	GRAVITY: -150,
 	FRICTION: 0.99,
 	MASS_PLAYER: 10,
-	MASS_BLOCK: 99999999,
-	MASS_BLOCK_STATIC: 99999999999,
+	MASS_BLOCK: 999999,
+	MASS_BLOCK_STATIC: 999999999999,
 	TIME_STEP: 1/60,
 	FRICTION_FACTOR_ONGROUND: 0.9,
 	TURN_FRICTION_FACTOR: 0.05
+};
+
+var SpawnLimit = {
+	OFFSET: 150
 };
 
 var PlayerConstants = {
@@ -252,18 +256,25 @@ var BlockListener = {
 			var killingBlock = (block1 != null ? block1 : block2);
 			if(killingBlock != null && !killingBlock.landed && killingBlock.ownerId != player.id)
 			{
-				//Find killing player.
-				var killingPlayer = null;
-				
-				for(var i in Game.players)
+				if(killingBlock.ownerId == null)
 				{
-					if(Game.players[i].color == killingBlock.color)
-						killingPlayer = Game.players[i];
+					Overlord.kill(player, killingBlock.type);
 				}
+				else
+				{
+					//Find killing player.
+					var killingPlayer = null;
+					
+					for(var i in Game.players)
+					{
+						if(Game.players[i].color == killingBlock.color)
+							killingPlayer = Game.players[i];
+					}
 
-				//If found, mark the player to be inserted in the next update in the killer blocks list.
-				if(killingPlayer != null)
-					killingPlayer.kill(player, killingBlock.type);
+					//If found, mark the player to be inserted in the next update in the killer blocks list.
+					if(killingPlayer != null)
+						killingPlayer.kill(player, killingBlock.type);
+				}
 			}
 			
 			block1 = null;
@@ -563,10 +574,10 @@ Player.prototype.update = function(){
 		switch(this.stepReached)
 		{
 			case StepReached.PLAYER:
-				Overlord.assignKill(this);
+				Overlord.assignKill(this, null);
 				break;
 			case StepReached.OVERLORD:
-				Overlord.kill(this);
+				Overlord.kill(this, null);
 				break;
 		}
 	}
@@ -613,9 +624,8 @@ Player.prototype.doubleJump = function(){
 Player.prototype.dropBlock = function(x, y, checkDropzone){
 
 	//Spawn a block if drop zone isn't obstructed.
-	if((this.obstruction == 0 && (checkDropzone == null || checkDropzone))
-	  ||(!checkDropzone)){	
-	
+	if(this.obstruction == 0 || (checkDropzone != null && !checkDropzone)){	
+
 		var tmpX = (x != null ? x : this.getPosition().x);
 		var tmpY = (y != null ? y : this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5);
 	
@@ -672,7 +682,7 @@ Player.prototype.initBody = function(space){
 		//Add drop sensor to prevent double jump when drop zone is obstructed.
 		this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
 															new chipmunk.BB(-(BlockConstants.WIDTH*0.33), 
-																			-(playerHalfHeight+(BlockConstants.HEIGHT*0.5)), 
+																			-(playerHalfHeight+(BlockConstants.HEIGHT*0.75)), 
 																			(BlockConstants.WIDTH*0.33), 
 																			-(playerHalfHeight))));
 																	
@@ -822,16 +832,22 @@ Block.prototype.trigger = function(){
 
 Block.prototype.spawn = function(){
 
+	var posY = PlayerConstants.HEIGHT;
+	var factor = Math.PI*(Math.random()*2);
+	
+	var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
+	var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+	
+	//Prevent block to spawn player on the world edges.
+	if((this.body.getPos().x < SpawnLimit.OFFSET && launchPowerX < 0)
+	|| (this.body.getPos().x > Game.width - SpawnLimit.OFFSET && launchPowerX > 0))
+		launchPowerX *= -1;
+	
 	//Check if spawn block is overlord's one.
 	if(this.ownerId == null)
 	{
 		for(var i in Overlord.killedList)
 		{
-			var factor = Math.PI*(Math.random()*2);
-		
-			var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-			var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
-			
 			//Spawn the player.
 			Game.players[Overlord.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
 			
@@ -849,17 +865,10 @@ Block.prototype.spawn = function(){
 		var player = Game.players[this.ownerId];
 		
 		if(player != null && player.killedList != null)
-		{
-			var posY = PlayerConstants.HEIGHT;
-		
+		{		
 			//Respawn enemies killed by player.
 			for(var i in player.killedList)
-			{
-				var factor = Math.PI*(Math.random()*2);
-			
-				var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-				var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
-				
+			{				
 				//Spawn the player.
 				Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
 				
@@ -996,7 +1005,7 @@ var Game = {
 		{	
 			for(var i in this.players)
 				this.players[i].update();
-				
+
 			if(this.space != null)
 				this.space.step(PhysicConstants.TIME_STEP);
 				
@@ -1005,6 +1014,9 @@ var Game = {
 				if(this.blocks[i] != null)
 					this.blocks[i].update();
 			}
+			
+			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
+				Overlord.launch(BlockType.SPAWN);
 		}
 	},
 	launch: function(){
@@ -1039,28 +1051,35 @@ var Overlord = {
 			killed.killedList = tmpKilledList;
 		}
 	},
-	kill: function(killed){
+	launch: function(blockType){
 		
-		//Spawn block falls from the sky.
-		if(!this.hasActiveSpawnBlock)
+		if(blockType == BlockType.SPAWN)
 		{
-			var spawnY = Game.height + 100;
-			var spawnX = BlockConstants.WIDTH*0.5 + (Math.random()*(Game.width-BlockConstants.WIDTH));
-			
-			//Create a block and launch it.
-			var block = new Block(Game.blockSequence, 
-								  spawnX, 
-								  spawnY, 
-								  BlockType.SPAWN, 
-								  null,
-								  null);
-			
-			Game.blocks.push(block);
-			block.launch();
-			
-			Game.blockSequence++;	
-			io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
+			//Spawn block falls from the sky.
+			if(!this.hasActiveSpawnBlock)
+			{
+				var spawnY = Game.height + 100;
+				var spawnX = BlockConstants.WIDTH*0.5 + (Math.random()*(Game.width-BlockConstants.WIDTH));
+				
+				//Create a block and launch it.
+				var block = new Block(Game.blockSequence, 
+									  spawnX, 
+									  spawnY, 
+									  BlockType.SPAWN, 
+									  null,
+									  null);
+				
+				Game.blocks.push(block);
+				block.launch();
+				
+				Game.blockSequence++;	
+				io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
+				
+				this.hasActiveSpawnBlock = true;
+			}
 		}
+	},
+	kill: function(killed, cause){
 		
 		if(this.killedList == null)
 			this.killedList = [];
@@ -1068,8 +1087,17 @@ var Overlord = {
 		//Assign killed id to list.
 		this.killedList.push(killed.id);
 		
+		//Steal killed's list.
+		if(killed.killedList != null)
+		{
+			for(var i in killed.killedList)
+				this.killedList.push(killed.killedList[i]);
+				
+			killed.killedList = null;
+		}
+		
 		//Force player to die.
-		killed.die();
+		killed.toBeDestroy = true;
 	}
 };//Modules.
 var http = require('http');
