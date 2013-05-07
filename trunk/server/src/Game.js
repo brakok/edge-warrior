@@ -95,7 +95,7 @@ var Game = {
 		{	
 			for(var i in this.players)
 				this.players[i].update();
-				
+
 			if(this.space != null)
 				this.space.step(PhysicConstants.TIME_STEP);
 				
@@ -104,6 +104,9 @@ var Game = {
 				if(this.blocks[i] != null)
 					this.blocks[i].update();
 			}
+			
+			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
+				Overlord.launch(BlockType.SPAWN);
 		}
 	},
 	launch: function(){

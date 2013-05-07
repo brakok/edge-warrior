@@ -26,28 +26,35 @@ var Overlord = {
 			killed.killedList = tmpKilledList;
 		}
 	},
-	kill: function(killed){
+	launch: function(blockType){
 		
-		//Spawn block falls from the sky.
-		if(!this.hasActiveSpawnBlock)
+		if(blockType == BlockType.SPAWN)
 		{
-			var spawnY = Game.height + 100;
-			var spawnX = BlockConstants.WIDTH*0.5 + (Math.random()*(Game.width-BlockConstants.WIDTH));
-			
-			//Create a block and launch it.
-			var block = new Block(Game.blockSequence, 
-								  spawnX, 
-								  spawnY, 
-								  BlockType.SPAWN, 
-								  null,
-								  null);
-			
-			Game.blocks.push(block);
-			block.launch();
-			
-			Game.blockSequence++;	
-			io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
+			//Spawn block falls from the sky.
+			if(!this.hasActiveSpawnBlock)
+			{
+				var spawnY = Game.height + 100;
+				var spawnX = BlockConstants.WIDTH*0.5 + (Math.random()*(Game.width-BlockConstants.WIDTH));
+				
+				//Create a block and launch it.
+				var block = new Block(Game.blockSequence, 
+									  spawnX, 
+									  spawnY, 
+									  BlockType.SPAWN, 
+									  null,
+									  null);
+				
+				Game.blocks.push(block);
+				block.launch();
+				
+				Game.blockSequence++;	
+				io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
+				
+				this.hasActiveSpawnBlock = true;
+			}
 		}
+	},
+	kill: function(killed, cause){
 		
 		if(this.killedList == null)
 			this.killedList = [];
@@ -55,7 +62,16 @@ var Overlord = {
 		//Assign killed id to list.
 		this.killedList.push(killed.id);
 		
+		//Steal killed's list.
+		if(killed.killedList != null)
+		{
+			for(var i in killed.killedList)
+				this.killedList.push(killed.killedList[i]);
+				
+			killed.killedList = null;
+		}
+		
 		//Force player to die.
-		killed.die();
+		killed.toBeDestroy = true;
 	}
 };

@@ -134,18 +134,25 @@ var BlockListener = {
 			var killingBlock = (block1 != null ? block1 : block2);
 			if(killingBlock != null && !killingBlock.landed && killingBlock.ownerId != player.id)
 			{
-				//Find killing player.
-				var killingPlayer = null;
-				
-				for(var i in Game.players)
+				if(killingBlock.ownerId == null)
 				{
-					if(Game.players[i].color == killingBlock.color)
-						killingPlayer = Game.players[i];
+					Overlord.kill(player, killingBlock.type);
 				}
+				else
+				{
+					//Find killing player.
+					var killingPlayer = null;
+					
+					for(var i in Game.players)
+					{
+						if(Game.players[i].color == killingBlock.color)
+							killingPlayer = Game.players[i];
+					}
 
-				//If found, mark the player to be inserted in the next update in the killer blocks list.
-				if(killingPlayer != null)
-					killingPlayer.kill(player, killingBlock.type);
+					//If found, mark the player to be inserted in the next update in the killer blocks list.
+					if(killingPlayer != null)
+						killingPlayer.kill(player, killingBlock.type);
+				}
 			}
 			
 			block1 = null;
