@@ -2,6 +2,11 @@ var Network = {
 	ADDRESS: 'http://localhost:80'
 };
 
+var Percent = {
+	STARTING_NEUTRAL: 25,
+	LOST_FOREACH_ENEMY: 5
+};
+
 //Socket messages.
 var Message = {
 	NEXT_BLOCK: 'nextBlock',

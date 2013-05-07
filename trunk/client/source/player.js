@@ -6,7 +6,7 @@ var Player = function (x, y, color) {
 	this.givenBlock = null;
 	
 	this.blockTypeAvailable = [];
-	this.blockTypeAvailable.push(new BlockOption(BlockType.NEUTRAL, 25));
+	this.blockTypeAvailable.push(new BlockOption(BlockType.NEUTRAL, Percent.STARTING_NEUTRAL));
 	
 	this.blockStorage = {
 		option1: null,
@@ -75,6 +75,16 @@ var Player = function (x, y, color) {
 	//Starting animation is idle.
 	this.currentAnimation.runAction(cc.RepeatForever.create(this.idleAnimation));
 }
+
+//Change percent on a specific option. Negative percent lowers actual one.
+Player.prototype.changePercent = function(blockType, percent){
+
+	for(var i in this.blockTypeAvailable)
+	{
+		if(this.blockTypeAvailable[i].type == blockType)
+			this.blockTypeAvailable[i].percent += percent;
+	}
+};
 
 //Add a block as the current block from an extern source.
 Player.prototype.addNextBlock = function(blockType){

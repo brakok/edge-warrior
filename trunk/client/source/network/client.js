@@ -96,6 +96,9 @@ var Client = new function(){
 			console.log('Launching!');
 			//Add received elements to the layer (render).
 			Client.initLayers();
+			
+			//Lower neutral by quantity of enemies.
+			Client.player.changePercent(BlockType.NEUTRAL, -Percent.LOST_FOREACH_ENEMY*Client.enemies.length);
 		});
 		
 		socket.on(Message.NEW_BLOCK, function(block){
