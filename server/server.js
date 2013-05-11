@@ -754,6 +754,7 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.blockSensor.setCollisionType(CollisionType.BLOCK);
 	this.blockSensor.sensor = true;
+
 };
 
 Block.prototype.markToDestroy = function(cause){
@@ -1220,4 +1221,4 @@ io.sockets.on(Message.CONNECTION, function (socket){
 	});
 });
 
-console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		this.body = Game.space.addBody(new chipmunk.Body(1, Infinity));	this.body.setPos(new chipmunk.Vect(this.x, this.y));		/*	//Override to not be affected by gravity.	this.body.velocity_func = function(gravity, damping, dt)	{		var vx = this.vx * damping + (this.f.x * this.m_inv) * dt;		var vy = this.vy * damping + (this.f.y * this.m_inv) * dt;		var v_limit = this.v_limit;		var lensq = vx * vx + vy * vy;		var scale = (lensq > v_limit*v_limit) ? v_limit / Math.sqrt(lensq) : 1;		this.vx = vx * scale;		this.vy = vy * scale;		var w_limit = this.w_limit;		this.w = clamp(this.w*damping + this.t*this.i_inv*dt, -w_limit, w_limit);		this.sanityCheck();	};	*/		//Assign custom data to body.	this.body.userdata = {		type: UserDataType.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(new chipmunk.CircleShape(this.body, WinningGoal.FLOATING_BALL.RADIUS, 0));	this.shape.setCollisionType(CollisionType.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		this.body = Game.space.addBody(new chipmunk.Body(1, Infinity));	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: UserDataType.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(new chipmunk.CircleShape(this.body, WinningGoal.FLOATING_BALL.RADIUS, 0));	this.shape.setCollisionType(CollisionType.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
