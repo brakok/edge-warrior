@@ -5,6 +5,8 @@ var assetsPlayerDir = 'assets/players/';
 var assetsHudDir = 'assets/hud/';
 
 var assets = [
+	{type:'image', src: assestsPlaceHolderDir + 'floating_ball.png'},
+
 	{type:'image', src: assetsBlockDir + 'block.png'},
 	{type:'image', src: assetsBlockDir + 'block_0.png'},
 	{type:'image', src: assetsBlockDir + 'block_1.png'},
