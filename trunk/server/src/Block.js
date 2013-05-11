@@ -44,7 +44,6 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.blockSensor.setCollisionType(CollisionType.BLOCK);
 	this.blockSensor.sensor = true;
-
 };
 
 Block.prototype.markToDestroy = function(cause){
