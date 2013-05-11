@@ -4,6 +4,7 @@ var Game = {
 	players: [],
 	blocks: [],
 	blockSequence: 0,
+	goal: null,
 	spawnX: 100,
 	spawnY: 100,
 	width: 1200,
@@ -87,6 +88,9 @@ var Game = {
 			//Init players' bodies.
 			for(var i in this.players)
 				this.players[i].initBody();
+				
+			//Add the goal. TODO: Random between multiples goals.
+			this.goal = new FloatingBall(this.width*0.5, this.height - WinningGoal.OFFSET_Y);
 		}
 	},
 	update: function() {
@@ -108,6 +112,33 @@ var Game = {
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(BlockType.SPAWN);
 		}
+	},
+	push: function(inputs, id){
+		this.players[id].keys = inputs;
+	},
+	pull: function(id){
+		
+		var enemies = [];
+		
+		for(var i in this.players)
+		{
+			if(i != id && this.players[i].isAlive)
+				enemies.push(this.players[i].toClient());
+		}
+		
+		var blocks = [];
+		for(var i in this.blocks)
+		{
+			if(this.blocks[i] != null)
+				blocks.push(this.blocks[i].toClient());
+		}
+		
+		return {
+			player: this.players[id].toClient(),
+			enemies: enemies,
+			goal: this.goal.toClient(),
+			blocks: blocks
+		};
 	},
 	launch: function(){
 		//17 milliseconds = 60 FPS

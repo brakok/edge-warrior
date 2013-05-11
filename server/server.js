@@ -12,7 +12,8 @@ var Color = {
 
 var UserDataType = {
 	PLAYER: 0,
-	BLOCK: 1
+	BLOCK: 1,
+	WINNING_GOAL: 2
 };
 
 var BlockType = {
@@ -27,7 +28,8 @@ var CollisionType = {
 	PLAYER: 1,
 	GROUND_SENSOR: 2,
 	BLOCK: 3,
-	DROP_SENSOR: 4
+	DROP_SENSOR: 4,
+	WINNING_GOAL: 5
 };
 
 var Facing = {
@@ -97,6 +99,13 @@ var StepReached = {
 	STANDING: 1,
 	PLAYER: 2,
 	OVERLORD: 3
+};
+
+var WinningGoal = {
+	OFFSET_Y: 600,
+	FLOATING_BALL: {
+		RADIUS: 60
+	}
 };
 
 var KillCommandTime = {
@@ -745,7 +754,6 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.blockSensor.setCollisionType(CollisionType.BLOCK);
 	this.blockSensor.sensor = true;
-
 };
 
 Block.prototype.markToDestroy = function(cause){
@@ -914,6 +922,7 @@ var Game = {
 	players: [],
 	blocks: [],
 	blockSequence: 0,
+	goal: null,
 	spawnX: 100,
 	spawnY: 100,
 	width: 1200,
@@ -997,6 +1006,9 @@ var Game = {
 			//Init players' bodies.
 			for(var i in this.players)
 				this.players[i].initBody();
+				
+			//Add the goal. TODO: Random between multiples goals.
+			this.goal = new FloatingBall(this.width*0.5, this.height - WinningGoal.OFFSET_Y);
 		}
 	},
 	update: function() {
@@ -1018,6 +1030,33 @@ var Game = {
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(BlockType.SPAWN);
 		}
+	},
+	push: function(inputs, id){
+		this.players[id].keys = inputs;
+	},
+	pull: function(id){
+		
+		var enemies = [];
+		
+		for(var i in this.players)
+		{
+			if(i != id && this.players[i].isAlive)
+				enemies.push(this.players[i].toClient());
+		}
+		
+		var blocks = [];
+		for(var i in this.blocks)
+		{
+			if(this.blocks[i] != null)
+				blocks.push(this.blocks[i].toClient());
+		}
+		
+		return {
+			player: this.players[id].toClient(),
+			enemies: enemies,
+			goal: this.goal.toClient(),
+			blocks: blocks
+		};
 	},
 	launch: function(){
 		//17 milliseconds = 60 FPS
@@ -1157,7 +1196,7 @@ io.sockets.on(Message.CONNECTION, function (socket){
 			Game.launch();
 		
 			console.log('Game launching!');
-			io.sockets.in(Game.id).emit(Message.LAUNCH);
+			io.sockets.in(Game.id).emit(Message.LAUNCH, Game.goal.toClient());
 			
 			Game.ready = true;
 		}
@@ -1171,35 +1210,14 @@ io.sockets.on(Message.CONNECTION, function (socket){
 	
 	//Retrieving information from players.
 	socket.on(Message.PUSH, function(inputs){
-		Game.players[socket.id].keys = inputs;
+		Game.push(inputs, socket.id);
 	});
 	
 	//Sending information upon pull request.
 	socket.on(Message.PULL, function(){
-	
-		var enemies = [];
-		
-		for(var i in Game.players)
-		{
-			if(i != socket.id && Game.players[i].isAlive)
-				enemies.push(Game.players[i].toClient());
-		}
-		
-		var blocks = [];
-		for(var i in Game.blocks)
-		{
-			if(Game.blocks[i] != null)
-				blocks.push(Game.blocks[i].toClient());
-		}
-		
-		var data = {
-			player: Game.players[socket.id].toClient(),
-			enemies: enemies,
-			blocks: blocks
-		};
-		
+		var data = Game.pull(socket.id);
 		socket.emit(Message.PULL, data);
 	});
 });
 
-console.log('Server created');
+console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		this.body = Game.space.addBody(new chipmunk.Body(1, Infinity));	this.body.setPos(new chipmunk.Vect(this.x, this.y));		/*	//Override to not be affected by gravity.	this.body.velocity_func = function(gravity, damping, dt)	{		var vx = this.vx * damping + (this.f.x * this.m_inv) * dt;		var vy = this.vy * damping + (this.f.y * this.m_inv) * dt;		var v_limit = this.v_limit;		var lensq = vx * vx + vy * vy;		var scale = (lensq > v_limit*v_limit) ? v_limit / Math.sqrt(lensq) : 1;		this.vx = vx * scale;		this.vy = vy * scale;		var w_limit = this.w_limit;		this.w = clamp(this.w*damping + this.t*this.i_inv*dt, -w_limit, w_limit);		this.sanityCheck();	};	*/		//Assign custom data to body.	this.body.userdata = {		type: UserDataType.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(new chipmunk.CircleShape(this.body, WinningGoal.FLOATING_BALL.RADIUS, 0));	this.shape.setCollisionType(CollisionType.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};

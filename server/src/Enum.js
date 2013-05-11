@@ -12,7 +12,8 @@ var Color = {
 
 var UserDataType = {
 	PLAYER: 0,
-	BLOCK: 1
+	BLOCK: 1,
+	WINNING_GOAL: 2
 };
 
 var BlockType = {
@@ -27,7 +28,8 @@ var CollisionType = {
 	PLAYER: 1,
 	GROUND_SENSOR: 2,
 	BLOCK: 3,
-	DROP_SENSOR: 4
+	DROP_SENSOR: 4,
+	WINNING_GOAL: 5
 };
 
 var Facing = {
@@ -97,6 +99,13 @@ var StepReached = {
 	STANDING: 1,
 	PLAYER: 2,
 	OVERLORD: 3
+};
+
+var WinningGoal = {
+	OFFSET_Y: 600,
+	FLOATING_BALL: {
+		RADIUS: 60
+	}
 };
 
 var KillCommandTime = {
