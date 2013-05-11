@@ -1,0 +1,1 @@
+var FloatingBall = function(x, y){	this.x = x;	this.y = y;		this.sprite = cc.Sprite.create(assestsPlaceHolderDir + 'floating_ball.png');	this.sprite.setPosition(new cc.Point(x, y));		this.sprite._zOrder = 1000;};FloatingBall.prototype.fromServer = function(data){	this.x = data.x;	this.y = data.y;		this.sprite.setPosition(new cc.Point(x, y));};

@@ -8,6 +8,7 @@ var Client = new function(){
 	this.player = null;
 	this.currentState = GameState.PLAYING;
 	this.needPush = false;
+	this.goal = null;
 	
 	//Init keys.
 	this.keys[cc.KEY.d] = false;
@@ -35,6 +36,8 @@ var Client = new function(){
 		for(var i in this.enemies)
 			this.layer.addChild(this.enemies[i].currentAnimation);
 				
+		this.layer.addChild(this.goal.sprite);
+		
 		//Set first blocks to the HUD.
 		this.hud.inventory.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), new Block(0,0, this.player.nextBlock, this.player.color));
 		
@@ -92,8 +95,12 @@ var Client = new function(){
 										   data.color));
 		});
 		
-		socket.on(Message.LAUNCH, function(){
+		socket.on(Message.LAUNCH, function(goalData){
 			console.log('Launching!');
+			
+			//Add goal.
+			Client.goal = new FloatingBall(goalData.x, goalData.y);
+			
 			//Add received elements to the layer (render).
 			Client.initLayers();
 			
@@ -113,7 +120,7 @@ var Client = new function(){
 		
 		//Pulling info from server.
 		socket.on(Message.PULL, function (data){	
-			Client.updateFromServer(data.player, data.enemies, data.blocks);
+			Client.updateFromServer(data.player, data.enemies, data.blocks, data.goal);
 		});
 		
 		//Ask for next block.
@@ -166,7 +173,7 @@ var Client = new function(){
 	};
 	
 	//Update positions from server ones.
-	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks){
+	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal){
 		
 		//Update player.
 		this.player.fromServer(remotePlayer);
@@ -181,6 +188,9 @@ var Client = new function(){
 		for(var i in remoteBlocks)
 			if(this.blocks[remoteBlocks[i].id] != null)
 				this.blocks[remoteBlocks[i].id].fromServer(remoteBlocks[i]);
+			
+		//Update goal.
+		this.goal.fromServer(remoteGoal);
 	};
 	
 	//Spawn player.
