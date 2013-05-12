@@ -21,7 +21,8 @@
 				  'source/Resources.js',
 				  'source/inventory.js',
 				  'source/killCommand.js',
-				  'source/hud.js']
+				  'source/hud.js',
+				  'source/endScreen.js']
 	};
 	
 	//Add event that load everything needed by Cocos2d.

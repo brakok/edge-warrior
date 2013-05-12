@@ -17,10 +17,11 @@ var Client = new function(){
 	this.keys[cc.KEY.q] = false;
 	
 	//Initialize the game client.
-	this.init = function (layer, hud) {
+	this.init = function (layer, hud, endScreen) {
 	
 		this.layer = layer;
 		this.hud = hud;
+		this.endScreen = endScreen;
 		
 		this.ready = false;
 		
@@ -145,11 +146,21 @@ var Client = new function(){
 		socket.on(Message.KILL_COMMAND, function(stepReached){
 			Client.changeStep(stepReached);
 		});
+		
+		socket.on(Message.WIN, function(data){
+			Client.end(data);
+		});
 				
 		//Once defined, preserved the socket.
 		this.socket = socket;
 	};
 	
+	this.end = function(data){
+		this.hud._zOrder = -1000;
+		this.endScreen.addWinner(data.winner, data.succeed);
+	};
+	
+	//Used to know kill command current step.
 	this.changeStep = function(stepReached){
 	
 		if(stepReached == StepReached.NONE)
