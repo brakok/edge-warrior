@@ -103,8 +103,10 @@ var StepReached = {
 
 var WinningGoal = {
 	OFFSET_Y: 600,
+	TIMER: 3,
 	FLOATING_BALL: {
-		RADIUS: 60
+		WIDTH: 90,
+		HEIGHT: 90
 	}
 };
 
@@ -128,5 +130,6 @@ var Message = {
 	PLAYER_KILLED: 'playerKilled',
 	PLAYER_SPAWNED: 'playerSpawned',
 	LAUNCH: 'launch',
-	KILL_COMMAND: 'killCommand'
+	KILL_COMMAND: 'killCommand',
+	WIN: 'win'
 };

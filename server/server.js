@@ -103,8 +103,10 @@ var StepReached = {
 
 var WinningGoal = {
 	OFFSET_Y: 600,
+	TIMER: 3,
 	FLOATING_BALL: {
-		RADIUS: 60
+		WIDTH: 90,
+		HEIGHT: 90
 	}
 };
 
@@ -128,8 +130,25 @@ var Message = {
 	PLAYER_KILLED: 'playerKilled',
 	PLAYER_SPAWNED: 'playerSpawned',
 	LAUNCH: 'launch',
-	KILL_COMMAND: 'killCommand'
-};//Drop listener.
+	KILL_COMMAND: 'killCommand',
+	WIN: 'win'
+};//Goal listener.
+var GoalListener = {
+	begin: function(arbiter, space){
+		var player = null;
+		
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_a.userdata.object;
+
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_b.userdata.object;
+			
+		Game.winner = player;
+	}
+};
+
+
+//Drop listener.
 var DropListener = {
 	begin: function(arbiter, space){
 		var player = null;
@@ -924,6 +943,9 @@ var Game = {
 	blocks: [],
 	blockSequence: 0,
 	goal: null,
+	intervalId: null,
+	winner: null,
+	winningPhaseTimer: WinningGoal.TIMER,
 	spawnX: 100,
 	spawnY: 100,
 	width: 1200,
@@ -940,6 +962,14 @@ var Game = {
 		{
 			this.space = new chipmunk.Space();
 			this.space.gravity = new chipmunk.Vect(0, PhysicConstants.GRAVITY);
+			
+			//Add goal listener.
+			this.space.addCollisionHandler(CollisionType.WINNING_GOAL, 
+										   CollisionType.PLAYER, 
+										   function(arbiter, space){ GoalListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   null);
 			
 			//Add ground sensor callback.
 			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
@@ -1030,6 +1060,37 @@ var Game = {
 			
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(BlockType.SPAWN);
+				
+			//Reduce winning phase timer when there's a winner.
+			if(this.winner != null)
+			{
+				if(this.winningPhaseTimer > 0)
+					this.winningPhaseTimer -= PhysicConstants.TIME_STEP*0.5;
+			}
+			
+			//Winner!
+			if(this.winningPhaseTimer <= 0)
+			{
+				var survivors = 0;
+			
+				//Count and kill survivors.
+				for(var i in this.players)
+				{
+					if(this.players[i].isAlive && i != this.winner.id)
+					{
+						this.players[i].die();
+						survivors++;
+					}
+				}
+				
+				var data = {
+					winner: this.winner.toClient(),
+					succeed: (survivors == 0)
+				};
+				
+				io.sockets.in(this.id).emit(Message.WIN, data);
+				clearInterval(this.intervalId);
+			}
 		}
 	},
 	push: function(inputs, id){
@@ -1061,7 +1122,7 @@ var Game = {
 	},
 	launch: function(){
 		//17 milliseconds = 60 FPS
-		setInterval(function(){Game.update()}, 8);
+		this.intervalId = setInterval(function(){Game.update()}, 8);
 	}
 };
 var Overlord = {
@@ -1221,4 +1282,4 @@ io.sockets.on(Message.CONNECTION, function (socket){
 	});
 });
 
-console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		this.body = Game.space.addBody(new chipmunk.Body(1, Infinity));	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: UserDataType.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(new chipmunk.CircleShape(this.body, WinningGoal.FLOATING_BALL.RADIUS, 0));	this.shape.setCollisionType(CollisionType.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: UserDataType.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, WinningGoal.FLOATING_BALL.WIDTH, WinningGoal.FLOATING_BALL.HEIGHT));	this.shape.setCollisionType(CollisionType.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};

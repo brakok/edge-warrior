@@ -1,3 +1,19 @@
+//Goal listener.
+var GoalListener = {
+	begin: function(arbiter, space){
+		var player = null;
+		
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_a.userdata.object;
+
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+			player = arbiter.body_b.userdata.object;
+			
+		Game.winner = player;
+	}
+};
+
+
 //Drop listener.
 var DropListener = {
 	begin: function(arbiter, space){
