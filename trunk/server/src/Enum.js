@@ -103,7 +103,7 @@ var StepReached = {
 
 var WinningGoal = {
 	OFFSET_Y: 600,
-	TIMER: 3,
+	TIMER: 10,
 	FLOATING_BALL: {
 		WIDTH: 90,
 		HEIGHT: 90
