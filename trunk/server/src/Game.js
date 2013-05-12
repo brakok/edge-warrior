@@ -5,6 +5,9 @@ var Game = {
 	blocks: [],
 	blockSequence: 0,
 	goal: null,
+	intervalId: null,
+	winner: null,
+	winningPhaseTimer: WinningGoal.TIMER,
 	spawnX: 100,
 	spawnY: 100,
 	width: 1200,
@@ -21,6 +24,14 @@ var Game = {
 		{
 			this.space = new chipmunk.Space();
 			this.space.gravity = new chipmunk.Vect(0, PhysicConstants.GRAVITY);
+			
+			//Add goal listener.
+			this.space.addCollisionHandler(CollisionType.WINNING_GOAL, 
+										   CollisionType.PLAYER, 
+										   function(arbiter, space){ GoalListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   null);
 			
 			//Add ground sensor callback.
 			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
@@ -111,6 +122,37 @@ var Game = {
 			
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(BlockType.SPAWN);
+				
+			//Reduce winning phase timer when there's a winner.
+			if(this.winner != null)
+			{
+				if(this.winningPhaseTimer > 0)
+					this.winningPhaseTimer -= PhysicConstants.TIME_STEP*0.5;
+			}
+			
+			//Winner!
+			if(this.winningPhaseTimer <= 0)
+			{
+				var survivors = 0;
+			
+				//Count and kill survivors.
+				for(var i in this.players)
+				{
+					if(this.players[i].isAlive && i != this.winner.id)
+					{
+						this.players[i].die();
+						survivors++;
+					}
+				}
+				
+				var data = {
+					winner: this.winner.toClient(),
+					succeed: (survivors == 0)
+				};
+				
+				io.sockets.in(this.id).emit(Message.WIN, data);
+				clearInterval(this.intervalId);
+			}
 		}
 	},
 	push: function(inputs, id){
@@ -142,6 +184,6 @@ var Game = {
 	},
 	launch: function(){
 		//17 milliseconds = 60 FPS
-		setInterval(function(){Game.update()}, 8);
+		this.intervalId = setInterval(function(){Game.update()}, 8);
 	}
 };
