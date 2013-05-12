@@ -9,13 +9,15 @@ var Game = cc.Layer.extend({
 		playGroundLayer.setAnchorPoint(new cc.Point(0.5,0.5));	
 		
 		var hud = HUD.create(s.width, s.height);
+		var endScreen = EndScreen.create(s.width, s.height);
 		
 		//Init world.
-		Client.init(playGroundLayer, hud);
+		Client.init(playGroundLayer, hud, endScreen);
 		
 		//Set the game layer (middle ground).
 		this.addChild(playGroundLayer);
 		this.addChild(hud);
+		this.addChild(endScreen);
 		
 		this.setKeyboardEnabled(true);
 				

@@ -21,5 +21,6 @@ var Message = {
 	PLAYER_KILLED: 'playerKilled',
 	PLAYER_SPAWNED: 'playerSpawned',
 	LAUNCH: 'launch',
-	KILL_COMMAND: 'killCommand'
+	KILL_COMMAND: 'killCommand',
+	WIN: 'win'
 };
