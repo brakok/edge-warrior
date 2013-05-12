@@ -126,34 +126,46 @@ var Game = {
 			//Reduce winning phase timer when there's a winner.
 			if(this.winner != null)
 			{
+				var hasSurvivors = false;
+				for(var i in this.players)
+				{	
+					if(this.players[i].id != this.winner.id && this.players[i].isAlive)
+						hasSurvivors = true;
+				}
+				
+				//Stop countdown if there's no more survivor.
+				if(!hasSurvivors)
+					this.winningPhaseTimer = 0;
+			
 				if(this.winningPhaseTimer > 0)
 					this.winningPhaseTimer -= PhysicConstants.TIME_STEP*0.5;
 			}
 			
 			//Winner!
 			if(this.winningPhaseTimer <= 0)
-			{
-				var survivors = 0;
+				this.end();
+		}
+	},
+	end: function(){
+		var survivors = 0;
 			
-				//Count and kill survivors.
-				for(var i in this.players)
-				{
-					if(this.players[i].isAlive && i != this.winner.id)
-					{
-						this.players[i].die();
-						survivors++;
-					}
-				}
-				
-				var data = {
-					winner: this.winner.toClient(),
-					succeed: (survivors == 0)
-				};
-				
-				io.sockets.in(this.id).emit(Message.WIN, data);
-				clearInterval(this.intervalId);
+		//Count and kill survivors.
+		for(var i in this.players)
+		{
+			if(this.players[i].isAlive && i != this.winner.id)
+			{
+				this.players[i].die();
+				survivors++;
 			}
 		}
+		
+		var data = {
+			winner: this.winner.toClient(),
+			succeed: (survivors == 0)
+		};
+		
+		io.sockets.in(this.id).emit(Message.WIN, data);
+		clearInterval(this.intervalId);
 	},
 	push: function(inputs, id){
 		this.players[id].keys = inputs;
