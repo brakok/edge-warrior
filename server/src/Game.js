@@ -3,6 +3,7 @@ var Game = {
 	id: 1,
 	players: [],
 	blocks: [],
+	missiles: [],
 	blockSequence: 0,
 	goal: null,
 	intervalId: null,
@@ -29,6 +30,21 @@ var Game = {
 			this.space.addCollisionHandler(CollisionType.WINNING_GOAL, 
 										   CollisionType.PLAYER, 
 										   function(arbiter, space){ GoalListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   null);
+			
+			//Add death zone listener.
+			this.space.addCollisionHandler(CollisionType.DEATH_ZONE, 
+										   CollisionType.PLAYER, 
+										   function(arbiter, space){ DeathZoneListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   null);
+										   
+			this.space.addCollisionHandler(CollisionType.DEATH_ZONE, 
+										   CollisionType.BLOCK, 
+										   function(arbiter, space){ DeathZoneListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 
 										   null);
@@ -123,6 +139,10 @@ var Game = {
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(BlockType.SPAWN);
 				
+			for(var i in this.missiles)
+				if(this.missiles[i] != null)
+					this.missiles[i].update();
+			
 			//Reduce winning phase timer when there's a winner.
 			if(this.winner != null)
 			{
@@ -145,6 +165,10 @@ var Game = {
 			if(this.winningPhaseTimer <= 0)
 				this.end();
 		}
+	},
+	electWinner: function(winner){
+		this.winner = winner;
+		this.winner.hasWon = true;;
 	},
 	end: function(){
 		var survivors = 0;

@@ -1,3 +1,33 @@
+//Mortal things listener.
+var DeathZoneListener = {
+	begin: function(arbiter, space){
+	
+		var player = null;
+		var block = null;
+		
+		if(arbiter.body_a.userdata != null)
+		{
+			if(arbiter.body_a.userdata.type == UserDataType.PLAYER)
+				player = arbiter.body_a.userdata.object;
+			if(arbiter.body_a.userdata.type == UserDataType.BLOCK)
+				block = arbiter.body_a.userdata.object;
+		}	
+		if(arbiter.body_b.userdata != null)
+		{
+			if(arbiter.body_b.userdata.type == UserDataType.PLAYER)
+				player = arbiter.body_b.userdata.object;
+			if(arbiter.body_b.userdata.type == UserDataType.BLOCK)
+				block = arbiter.body_b.userdata.object;
+		}	
+		
+		if(player != null)
+			player.toBeDestroy = true;
+		if(block != null)
+			block.markToDestroy(BlockDestructionType.CRUSHED);
+	}
+};
+
+
 //Goal listener.
 var GoalListener = {
 	begin: function(arbiter, space){
@@ -9,7 +39,10 @@ var GoalListener = {
 		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
-		Game.winner = player;
+		if(Game.winner == null)
+			Game.electWinner(player);
+		else
+			player.toBeDestroy = true;
 	}
 };
 

@@ -9,6 +9,8 @@ var Player = function(id, x, y, color){
 	
 	this.isAlive = true;
 	this.toBeDestroy = false;
+	this.hasWon = false;
+	this.isRemoved = false;
 	
 	//Timer indicating how long a player may keep a spawn block in his inventory.
 	this.spawnTimer = BlockRestriction.SPAWN_TIMER;
@@ -94,8 +96,21 @@ Player.prototype.spawn = function(x, y){
 	Game.space.addShape(this.dropSensor);
 	
 	this.isAlive = true;
+	this.isRemoved = false;
 	
 	io.sockets.in(Game.id).emit(Message.PLAYER_SPAWNED, this.toClient());
+};
+
+Player.prototype.win = function(){
+	
+	//Remove physical presence.
+	Game.space.removeShape(this.shape);
+	Game.space.removeShape(this.groundSensor);
+	Game.space.removeShape(this.dropSensor);
+	Game.space.removeBody(this.body);
+	
+	this.isRemoved = true;
+	io.sockets.in(Game.id).emit(Message.AT_GOAL, this.toClient());
 };
 
 Player.prototype.die = function(){
@@ -108,6 +123,7 @@ Player.prototype.die = function(){
 	
 	this.isAlive = false;
 	this.toBeDestroy = false;
+	this.isRemoved = true;
 		
 	this.stepReached = 0;
 	this.killTime = 0;
@@ -131,8 +147,14 @@ Player.prototype.update = function(){
 		this.die();
 		return;
 	}
+	if(this.hasWon && !this.isRemoved)
+		this.win();
 	
-	if(this.isAlive)
+	//Control goal for winner phase.
+	if(this.hasWon)
+		Game.goal.update(this.keys);
+	
+	if(this.isAlive && !this.hasWon)
 	{
 		this.x = this.getPosition().x;
 		this.y = this.getPosition().y;
@@ -203,7 +225,7 @@ Player.prototype.update = function(){
 				
 				if(this.currentAction != ActionType.STANDING && this.currentAction != ActionType.JUMPING)
 					this.currentAction = ActionType.STANDING;
-					
+				
 				//Calculate standing time to a limit of 1 min.
 				if(this.isAlive)
 				{
@@ -241,9 +263,11 @@ Player.prototype.update = function(){
 				
 					if(addTime)
 						this.killTime += PhysicConstants.TIME_STEP*0.5;	
-				}			
+				}	
 			}
 		}
+		
+		
 		
 		//Reset kill command timer.
 		if(this.killTime > 0 && (nextX != 0 || this.keys.jump))

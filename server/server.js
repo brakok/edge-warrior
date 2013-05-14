@@ -13,7 +13,8 @@ var Color = {
 var UserDataType = {
 	PLAYER: 0,
 	BLOCK: 1,
-	WINNING_GOAL: 2
+	WINNING_GOAL: 2,
+	RAYBALL: 3
 };
 
 var BlockType = {
@@ -29,7 +30,8 @@ var CollisionType = {
 	GROUND_SENSOR: 2,
 	BLOCK: 3,
 	DROP_SENSOR: 4,
-	WINNING_GOAL: 5
+	WINNING_GOAL: 5,
+	DEATH_ZONE: 6
 };
 
 var Facing = {
@@ -44,7 +46,8 @@ var BlockState = {
 
 var BlockDestructionType = {
 	COLOR_CONTACT: 0,
-	SPAWN: 1
+	SPAWN: 1,
+	CRUSHED: 2
 };
 
 //Constants
@@ -103,10 +106,30 @@ var StepReached = {
 
 var WinningGoal = {
 	OFFSET_Y: 600,
-	TIMER: 10,
+	TIMER: 5,
 	FLOATING_BALL: {
 		WIDTH: 90,
-		HEIGHT: 90
+		HEIGHT: 90,
+		SPEED: 1,
+		MAX_SPEED: 30,
+		FRICTION_FACTOR: 0.98,
+		ORBIT_RADIUS: 20,
+		ORBIT_SPEED: 0.05
+	}
+};
+
+var DirectionConstants = {
+	UP: 0,
+	LEFT: 1,
+	DOWN: 2,
+	RIGHT: 3
+};
+
+var MissileConstants = {
+	RAYBALL: {
+		SPEED: 100,
+		WIDTH: 45,
+		HEIGHT: 45
 	}
 };
 
@@ -131,8 +154,39 @@ var Message = {
 	PLAYER_SPAWNED: 'playerSpawned',
 	LAUNCH: 'launch',
 	KILL_COMMAND: 'killCommand',
+	AT_GOAL: 'atGoal',
 	WIN: 'win'
-};//Goal listener.
+};//Mortal things listener.
+var DeathZoneListener = {
+	begin: function(arbiter, space){
+	
+		var player = null;
+		var block = null;
+		
+		if(arbiter.body_a.userdata != null)
+		{
+			if(arbiter.body_a.userdata.type == UserDataType.PLAYER)
+				player = arbiter.body_a.userdata.object;
+			if(arbiter.body_a.userdata.type == UserDataType.BLOCK)
+				block = arbiter.body_a.userdata.object;
+		}	
+		if(arbiter.body_b.userdata != null)
+		{
+			if(arbiter.body_b.userdata.type == UserDataType.PLAYER)
+				player = arbiter.body_b.userdata.object;
+			if(arbiter.body_b.userdata.type == UserDataType.BLOCK)
+				block = arbiter.body_b.userdata.object;
+		}	
+		
+		if(player != null)
+			player.toBeDestroy = true;
+		if(block != null)
+			block.markToDestroy(BlockDestructionType.CRUSHED);
+	}
+};
+
+
+//Goal listener.
 var GoalListener = {
 	begin: function(arbiter, space){
 		var player = null;
@@ -143,7 +197,10 @@ var GoalListener = {
 		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
-		Game.winner = player;
+		if(Game.winner == null)
+			Game.electWinner(player);
+		else
+			player.toBeDestroy = true;
 	}
 };
 
@@ -350,6 +407,8 @@ var Player = function(id, x, y, color){
 	
 	this.isAlive = true;
 	this.toBeDestroy = false;
+	this.hasWon = false;
+	this.isRemoved = false;
 	
 	//Timer indicating how long a player may keep a spawn block in his inventory.
 	this.spawnTimer = BlockRestriction.SPAWN_TIMER;
@@ -435,8 +494,21 @@ Player.prototype.spawn = function(x, y){
 	Game.space.addShape(this.dropSensor);
 	
 	this.isAlive = true;
+	this.isRemoved = false;
 	
 	io.sockets.in(Game.id).emit(Message.PLAYER_SPAWNED, this.toClient());
+};
+
+Player.prototype.win = function(){
+	
+	//Remove physical presence.
+	Game.space.removeShape(this.shape);
+	Game.space.removeShape(this.groundSensor);
+	Game.space.removeShape(this.dropSensor);
+	Game.space.removeBody(this.body);
+	
+	this.isRemoved = true;
+	io.sockets.in(Game.id).emit(Message.AT_GOAL, this.toClient());
 };
 
 Player.prototype.die = function(){
@@ -449,6 +521,7 @@ Player.prototype.die = function(){
 	
 	this.isAlive = false;
 	this.toBeDestroy = false;
+	this.isRemoved = true;
 		
 	this.stepReached = 0;
 	this.killTime = 0;
@@ -472,8 +545,14 @@ Player.prototype.update = function(){
 		this.die();
 		return;
 	}
+	if(this.hasWon && !this.isRemoved)
+		this.win();
 	
-	if(this.isAlive)
+	//Control goal for winner phase.
+	if(this.hasWon)
+		Game.goal.update(this.keys);
+	
+	if(this.isAlive && !this.hasWon)
 	{
 		this.x = this.getPosition().x;
 		this.y = this.getPosition().y;
@@ -544,7 +623,7 @@ Player.prototype.update = function(){
 				
 				if(this.currentAction != ActionType.STANDING && this.currentAction != ActionType.JUMPING)
 					this.currentAction = ActionType.STANDING;
-					
+				
 				//Calculate standing time to a limit of 1 min.
 				if(this.isAlive)
 				{
@@ -582,9 +661,11 @@ Player.prototype.update = function(){
 				
 					if(addTime)
 						this.killTime += PhysicConstants.TIME_STEP*0.5;	
-				}			
+				}	
 			}
 		}
+		
+		
 		
 		//Reset kill command timer.
 		if(this.killTime > 0 && (nextX != 0 || this.keys.jump))
@@ -941,6 +1022,7 @@ var Game = {
 	id: 1,
 	players: [],
 	blocks: [],
+	missiles: [],
 	blockSequence: 0,
 	goal: null,
 	intervalId: null,
@@ -967,6 +1049,21 @@ var Game = {
 			this.space.addCollisionHandler(CollisionType.WINNING_GOAL, 
 										   CollisionType.PLAYER, 
 										   function(arbiter, space){ GoalListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   null);
+			
+			//Add death zone listener.
+			this.space.addCollisionHandler(CollisionType.DEATH_ZONE, 
+										   CollisionType.PLAYER, 
+										   function(arbiter, space){ DeathZoneListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   null);
+										   
+			this.space.addCollisionHandler(CollisionType.DEATH_ZONE, 
+										   CollisionType.BLOCK, 
+										   function(arbiter, space){ DeathZoneListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 
 										   null);
@@ -1061,6 +1158,10 @@ var Game = {
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(BlockType.SPAWN);
 				
+			for(var i in this.missiles)
+				if(this.missiles[i] != null)
+					this.missiles[i].update();
+			
 			//Reduce winning phase timer when there's a winner.
 			if(this.winner != null)
 			{
@@ -1083,6 +1184,10 @@ var Game = {
 			if(this.winningPhaseTimer <= 0)
 				this.end();
 		}
+	},
+	electWinner: function(winner){
+		this.winner = winner;
+		this.winner.hasWon = true;;
 	},
 	end: function(){
 		var survivors = 0;
@@ -1294,4 +1399,32 @@ io.sockets.on(Message.CONNECTION, function (socket){
 	});
 });
 
-console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: UserDataType.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, WinningGoal.FLOATING_BALL.WIDTH, WinningGoal.FLOATING_BALL.HEIGHT));	this.shape.setCollisionType(CollisionType.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.missileStats = {		width: MissileConstants.RAYBALL.WIDTH,		height: MissileConstants.RAYBALL.HEIGHT,		speed: MissileConstants.RAYBALL.SPEED,		direction: DirectionConstants.DOWN	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: UserDataType.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, WinningGoal.FLOATING_BALL.WIDTH, WinningGoal.FLOATING_BALL.HEIGHT));	this.shape.setCollisionType(CollisionType.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		var nextX = 0;		if(inputs.right)		nextX += WinningGoal.FLOATING_BALL.SPEED;	if(inputs.left)		nextX -= WinningGoal.FLOATING_BALL.SPEED;			if(nextX != 0)	{		//Turn.		if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))			this.velocity *= 0.95;					this.velocity += nextX;	}	else	{		if(this.velocity != 0)		{			//Artificial friction.			if(Math.abs(this.velocity) < WinningGoal.FLOATING_BALL.SPEED*0.25)				this.velocity = 0;			else				this.velocity *= WinningGoal.FLOATING_BALL.FRICTION_FACTOR;		}	}		//Trigger action on jump command.	if(inputs.jump)		this.launch();		//Velocity can't be higher than max speed.	if(this.velocity < -(WinningGoal.FLOATING_BALL.MAX_SPEED))		this.velocity = -(WinningGoal.FLOATING_BALL.MAX_SPEED);	if(this.velocity > WinningGoal.FLOATING_BALL.MAX_SPEED)		this.velocity = WinningGoal.FLOATING_BALL.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += WinningGoal.FLOATING_BALL.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*WinningGoal.FLOATING_BALL.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	var missile = new Missile(this.x, this.y, this.missileStats);	Game.missiles.push(missile);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > Game.width - WinningGoal.FLOATING_BALL.WIDTH*0.5)	{		this.x = Game.width - WinningGoal.FLOATING_BALL.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < WinningGoal.FLOATING_BALL.WIDTH*0.5)	{		this.x = WinningGoal.FLOATING_BALL.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+var Missile = function(x, y, stats){
+
+	this.x = x;
+	this.y = y;
+	this.velocity = {x:0, y:0};
+	
+	this.speed = stats.speed;
+	this.direction = stats.direction;
+	
+	this.body = new chipmunk.Body(Infinity, Infinity);
+	this.body.setPos(new chipmunk.Vect(this.x, this.y));
+	
+	//Assign custom data to body.
+	this.body.userdata = {
+		type: UserDataType.RAYBALL,
+		object: this
+	};
+	
+	//Create a shape associated with the body.
+	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, stats.width, stats.height));
+	this.shape.setCollisionType(CollisionType.DEATH_ZONE);
+	this.shape.sensor = true;
+};
+
+Missile.prototype.update = function(){
+	//TODO.
+};
+
