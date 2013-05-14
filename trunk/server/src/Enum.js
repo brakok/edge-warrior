@@ -13,7 +13,8 @@ var Color = {
 var UserDataType = {
 	PLAYER: 0,
 	BLOCK: 1,
-	WINNING_GOAL: 2
+	WINNING_GOAL: 2,
+	RAYBALL: 3
 };
 
 var BlockType = {
@@ -29,7 +30,8 @@ var CollisionType = {
 	GROUND_SENSOR: 2,
 	BLOCK: 3,
 	DROP_SENSOR: 4,
-	WINNING_GOAL: 5
+	WINNING_GOAL: 5,
+	DEATH_ZONE: 6
 };
 
 var Facing = {
@@ -44,7 +46,8 @@ var BlockState = {
 
 var BlockDestructionType = {
 	COLOR_CONTACT: 0,
-	SPAWN: 1
+	SPAWN: 1,
+	CRUSHED: 2
 };
 
 //Constants
@@ -103,10 +106,30 @@ var StepReached = {
 
 var WinningGoal = {
 	OFFSET_Y: 600,
-	TIMER: 10,
+	TIMER: 5,
 	FLOATING_BALL: {
 		WIDTH: 90,
-		HEIGHT: 90
+		HEIGHT: 90,
+		SPEED: 1,
+		MAX_SPEED: 30,
+		FRICTION_FACTOR: 0.98,
+		ORBIT_RADIUS: 20,
+		ORBIT_SPEED: 0.05
+	}
+};
+
+var DirectionConstants = {
+	UP: 0,
+	LEFT: 1,
+	DOWN: 2,
+	RIGHT: 3
+};
+
+var MissileConstants = {
+	RAYBALL: {
+		SPEED: 100,
+		WIDTH: 45,
+		HEIGHT: 45
 	}
 };
 
@@ -131,5 +154,6 @@ var Message = {
 	PLAYER_SPAWNED: 'playerSpawned',
 	LAUNCH: 'launch',
 	KILL_COMMAND: 'killCommand',
+	AT_GOAL: 'atGoal',
 	WIN: 'win'
 };
