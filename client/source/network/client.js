@@ -150,11 +150,26 @@ var Client = new function(){
 		socket.on(Message.WIN, function(data){
 			Client.end(data);
 		});
+		
+		socket.on(Message.AT_GOAL, function(winner){
+			Client.electWinner(winner);
+		});
 				
 		//Once defined, preserved the socket.
 		this.socket = socket;
 	};
 	
+	this.electWinner = function(winner){
+		
+		if(winner.color == this.player.color)
+			this.player.win();
+		else
+			for(var i in this.enemies)
+				if(this.enemies[i].color == winner.color)
+					this.enemies[i].win();
+	};
+	
+	//End of the round. Show splash screen of victorious.
 	this.end = function(data){
 		this.hud._zOrder = -1000;
 		this.endScreen.addWinner(data.winner, data.succeed);

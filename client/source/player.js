@@ -175,6 +175,10 @@ Player.prototype.die = function() {
 	Client.layer.removeChild(this.currentAnimation);
 };
 
+Player.prototype.win = function(){
+	Client.layer.removeChild(this.currentAnimation);
+};
+
 Player.prototype.turn = function(){
 	//Flip the sprite to current direction.
 	this.currentAnimation.setFlipX(this.facing == Facing.RIGHT);
