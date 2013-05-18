@@ -283,7 +283,7 @@ var BlockListener = {
 		if(block1 != null && block2 != null)
 		{	
 			if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED
-			&& block1.color == block2.color && block1.color < Color.GREEN)
+			&& block1.color == block2.color && block1.color < Enum.Color.GREEN)
 			{			
 				//If blocks are touching a third one, destroy them all.
 				if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
@@ -939,7 +939,7 @@ Block.prototype.trigger = function(){
 
 Block.prototype.spawn = function(){
 
-	var posY = PlayerConstants.HEIGHT;
+	var posY = Constants.Player.HEIGHT;
 	var factor = Math.PI*(Math.random()*2);
 	
 	var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);

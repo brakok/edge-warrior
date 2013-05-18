@@ -131,7 +131,7 @@ Block.prototype.trigger = function(){
 
 Block.prototype.spawn = function(){
 
-	var posY = PlayerConstants.HEIGHT;
+	var posY = Constants.Player.HEIGHT;
 	var factor = Math.PI*(Math.random()*2);
 	
 	var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);

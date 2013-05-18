@@ -127,7 +127,7 @@ var BlockListener = {
 		if(block1 != null && block2 != null)
 		{	
 			if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED
-			&& block1.color == block2.color && block1.color < Color.GREEN)
+			&& block1.color == block2.color && block1.color < Enum.Color.GREEN)
 			{			
 				//If blocks are touching a third one, destroy them all.
 				if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
