@@ -7,9 +7,9 @@ var Block = function (x, y, type, color) {
 	this.color = color;
 	
 	//Create sprite associated.
-	if(type == BlockType.COLORED && color != null)
+	if(type == Enum.Block.Type.COLORED && color != null)
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + color + '.png');
-	else if(type == BlockType.SPAWN)
+	else if(type == Enum.Block.Type.SPAWN)
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_spawn.png');
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');

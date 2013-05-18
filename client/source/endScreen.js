@@ -16,16 +16,16 @@ var EndScreen = cc.LayerColor.extend({
 		var colorText = '';
 		switch(winner.color)
 		{
-			case Color.RED:
+			case Enum.Color.RED:
 				colorText = 'Red';
 				break;
-			case Color.BLUE:
+			case Enum.Color.BLUE:
 				colorText = 'Blue';
 				break;
-			case Color.YELLOW:
+			case Enum.Color.YELLOW:
 				colorText = 'Yellow';
 				break;
-			case Color.WHITE:
+			case Enum.Color.WHITE:
 				colorText = 'White';
 				break;
 		}
