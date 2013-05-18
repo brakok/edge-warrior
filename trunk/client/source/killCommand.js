@@ -49,11 +49,11 @@ KillCommand.prototype.start = function(stepReached){
 	
 	switch(stepReached)
 	{
-		case StepReached.STANDING:
+		case Enum.StepReached.STANDING:
 			this.animToDie._animation._loops = 1;
 			this.currentAnimation.runAction(this.animToDie);
 			break;
-		case StepReached.PLAYER:
+		case Enum.StepReached.PLAYER:
 			this.currentAnimation.runAction(this.animToBlock);
 			break;
 	}

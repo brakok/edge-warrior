@@ -6,7 +6,7 @@ var Client = new function(){
 	this.enemies = [];
 	this.blocks = [];
 	this.player = null;
-	this.currentState = GameState.PLAYING;
+	this.currentState = Enum.Game.State.PLAYING;
 	this.needPush = false;
 	this.goal = null;
 	
@@ -50,7 +50,7 @@ var Client = new function(){
 		
 		//Ask player to create the next block and send the new one to the server.
 		this.player.pushNextBlock();
-		this.socket.emit(Message.NEXT_BLOCK, this.player.currentBlock);
+		this.socket.emit(Constants.Message.NEXT_BLOCK, this.player.currentBlock);
 	};
 	
 	//Update elements contained in the container.
@@ -68,10 +68,10 @@ var Client = new function(){
 	this.connect = function(){
 		this.ready = false;
 		
-		var socket = io.connect(Network.ADDRESS);
+		var socket = io.connect(Constants.Network.ADDRESS);
 		
 		//Init.
-		socket.on(Message.INIT, function (data) {
+		socket.on(Constants.Message.INIT, function (data) {
 			console.log('Initialize');				
 			
 			//Server positioning and giving color to player.
@@ -84,11 +84,11 @@ var Client = new function(){
 											   data.enemies[i].color));
 			}
 
-			socket.emit(Message.CONNECTED);
+			socket.emit(Constants.Message.CONNECTED);
 		});
 		
 		//Incoming enemy.
-		socket.on(Message.NEW_PLAYER, function(data){
+		socket.on(Constants.Message.NEW_PLAYER, function(data){
 			console.log('New player...');
 			
 			Client.enemies.push(new Player(data.x,
@@ -96,7 +96,7 @@ var Client = new function(){
 										   data.color));
 		});
 		
-		socket.on(Message.LAUNCH, function(goalData){
+		socket.on(Constants.Message.LAUNCH, function(goalData){
 			console.log('Launching!');
 			
 			//Add goal.
@@ -106,52 +106,52 @@ var Client = new function(){
 			Client.initLayers();
 			
 			//Lower neutral by quantity of enemies.
-			Client.player.changePercent(BlockType.NEUTRAL, -Percent.LOST_FOREACH_ENEMY*Client.enemies.length);
+			Client.player.changePercent(Enum.Block.Type.NEUTRAL, -Constants.Block.Percent.LOST_FOREACH_ENEMY*Client.enemies.length);
 		});
 		
-		socket.on(Message.NEW_BLOCK, function(block){
+		socket.on(Constants.Message.NEW_BLOCK, function(block){
 			//Add a new block.
 			Client.addNewBlock(block); 
 		});
 		
-		socket.on(Message.DELETE_BLOCK, function(data){
+		socket.on(Constants.Message.DELETE_BLOCK, function(data){
 			//Delete a block.
 			Client.deleteBlock(data.id, data.cause);
 		});
 		
 		//Pulling info from server.
-		socket.on(Message.PULL, function (data){	
+		socket.on(Constants.Message.PULL, function (data){	
 			Client.updateFromServer(data.player, data.enemies, data.blocks, data.goal);
 		});
 		
 		//Ask for next block.
-		socket.on(Message.NEXT_BLOCK, function(data){
+		socket.on(Constants.Message.NEXT_BLOCK, function(data){
 			Client.randomBlock();
 		});
 		
 		//Received dead people information.
-		socket.on(Message.PLAYER_KILLED, function(killed){
+		socket.on(Constants.Message.PLAYER_KILLED, function(killed){
 			Client.kill(killed);
 		});
 		
 		//Received information to build spawn block.
-		socket.on(Message.SEND_BLOCK, function(blockType){
+		socket.on(Constants.Message.SEND_BLOCK, function(blockType){
 			Client.player.addNextBlock(blockType);
 		});
 		
-		socket.on(Message.PLAYER_SPAWNED, function(remotePlayer){
+		socket.on(Constants.Message.PLAYER_SPAWNED, function(remotePlayer){
 			Client.spawnPlayer(remotePlayer);
 		});
 		
-		socket.on(Message.KILL_COMMAND, function(stepReached){
+		socket.on(Constants.Message.KILL_COMMAND, function(stepReached){
 			Client.changeStep(stepReached);
 		});
 		
-		socket.on(Message.WIN, function(data){
+		socket.on(Constants.Message.WIN, function(data){
 			Client.end(data);
 		});
 		
-		socket.on(Message.AT_GOAL, function(winner){
+		socket.on(Constants.Message.AT_GOAL, function(winner){
 			Client.electWinner(winner);
 		});
 				
@@ -178,7 +178,7 @@ var Client = new function(){
 	//Used to know kill command current step.
 	this.changeStep = function(stepReached){
 	
-		if(stepReached == StepReached.NONE)
+		if(stepReached == Enum.StepReached.NONE)
 			this.hud.killCommand.reset();
 		else
 			this.hud.killCommand.start(stepReached);
@@ -257,12 +257,12 @@ var Client = new function(){
 		};
 	
 		//Send key pressed to server.
-		this.socket.emit(Message.PUSH, inputs);
+		this.socket.emit(Constants.Message.PUSH, inputs);
 		this.needPush = false;
 	};
 	
 	//Pulling info from server.
 	this.pull = function(){
-		this.socket.emit(Message.PULL);
+		this.socket.emit(Constants.Message.PULL);
 	};
 };

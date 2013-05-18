@@ -1,19 +1,19 @@
 var Player = function (x, y, color) {
 	this.color = color;
 	
-	this.currentBlock = BlockType.NEUTRAL;
-	this.nextBlock = BlockType.COLORED;
+	this.currentBlock = Enum.Block.Type.NEUTRAL;
+	this.nextBlock = Enum.Block.Type.COLORED;
 	this.givenBlock = null;
 	
 	this.blockTypeAvailable = [];
-	this.blockTypeAvailable.push(new BlockOption(BlockType.NEUTRAL, Percent.STARTING_NEUTRAL));
+	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
 	
 	this.blockStorage = {
 		option1: null,
 		option2: null
 	};
 	
-	this.facing = Facing.LEFT;
+	this.facing = Enum.Facing.LEFT;
 	
 	var colorText = 'yellow';
 	
@@ -28,8 +28,8 @@ var Player = function (x, y, color) {
 												      assetsPlayerDir + colorText + '_jumping.png');
 	
 	//Set current animation to idle.
-	this.currentAnimationType = AnimType.IDLE;	
-	this.currentAction = ActionType.STANDING;
+	this.currentAnimationType = Enum.Anim.Type.IDLE;	
+	this.currentAction = Enum.Action.Type.STANDING;
 	
 	//Base frame.
 	this.currentAnimation = cc.Sprite.createWithSpriteFrameName(colorText + '_idle.0000.png');
@@ -121,7 +121,7 @@ Player.prototype.pushNextBlock = function(){
 		
 		//Colored if not found.
 		if(!found)
-			this.nextBlock = BlockType.COLORED;
+			this.nextBlock = Enum.Block.Type.COLORED;
 	}
 	else
 		this.givenBlock = null;
@@ -146,18 +146,18 @@ Player.prototype.fromServer = function(data){
 		//Assign good animation to the right action.
 		switch(data.action)
 		{
-			case ActionType.STANDING:
-				this.swapAnimation(AnimType.IDLE);
+			case Enum.Action.Type.STANDING:
+				this.swapAnimation(Enum.Anim.Type.IDLE);
 				break;
-			case ActionType.RUNNING:
-				this.swapAnimation(AnimType.RUNNING);
+			case Enum.Action.Type.RUNNING:
+				this.swapAnimation(Enum.Anim.Type.RUNNING);
 				break;
-			case ActionType.JUMPING:
-			case ActionType.DOUBLE_JUMPING:
-				this.swapAnimation(AnimType.JUMPING);
+			case Enum.Action.Type.JUMPING:
+			case Enum.Action.Type.DOUBLE_JUMPING:
+				this.swapAnimation(Enum.Anim.Type.JUMPING);
 				break;
-			case ActionType.FALLING:
-				this.swapAnimation(AnimType.FALLING);
+			case Enum.Action.Type.FALLING:
+				this.swapAnimation(Enum.Anim.Type.FALLING);
 				break;
 		}
 		
@@ -181,7 +181,7 @@ Player.prototype.win = function(){
 
 Player.prototype.turn = function(){
 	//Flip the sprite to current direction.
-	this.currentAnimation.setFlipX(this.facing == Facing.RIGHT);
+	this.currentAnimation.setFlipX(this.facing == Enum.Facing.RIGHT);
 };
 
 Player.prototype.spawn = function(x, y){
@@ -191,7 +191,7 @@ Player.prototype.spawn = function(x, y){
 
 Player.prototype.swapAnimation = function(newAnim){
 	
-	if(newAnim == this.currentAnimationType && newAnim != AnimType.JUMPING)
+	if(newAnim == this.currentAnimationType && newAnim != Enum.Anim.Type.JUMPING)
 		return;
 			
 	this.currentAnimationType = newAnim;
@@ -199,16 +199,16 @@ Player.prototype.swapAnimation = function(newAnim){
 	
 	switch(newAnim)
 	{
-		case AnimType.IDLE:
+		case Enum.Anim.Type.IDLE:
 			this.currentAnimation.runAction(cc.RepeatForever.create(this.idleAnimation));
 			break;
-		case AnimType.RUNNING:
+		case Enum.Anim.Type.RUNNING:
 			this.currentAnimation.runAction(cc.RepeatForever.create(this.runningAnimation));
 			break;
-		case AnimType.JUMPING:
+		case Enum.Anim.Type.JUMPING:
 			this.currentAnimation.runAction(this.jumpingAnimation);
 			break;
-		case AnimType.FALLING:
+		case Enum.Anim.Type.FALLING:
 			this.currentAnimation.runAction(this.jumpingAnimation);
 			break;
 	}
