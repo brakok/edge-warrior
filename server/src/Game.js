@@ -8,7 +8,7 @@ var Game = {
 	goal: null,
 	intervalId: null,
 	winner: null,
-	winningPhaseTimer: WinningGoal.TIMER,
+	winningPhaseTimer: Constants.WinningGoal.PHASE_TIME,
 	spawnX: 100,
 	spawnY: 100,
 	width: 1200,
@@ -24,62 +24,62 @@ var Game = {
 		if(this.space == null || this.space == 'undefined')
 		{
 			this.space = new chipmunk.Space();
-			this.space.gravity = new chipmunk.Vect(0, PhysicConstants.GRAVITY);
+			this.space.gravity = new chipmunk.Vect(0, Constants.Physic.GRAVITY);
 			
 			//Add goal listener.
-			this.space.addCollisionHandler(CollisionType.WINNING_GOAL, 
-										   CollisionType.PLAYER, 
+			this.space.addCollisionHandler(Enum.Collision.Type.WINNING_GOAL, 
+										   Enum.Collision.Type.PLAYER, 
 										   function(arbiter, space){ GoalListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 
 										   null);
 			
 			//Add death zone listener.
-			this.space.addCollisionHandler(CollisionType.DEATH_ZONE, 
-										   CollisionType.PLAYER, 
+			this.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
+										   Enum.Collision.Type.PLAYER, 
 										   function(arbiter, space){ DeathZoneListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 
 										   null);
 										   
-			this.space.addCollisionHandler(CollisionType.DEATH_ZONE, 
-										   CollisionType.BLOCK, 
+			this.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
+										   Enum.Collision.Type.BLOCK, 
 										   function(arbiter, space){ DeathZoneListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 
 										   null);
 			
 			//Add ground sensor callback.
-			this.space.addCollisionHandler(CollisionType.GROUND_SENSOR, 
-										   CollisionType.STATIC, 
+			this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
+										   Enum.Collision.Type.STATIC, 
 										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 
 										   function(arbiter, space){GroundListener.separate(arbiter, space);});
 						
 			//Add block listener callback.
-			this.space.addCollisionHandler(CollisionType.BLOCK, 
-										   CollisionType.STATIC, 
+			this.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
+										   Enum.Collision.Type.STATIC, 
 										   function(arbiter, space){ BlockListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 
 										   function(arbiter, space){BlockListener.separate(arbiter, space);});
-			this.space.addCollisionHandler(CollisionType.BLOCK, 
-										   CollisionType.BLOCK, 
+			this.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
+										   Enum.Collision.Type.BLOCK, 
 										   function(arbiter, space){ BlockListener.begin(arbiter, space); }, 
 										   null, 
 										   null, 
 										   function(arbiter, space){BlockListener.separate(arbiter, space);});
-			this.space.addCollisionHandler(CollisionType.BLOCK, 
-										   CollisionType.PLAYER, 
+			this.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
+										   Enum.Collision.Type.PLAYER, 
 										   function(arbiter, space){ BlockListener.begin(arbiter, space); }, 
 										   null, 
 										   null, 
 										   function(arbiter, space){BlockListener.separate(arbiter, space);});
 
 			//Add drop zone listener callback.
-			this.space.addCollisionHandler(CollisionType.DROP_SENSOR, 
-										   CollisionType.STATIC, 
+			this.space.addCollisionHandler(Enum.Collision.Type.DROP_SENSOR, 
+										   Enum.Collision.Type.STATIC, 
 										   function(arbiter, space){ DropListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 
@@ -106,7 +106,7 @@ var Game = {
 														1);																
 			
 			//Set friction on ground.
-			ground.setFriction(PhysicConstants.FRICTION);
+			ground.setFriction(Constants.Physic.FRICTION);
 			
 			this.space.addShape(ground);
 			this.space.addShape(leftWall);
@@ -117,7 +117,7 @@ var Game = {
 				this.players[i].initBody();
 				
 			//Add the goal. TODO: Random between multiples goals.
-			this.goal = new FloatingBall(this.width*0.5, this.height - WinningGoal.OFFSET_Y);
+			this.goal = new FloatingBall(this.width*0.5, this.height - Constants.WinningGoal.OFFSET_Y);
 		}
 	},
 	update: function() {
@@ -128,7 +128,7 @@ var Game = {
 				this.players[i].update();
 
 			if(this.space != null)
-				this.space.step(PhysicConstants.TIME_STEP);
+				this.space.step(Constants.Physic.TIME_STEP);
 				
 			for(var i in this.blocks)
 			{
@@ -137,7 +137,7 @@ var Game = {
 			}
 			
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
-				Overlord.launch(BlockType.SPAWN);
+				Overlord.launch(Enum.Block.Type.SPAWN);
 				
 			for(var i in this.missiles)
 				if(this.missiles[i] != null)
@@ -158,7 +158,7 @@ var Game = {
 					this.winningPhaseTimer = 0;
 			
 				if(this.winningPhaseTimer > 0)
-					this.winningPhaseTimer -= PhysicConstants.TIME_STEP*0.5;
+					this.winningPhaseTimer -= Constants.Physic.TIME_STEP*0.5;
 			}
 			
 			//Winner!
@@ -188,7 +188,7 @@ var Game = {
 			succeed: (survivors == 0)
 		};
 		
-		io.sockets.in(this.id).emit(Message.WIN, data);
+		io.sockets.in(this.id).emit(Constants.Message.WIN, data);
 		clearInterval(this.intervalId);
 	},
 	push: function(inputs, id){

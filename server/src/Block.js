@@ -5,8 +5,8 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.linkedBlockId = null;
 	this.ownerId = ownerId;
 	
-	this.width = BlockConstants.WIDTH;
-	this.height = BlockConstants.HEIGHT;
+	this.width = Constants.Block.WIDTH;
+	this.height = Constants.Block.HEIGHT;
 	this.landed = false;
 	this.stillExist = true;
 	
@@ -23,26 +23,26 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.toBeDestroy = false;
 	this.destroyCause = null;
 	
-	this.state = BlockState.DYNAMIC;
+	this.state = Enum.Block.State.DYNAMIC;
 		
 	//Body creation (when not static).
-	this.body = Game.space.addBody(new chipmunk.Body(PhysicConstants.MASS_BLOCK, Infinity));
+	this.body = Game.space.addBody(new chipmunk.Body(Constants.Physic.MASS_BLOCK, Infinity));
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 						
 	//Assign custom data to body.
 	this.body.userdata = {
-		type: UserDataType.BLOCK,
+		type: Enum.UserData.Type.BLOCK,
 		object: this
 	};
 			
 	//Create a shape associated with the body.
 	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
-	this.shape.setCollisionType(CollisionType.STATIC);
+	this.shape.setCollisionType(Enum.Collision.Type.STATIC);
 	this.shape.setFriction(1);
 	
 	//Sensor allowing shape to be defined as block, because listener overrides collision behavior.
 	this.blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
-	this.blockSensor.setCollisionType(CollisionType.BLOCK);
+	this.blockSensor.setCollisionType(Enum.Collision.Type.BLOCK);
 	this.blockSensor.sensor = true;
 
 };
@@ -54,7 +54,7 @@ Block.prototype.markToDestroy = function(cause){
 
 Block.prototype.launch = function(){
 	this.landed = false;
-	this.body.setVel(new chipmunk.Vect(0, BlockConstants.LAUNCHING_SPEED));
+	this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
 };
 
 Block.prototype.active = function(flag){
@@ -62,26 +62,26 @@ Block.prototype.active = function(flag){
 	if(flag)
 	{
 		//Block become dynamic.
-		if(this.state != BlockState.DYNAMIC)
+		if(this.state != Enum.Block.State.DYNAMIC)
 		{
 			this.landed = false;
-			this.state = BlockState.DYNAMIC;
+			this.state = Enum.Block.State.DYNAMIC;
 			
 			this.body.nodeIdleTime = 0;
-			this.body.setMass(PhysicConstants.MASS_BLOCK);
+			this.body.setMass(Constants.Physic.MASS_BLOCK);
 			Game.space.addBody(this.body);
 		}
 	}
 	else
 	{
 		//Block become static.
-		if(this.state != BlockState.STATIC)
+		if(this.state != Enum.Block.State.STATIC)
 		{
-			this.state = BlockState.STATIC;
+			this.state = Enum.Block.State.STATIC;
 			
 			Game.space.removeBody(this.body);
 			this.body.nodeIdleTime = Infinity;
-			this.body.setMass(PhysicConstants.MASS_BLOCK_STATIC);
+			this.body.setMass(Constants.Physic.MASS_BLOCK_STATIC);
 		}
 	}
 };
@@ -100,7 +100,7 @@ Block.prototype.update = function(){
 		if(this.stillExist)
 		{
 			//Activate or desactivate a block to become static or dynamic.
-			if(this.toggleState && (this.state == BlockState.STATIC || this.body.isSleeping()))
+			if(this.toggleState && (this.state == Enum.Block.State.STATIC || this.body.isSleeping()))
 			{
 				this.active(!this.isStatic);
 				this.toggleState = false;
@@ -123,7 +123,7 @@ Block.prototype.trigger = function(){
 
 	if(this.stillExist)
 	{
-		if(this.type == BlockType.SPAWN)
+		if(this.type == Enum.Block.Type.SPAWN)
 			this.spawn();
 	}
 	
@@ -134,12 +134,12 @@ Block.prototype.spawn = function(){
 	var posY = PlayerConstants.HEIGHT;
 	var factor = Math.PI*(Math.random()*2);
 	
-	var launchPowerX = BlockConstants.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-	var launchPowerY = Math.abs(BlockConstants.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+	var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
+	var launchPowerY = Math.abs(Constants.Block.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
 	
 	//Prevent block to spawn player on the world edges.
-	if((this.body.getPos().x < SpawnLimit.OFFSET && launchPowerX < 0)
-	|| (this.body.getPos().x > Game.width - SpawnLimit.OFFSET && launchPowerX > 0))
+	if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
+	|| (this.body.getPos().x > Game.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
 		launchPowerX *= -1;
 	
 	//Check if spawn block is overlord's one.
@@ -180,7 +180,7 @@ Block.prototype.spawn = function(){
 		}
 	}
 	
-	this.explode(BlockDestructionType.SPAWN);
+	this.explode(Enum.Block.Destruction.SPAWN);
 };
 
 Block.prototype.explode = function(cause){
@@ -206,5 +206,5 @@ Block.prototype.explode = function(cause){
 	this.stillExist = false;
 	this.toBeDestroy = false;
 	
-	io.sockets.in(Game.id).emit(Message.DELETE_BLOCK, data);
+	io.sockets.in(Game.id).emit(Constants.Message.DELETE_BLOCK, data);
 };

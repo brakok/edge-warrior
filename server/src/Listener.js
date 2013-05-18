@@ -7,23 +7,23 @@ var DeathZoneListener = {
 		
 		if(arbiter.body_a.userdata != null)
 		{
-			if(arbiter.body_a.userdata.type == UserDataType.PLAYER)
+			if(arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 				player = arbiter.body_a.userdata.object;
-			if(arbiter.body_a.userdata.type == UserDataType.BLOCK)
+			if(arbiter.body_a.userdata.type == Enum.UserData.Type.BLOCK)
 				block = arbiter.body_a.userdata.object;
 		}	
 		if(arbiter.body_b.userdata != null)
 		{
-			if(arbiter.body_b.userdata.type == UserDataType.PLAYER)
+			if(arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 				player = arbiter.body_b.userdata.object;
-			if(arbiter.body_b.userdata.type == UserDataType.BLOCK)
+			if(arbiter.body_b.userdata.type == Enum.UserData.Type.BLOCK)
 				block = arbiter.body_b.userdata.object;
 		}	
 		
 		if(player != null)
 			player.toBeDestroy = true;
 		if(block != null)
-			block.markToDestroy(BlockDestructionType.CRUSHED);
+			block.markToDestroy(Enum.Block.Destruction.CRUSHED);
 	}
 };
 
@@ -33,10 +33,10 @@ var GoalListener = {
 	begin: function(arbiter, space){
 		var player = null;
 		
-		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
 		if(Game.winner == null)
@@ -52,10 +52,10 @@ var DropListener = {
 	begin: function(arbiter, space){
 		var player = null;
 		
-		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
 		
 		if(player != null){
@@ -65,10 +65,10 @@ var DropListener = {
 	separate: function(arbiter, space){
 		var player = null;
 		
-		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
 		
 		if(player != null){
@@ -83,10 +83,10 @@ var GroundListener = {
 			
 		var player = null;
 		
-		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
 		
 		if(player != null){
@@ -97,10 +97,10 @@ var GroundListener = {
 
 		var player = null;
 		
-		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
 		if(player != null){
@@ -117,24 +117,24 @@ var BlockListener = {
 		var block1 = null;
 		var block2 = null;
 				
-		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.BLOCK)
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.BLOCK)
 			block1 = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.BLOCK)
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.BLOCK)
 			block2 = arbiter.body_b.userdata.object;
 
 		//Special process for collision with two blocks.
 		if(block1 != null && block2 != null)
 		{	
-			if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED
+			if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED
 			&& block1.color == block2.color && block1.color < Color.GREEN)
 			{			
 				//If blocks are touching a third one, destroy them all.
 				if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
 					|| (block2.linkedBlockId != null && block2.linkedBlockId != block1.id))
 				{
-					block1.markToDestroy(BlockDestructionType.COLOR_CONTACT);
-					block2.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+					block1.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
+					block2.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
 					
 					//Destroy linked leaves.
 					if(block1.linkedBlockId != null)
@@ -151,12 +151,12 @@ var BlockListener = {
 					block2.linkedBlockId = block1.id;
 				}
 			}
-			else if(block1.type == BlockType.COLORED && block2.type == BlockType.COLORED 
+			else if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED 
 					&& Math.abs(block1.color - block2.color) == 4)
 			{
 				//Destroy complementary blocks on contact.
-				block1.markToDestroy(BlockDestructionType.COLOR_CONTACT);
-				block2.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+				block1.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
+				block2.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
 				
 				block1 = null;
 				block2 = null;
@@ -166,16 +166,16 @@ var BlockListener = {
 		//Treament for player within contact.
 		var player = null;
 		
-		if(block1 == null && arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == UserDataType.PLAYER)
+		if(block1 == null && arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == UserDataType.PLAYER)
+		if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
 		//Trigger spawn.
-		if(block1 != null && player == null && block1.type == BlockType.SPAWN)
+		if(block1 != null && player == null && block1.type == Enum.Block.Type.SPAWN)
 			block1.mustTrigger = true;
-		if(block2 != null && player == null && block2.type == BlockType.SPAWN)
+		if(block2 != null && player == null && block2.type == Enum.Block.Type.SPAWN)
 			block2.mustTrigger = true;
 		
 		if(player != null)
@@ -232,7 +232,7 @@ var BlockListener = {
 		
 		if(block != null)
 		{
-			block.markToDestroy(BlockDestructionType.COLOR_CONTACT);
+			block.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
 			
 			if(block.linkedBlockId != null && block.linkedBlockId != previousId)
 				this.destroyLeaves(block.linkedBlockId, blockId);

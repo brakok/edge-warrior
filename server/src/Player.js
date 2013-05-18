@@ -5,7 +5,7 @@ var Player = function(id, x, y, color){
 	this.y = y;
 		
 	this.killTime = 0;	
-	this.stepReached = StepReached.NONE;
+	this.stepReached = Enum.StepReached.NONE;
 	
 	this.isAlive = true;
 	this.toBeDestroy = false;
@@ -13,10 +13,10 @@ var Player = function(id, x, y, color){
 	this.isRemoved = false;
 	
 	//Timer indicating how long a player may keep a spawn block in his inventory.
-	this.spawnTimer = BlockRestriction.SPAWN_TIMER;
+	this.spawnTimer = Constants.Block.Restriction.SPAWN_TIMER;
 	
-	this.width = PlayerConstants.WIDTH;
-	this.height = PlayerConstants.HEIGHT;
+	this.width = Constants.Player.WIDTH;
+	this.height = Constants.Player.HEIGHT;
 	
 	this.groundContact = 0;
 	
@@ -26,14 +26,14 @@ var Player = function(id, x, y, color){
 	this.doubleJumpEnabled = false;
 	this.doubleJumpUsed = true;
 	
-	this.currentBlock = BlockType.NEUTRAL;
+	this.currentBlock = Enum.Block.Type.NEUTRAL;
 	this.hasGivenBlock = false;
 	
 	//Id list of people killed by player.
 	this.killedList = null;
 	
-	this.facing = Facing.LEFT;
-	this.currentAction = ActionType.STANDING;
+	this.facing = Enum.Facing.LEFT;
+	this.currentAction = Enum.Action.Type.STANDING;
 	
 	this.color = color;
 	this.keys = {
@@ -51,10 +51,10 @@ Player.prototype.kill = function(killed, blockType){
 	killed.toBeDestroy = true;
 	
 	//Assign spawn block.
-	if(blockType != BlockType.SPAWN)
+	if(blockType != Enum.Block.Type.SPAWN)
 	{
-		this.currentBlock = BlockType.SPAWN;
-		io.sockets.sockets[this.id].emit(Message.SEND_BLOCK, BlockType.SPAWN);
+		this.currentBlock = Enum.Block.Type.SPAWN;
+		io.sockets.sockets[this.id].emit(Constants.Message.SEND_BLOCK, Enum.Block.Type.SPAWN);
 		this.hasGivenBlock = true;
 	}
 		
@@ -76,7 +76,7 @@ Player.prototype.kill = function(killed, blockType){
 	for(var i in Game.blocks)
 	{
 		if(Game.blocks[i] != null 
-		   && Game.blocks[i].type != BlockType.NEUTRAL 
+		   && Game.blocks[i].type != Enum.Block.Type.NEUTRAL 
 		   && Game.blocks[i].color == this.color)
 	    {
 			Game.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
@@ -98,7 +98,7 @@ Player.prototype.spawn = function(x, y){
 	this.isAlive = true;
 	this.isRemoved = false;
 	
-	io.sockets.in(Game.id).emit(Message.PLAYER_SPAWNED, this.toClient());
+	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
 };
 
 Player.prototype.win = function(){
@@ -110,7 +110,7 @@ Player.prototype.win = function(){
 	Game.space.removeBody(this.body);
 	
 	this.isRemoved = true;
-	io.sockets.in(Game.id).emit(Message.AT_GOAL, this.toClient());
+	io.sockets.in(Game.id).emit(Constants.Message.AT_GOAL, this.toClient());
 };
 
 Player.prototype.die = function(){
@@ -128,11 +128,11 @@ Player.prototype.die = function(){
 	this.stepReached = 0;
 	this.killTime = 0;
 	
-	io.sockets.in(Game.id).emit(Message.PLAYER_KILLED, this.toClient());
+	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_KILLED, this.toClient());
 	
 	//Ask for the next block if player is currently holding a spawn block.
-	if(this.currentBlock == BlockType.SPAWN)
-		io.sockets.sockets[this.id].emit(Message.NEXT_BLOCK);
+	if(this.currentBlock == Enum.Block.Type.SPAWN)
+		io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
 };
 
 Player.prototype.getPosition = function(){
@@ -164,8 +164,8 @@ Player.prototype.update = function(){
 		
 		if(this.keys.right || this.keys.left)
 		{
-			var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*PlayerConstants.MAX_SPEED_FACTOR);
-			impulse = PlayerConstants.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
+			var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*Constants.Player.MAX_SPEED_FACTOR);
+			impulse = Constants.Player.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
 		}	
 		
 		//Move
@@ -194,18 +194,18 @@ Player.prototype.update = function(){
 			this.doubleJumpEnabled = true;
 		
 		//Look if player is falling.
-		if(this.groundContact == 0 && this.currentAction != ActionType.DOUBLE_JUMPING)
+		if(this.groundContact == 0 && this.currentAction != Enum.Action.Type.DOUBLE_JUMPING)
 		{
-			if(this.currentAction != ActionType.JUMPING)
-				this.currentAction = ActionType.FALLING;
+			if(this.currentAction != Enum.Action.Type.JUMPING)
+				this.currentAction = Enum.Action.Type.FALLING;
 			else
-				this.currentAction = ActionType.NONE;
+				this.currentAction = Enum.Action.Type.NONE;
 		} 
 		
 		if(nextX != 0)
 		{
 			var lastFacing = this.facing;
-			this.facing = (nextX > 0 ? Facing.RIGHT : Facing.LEFT);
+			this.facing = (nextX > 0 ? Enum.Facing.RIGHT : Enum.Facing.LEFT);
 			
 			if(lastFacing != this.facing)
 				this.turn();
@@ -213,18 +213,18 @@ Player.prototype.update = function(){
 			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
 			
 			//Switch current action to running if player is on the ground.
-			if(this.groundContact > 0 && this.currentAction != ActionType.RUNNING && this.currentAction != ActionType.JUMPING)
-				this.currentAction = ActionType.RUNNING;	
+			if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.RUNNING && this.currentAction != Enum.Action.Type.JUMPING)
+				this.currentAction = Enum.Action.Type.RUNNING;	
 		}
 		else
 		{
 			//Artificial friction for players when on ground and pressing no key.
 			if(this.groundContact > 0)
 			{
-				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
+				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
 				
-				if(this.currentAction != ActionType.STANDING && this.currentAction != ActionType.JUMPING)
-					this.currentAction = ActionType.STANDING;
+				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING)
+					this.currentAction = Enum.Action.Type.STANDING;
 				
 				//Calculate standing time to a limit of 1 min.
 				if(this.isAlive)
@@ -232,37 +232,37 @@ Player.prototype.update = function(){
 					var addTime = false;
 					var sendMessage = false;
 				
-					if(this.killTime < KillCommandTime.FIRST_STEP)
+					if(this.killTime < Constants.KillCommand.Time.FIRST_STEP)
 						addTime = true;
 				
 					//Standing phase.
 					if(this.killTime == 0)
 					{
 						sendMessage = true;
-						this.stepReached = StepReached.STANDING;
+						this.stepReached = Enum.StepReached.STANDING;
 					}
 									
 					//Assign to a player phase.
-					if(this.killTime >= KillCommandTime.FIRST_STEP && this.keys.kill)
+					if(this.killTime >= Constants.KillCommand.Time.FIRST_STEP && this.keys.kill)
 					{
 						addTime = true;
 						
-						if(this.stepReached < StepReached.PLAYER)
+						if(this.stepReached < Enum.StepReached.PLAYER)
 						{
 							sendMessage = true;
-							this.stepReached = StepReached.PLAYER;
+							this.stepReached = Enum.StepReached.PLAYER;
 						}
 					}
 					
 					//Assign to the overlord phase.
-					if(this.killTime >= KillCommandTime.SECOND_STEP && this.keys.kill && this.stepReached < StepReached.OVERLORD)
-						this.stepReached = StepReached.OVERLORD;
+					if(this.killTime >= Constants.KillCommand.Time.SECOND_STEP && this.keys.kill && this.stepReached < Enum.StepReached.OVERLORD)
+						this.stepReached = Enum.StepReached.OVERLORD;
 				
 					if(sendMessage)
-						io.sockets.sockets[this.id].emit(Message.KILL_COMMAND, this.stepReached);
+						io.sockets.sockets[this.id].emit(Constants.Message.KILL_COMMAND, this.stepReached);
 				
 					if(addTime)
-						this.killTime += PhysicConstants.TIME_STEP*0.5;	
+						this.killTime += Constants.Physic.TIME_STEP*0.5;	
 				}	
 			}
 		}
@@ -275,28 +275,28 @@ Player.prototype.update = function(){
 			this.killTime = 0;
 			this.stepReached = 0;
 			
-			io.sockets.sockets[this.id].emit(Message.KILL_COMMAND, StepReached.NONE);
+			io.sockets.sockets[this.id].emit(Constants.Message.KILL_COMMAND, Enum.StepReached.NONE);
 		}	
 	}
 	
 	//Manage kill command.
-	if(this.stepReached > StepReached.STANDING && (!this.keys.kill || this.stepReached == StepReached.OVERLORD))
+	if(this.stepReached > Enum.StepReached.STANDING && (!this.keys.kill || this.stepReached == Enum.StepReached.OVERLORD))
 	{
 		switch(this.stepReached)
 		{
-			case StepReached.PLAYER:
+			case Enum.StepReached.PLAYER:
 				Overlord.assignKill(this, null);
 				break;
-			case StepReached.OVERLORD:
+			case Enum.StepReached.OVERLORD:
 				Overlord.kill(this, null);
 				break;
 		}
 	}
 	
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
-	if(this.currentBlock == BlockType.SPAWN && this.isAlive)
+	if(this.currentBlock == Enum.Block.Type.SPAWN && this.isAlive)
 	{
-		this.spawnTimer -= PhysicConstants.TIME_STEP*0.5;
+		this.spawnTimer -= Constants.Physic.TIME_STEP*0.5;
 		
 		if(this.spawnTimer < 0)
 		{
@@ -308,26 +308,26 @@ Player.prototype.update = function(){
 	}
 	else
 	{
-		if(this.spawnTimer < BlockRestriction.SPAWN_TIMER)
-			this.spawnTimer = BlockRestriction.SPAWN_TIMER;
+		if(this.spawnTimer < Constants.Block.Restriction.SPAWN_TIMER)
+			this.spawnTimer = Constants.Block.Restriction.SPAWN_TIMER;
 	}
 };
 
 Player.prototype.turn = function(){
-	this.body.setVel(new chipmunk.Vect(this.body.getVel().x*PhysicConstants.TURN_FRICTION_FACTOR, this.body.getVel().y));
+	this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.TURN_FRICTION_FACTOR, this.body.getVel().y));
 };
 
 Player.prototype.jump = function(){
-	this.currentAction = ActionType.JUMPING;
+	this.currentAction = Enum.Action.Type.JUMPING;
 	this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
-	this.body.applyImpulse(new chipmunk.Vect(0, PlayerConstants.JUMP_POWER), new chipmunk.Vect(0,0));
+	this.body.applyImpulse(new chipmunk.Vect(0, Constants.Player.JUMP_POWER), new chipmunk.Vect(0,0));
 };
 
 Player.prototype.doubleJump = function(){
 	this.jump();
 	this.dropBlock();
 
-	this.currentAction = ActionType.DOUBLE_JUMPING;
+	this.currentAction = Enum.Action.Type.DOUBLE_JUMPING;
 	this.doubleJumpUsed = true;
 	this.doubleJumpEnabled = false;
 };
@@ -338,7 +338,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 	if(this.obstruction == 0 || (checkDropzone != null && !checkDropzone)){	
 
 		var tmpX = (x != null ? x : this.getPosition().x);
-		var tmpY = (y != null ? y : this.getPosition().y - (PlayerConstants.HEIGHT*0.5 + BlockConstants.HEIGHT*0.5) - 5);
+		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
 		var block = new Block(Game.blockSequence, 
@@ -355,31 +355,31 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		this.hasGivenBlock = false;
 		
 		//Emit the new block to all players and ask for next block of current player.
-		io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
-		io.sockets.sockets[this.id].emit(Message.NEXT_BLOCK);
+		io.sockets.in(Game.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
+		io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
 	}
 };
 
 //Init the physical part of the player.
 Player.prototype.initBody = function(space){
 	
-		var groundSensorHalfWidth = PlayerConstants.WIDTH*0.33;
-		var playerHalfHeight = PlayerConstants.HEIGHT*0.5;
+		var groundSensorHalfWidth = Constants.Player.WIDTH*0.33;
+		var playerHalfHeight = Constants.Player.HEIGHT*0.5;
 		var groundSensorHeight = 2;
 	
 		//Body creation.
-		this.body = Game.space.addBody(new chipmunk.Body(PhysicConstants.MASS_PLAYER, Infinity));
+		this.body = Game.space.addBody(new chipmunk.Body(Constants.Physic.MASS_PLAYER, Infinity));
 		this.body.setPos(new chipmunk.Vect(this.x, this.y));
 							
 		//Assign custom data to body.
 		this.body.userdata = {
-			type: UserDataType.PLAYER,
+			type: Enum.UserData.Type.PLAYER,
 			object: this
 		};
 							
 		//Create a shape associated with the body.
 		this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
-		this.shape.setCollisionType(CollisionType.PLAYER);
+		this.shape.setCollisionType(Enum.Collision.Type.PLAYER);
 		
 		//Add ground sensor.
 		this.groundSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
@@ -387,17 +387,17 @@ Player.prototype.initBody = function(space){
 																			-(playerHalfHeight+groundSensorHeight), 
 																			(groundSensorHalfWidth), 
 																			-(playerHalfHeight))));
-		this.groundSensor.setCollisionType(CollisionType.GROUND_SENSOR);
+		this.groundSensor.setCollisionType(Enum.Collision.Type.GROUND_SENSOR);
 		this.groundSensor.sensor = true;
 		
 		//Add drop sensor to prevent double jump when drop zone is obstructed.
 		this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
-															new chipmunk.BB(-(BlockConstants.WIDTH*0.33), 
-																			-(playerHalfHeight+(BlockConstants.HEIGHT*0.75)), 
-																			(BlockConstants.WIDTH*0.33), 
+															new chipmunk.BB(-(Constants.Block.WIDTH*0.33), 
+																			-(playerHalfHeight+(Constants.Block.HEIGHT*0.75)), 
+																			(Constants.Block.WIDTH*0.33), 
 																			-(playerHalfHeight))));
 																	
-		this.dropSensor.setCollisionType(CollisionType.DROP_SENSOR);
+		this.dropSensor.setCollisionType(Enum.Collision.Type.DROP_SENSOR);
 		this.dropSensor.sensor = true;
 	};
 

@@ -16,7 +16,7 @@ var Overlord = {
 		var tmpKilledList = (!otherPlayers[killerIndex].isAlive ? killed.killedList : null);
 		
 		//Assign the kill.
-		otherPlayers[killerIndex].kill(killed, BlockType.NEUTRAL);
+		otherPlayers[killerIndex].kill(killed, Enum.Block.Type.NEUTRAL);
 		
 		if(tmpKilledList != null)
 		{
@@ -28,19 +28,19 @@ var Overlord = {
 	},
 	launch: function(blockType){
 		
-		if(blockType == BlockType.SPAWN)
+		if(blockType == Enum.Block.Type.SPAWN)
 		{
 			//Spawn block falls from the sky.
 			if(!this.hasActiveSpawnBlock)
 			{
 				var spawnY = Game.height + 100;
-				var spawnX = BlockConstants.WIDTH*0.5 + (Math.random()*(Game.width-BlockConstants.WIDTH));
+				var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(Game.width-Constants.Block.WIDTH));
 				
 				//Create a block and launch it.
 				var block = new Block(Game.blockSequence, 
 									  spawnX, 
 									  spawnY, 
-									  BlockType.SPAWN, 
+									  Enum.Block.Type.SPAWN, 
 									  null,
 									  null);
 				
@@ -48,7 +48,7 @@ var Overlord = {
 				block.launch();
 				
 				Game.blockSequence++;	
-				io.sockets.in(Game.id).emit(Message.NEW_BLOCK, block.toClient());
+				io.sockets.in(Game.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
 				
 				this.hasActiveSpawnBlock = true;
 			}
