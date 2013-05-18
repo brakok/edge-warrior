@@ -1,159 +1,157 @@
 //Enums
-var Color = {
-	RED: 0,
-	BLUE: 1,
-	YELLOW: 2,
-	WHITE: 3,
-	GREEN: 4,
-	ORANGE: 5,
-	PURPLE: 6,
-	BLACK: 7
-};
-
-var UserDataType = {
-	PLAYER: 0,
-	BLOCK: 1,
-	WINNING_GOAL: 2,
-	RAYBALL: 3
-};
-
-var BlockType = {
-	NEUTRAL: 0,
-	COLORED: 1,
-	SPAWN: 2,
-	SKILLED: 3
-};
-
-var CollisionType = {
-	STATIC: 0,
-	PLAYER: 1,
-	GROUND_SENSOR: 2,
-	BLOCK: 3,
-	DROP_SENSOR: 4,
-	WINNING_GOAL: 5,
-	DEATH_ZONE: 6
-};
-
-var Facing = {
-	RIGHT:  0,
-	LEFT: 1
-};
-
-var BlockState = {
-	STATIC: 0,
-	DYNAMIC: 1
-};
-
-var BlockDestructionType = {
-	COLOR_CONTACT: 0,
-	SPAWN: 1,
-	CRUSHED: 2
+var Enum = {
+	Color: {
+		RED: 0,
+		BLUE: 1,
+		YELLOW: 2,
+		WHITE: 3,
+		GREEN: 4,
+		ORANGE: 5,
+		PURPLE: 6,
+		BLACK: 7
+	},
+	UserData: {
+		Type: {
+			PLAYER: 0,
+			BLOCK: 1,
+			WINNING_GOAL: 2,
+			RAYBALL: 3
+		}
+	},
+	Block: {
+		Type: {
+			NEUTRAL: 0,
+			COLORED: 1,
+			SPAWN: 2,
+			SKILLED: 3
+		},
+		State: {
+			STATIC: 0,
+			DYNAMIC: 1
+		},
+		Destruction: {
+			COLOR_CONTACT: 0,
+			SPAWN: 1,
+			CRUSHED: 2
+		}
+	},
+	Collision: {
+		Type: {
+			STATIC: 0,
+			PLAYER: 1,
+			GROUND_SENSOR: 2,
+			BLOCK: 3,
+			DROP_SENSOR: 4,
+			WINNING_GOAL: 5,
+			DEATH_ZONE: 6
+		}
+	},
+	Facing: {
+		RIGHT:  0,
+		LEFT: 1
+	},
+	StepReached: {
+		NONE: 0,
+		STANDING: 1,
+		PLAYER: 2,
+		OVERLORD: 3
+	},
+	Direction: {
+		UP: 0,
+		LEFT: 1,
+		DOWN: 2,
+		RIGHT: 3
+	},
+	Action: {
+		Type: {
+			NONE: -1,
+			STANDING: 0,
+			RUNNING: 1,
+			JUMPING: 2,
+			FALLING: 3,
+			DOUBLE_JUMPING: 4
+		}
+	}
 };
 
 //Constants
-var PhysicConstants = {
-	GRAVITY: -150,
-	FRICTION: 0.99,
-	MASS_PLAYER: 10,
-	MASS_BLOCK: 999999,
-	MASS_BLOCK_STATIC: 999999999999,
-	TIME_STEP: 1/60,
-	FRICTION_FACTOR_ONGROUND: 0.9,
-	TURN_FRICTION_FACTOR: 0.05
-};
-
-var SpawnLimit = {
-	OFFSET: 150
-};
-
-var PlayerConstants = {
-	JUMP_POWER: 1350,
-	RUN_POWER_ONGROUND: 1000,
-	RUN_POWER_OFFGROUND: 15,
-	WIDTH: 40,
-	HEIGHT: 40,
-	MAX_SPEED_FACTOR: 0.01
-};
-
-var BlockConstants = {
-	WIDTH: 80,
-	HEIGHT: 30,
-	LAUNCHING_SPEED: -500,
-	SPAWN_MAXLAUNCHING_Y: 500,
-	SPAWN_MAXLAUNCHING_X: 500
-};
-
-var ActionType = {
-	NONE: -1,
-	STANDING: 0,
-	RUNNING: 1,
-	JUMPING: 2,
-	FALLING: 3,
-	DOUBLE_JUMPING: 4
-};
-
-var BlockRestriction = {
-	SPAWN_TIMER: 6
-};
-
-//Who get the kill for a kill command.
-var StepReached = {
-	NONE: 0,
-	STANDING: 1,
-	PLAYER: 2,
-	OVERLORD: 3
-};
-
-var WinningGoal = {
-	OFFSET_Y: 600,
-	TIMER: 5,
-	FLOATING_BALL: {
-		WIDTH: 90,
-		HEIGHT: 90,
-		SPEED: 1,
-		MAX_SPEED: 30,
-		FRICTION_FACTOR: 0.98,
-		ORBIT_RADIUS: 20,
-		ORBIT_SPEED: 0.05
+var Constants = {
+	Physic: {
+		GRAVITY: -150,
+		FRICTION: 0.99,
+		MASS_PLAYER: 10,
+		MASS_BLOCK: 999999,
+		MASS_BLOCK_STATIC: 999999999999,
+		TIME_STEP: 1/60,
+		FRICTION_FACTOR_ONGROUND: 0.9,
+		TURN_FRICTION_FACTOR: 0.05
+	},
+	Spawn: {
+		Limit: {
+		OFFSET: 150
+		}
+	},
+	Player: {
+		JUMP_POWER: 1350,
+		RUN_POWER_ONGROUND: 1000,
+		RUN_POWER_OFFGROUND: 15,
+		WIDTH: 40,
+		HEIGHT: 40,
+		MAX_SPEED_FACTOR: 0.01
+	},
+	Block: {
+		WIDTH: 80,
+		HEIGHT: 30,
+		LAUNCHING_SPEED: -500,
+		SPAWN_MAXLAUNCHING_Y: 500,
+		SPAWN_MAXLAUNCHING_X: 500,
+		Restriction: {
+			SPAWN_TIMER: 6
+		}
+	},
+	
+	WinningGoal: {
+		OFFSET_Y: 600,
+		PHASE_TIME: 5,
+		FLOATING_BALL: {
+			WIDTH: 90,
+			HEIGHT: 90,
+			SPEED: 1,
+			MAX_SPEED: 30,
+			FRICTION_FACTOR: 0.98,
+			ORBIT_RADIUS: 20,
+			ORBIT_SPEED: 0.05
+		}
+	},
+	Missile: {
+		RAYBALL: {
+			SPEED: 100,
+			WIDTH: 45,
+			HEIGHT: 45
+		}
+	},
+	KillCommand: {
+		Time: {
+			FIRST_STEP: 5,
+			SECOND_STEP: 10
+		}
+	},
+	Message: {
+		NEXT_BLOCK: 'nextBlock',
+		NEW_BLOCK: 'newBlock',
+		SEND_BLOCK: 'sendBlock',
+		DELETE_BLOCK: 'deleteBlock',
+		PULL: 'pull',
+		PUSH: 'push',
+		INIT: 'init',
+		CONNECTED: 'connected',
+		CONNECTION: 'connection',
+		NEW_PLAYER: 'newPlayer',
+		PLAYER_KILLED: 'playerKilled',
+		PLAYER_SPAWNED: 'playerSpawned',
+		LAUNCH: 'launch',
+		KILL_COMMAND: 'killCommand',
+		AT_GOAL: 'atGoal',
+		WIN: 'win'
 	}
-};
-
-var DirectionConstants = {
-	UP: 0,
-	LEFT: 1,
-	DOWN: 2,
-	RIGHT: 3
-};
-
-var MissileConstants = {
-	RAYBALL: {
-		SPEED: 100,
-		WIDTH: 45,
-		HEIGHT: 45
-	}
-};
-
-var KillCommandTime = {
-	FIRST_STEP: 5,
-	SECOND_STEP: 10
-};
-
-//Socket messages.
-var Message = {
-	NEXT_BLOCK: 'nextBlock',
-	NEW_BLOCK: 'newBlock',
-	SEND_BLOCK: 'sendBlock',
-	DELETE_BLOCK: 'deleteBlock',
-	PULL: 'pull',
-	PUSH: 'push',
-	INIT: 'init',
-	CONNECTED: 'connected',
-	CONNECTION: 'connection',
-	NEW_PLAYER: 'newPlayer',
-	PLAYER_KILLED: 'playerKilled',
-	PLAYER_SPAWNED: 'playerSpawned',
-	LAUNCH: 'launch',
-	KILL_COMMAND: 'killCommand',
-	AT_GOAL: 'atGoal',
-	WIN: 'win'
 };

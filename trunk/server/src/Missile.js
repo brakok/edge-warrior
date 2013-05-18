@@ -13,13 +13,13 @@ var Missile = function(x, y, stats){
 	
 	//Assign custom data to body.
 	this.body.userdata = {
-		type: UserDataType.RAYBALL,
+		type: Enum.UserData.Type.RAYBALL,
 		object: this
 	};
 	
 	//Create a shape associated with the body.
 	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, stats.width, stats.height));
-	this.shape.setCollisionType(CollisionType.DEATH_ZONE);
+	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);
 	this.shape.sensor = true;
 };
 
