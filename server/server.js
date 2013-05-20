@@ -78,12 +78,12 @@ var Enum = {
 var Constants = {
 	Physic: {
 		GRAVITY: -150,
-		FRICTION: 0.99,
+		FRICTION: 0.97,
 		MASS_PLAYER: 10,
 		MASS_BLOCK: 999999,
 		MASS_BLOCK_STATIC: 999999999999,
 		TIME_STEP: 1/60,
-		FRICTION_FACTOR_ONGROUND: 0.9,
+		FRICTION_FACTOR_ONGROUND: 0.85,
 		TURN_FRICTION_FACTOR: 0.05
 	},
 	Spawn: {
@@ -92,6 +92,7 @@ var Constants = {
 		}
 	},
 	Player: {
+		JUMP_COOLDOWN: 0.1,
 		JUMP_POWER: 1350,
 		RUN_POWER_ONGROUND: 1000,
 		RUN_POWER_OFFGROUND: 15,
@@ -421,6 +422,7 @@ var Player = function(id, x, y, color){
 	
 	this.doubleJumpEnabled = false;
 	this.doubleJumpUsed = true;
+	this.jumpCooldown = Constants.Player.JUMP_COOLDOWN;
 	
 	this.currentBlock = Enum.Block.Type.NEUTRAL;
 	this.hasGivenBlock = false;
@@ -574,6 +576,15 @@ Player.prototype.update = function(){
 		if(this.groundContact > 0 && this.doubleJumpUsed)
 			this.doubleJumpUsed = false;
 		
+		//Look if player is falling.
+		if(this.groundContact == 0 && this.currentAction != Enum.Action.Type.FALLING && this.currentAction != Enum.Action.Type.NONE && this.jumpCooldown <= 0)
+		{
+			if(this.currentAction == Enum.Action.Type.RUNNING || this.currentAction == Enum.Action.Type.STANDING)
+				this.currentAction = Enum.Action.Type.FALLING;
+			else
+				this.currentAction = Enum.Action.Type.NONE;
+		} 
+		
 		//Jump
 		if(this.keys.jump && this.groundContact > 0)
 		{
@@ -588,16 +599,7 @@ Player.prototype.update = function(){
 		//Allow double jump.
 		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
 			this.doubleJumpEnabled = true;
-		
-		//Look if player is falling.
-		if(this.groundContact == 0 && this.currentAction != Enum.Action.Type.DOUBLE_JUMPING)
-		{
-			if(this.currentAction != Enum.Action.Type.JUMPING)
-				this.currentAction = Enum.Action.Type.FALLING;
-			else
-				this.currentAction = Enum.Action.Type.NONE;
-		} 
-		
+				
 		if(nextX != 0)
 		{
 			var lastFacing = this.facing;
@@ -620,7 +622,7 @@ Player.prototype.update = function(){
 				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
 				
 				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING)
-					this.currentAction = Enum.Action.Type.STANDING;
+					this.currentAction = Enum.Action.Type.STANDING;					
 				
 				//Calculate standing time to a limit of 1 min.
 				if(this.isAlive)
@@ -663,8 +665,6 @@ Player.prototype.update = function(){
 			}
 		}
 		
-		
-		
 		//Reset kill command timer.
 		if(this.killTime > 0 && (nextX != 0 || this.keys.jump))
 		{
@@ -673,6 +673,9 @@ Player.prototype.update = function(){
 			
 			io.sockets.sockets[this.id].emit(Constants.Message.KILL_COMMAND, Enum.StepReached.NONE);
 		}	
+		
+		if(this.jumpCooldown > 0)
+			this.jumpCooldown -= Constants.Physic.TIME_STEP*0.5;
 	}
 	
 	//Manage kill command.
@@ -714,18 +717,29 @@ Player.prototype.turn = function(){
 };
 
 Player.prototype.jump = function(){
-	this.currentAction = Enum.Action.Type.JUMPING;
-	this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
-	this.body.applyImpulse(new chipmunk.Vect(0, Constants.Player.JUMP_POWER), new chipmunk.Vect(0,0));
+
+	if(this.jumpCooldown <= 0)
+	{
+		this.jumpCooldown = Constants.Player.JUMP_COOLDOWN;
+		this.currentAction = Enum.Action.Type.JUMPING;
+		
+		this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
+		this.body.applyImpulse(new chipmunk.Vect(0, Constants.Player.JUMP_POWER), new chipmunk.Vect(0,0));
+	}
+	
 };
 
 Player.prototype.doubleJump = function(){
-	this.jump();
-	this.dropBlock();
 
-	this.currentAction = Enum.Action.Type.DOUBLE_JUMPING;
-	this.doubleJumpUsed = true;
-	this.doubleJumpEnabled = false;
+	if(this.jumpCooldown <= 0)
+	{
+		this.jump();
+		this.dropBlock();
+
+		this.currentAction = Enum.Action.Type.DOUBLE_JUMPING;
+		this.doubleJumpUsed = true;
+		this.doubleJumpEnabled = false;
+	}
 };
 
 Player.prototype.dropBlock = function(x, y, checkDropzone){
