@@ -7,2810 +7,1562 @@
             <key>killCommand.0000.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{694,794},{86,44}}</string>
+                <string>{{408,698},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{694,632},{86,44}}</string>
+                <string>{{350,698},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{694,706},{86,44}}</string>
+                <string>{{292,698},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0003.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{648,882},{86,44}}</string>
+                <string>{{234,698},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0004.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{648,794},{86,44}}</string>
+                <string>{{176,930},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0005.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{648,706},{86,44}}</string>
+                <string>{{176,872},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0006.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{970,618},{86,44}}</string>
+                <string>{{176,814},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0007.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,586},{86,44}}</string>
+                <string>{{176,756},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0008.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,586},{86,44}}</string>
+                <string>{{176,698},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0009.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{648,586},{86,44}}</string>
+                <string>{{408,640},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0010.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,586},{86,44}}</string>
+                <string>{{350,640},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0011.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,540},{86,44}}</string>
+                <string>{{292,640},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0012.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,540},{86,44}}</string>
+                <string>{{234,640},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0013.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,540},{86,44}}</string>
+                <string>{{176,640},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0014.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,970},{86,44}}</string>
+                <string>{{118,930},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0015.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{602,882},{86,44}}</string>
+                <string>{{118,872},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0016.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{602,794},{86,44}}</string>
+                <string>{{118,814},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0017.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{602,706},{86,44}}</string>
+                <string>{{118,756},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0018.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{604,540},{86,44}}</string>
+                <string>{{118,698},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0019.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{602,618},{86,44}}</string>
+                <string>{{118,640},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0020.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{556,882},{86,44}}</string>
+                <string>{{408,582},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0021.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{556,794},{86,44}}</string>
+                <string>{{350,582},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0022.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{556,706},{86,44}}</string>
+                <string>{{292,582},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0023.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{556,618},{86,44}}</string>
+                <string>{{234,582},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0024.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{970,530},{86,44}}</string>
+                <string>{{176,582},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0025.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,494},{86,44}}</string>
+                <string>{{118,582},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0026.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,494},{86,44}}</string>
+                <string>{{60,930},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0027.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,494},{86,44}}</string>
+                <string>{{60,872},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0028.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,494},{86,44}}</string>
+                <string>{{60,814},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0029.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{558,524},{86,44}}</string>
+                <string>{{60,756},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0030.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,494},{86,44}}</string>
+                <string>{{60,698},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0031.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,448},{86,44}}</string>
+                <string>{{60,640},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0032.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,448},{86,44}}</string>
+                <string>{{60,582},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0033.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,448},{86,44}}</string>
+                <string>{{408,524},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0034.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,448},{86,44}}</string>
+                <string>{{350,524},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0035.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,448},{86,44}}</string>
+                <string>{{292,524},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0036.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{970,442},{86,44}}</string>
+                <string>{{234,524},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0037.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,402},{86,44}}</string>
+                <string>{{176,524},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0038.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,402},{86,44}}</string>
+                <string>{{118,524},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0039.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,402},{86,44}}</string>
+                <string>{{60,524},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0040.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,402},{86,44}}</string>
+                <string>{{2,930},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0041.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{558,436},{86,44}}</string>
+                <string>{{2,872},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0042.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{558,436},{86,44}}</string>
+                <string>{{2,814},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0043.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,402},{86,44}}</string>
+                <string>{{2,756},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0044.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,356},{86,44}}</string>
+                <string>{{2,698},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0045.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,356},{86,44}}</string>
+                <string>{{2,640},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0046.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,356},{86,44}}</string>
+                <string>{{2,582},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0047.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,356},{86,44}}</string>
+                <string>{{2,524},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0048.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,356},{86,44}}</string>
+                <string>{{408,466},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0049.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,356},{86,44}}</string>
+                <string>{{350,466},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0050.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{970,354},{86,44}}</string>
+                <string>{{292,466},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0051.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,310},{86,44}}</string>
+                <string>{{234,466},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0052.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,310},{86,44}}</string>
+                <string>{{176,466},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0053.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,310},{86,44}}</string>
+                <string>{{118,466},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0054.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,310},{86,44}}</string>
+                <string>{{60,466},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0055.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{558,348},{86,44}}</string>
+                <string>{{2,466},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0056.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,310},{86,44}}</string>
+                <string>{{408,408},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0057.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,310},{86,44}}</string>
+                <string>{{350,408},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0058.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{970,266},{86,44}}</string>
+                <string>{{292,408},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0059.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,264},{86,44}}</string>
+                <string>{{234,408},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0060.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,264},{86,44}}</string>
+                <string>{{176,408},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0061.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,264},{86,44}}</string>
+                <string>{{118,408},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0062.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,264},{86,44}}</string>
+                <string>{{60,408},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0063.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,264},{86,44}}</string>
+                <string>{{2,408},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0064.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,218},{86,44}}</string>
+                <string>{{408,350},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0065.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,218},{86,44}}</string>
+                <string>{{350,350},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0066.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,218},{86,44}}</string>
+                <string>{{292,350},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0067.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{558,260},{86,44}}</string>
+                <string>{{234,350},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0068.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,218},{86,44}}</string>
+                <string>{{176,350},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0069.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{970,178},{86,44}}</string>
+                <string>{{118,350},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0070.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,172},{86,44}}</string>
+                <string>{{60,350},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0071.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,172},{86,44}}</string>
+                <string>{{2,350},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0072.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,172},{86,44}}</string>
+                <string>{{408,292},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0073.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{558,172},{86,44}}</string>
+                <string>{{350,292},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0074.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,172},{86,44}}</string>
+                <string>{{292,292},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0075.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{882,126},{86,44}}</string>
+                <string>{{234,292},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0076.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{794,126},{86,44}}</string>
+                <string>{{176,292},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0077.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{706,126},{86,44}}</string>
+                <string>{{118,292},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0078.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{618,126},{86,44}}</string>
+                <string>{{60,292},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0079.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{530,970},{86,44}}</string>
+                <string>{{2,292},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0080.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{510,882},{86,44}}</string>
+                <string>{{408,234},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0081.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{510,794},{86,44}}</string>
+                <string>{{350,234},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0082.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{510,706},{86,44}}</string>
+                <string>{{292,234},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0083.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{510,618},{86,44}}</string>
+                <string>{{234,234},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0084.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{512,442},{86,44}}</string>
+                <string>{{176,234},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0085.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{512,354},{86,44}}</string>
+                <string>{{118,234},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0086.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{512,266},{86,44}}</string>
+                <string>{{60,234},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0087.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{530,126},{86,44}}</string>
+                <string>{{2,234},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0088.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{512,178},{86,44}}</string>
+                <string>{{408,176},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0089.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{510,530},{86,44}}</string>
+                <string>{{350,176},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0090.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{464,882},{86,44}}</string>
+                <string>{{292,176},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0091.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{464,794},{86,44}}</string>
+                <string>{{234,176},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0092.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{464,706},{86,44}}</string>
+                <string>{{176,176},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0093.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{464,618},{86,44}}</string>
+                <string>{{118,176},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0094.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{466,442},{86,44}}</string>
+                <string>{{60,176},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0095.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{466,354},{86,44}}</string>
+                <string>{{2,176},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0096.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{466,266},{86,44}}</string>
+                <string>{{408,118},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0097.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{466,178},{86,44}}</string>
+                <string>{{350,118},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0098.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{464,530},{86,44}}</string>
+                <string>{{292,118},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0099.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{442,970},{86,44}}</string>
+                <string>{{234,118},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0100.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{418,882},{86,44}}</string>
+                <string>{{176,118},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0101.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{418,794},{86,44}}</string>
+                <string>{{118,118},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0102.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{418,706},{86,44}}</string>
+                <string>{{60,118},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0103.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{418,618},{86,44}}</string>
+                <string>{{2,118},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0104.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{420,442},{86,44}}</string>
+                <string>{{408,60},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0105.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{420,354},{86,44}}</string>
+                <string>{{350,60},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0106.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{420,266},{86,44}}</string>
+                <string>{{292,60},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0107.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{442,126},{86,44}}</string>
+                <string>{{234,60},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0108.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{420,178},{86,44}}</string>
+                <string>{{176,60},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0109.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{418,530},{86,44}}</string>
+                <string>{{118,60},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0110.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{372,882},{86,44}}</string>
+                <string>{{60,60},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0111.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{372,794},{86,44}}</string>
+                <string>{{2,60},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0112.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{372,706},{86,44}}</string>
+                <string>{{408,2},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0113.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{372,618},{86,44}}</string>
+                <string>{{350,2},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0114.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{374,442},{86,44}}</string>
+                <string>{{292,2},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0115.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{374,354},{86,44}}</string>
+                <string>{{234,2},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0116.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{374,266},{86,44}}</string>
+                <string>{{176,2},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0117.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{374,178},{86,44}}</string>
+                <string>{{118,2},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0118.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{372,530},{86,44}}</string>
+                <string>{{60,2},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
             <key>killCommand.0119.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{354,970},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>offset</key>
-                <string>{0,3}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
+                <string>{{2,2},{56,56}}</string>
                 <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0120.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{326,882},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,3}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0121.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{326,794},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,3}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,20},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0122.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{326,706},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,19},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0123.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{326,618},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,19},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0124.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{328,442},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,19},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0125.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{328,354},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,19},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0126.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{328,266},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,19},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0127.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{354,126},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,19},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0128.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{328,178},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,19},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0129.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{326,530},{86,44}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,19},{86,44}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0130.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{278,882},{86,46}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,18},{86,46}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0131.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{278,794},{86,46}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,18},{86,46}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0132.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{278,706},{86,46}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,18},{86,46}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0133.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{278,618},{86,46}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,18},{86,46}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0134.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{278,530},{86,46}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,18},{86,46}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0135.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{280,354},{86,46}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,18},{86,46}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0136.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{280,266},{86,46}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,18},{86,46}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0137.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{280,178},{86,46}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,18},{86,46}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0138.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{278,442},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0139.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{228,706},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0140.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{228,618},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0141.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{228,530},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0142.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{230,354},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0143.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{230,266},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0144.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{266,126},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0145.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{230,178},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0146.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{228,442},{86,48}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,17},{86,48}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0147.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{266,970},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0148.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{226,882},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0149.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{226,794},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0150.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{178,970},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0151.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{174,882},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0152.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{174,794},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0153.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{178,126},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0154.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{90,126},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0155.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,126},{86,50}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,16},{86,50}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0156.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{174,706},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0157.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{174,618},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0158.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{174,530},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0159.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{176,354},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0160.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{176,266},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0161.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{176,178},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0162.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{174,442},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0163.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{90,970},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0164.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,970},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0165.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{970,90},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0166.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{970,2},{86,52}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,15},{86,52}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0167.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{118,882},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0168.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{118,794},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0169.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{118,706},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0170.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{118,618},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0171.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{118,530},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0172.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{120,354},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0173.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{120,266},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0174.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{120,178},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0175.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{118,442},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0176.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{62,530},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0177.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{62,442},{86,54}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,14},{86,54}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0178.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{62,354},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0179.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{62,266},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0180.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{62,178},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0181.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{60,882},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0182.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{60,794},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0183.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{60,706},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0184.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{60,618},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0185.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,882},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0186.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,794},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0187.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,706},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0188.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,618},{86,56}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,13},{86,56}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0189.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,530},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0190.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,442},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0191.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,354},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0192.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,266},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0193.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,178},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0194.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{442,66},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0195.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{354,66},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0196.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{266,66},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0197.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{178,66},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0198.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{90,66},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0199.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,66},{86,58}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,12},{86,58}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0200.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{882,64},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0201.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{794,64},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0202.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{706,64},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0203.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{618,64},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0204.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{530,64},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0205.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{882,2},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0206.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{794,2},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0207.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{706,2},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0208.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{618,2},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0209.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{530,2},{86,60}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,11},{86,60}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0210.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{442,2},{86,62}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,10},{86,62}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0211.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{354,2},{86,62}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,10},{86,62}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0212.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{266,2},{86,62}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,10},{86,62}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0213.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{178,2},{86,62}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,10},{86,62}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0214.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{90,2},{86,62}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,10},{86,62}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
-            </dict>
-            <key>killCommand.0215.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,2},{86,62}}</string>
-                <key>offset</key>
-                <string>{0,4}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,10},{86,62}}</string>
-                <key>sourceSize</key>
-                <string>{90,90}</string>
+                <string>{60,60}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -2820,9 +1572,9 @@
             <key>realTextureFileName</key>
             <string>killCommand.png</string>
             <key>size</key>
-            <string>{1024,1024}</string>
+            <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:5d599311788a5d48b0318afaedcfe46e$</string>
+            <string>$TexturePacker:SmartUpdate:ad0fe8b3773725d2bb9bc10f8508bac2$</string>
             <key>textureFileName</key>
             <string>killCommand.png</string>
         </dict>

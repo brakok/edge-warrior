@@ -54,13 +54,15 @@ var Client = new function(){
 	};
 	
 	//Update elements contained in the container.
-	this.update = function (){
+	this.update = function (dt){
 		
 		//Update info from the server.
 		if(this.ready)
 		{
 			this.push();
 			this.pull();
+			
+			this.hud.update(dt);
 		}
 	};
 		
