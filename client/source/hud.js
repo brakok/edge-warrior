@@ -11,8 +11,11 @@ var HUD = cc.LayerColor.extend({
 		this.inventory = new Inventory(125, 75, width, this);
 		
 		//Add the kill command beside the inventory.
-		this.killCommand = new KillCommand(280, 60, width, this);
+		this.killCommand = new KillCommand(270, 65, width, this);
 		this._zOrder = 1000;
+	},
+	update: function(dt){
+		this.killCommand.update(dt);
 	}
 });
 

@@ -5,6 +5,10 @@ var KillCommand = function(offset, y, screenWidth, layer){
 		this.y = y;
 		this.layer = layer;
 		
+		this.mustAppear = false;
+		this.alphaStep = 255/(Constants.KillCommand.Time.FIRST_STEP - Constants.KillCommand.Time.APPARITION);
+		this.firstStepTimer = 0;
+		
 		//Load plist and animation sheets.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsHudDir + 'killCommand.plist', 
 														  assetsHudDir + 'killCommand.png');
@@ -21,25 +25,15 @@ var KillCommand = function(offset, y, screenWidth, layer){
 			toDieFrames.push(frame);
 		}
 		
-		//Creation of the first step animation.
+		//Creation of the animation.
 		var animation = cc.Animation.create(toDieFrames, 0.042);
 		this.animToDie = cc.Animate.create(animation);
 		
-		var toBlockFrames = [];
-		var str = '';
-		for (var i = 120; i < 216; i++) {
-			str = 'killCommand.' + '0' + i + '.png';
-			var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
-			toBlockFrames.push(frame);
-		}
-		
-		//Creation of the second step animation. Must be hold for 5 seconds for all animation.
-		animation = cc.Animation.create(toBlockFrames, 0.052);
-		this.animToBlock = cc.Animate.create(animation);
-		
 		this.animToDie._animation._loops = 0;
-		this.currentAnimation.runAction(this.animToDie);
+		this.currentAnimation._opacity = 0;
 		
+		this.currentAnimation.runAction(this.animToDie);
+				
 		this.layer.addChild(this.currentAnimation);
 };
 
@@ -50,15 +44,38 @@ KillCommand.prototype.start = function(stepReached){
 	switch(stepReached)
 	{
 		case Enum.StepReached.STANDING:
-			this.animToDie._animation._loops = 1;
+			this.animToDie._animation._loops = 0;
+			
+			this.mustAppear = true;
 			this.currentAnimation.runAction(this.animToDie);
 			break;
 		case Enum.StepReached.PLAYER:
-			this.currentAnimation.runAction(this.animToBlock);
+			this.animToDie._animation._loops = 1;
+			this.currentAnimation.runAction(this.animToDie);
 			break;
 	}
 	
 	this.layer.addChild(this.currentAnimation);
+};
+
+KillCommand.prototype.update = function(dt){
+
+	if(!this.mustAppear || this.currentAnimation._opacity == 255)
+		return;
+		
+	this.firstStepTimer += dt;
+	
+	//Appear only if in apparition phase.
+	if(this.firstStepTimer >= Constants.KillCommand.Time.FIRST_STEP)
+	{
+		var tmpAlpha = this.currentAnimation._opacity;
+		tmpAlpha += this.alphaStep*dt;
+		
+		if(tmpAlpha > 255)
+			this.currentAnimation._opacity = 255;
+		else
+			this.currentAnimation._opacity += this.alphaStep*dt;
+	}
 };
 
 //Reset anim.
@@ -67,6 +84,12 @@ KillCommand.prototype.reset = function(){
 	this.layer.removeChild(this.currentAnimation);
 	
 	this.animToDie._animation._loops = 0;
+	
+	//Reset opcaity to 0.
+	this.currentAnimation._opacity = 0;
+	this.firstStepTimer = 0;
+	this.mustAppear = false;
+	
 	this.currentAnimation.runAction(this.animToDie);
 	
 	this.layer.addChild(this.currentAnimation);

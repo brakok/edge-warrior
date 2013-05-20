@@ -38,7 +38,7 @@ var Game = cc.Layer.extend({
 
 		if(Client.currentState == Enum.Game.State.PLAYING)
 		{
-			Client.update();
+			Client.update(dt);
 		}
 	}
 });

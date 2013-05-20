@@ -8,6 +8,12 @@ var Constants = {
 			LOST_FOREACH_ENEMY: 5
 		}
 	},
+	KillCommand: {
+		Time: {
+			APPARITION: 3,
+			FIRST_STEP: 5
+		}		
+	},
 	Message:{
 		NEXT_BLOCK: 'nextBlock',
 		NEW_BLOCK: 'newBlock',
