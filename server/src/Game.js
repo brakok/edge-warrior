@@ -5,6 +5,7 @@ var Game = {
 	blocks: [],
 	missiles: [],
 	blockSequence: 0,
+	missileSequence: 0,
 	goal: null,
 	intervalId: null,
 	winner: null,

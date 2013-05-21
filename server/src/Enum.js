@@ -71,6 +71,11 @@ var Enum = {
 			FALLING: 3,
 			DOUBLE_JUMPING: 4
 		}
+	},
+	Missile: {
+		Type: {
+			RAYBALL: 0
+		}
 	}
 };
 
@@ -153,6 +158,8 @@ var Constants = {
 		LAUNCH: 'launch',
 		KILL_COMMAND: 'killCommand',
 		AT_GOAL: 'atGoal',
-		WIN: 'win'
+		WIN: 'win',
+		DELETE_MISSILE: 'deleteMissile',
+		NEW_MISSILE: 'newMissile'
 	}
 };
