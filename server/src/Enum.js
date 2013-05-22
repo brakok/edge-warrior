@@ -131,7 +131,7 @@ var Constants = {
 	},
 	Missile: {
 		RAYBALL: {
-			SPEED: 100,
+			SPEED: 50,
 			WIDTH: 45,
 			HEIGHT: 45
 		}
