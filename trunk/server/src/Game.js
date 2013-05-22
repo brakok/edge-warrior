@@ -212,11 +212,17 @@ var Game = {
 				blocks.push(this.blocks[i].toClient());
 		}
 		
+		var missiles = [];
+		for(var i in this.missiles)
+			if(this.missiles[i] != null)
+				missiles.push(this.missiles[i].toClient());
+		
 		return {
 			player: this.players[id].toClient(),
 			enemies: enemies,
 			goal: this.goal.toClient(),
-			blocks: blocks
+			blocks: blocks,
+			missiles: missiles
 		};
 	},
 	launch: function(){
