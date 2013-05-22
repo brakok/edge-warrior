@@ -51,5 +51,10 @@ var Enum = {
 		STANDING: 1,
 		PLAYER: 2,
 		OVERLORD: 3
+	},
+	Missile:{
+		Type:{
+			RAYBALL: 0
+		}
 	}
 };

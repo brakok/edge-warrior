@@ -21,6 +21,7 @@
 				  'source/Resources.js',
 				  'source/inventory.js',
 				  'source/killCommand.js',
+				  'source/missile.js',
 				  'source/hud.js',
 				  'source/endScreen.js']
 	};

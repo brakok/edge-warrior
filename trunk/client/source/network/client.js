@@ -5,6 +5,8 @@ var Client = new function(){
 	this.keys = [];
 	this.enemies = [];
 	this.blocks = [];
+	this.missiles = {};
+	
 	this.player = null;
 	this.currentState = Enum.Game.State.PLAYING;
 	this.needPush = false;
@@ -113,7 +115,7 @@ var Client = new function(){
 		
 		socket.on(Constants.Message.NEW_BLOCK, function(block){
 			//Add a new block.
-			Client.addNewBlock(block); 
+			Client.addBlock(block); 
 		});
 		
 		socket.on(Constants.Message.DELETE_BLOCK, function(data){
@@ -123,7 +125,7 @@ var Client = new function(){
 		
 		//Pulling info from server.
 		socket.on(Constants.Message.PULL, function (data){	
-			Client.updateFromServer(data.player, data.enemies, data.blocks, data.goal);
+			Client.updateFromServer(data.player, data.enemies, data.blocks, data.goal, data.missiles);
 		});
 		
 		//Ask for next block.
@@ -141,22 +143,36 @@ var Client = new function(){
 			Client.player.addNextBlock(blockType);
 		});
 		
+		//Spawn player.
 		socket.on(Constants.Message.PLAYER_SPAWNED, function(remotePlayer){
 			Client.spawnPlayer(remotePlayer);
 		});
 		
+		//Indicate at which step user is currently.
 		socket.on(Constants.Message.KILL_COMMAND, function(stepReached){
 			Client.changeStep(stepReached);
 		});
 		
+		//On victory of any player.
 		socket.on(Constants.Message.WIN, function(data){
 			Client.end(data);
 		});
 		
+		//When a player touches the goal.
 		socket.on(Constants.Message.AT_GOAL, function(winner){
 			Client.electWinner(winner);
 		});
-				
+		
+		//Delete a missile.
+		socket.on(Constants.Message.DELETE_MISSILE, function(data){
+			Client.deleteMissile(data.id);
+		});
+		
+		//Add a missile.
+		socket.on(Constants.Message.NEW_MISSILE, function(data){
+			Client.addMissile(data);
+		});
+		
 		//Once defined, preserved the socket.
 		this.socket = socket;
 	};
@@ -201,7 +217,7 @@ var Client = new function(){
 	};
 	
 	//Update positions from server ones.
-	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal){
+	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal, remoteMissiles){
 		
 		//Update player.
 		this.player.fromServer(remotePlayer);
@@ -216,6 +232,11 @@ var Client = new function(){
 		for(var i in remoteBlocks)
 			if(this.blocks[remoteBlocks[i].id] != null)
 				this.blocks[remoteBlocks[i].id].fromServer(remoteBlocks[i]);
+			
+		//Update missiles.
+		for(var i in remoteMissiles)
+			if(this.missiles[remoteMissiles[i].id] != null)
+				this.missiles[remoteMissiles[i].id].fromServer(remoteMissiles[i]);							
 			
 		//Update goal.
 		this.goal.fromServer(remoteGoal);
@@ -233,9 +254,25 @@ var Client = new function(){
 	};
 	
 	//Add a new block from the server.
-	this.addNewBlock = function(remoteBlock){
+	this.addBlock = function(remoteBlock){
 		this.blocks[remoteBlock.id] = new Block(remoteBlock.x, remoteBlock.y, remoteBlock.type, remoteBlock.color);
 		this.layer.addChild(this.blocks[remoteBlock.id].sprite);
+	};
+	
+	//Add a new missile from the server.
+	this.addMissile = function(remoteMissile){
+		this.missiles[remoteMissile.id] = new Missile(remoteMissile.x, remoteMissile.y, remoteMissile.type);
+		this.layer.addChild(this.missiles[remoteMissile.id].sprite);
+	};
+	
+	//Delete a missile.
+	this.deleteMissile = function(remoteMissileId){
+	
+		if(this.missiles[remoteMissileId] != null)
+		{
+			this.missiles[remoteMissileId].explode();
+			delete this.missiles[remoteMissileId];
+		}
 	};
 	
 	//Delete a block.
