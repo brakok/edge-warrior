@@ -55,7 +55,8 @@ Missile.prototype.move = function(){
 Missile.prototype.toClient = function(){
 	return {
 		x: this.x,
-		y: this.y
+		y: this.y,
+		id: this.id
 	};
 };
 
@@ -82,7 +83,7 @@ Missile.prototype.update = function(){
 
 	var distX = (this.x - this.originalX);
 	var distY = (this.y - this.originalY);
-	
+				
 	//If distance has been reached or surpassed, missile is deleted.
 	if((distX*distX)+(distY*distY) > this.stats.distance*this.stats.distance)
 		this.explode();

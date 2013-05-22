@@ -118,7 +118,7 @@ var Constants = {
 	
 	WinningGoal: {
 		OFFSET_Y: 600,
-		PHASE_TIME: 5,
+		PHASE_TIME: 35,
 		FLOATING_BALL: {
 			WIDTH: 90,
 			HEIGHT: 90,
@@ -133,7 +133,8 @@ var Constants = {
 		RAYBALL: {
 			SPEED: 50,
 			WIDTH: 45,
-			HEIGHT: 45
+			HEIGHT: 45,
+			COOLDOWN: 0.5
 		}
 	},
 	KillCommand: {
