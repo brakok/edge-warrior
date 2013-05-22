@@ -6,6 +6,7 @@ var assetsHudDir = 'assets/hud/';
 
 var assets = [
 	{type:'image', src: assestsPlaceHolderDir + 'floating_ball.png'},
+	{type:'image', src: assestsPlaceHolderDir + 'ray_ball.png'},
 
 	{type:'image', src: assetsBlockDir + 'block.png'},
 	{type:'image', src: assetsBlockDir + 'block_0.png'},

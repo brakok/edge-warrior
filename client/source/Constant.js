@@ -29,6 +29,8 @@ var Constants = {
 		LAUNCH: 'launch',
 		KILL_COMMAND: 'killCommand',
 		AT_GOAL: 'atGoal',
-		WIN: 'win'
+		WIN: 'win',
+		DELETE_MISSILE: 'deleteMissile',
+		NEW_MISSILE: 'newMissile'
 	}
 };
