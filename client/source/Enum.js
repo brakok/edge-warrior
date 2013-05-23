@@ -52,9 +52,10 @@ var Enum = {
 		PLAYER: 2,
 		OVERLORD: 3
 	},
-	Missile:{
-		Type:{
-			RAYBALL: 0
+	DeathZone: {
+		Type: {
+			RAYBALL: 0,
+			ENERGY_SPIKE: 1
 		}
 	}
 };

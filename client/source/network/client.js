@@ -261,7 +261,19 @@ var Client = new function(){
 	
 	//Add a new missile from the server.
 	this.addDeathZone = function(remoteDeathZone){	
-		this.deathZones[remoteDeathZone.id] = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
+		
+		var deathZone = null;
+		
+		switch(remoteDeathZone.type)
+		{
+			case Enum.DeathZone.Type.RAYBALL:
+				deathZone = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
+				break;
+			case Enum.DeathZone.Type.ENERGY_SPIKE:
+				break;
+		}
+		
+		this.deathZones[remoteDeathZone.id] = deathZone;
 		this.layer.addChild(this.deathZones[remoteDeathZone.id].sprite);
 	};
 	
