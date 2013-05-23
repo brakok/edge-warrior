@@ -354,21 +354,16 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
-		var block = new Block(Game.blockSequence, 
-							  tmpX, 
-							  tmpY, 
-							  this.currentBlock, 
-							  this.color,
-							  this.id);
+		BlockManager.launch(new Block(Game.blockSequence, 
+									  tmpX, 
+									  tmpY, 
+									  this.currentBlock, 
+									  this.color,
+									  this.id));
 		
-		Game.blocks.push(block);
-		block.launch();
-		
-		Game.blockSequence++;		
 		this.hasGivenBlock = false;
 		
-		//Emit the new block to all players and ask for next block of current player.
-		io.sockets.in(Game.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
+		//Ask for next block of current player.
 		io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
 	}
 };

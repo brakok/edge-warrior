@@ -27,7 +27,7 @@ var Missile = function(id, x, y, width, height, stats){
 	//Find good type for association.
 	switch(this.stats.type)
 	{
-		case Enum.Missile.Type.RAYBALL:
+		case Enum.DeathZone.Type.RAYBALL:
 			userDataType = Enum.UserData.Type.RAYBALL;
 			break;
 	}
@@ -66,9 +66,9 @@ Missile.prototype.explode = function(){
 	Game.space.removeShape(this.shape);
 		
 	//Remove from game.
-	for(var i in Game.missiles)
-		if(Game.missiles[i] != null && Game.missiles[i].id == this.id)
-			delete Game.missiles[i];
+	for(var i in Game.deathZones)
+		if(Game.deathZones[i] != null && Game.deathZones[i].id == this.id)
+			delete Game.deathZones[i];
 	
 	var data = {
 		id: this.id
@@ -76,7 +76,7 @@ Missile.prototype.explode = function(){
 	
 	//Send info to client.
 	this.stillExists = false;
-	io.sockets.in(Game.id).emit(Constants.Message.DELETE_MISSILE, data);
+	io.sockets.in(Game.id).emit(Constants.Message.DELETE_DEATHZONE, data);
 };
 
 Missile.prototype.update = function(){

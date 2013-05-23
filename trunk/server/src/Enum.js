@@ -15,7 +15,8 @@ var Enum = {
 			PLAYER: 0,
 			BLOCK: 1,
 			WINNING_GOAL: 2,
-			RAYBALL: 3
+			RAYBALL: 3,
+			ENERGY_SPIKE: 4
 		}
 	},
 	Block: {
@@ -72,9 +73,10 @@ var Enum = {
 			DOUBLE_JUMPING: 4
 		}
 	},
-	Missile: {
+	DeathZone: {
 		Type: {
-			RAYBALL: 0
+			RAYBALL: 0,
+			ENERGY_SPIKE: 1
 		}
 	}
 };
@@ -119,7 +121,7 @@ var Constants = {
 	WinningGoal: {
 		OFFSET_Y: 600,
 		PHASE_TIME: 35,
-		FLOATING_BALL: {
+		FloatingBall: {
 			WIDTH: 90,
 			HEIGHT: 90,
 			SPEED: 1,
@@ -129,12 +131,17 @@ var Constants = {
 			ORBIT_SPEED: 0.05
 		}
 	},
-	Missile: {
-		RAYBALL: {
+	DeathZone: {
+		Rayball: {
 			SPEED: 50,
 			WIDTH: 45,
 			HEIGHT: 45,
 			COOLDOWN: 0.5
+		},
+		EnergySpike: {
+			SPEED: 20,
+			WIDTH: 45,
+			COOLDOWN: 0.75
 		}
 	},
 	KillCommand: {
@@ -160,7 +167,7 @@ var Constants = {
 		KILL_COMMAND: 'killCommand',
 		AT_GOAL: 'atGoal',
 		WIN: 'win',
-		DELETE_MISSILE: 'deleteMissile',
-		NEW_MISSILE: 'newMissile'
+		DELETE_DEATHZONE: 'deleteDeathZone',
+		NEW_DEATHZONE: 'newDeathZone'
 	}
 };
