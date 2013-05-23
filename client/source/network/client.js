@@ -5,7 +5,7 @@ var Client = new function(){
 	this.keys = [];
 	this.enemies = [];
 	this.blocks = [];
-	this.missiles = {};
+	this.deathZones = {};
 	
 	this.player = null;
 	this.currentState = Enum.Game.State.PLAYING;
@@ -125,7 +125,7 @@ var Client = new function(){
 		
 		//Pulling info from server.
 		socket.on(Constants.Message.PULL, function (data){	
-			Client.updateFromServer(data.player, data.enemies, data.blocks, data.goal, data.missiles);
+			Client.updateFromServer(data.player, data.enemies, data.blocks, data.goal, data.deathZones);
 		});
 		
 		//Ask for next block.
@@ -163,14 +163,14 @@ var Client = new function(){
 			Client.electWinner(winner);
 		});
 		
-		//Delete a missile.
-		socket.on(Constants.Message.DELETE_MISSILE, function(data){
-			Client.deleteMissile(data.id);
+		//Delete a death zone.
+		socket.on(Constants.Message.DELETE_DEATHZONE, function(data){
+			Client.deleteDeathZone(data.id);
 		});
 		
-		//Add a missile.
-		socket.on(Constants.Message.NEW_MISSILE, function(data){
-			Client.addMissile(data);
+		//Add a death zone.
+		socket.on(Constants.Message.NEW_DEATHZONE, function(data){
+			Client.addDeathZone(data);
 		});
 		
 		//Once defined, preserved the socket.
@@ -217,7 +217,7 @@ var Client = new function(){
 	};
 	
 	//Update positions from server ones.
-	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal, remoteMissiles){
+	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal, remoteDeathZones){
 		
 		//Update player.
 		this.player.fromServer(remotePlayer);
@@ -234,9 +234,9 @@ var Client = new function(){
 				this.blocks[remoteBlocks[i].id].fromServer(remoteBlocks[i]);
 			
 		//Update missiles.
-		for(var i in remoteMissiles)
-			if(this.missiles[remoteMissiles[i].id] != null)
-				this.missiles[remoteMissiles[i].id].fromServer(remoteMissiles[i]);							
+		for(var i in remoteDeathZones)
+			if(this.deathZones[remoteDeathZones[i].id] != null)
+				this.deathZones[remoteDeathZones[i].id].fromServer(remoteDeathZones[i]);							
 			
 		//Update goal.
 		this.goal.fromServer(remoteGoal);
@@ -260,18 +260,18 @@ var Client = new function(){
 	};
 	
 	//Add a new missile from the server.
-	this.addMissile = function(remoteMissile){
-		this.missiles[remoteMissile.id] = new Missile(remoteMissile.x, remoteMissile.y, remoteMissile.type);
-		this.layer.addChild(this.missiles[remoteMissile.id].sprite);
+	this.addDeathZone = function(remoteDeathZone){	
+		this.deathZones[remoteDeathZone.id] = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
+		this.layer.addChild(this.deathZones[remoteDeathZone.id].sprite);
 	};
 	
 	//Delete a missile.
-	this.deleteMissile = function(remoteMissileId){
+	this.deleteDeathZone = function(remoteDeathZoneId){
 	
-		if(this.missiles[remoteMissileId] != null)
+		if(this.deathZones[remoteDeathZoneId] != null)
 		{
-			this.missiles[remoteMissileId].explode();
-			delete this.missiles[remoteMissileId];
+			this.deathZones[remoteDeathZoneId].explode();
+			delete this.deathZones[remoteDeathZoneId];
 		}
 	};
 	
