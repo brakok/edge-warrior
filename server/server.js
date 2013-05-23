@@ -15,7 +15,8 @@ var Enum = {
 			PLAYER: 0,
 			BLOCK: 1,
 			WINNING_GOAL: 2,
-			RAYBALL: 3
+			RAYBALL: 3,
+			ENERGY_SPIKE: 4
 		}
 	},
 	Block: {
@@ -72,9 +73,10 @@ var Enum = {
 			DOUBLE_JUMPING: 4
 		}
 	},
-	Missile: {
+	DeathZone: {
 		Type: {
-			RAYBALL: 0
+			RAYBALL: 0,
+			ENERGY_SPIKE: 1
 		}
 	}
 };
@@ -119,7 +121,7 @@ var Constants = {
 	WinningGoal: {
 		OFFSET_Y: 600,
 		PHASE_TIME: 35,
-		FLOATING_BALL: {
+		FloatingBall: {
 			WIDTH: 90,
 			HEIGHT: 90,
 			SPEED: 1,
@@ -129,12 +131,17 @@ var Constants = {
 			ORBIT_SPEED: 0.05
 		}
 	},
-	Missile: {
-		RAYBALL: {
+	DeathZone: {
+		Rayball: {
 			SPEED: 50,
 			WIDTH: 45,
 			HEIGHT: 45,
 			COOLDOWN: 0.5
+		},
+		EnergySpike: {
+			SPEED: 20,
+			WIDTH: 45,
+			COOLDOWN: 0.75
 		}
 	},
 	KillCommand: {
@@ -160,8 +167,8 @@ var Constants = {
 		KILL_COMMAND: 'killCommand',
 		AT_GOAL: 'atGoal',
 		WIN: 'win',
-		DELETE_MISSILE: 'deleteMissile',
-		NEW_MISSILE: 'newMissile'
+		DELETE_DEATHZONE: 'deleteDeathZone',
+		NEW_DEATHZONE: 'newDeathZone'
 	}
 };//Mortal things listener.
 var DeathZoneListener = {
@@ -759,21 +766,16 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
-		var block = new Block(Game.blockSequence, 
-							  tmpX, 
-							  tmpY, 
-							  this.currentBlock, 
-							  this.color,
-							  this.id);
+		BlockManager.launch(new Block(Game.blockSequence, 
+									  tmpX, 
+									  tmpY, 
+									  this.currentBlock, 
+									  this.color,
+									  this.id));
 		
-		Game.blocks.push(block);
-		block.launch();
-		
-		Game.blockSequence++;		
 		this.hasGivenBlock = false;
 		
-		//Emit the new block to all players and ask for next block of current player.
-		io.sockets.in(Game.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
+		//Ask for next block of current player.
 		io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
 	}
 };
@@ -1042,9 +1044,9 @@ var Game = {
 	id: 1,
 	players: [],
 	blocks: [],
-	missiles: [],
+	deathZones: [],
 	blockSequence: 0,
-	missileSequence: 0,
+	deathZoneSequence: 0,
 	goal: null,
 	intervalId: null,
 	winner: null,
@@ -1179,9 +1181,9 @@ var Game = {
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(Enum.Block.Type.SPAWN);
 				
-			for(var i in this.missiles)
-				if(this.missiles[i] != null)
-					this.missiles[i].update();
+			for(var i in this.deathZones)
+				if(this.deathZones[i] != null)
+					this.deathZones[i].update();
 			
 			//Reduce winning phase timer when there's a winner.
 			if(this.winner != null)
@@ -1251,17 +1253,17 @@ var Game = {
 				blocks.push(this.blocks[i].toClient());
 		}
 		
-		var missiles = [];
-		for(var i in this.missiles)
-			if(this.missiles[i] != null)
-				missiles.push(this.missiles[i].toClient());
+		var deathZones = [];
+		for(var i in this.deathZones)
+			if(this.deathZones[i] != null)
+				deathZones.push(this.deathZones[i].toClient());
 		
 		return {
 			player: this.players[id].toClient(),
 			enemies: enemies,
 			goal: this.goal.toClient(),
 			blocks: blocks,
-			missiles: missiles
+			deathZones: deathZones
 		};
 	},
 	launch: function(){
@@ -1426,7 +1428,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 });
 
-console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.jumpPressed = false;		this.missileStats = {		speed: Constants.Missile.RAYBALL.SPEED,		direction: Enum.Direction.UP,		type: Enum.Missile.Type.RAYBALL,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FLOATING_BALL.WIDTH, Constants.WinningGoal.FLOATING_BALL.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		var nextX = 0;		if(inputs.right)		nextX += Constants.WinningGoal.FLOATING_BALL.SPEED;	if(inputs.left)		nextX -= Constants.WinningGoal.FLOATING_BALL.SPEED;			if(nextX != 0)	{		//Turn.		if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))			this.velocity *= 0.95;					this.velocity += nextX;	}	else	{		if(this.velocity != 0)		{			//Artificial friction.			if(Math.abs(this.velocity) < Constants.WinningGoal.FLOATING_BALL.SPEED*0.25)				this.velocity = 0;			else				this.velocity *= Constants.WinningGoal.FLOATING_BALL.FRICTION_FACTOR;		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.Missile.RAYBALL.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= Constants.Physic.TIME_STEP*0.5;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FLOATING_BALL.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FLOATING_BALL.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FLOATING_BALL.MAX_SPEED)		this.velocity = Constants.WinningGoal.FLOATING_BALL.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FLOATING_BALL.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FLOATING_BALL.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	var missile = new Missile(Game.missileSequence,						      this.x, 							  0, 							  Constants.Missile.RAYBALL.WIDTH, 							  Constants.Missile.RAYBALL.HEIGHT, 							  this.missileStats);	Game.missileSequence++;	Game.missiles.push(missile);		var data = {		id: missile.id,		type: missile.stats.type,		x: missile.x,		y: missile.y	};		io.sockets.in(Game.id).emit(Constants.Message.NEW_MISSILE, data);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > Game.width - Constants.WinningGoal.FLOATING_BALL.WIDTH*0.5)	{		this.x = Game.width - Constants.WinningGoal.FLOATING_BALL.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FLOATING_BALL.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FLOATING_BALL.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+console.log('Server created');var FloatingBall = function(x, y){	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.jumpPressed = false;		this.missileStats = {		speed: Constants.DeathZone.Rayball.SPEED,		direction: Enum.Direction.UP,		type: Enum.DeathZone.Type.RAYBALL,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		var nextX = 0;		if(inputs.right)		nextX += Constants.WinningGoal.FloatingBall.SPEED;	if(inputs.left)		nextX -= Constants.WinningGoal.FloatingBall.SPEED;			if(nextX != 0)	{		//Turn.		if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))			this.velocity *= 0.95;					this.velocity += nextX;	}	else	{		if(this.velocity != 0)		{			//Artificial friction.			if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)				this.velocity = 0;			else				this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.Rayball.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= Constants.Physic.TIME_STEP*0.5;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	DeathZoneManager.launch(new Missile(Game.deathZoneSequence,									  this.x, 									  0, 									  Constants.DeathZone.Rayball.WIDTH, 									  Constants.DeathZone.Rayball.HEIGHT, 									  this.missileStats));};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > Game.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Game.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
 var Missile = function(id, x, y, width, height, stats){
 	
 	this.stillExists = true;
@@ -1455,7 +1457,7 @@ var Missile = function(id, x, y, width, height, stats){
 	//Find good type for association.
 	switch(this.stats.type)
 	{
-		case Enum.Missile.Type.RAYBALL:
+		case Enum.DeathZone.Type.RAYBALL:
 			userDataType = Enum.UserData.Type.RAYBALL;
 			break;
 	}
@@ -1494,9 +1496,9 @@ Missile.prototype.explode = function(){
 	Game.space.removeShape(this.shape);
 		
 	//Remove from game.
-	for(var i in Game.missiles)
-		if(Game.missiles[i] != null && Game.missiles[i].id == this.id)
-			delete Game.missiles[i];
+	for(var i in Game.deathZones)
+		if(Game.deathZones[i] != null && Game.deathZones[i].id == this.id)
+			delete Game.deathZones[i];
 	
 	var data = {
 		id: this.id
@@ -1504,7 +1506,7 @@ Missile.prototype.explode = function(){
 	
 	//Send info to client.
 	this.stillExists = false;
-	io.sockets.in(Game.id).emit(Constants.Message.DELETE_MISSILE, data);
+	io.sockets.in(Game.id).emit(Constants.Message.DELETE_DEATHZONE, data);
 };
 
 Missile.prototype.update = function(){
@@ -1566,3 +1568,32 @@ Missile.prototype.update = function(){
 	}
 };
 
+
+var DeathZoneManager = {
+	launch: function(deathZone){
+	
+		Game.deathZoneSequence++;
+		Game.deathZones.push(deathZone);
+		
+		var data = {
+			id: deathZone.id,
+			type: deathZone.stats.type,
+			x: deathZone.x,
+			y: deathZone.y
+		};
+		
+		io.sockets.in(Game.id).emit(Constants.Message.NEW_DEATHZONE, data);
+	}
+};
+var BlockManager = {
+	launch: function(block){
+			
+		Game.blocks.push(block);
+		block.launch();
+		
+		Game.blockSequence++;		
+		
+		//Emit the new block to all players.
+		io.sockets.in(Game.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
+	}
+};

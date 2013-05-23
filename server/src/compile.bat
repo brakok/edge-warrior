@@ -1,1 +1,1 @@
-type Enum.js + Listener.js + Player.js + Block.js + Game.js + Overlord.js + Server.js + "winnerGoal\floatingBall.js" + Missile.js > ../server.js
+type Enum.js + Listener.js + Player.js + Block.js + Game.js + Overlord.js + Server.js + "winnerGoal\floatingBall.js" + Missile.js + DeathZoneManager.js + BlockManager.js > ../server.js

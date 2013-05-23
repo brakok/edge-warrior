@@ -3,9 +3,9 @@ var Game = {
 	id: 1,
 	players: [],
 	blocks: [],
-	missiles: [],
+	deathZones: [],
 	blockSequence: 0,
-	missileSequence: 0,
+	deathZoneSequence: 0,
 	goal: null,
 	intervalId: null,
 	winner: null,
@@ -140,9 +140,9 @@ var Game = {
 			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(Enum.Block.Type.SPAWN);
 				
-			for(var i in this.missiles)
-				if(this.missiles[i] != null)
-					this.missiles[i].update();
+			for(var i in this.deathZones)
+				if(this.deathZones[i] != null)
+					this.deathZones[i].update();
 			
 			//Reduce winning phase timer when there's a winner.
 			if(this.winner != null)
@@ -212,17 +212,17 @@ var Game = {
 				blocks.push(this.blocks[i].toClient());
 		}
 		
-		var missiles = [];
-		for(var i in this.missiles)
-			if(this.missiles[i] != null)
-				missiles.push(this.missiles[i].toClient());
+		var deathZones = [];
+		for(var i in this.deathZones)
+			if(this.deathZones[i] != null)
+				deathZones.push(this.deathZones[i].toClient());
 		
 		return {
 			player: this.players[id].toClient(),
 			enemies: enemies,
 			goal: this.goal.toClient(),
 			blocks: blocks,
-			missiles: missiles
+			deathZones: deathZones
 		};
 	},
 	launch: function(){
