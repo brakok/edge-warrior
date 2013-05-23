@@ -5,7 +5,7 @@ var Missile = function(x, y, type){
 	this.type = type
 	
 	switch(this.type){
-		case Enum.Missile.Type.RAYBALL:
+		case Enum.DeathZone.Type.RAYBALL:
 			this.sprite = cc.Sprite.create(assestsPlaceHolderDir + 'ray_ball.png');
 			break;
 	}
