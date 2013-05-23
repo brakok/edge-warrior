@@ -30,7 +30,7 @@ var Constants = {
 		KILL_COMMAND: 'killCommand',
 		AT_GOAL: 'atGoal',
 		WIN: 'win',
-		DELETE_MISSILE: 'deleteMissile',
-		NEW_MISSILE: 'newMissile'
+		DELETE_DEATHZONE: 'deleteDeathZone',
+		NEW_DEATHZONE: 'newDeathZone'
 	}
 };
