@@ -270,6 +270,7 @@ var Client = new function(){
 				deathZone = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
 				break;
 			case Enum.DeathZone.Type.ENERGY_SPIKE:
+				deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
 				break;
 		}
 		
