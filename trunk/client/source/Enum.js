@@ -40,8 +40,7 @@ var Enum = {
 			RUNNING: 1,
 			JUMPING: 2,
 			FALLING: 3,
-			DOUBLE_JUMPING: 4,
-			GOAL_ACTION: 5
+			DOUBLE_JUMPING: 4
 		}
 	},
 	Facing:{

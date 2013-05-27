@@ -40,7 +40,7 @@ var Client = new function(){
 			this.layer.addChild(this.enemies[i].currentAnimation);
 				
 		this.layer.addChild(this.goal.currentAnimation);
-		
+
 		//Set first blocks to the HUD.
 		this.hud.inventory.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), new Block(0,0, this.player.nextBlock, this.player.color));
 		
@@ -274,6 +274,7 @@ var Client = new function(){
 				break;
 		}
 		
+		this.goal.swapAnimation(Enum.Anim.Type.GOAL_ACTION);
 		this.deathZones[remoteDeathZone.id] = deathZone;
 		this.layer.addChild(this.deathZones[remoteDeathZone.id].sprite);
 	};
