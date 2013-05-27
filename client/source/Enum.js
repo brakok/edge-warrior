@@ -30,7 +30,8 @@ var Enum = {
 			IDLE: 0,
 			RUNNING: 1,
 			JUMPING: 2,
-			FALLING: 3
+			FALLING: 3,
+			GOAL_ACTION: 4
 		}
 	},
 	Action: {
@@ -39,7 +40,8 @@ var Enum = {
 			RUNNING: 1,
 			JUMPING: 2,
 			FALLING: 3,
-			DOUBLE_JUMPING: 4
+			DOUBLE_JUMPING: 4,
+			GOAL_ACTION: 5
 		}
 	},
 	Facing:{
