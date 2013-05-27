@@ -139,9 +139,11 @@ var Constants = {
 			COOLDOWN: 0.5
 		},
 		EnergySpike: {
-			SPEED: 20,
-			WIDTH: 45,
-			COOLDOWN: 0.75
+			SPEED: 6,
+			WIDTH: 30,
+			COOLDOWN: 1,
+			IMPULSE_X: 10000,
+			IMPULSE_Y: 300
 		}
 	},
 	KillCommand: {
