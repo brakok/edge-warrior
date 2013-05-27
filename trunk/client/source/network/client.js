@@ -39,7 +39,7 @@ var Client = new function(){
 		for(var i in this.enemies)
 			this.layer.addChild(this.enemies[i].currentAnimation);
 				
-		this.layer.addChild(this.goal.sprite);
+		this.layer.addChild(this.goal.currentAnimation);
 		
 		//Set first blocks to the HUD.
 		this.hud.inventory.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), new Block(0,0, this.player.nextBlock, this.player.color));
