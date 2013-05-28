@@ -2,11 +2,14 @@ var Game = cc.Layer.extend({
 	init: function ()
 	{
 		this._super();
-				
+			
 		//Create color of the layer.
 		var s = cc.Director.getInstance().getWinSize();
 		var playGroundLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 255), s.width, s.height);
 		playGroundLayer.setAnchorPoint(new cc.Point(0.5,0.5));	
+		
+		//Load spritesheets and other graphical stuffs.
+		AnimationManager.init();
 		
 		var hud = HUD.create(s.width, s.height);
 		var endScreen = EndScreen.create(s.width, s.height);

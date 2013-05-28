@@ -8,26 +8,13 @@ var KillCommand = function(offset, y, screenWidth, layer){
 		this.mustAppear = false;
 		this.alphaStep = 255/(Constants.KillCommand.Time.FIRST_STEP - Constants.KillCommand.Time.APPARITION);
 		this.firstStepTimer = 0;
-		
-		//Load plist and animation sheets.
-		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsHudDir + 'killCommand.plist', 
-														  assetsHudDir + 'killCommand.png');
-				
+			
+		//Base frame.
 		this.currentAnimation = cc.Sprite.createWithSpriteFrameName('killCommand.0000.png');
 		this.currentAnimation.setPosition(new cc.Point(this.x, this.y))
 		
-		var toDieFrames = [];
-		var str = "";
-		for (var i = 0; i < 120; i++) {
-		
-			str = "killCommand." + (i < 10 ? ('000' + i) : ( i < 100 ? ('00' + i) : ('0' + i))) + ".png";
-			var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
-			toDieFrames.push(frame);
-		}
-		
-		//Creation of the animation.
-		var animation = cc.Animation.create(toDieFrames, 0.042);
-		this.animToDie = cc.Animate.create(animation);
+		//Animation creation.
+		this.animToDie = AnimationManager.create('killCommand', 0, 120, 24);
 		
 		this.animToDie._animation._loops = 0;
 		this.currentAnimation._opacity = 0;
