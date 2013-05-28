@@ -17,16 +17,6 @@ var Player = function (x, y, color) {
 	
 	var colorText = 'yellow';
 	
-	//Load plist and animation sheets.
-    cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + colorText + '_idle.plist', 
-												      assetsPlayerDir + colorText + '_idle.png');	
-													  
-	cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + colorText + '_running.plist', 
-												      assetsPlayerDir + colorText + '_running.png');
-	
-	cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + colorText + '_jumping.plist', 
-												      assetsPlayerDir + colorText + '_jumping.png');
-	
 	//Set current animation to idle.
 	this.currentAnimationType = Enum.Anim.Type.IDLE;	
 	this.currentAction = Enum.Action.Type.STANDING;
@@ -34,43 +24,11 @@ var Player = function (x, y, color) {
 	//Base frame.
 	this.currentAnimation = cc.Sprite.createWithSpriteFrameName(colorText + '_idle.0000.png');
 	this.currentAnimation.setPosition(new cc.Point(x, y));
-		
-	//Idle.
-	var idleAnimFrames = [];
-	var str = "";
-	for (var i = 0; i < 24; i++) {
-		str = colorText + "_idle." + (i < 10 ? ("000" + i) : ('00' + i)) + ".png";
-		var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
-		idleAnimFrames.push(frame);
-	}
-	
-	//Creation of the idle animation.
-	var animation = cc.Animation.create(idleAnimFrames, 0.042);
-	this.idleAnimation = cc.Animate.create(animation);
-	
-	//Running cycle.
-	var runningAnimFrames = [];
-	for (var i = 24; i < 48; i++) {
-		str = colorText + "_running.00" + i + ".png";
-		var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
-		runningAnimFrames.push(frame);
-	}
-	
-	//Creation of the running cycle.
-	animation = cc.Animation.create(runningAnimFrames, 0.042);
-	this.runningAnimation = cc.Animate.create(animation);
-	
-	//Jumping.
-	var jumpingAnimFrames = [];
-	for (var i = 49; i < 60; i++) {
-		str = colorText + "_jumping.00" + i + ".png";
-		var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);
-		jumpingAnimFrames.push(frame);
-	}
-	
-	//Creation of the jumping animation.
-	animation = cc.Animation.create(jumpingAnimFrames, 0.042);
-	this.jumpingAnimation = cc.Animate.create(animation);
+			
+	//Creation of the animations.
+	this.idleAnimation = AnimationManager.create(colorText + '_idle', 0, 24, 24);
+	this.runningAnimation = AnimationManager.create(colorText + '_running', 24, 48, 24);
+	this.jumpingAnimation = AnimationManager.create(colorText + '_jumping', 49, 60, 24);
 	
 	//Starting animation is idle.
 	this.currentAnimation.runAction(cc.RepeatForever.create(this.idleAnimation));
