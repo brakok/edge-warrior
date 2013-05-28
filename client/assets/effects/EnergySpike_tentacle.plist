@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>EnergySpike.0000.png</key>
+            <key>EnergySpike_tentacle.0000.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,972},{41,786}}</string>
@@ -17,7 +17,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0001.png</key>
+            <key>EnergySpike_tentacle.0001.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,929},{41,786}}</string>
@@ -30,7 +30,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0002.png</key>
+            <key>EnergySpike_tentacle.0002.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,843},{41,788}}</string>
@@ -43,7 +43,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0003.png</key>
+            <key>EnergySpike_tentacle.0003.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{786,2},{41,788}}</string>
@@ -56,7 +56,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0004.png</key>
+            <key>EnergySpike_tentacle.0004.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{743,2},{41,788}}</string>
@@ -69,7 +69,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0005.png</key>
+            <key>EnergySpike_tentacle.0005.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{700,2},{41,788}}</string>
@@ -82,7 +82,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0006.png</key>
+            <key>EnergySpike_tentacle.0006.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{657,2},{41,788}}</string>
@@ -95,7 +95,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0007.png</key>
+            <key>EnergySpike_tentacle.0007.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{526,2},{43,788}}</string>
@@ -108,7 +108,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0008.png</key>
+            <key>EnergySpike_tentacle.0008.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,796},{45,788}}</string>
@@ -121,7 +121,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0009.png</key>
+            <key>EnergySpike_tentacle.0009.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{481,2},{43,788}}</string>
@@ -134,7 +134,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0010.png</key>
+            <key>EnergySpike_tentacle.0010.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{438,2},{41,790}}</string>
@@ -147,7 +147,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0011.png</key>
+            <key>EnergySpike_tentacle.0011.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{395,2},{41,790}}</string>
@@ -160,7 +160,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0012.png</key>
+            <key>EnergySpike_tentacle.0012.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{352,2},{41,790}}</string>
@@ -173,7 +173,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0013.png</key>
+            <key>EnergySpike_tentacle.0013.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{309,2},{41,790}}</string>
@@ -186,7 +186,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0014.png</key>
+            <key>EnergySpike_tentacle.0014.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{180,2},{41,792}}</string>
@@ -199,7 +199,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0015.png</key>
+            <key>EnergySpike_tentacle.0015.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{137,2},{41,792}}</string>
@@ -212,7 +212,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0016.png</key>
+            <key>EnergySpike_tentacle.0016.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{92,2},{43,792}}</string>
@@ -225,7 +225,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0017.png</key>
+            <key>EnergySpike_tentacle.0017.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{47,2},{43,792}}</string>
@@ -238,7 +238,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0018.png</key>
+            <key>EnergySpike_tentacle.0018.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,2},{43,792}}</string>
@@ -251,7 +251,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0019.png</key>
+            <key>EnergySpike_tentacle.0019.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{266,2},{41,790}}</string>
@@ -264,7 +264,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0020.png</key>
+            <key>EnergySpike_tentacle.0020.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{223,2},{41,790}}</string>
@@ -277,7 +277,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0021.png</key>
+            <key>EnergySpike_tentacle.0021.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{614,2},{41,788}}</string>
@@ -290,7 +290,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0022.png</key>
+            <key>EnergySpike_tentacle.0022.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,886},{41,786}}</string>
@@ -303,7 +303,7 @@
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
-            <key>EnergySpike.0023.png</key>
+            <key>EnergySpike_tentacle.0023.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{571,2},{41,788}}</string>
@@ -322,13 +322,13 @@
             <key>format</key>
             <integer>2</integer>
             <key>realTextureFileName</key>
-            <string>energySpike.png</string>
+            <string>EnergySpike_tentacle.png</string>
             <key>size</key>
             <string>{1024,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:ceccc3dcc95e1d43776f60eb6ee8c40d$</string>
+            <string>$TexturePacker:SmartUpdate:dddea66cd8b981873000652549b6b33d$</string>
             <key>textureFileName</key>
-            <string>energySpike.png</string>
+            <string>EnergySpike_tentacle.png</string>
         </dict>
     </dict>
 </plist>
