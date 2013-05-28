@@ -14,6 +14,11 @@ var Constants = {
 			FIRST_STEP: 5
 		}		
 	},
+	DeathZone: {
+		EnergySpike: {
+			HEIGHT: 800
+		}
+	},
 	Message:{
 		NEXT_BLOCK: 'nextBlock',
 		NEW_BLOCK: 'newBlock',
