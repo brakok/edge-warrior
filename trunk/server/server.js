@@ -1587,7 +1587,7 @@ var DeathZoneManager = {
 		};
 		
 		//Insert specific custom data.
-		switch(deathZone.type){
+		switch(deathZone.stats.type){
 			case Enum.DeathZone.Type.ENERGY_SPIKE:
 				data.finalX = deathZone.finalX;
 				data.finalY = deathZone.finalY;
