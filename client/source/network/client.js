@@ -276,7 +276,11 @@ var Client = new function(){
 		
 		this.goal.swapAnimation(Enum.Anim.Type.GOAL_ACTION);
 		this.deathZones[remoteDeathZone.id] = deathZone;
-		this.layer.addChild(this.deathZones[remoteDeathZone.id].sprite);
+		
+		if(this.deathZones[remoteDeathZone.id].currentAnimation != null)
+			this.layer.addChild(this.deathZones[remoteDeathZone.id].currentAnimation);
+		else
+			this.layer.addChild(this.deathZones[remoteDeathZone.id].sprite);
 	};
 	
 	//Delete a missile.

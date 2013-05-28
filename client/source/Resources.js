@@ -3,17 +3,18 @@ var assestsPlaceHolderDir = 'placeholders/';
 var assetsBlockDir = 'assets/blocks/';
 var assetsPlayerDir = 'assets/players/';
 var assetsHudDir = 'assets/hud/';
-var assetsWinningGoal = 'assets/winningGoal/';
+var assetsWinningGoalDir = 'assets/winningGoal/';
+var assetsEffectDir = 'assets/effects/';
 
 var assets = [
 
-	{type:'image', src: assestsPlaceHolderDir + 'ray_ball.png'},
-	{type:'image', src: assestsPlaceHolderDir + 'energy_spike.png'},
+	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
+	{type:"plist", src: assetsEffectDir + 'EnergySpike_tentacle.plist'},
 
-	{type:'image', src: assetsWinningGoal + 'floatingBall_idle.png'},
-	{type:'image', src: assetsWinningGoal + 'floatingBall_action.png'},
-	{type:"plist", src: assetsWinningGoal + 'floatingBall_idle.plist'},
-	{type:"plist", src: assetsWinningGoal + 'floatingBall_action.plist'},
+	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},
+	{type:'image', src: assetsWinningGoalDir + 'floatingBall_action.png'},
+	{type:"plist", src: assetsWinningGoalDir + 'floatingBall_idle.plist'},
+	{type:"plist", src: assetsWinningGoalDir + 'floatingBall_action.plist'},
 	
 	{type:'image', src: assetsBlockDir + 'block.png'},
 	{type:'image', src: assetsBlockDir + 'block_0.png'},
