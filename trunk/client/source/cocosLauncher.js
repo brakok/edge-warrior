@@ -20,6 +20,7 @@
 				  'source/gameScene.js',
 				  'source/Resources.js',
 				  'source/inventory.js',
+				  'source/animationManager.js',
 				  'source/killCommand.js',
 				  'source/missile.js',
 				  'source/spike.js',
