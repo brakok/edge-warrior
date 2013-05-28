@@ -158,6 +158,10 @@ var Client = new function(){
 			Client.end(data);
 		});
 		
+		socket.on(Constants.Message.GOAL_ACTION, function(actionType){
+			Client.goal.execute(actionType);
+		});
+		
 		//When a player touches the goal.
 		socket.on(Constants.Message.AT_GOAL, function(winner){
 			Client.electWinner(winner);
