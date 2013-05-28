@@ -267,14 +267,14 @@ var Client = new function(){
 	this.addDeathZone = function(remoteDeathZone){	
 		
 		var deathZone = null;
-		
+
 		switch(remoteDeathZone.type)
 		{
 			case Enum.DeathZone.Type.RAYBALL:
 				deathZone = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
 				break;
 			case Enum.DeathZone.Type.ENERGY_SPIKE:
-				deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
+				deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.finalX, remoteDeathZone.finalY);
 				break;
 		}
 		

@@ -1,8 +1,11 @@
 
-var Spike = function(x, y, type){
+var Spike = function(x, y, type, finalX, finalY){
 	this.x = x;
 	this.y = y;
 	this.type = type
+	
+	this.finalX = finalX;
+	this.finalY = finalY;
 	
 	this.currentAnimationType = Enum.Anim.Type.IDLE;
 	
@@ -20,6 +23,13 @@ var Spike = function(x, y, type){
 			this.currentAnimation.runAction(cc.RepeatForever.create(this.tentacleAnimation));
 			break;
 	}
+
+	var distance = Math.abs(y - finalY);
+	
+	//Resize to good scale.
+	var factor = Constants.DeathZone.EnergySpike.HEIGHT/distance;
+	console.log(distance + ' ' + Constants.DeathZone.EnergySpike.HEIGHT);
+	this.currentAnimation.setScaleY(1/factor);
 	
 	this.currentAnimation.setPosition(new cc.Point(this.x, this.y));	
 	this.currentAnimation._zOrder = 998;
