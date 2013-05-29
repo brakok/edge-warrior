@@ -8,8 +8,11 @@ var assetsEffectDir = 'assets/effects/';
 
 var assets = [
 
+	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
+	{type:'image', src: assetsEffectDir + 'EnergySpike_twisted.png'},
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_tentacle.plist'},
+	{type:"plist", src: assetsEffectDir + 'EnergySpike_twisted.plist'},
 
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_action.png'},
