@@ -79,6 +79,11 @@ var Enum = {
 			RAYBALL: 0,
 			ENERGY_SPIKE: 1
 		}
+	},
+	WinningGoal: {
+		Type: {
+			FLOATING_BALL: 1
+		}
 	}
 };
 
@@ -120,8 +125,8 @@ var Constants = {
 	},
 	
 	WinningGoal: {
-		OFFSET_Y: 600,
-		PHASE_TIME: 35,
+		OFFSET_Y: 100,
+		PHASE_TIME: 8,
 		FloatingBall: {
 			WIDTH: 90,
 			HEIGHT: 90,

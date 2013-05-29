@@ -56,7 +56,16 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 			Game.launch();
 		
 			console.log('Game launching!');
-			io.sockets.in(Game.id).emit(Constants.Message.LAUNCH, Game.goal.toClient());
+			
+			var data = {
+				goal: Game.goal.toClient(),
+				width: Game.width,
+				height: Game.height
+			};
+			
+			data.goal.type = Game.goal.type;
+			
+			io.sockets.in(Game.id).emit(Constants.Message.LAUNCH, data);
 			
 			Game.ready = true;
 		}
