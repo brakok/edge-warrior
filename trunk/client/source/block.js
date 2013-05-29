@@ -7,17 +7,24 @@ var Block = function (x, y, type, color) {
 	this.color = color;
 	
 	//Create sprite associated.
-	if(type == Enum.Block.Type.COLORED && color != null)
-		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + color + '.png');
-	else if(type == Enum.Block.Type.SPAWN)
+	if(this.type == Enum.Block.Type.COLORED && this.color != null)
+		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + this.color + '.png');
+	else if(this.type == Enum.Block.Type.SPAWN)
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_spawn.png');
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
 	
-	this.sprite.setPosition(new cc.Point(x, y));	
+	this.sprite.setPosition(new cc.Point(this.x, this.y));
 }
 
+Block.prototype.init = function(){
+	Client.layer.addChild(this.sprite);
+};
+
 Block.prototype.setPosition = function(x, y){
+	this.x = x;
+	this.y = y;
+	
 	this.sprite.setPosition(new cc.Point(x, y));
 };
 
@@ -36,8 +43,6 @@ Block.prototype.explode = function(cause){
 //Update block information from server.
 Block.prototype.fromServer = function(data){
 
-	this.x = data.x;
-	this.y = data.y;
 	this.type = data.type;
 	
 	//If color has changed, swap color.

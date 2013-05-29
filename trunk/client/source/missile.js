@@ -3,7 +3,11 @@ var Missile = function(x, y, type){
 	this.x = x;
 	this.y = y;
 	this.type = type
-	
+	this.init();	
+};
+
+Missile.prototype.init = function(){
+
 	switch(this.type){
 		case Enum.DeathZone.Type.RAYBALL:
 			this.sprite = cc.Sprite.create(assestsPlaceHolderDir + 'ray_ball.png');
@@ -12,6 +16,8 @@ var Missile = function(x, y, type){
 	
 	this.sprite.setPosition(new cc.Point(this.x, this.y));	
 	this.sprite._zOrder = 999;
+	
+	Client.layer.addChild(this.sprite);
 };
 
 Missile.prototype.fromServer = function(remoteMissile){

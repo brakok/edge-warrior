@@ -34,15 +34,16 @@ var Client = new function(){
 	//Add elements on layer.
 	this.initLayers = function(){
 	
-		this.layer.addChild(this.player.currentAnimation);
+		this.player.init();
 		
 		for(var i in this.enemies)
-			this.layer.addChild(this.enemies[i].currentAnimation);
+			this.enemies[i].init();
 				
-		this.layer.addChild(this.goal.currentAnimation);
+		this.goal.init();
 
 		//Set first blocks to the HUD.
-		this.hud.inventory.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), new Block(0,0, this.player.nextBlock, this.player.color));
+		this.hud.inventory.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), 
+									 new Block(0,0, this.player.nextBlock, this.player.color));
 		
 		this.ready = true;
 	};
@@ -260,7 +261,7 @@ var Client = new function(){
 	//Add a new block from the server.
 	this.addBlock = function(remoteBlock){
 		this.blocks[remoteBlock.id] = new Block(remoteBlock.x, remoteBlock.y, remoteBlock.type, remoteBlock.color);
-		this.layer.addChild(this.blocks[remoteBlock.id].sprite);
+		this.blocks[remoteBlock.id].init();
 	};
 	
 	//Add a new missile from the server.
@@ -275,19 +276,11 @@ var Client = new function(){
 				break;
 			case Enum.DeathZone.Type.ENERGY_SPIKE:
 				deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.finalX, remoteDeathZone.finalY);
-				
-				//Add light ball.
-				this.layer.addChild(deathZone.lightBall);
 				break;
 		}
 		
 		this.goal.swapAnimation(Enum.Anim.Type.GOAL_ACTION);
 		this.deathZones[remoteDeathZone.id] = deathZone;
-		
-		if(this.deathZones[remoteDeathZone.id].currentAnimation != null)
-			this.layer.addChild(this.deathZones[remoteDeathZone.id].currentAnimation);
-		else
-			this.layer.addChild(this.deathZones[remoteDeathZone.id].sprite);
 	};
 	
 	//Delete a missile.

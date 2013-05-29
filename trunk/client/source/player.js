@@ -12,26 +12,6 @@ var Player = function (x, y, color) {
 		option1: null,
 		option2: null
 	};
-	
-	this.facing = Enum.Facing.LEFT;
-	
-	var colorText = 'yellow';
-	
-	//Set current animation to idle.
-	this.currentAnimationType = Enum.Anim.Type.IDLE;	
-	this.currentAction = Enum.Action.Type.STANDING;
-	
-	//Base frame.
-	this.currentAnimation = cc.Sprite.createWithSpriteFrameName(colorText + '_idle.0000.png');
-	this.currentAnimation.setPosition(new cc.Point(x, y));
-			
-	//Creation of the animations.
-	this.idleAnimation = AnimationManager.create(colorText + '_idle', 0, 24, 24);
-	this.runningAnimation = AnimationManager.create(colorText + '_running', 24, 48, 24);
-	this.jumpingAnimation = AnimationManager.create(colorText + '_jumping', 49, 60, 24);
-	
-	//Starting animation is idle.
-	this.currentAnimation.runAction(cc.RepeatForever.create(this.idleAnimation));
 }
 
 //Change percent on a specific option. Negative percent lowers actual one.
@@ -86,6 +66,30 @@ Player.prototype.pushNextBlock = function(){
 
 	//Push the new block to the HUD.
 	Client.hud.inventory.pushBlock(new Block(0,0,this.nextBlock, this.color));
+};
+
+Player.prototype.init = function(){
+
+	this.facing = Enum.Facing.LEFT;
+	
+	var colorText = 'yellow';
+	
+	//Set current animation to idle.
+	this.currentAnimationType = Enum.Anim.Type.IDLE;	
+	this.currentAction = Enum.Action.Type.STANDING;
+
+	//Base frame.
+	this.currentAnimation = cc.Sprite.createWithSpriteFrameName(colorText + '_idle.0000.png');
+	this.currentAnimation.setPosition(new cc.Point(this.x, this.y));
+			
+	//Creation of the animations.
+	this.idleAnimation = AnimationManager.create(colorText + '_idle', 0, 24, 24);
+	this.runningAnimation = AnimationManager.create(colorText + '_running', 24, 48, 24);
+	this.jumpingAnimation = AnimationManager.create(colorText + '_jumping', 49, 60, 24);
+	
+	//Starting animation is idle.
+	this.currentAnimation.runAction(cc.RepeatForever.create(this.idleAnimation));
+	Client.layer.addChild(this.currentAnimation);
 };
 
 Player.prototype.getPosition = function(){
