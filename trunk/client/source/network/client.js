@@ -275,6 +275,9 @@ var Client = new function(){
 				break;
 			case Enum.DeathZone.Type.ENERGY_SPIKE:
 				deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.finalX, remoteDeathZone.finalY);
+				
+				//Add light ball.
+				this.layer.addChild(deathZone.lightBall);
 				break;
 		}
 		
