@@ -140,7 +140,7 @@ var Constants = {
 			COOLDOWN: 0.5
 		},
 		EnergySpike: {
-			SPEED: 6,
+			SPEED: 4,
 			WIDTH: 30,
 			COOLDOWN: 1,
 			IMPULSE_X: 10000,
