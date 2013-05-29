@@ -8,6 +8,9 @@ var assetsEffectDir = 'assets/effects/';
 
 var assets = [
 
+	{type:'image', src: assestsPlaceHolderDir + 'wall.png'},
+	{type:'image', src: assestsPlaceHolderDir + 'floor.png'},
+
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_twisted.png'},
