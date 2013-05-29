@@ -32,8 +32,32 @@ var Client = new function(){
 	};
 	
 	//Add elements on layer.
-	this.initLayers = function(){
+	this.initLayers = function(width, height){
 	
+		this.width = width;
+		this.height = height;
+		
+		//Create walls and floor.
+		this.floor = cc.Sprite.create(assestsPlaceHolderDir + 'floor.png');
+		this.leftWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
+		this.rightWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
+		
+		//Scale.
+		this.floor.setScaleX(this.width/100);
+		this.leftWall.setScale(3, this.height/50);
+		this.rightWall.setScale(3, this.height/50);
+		
+		//Position.
+		this.floor.setPosition(new cc.Point(this.width*0.5, -40));
+		this.leftWall.setPosition(new cc.Point(-150, this.height*0.5));
+		this.rightWall.setPosition(new cc.Point(this.width+150, this.height*0.5));
+		
+		//Add walls and floor.
+		this.layer.addChild(this.leftWall);
+		this.layer.addChild(this.rightWall);
+		this.layer.addChild(this.floor);
+	
+		//Init dynamic elements.
 		this.player.init();
 		
 		for(var i in this.enemies)
@@ -101,14 +125,19 @@ var Client = new function(){
 										   data.color));
 		});
 		
-		socket.on(Constants.Message.LAUNCH, function(goalData){
+		socket.on(Constants.Message.LAUNCH, function(data){
 			console.log('Launching!');
 			
 			//Add goal.
-			Client.goal = new FloatingBall(goalData.x, goalData.y);
+			switch(data.goal.type)
+			{
+				case Enum.WinningGoal.Type.FLOATING_BALL:
+					Client.goal = new FloatingBall(data.goal.x, data.goal.y);
+					break;
+			}
 			
 			//Add received elements to the layer (render).
-			Client.initLayers();
+			Client.initLayers(data.width, data.height);
 			
 			//Lower neutral by quantity of enemies.
 			Client.player.changePercent(Enum.Block.Type.NEUTRAL, -Constants.Block.Percent.LOST_FOREACH_ENEMY*Client.enemies.length);

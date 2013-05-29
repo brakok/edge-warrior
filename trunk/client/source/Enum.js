@@ -59,5 +59,10 @@ var Enum = {
 			RAYBALL: 0,
 			ENERGY_SPIKE: 1
 		}
+	},
+	WinningGoal: {
+		Type: {
+			FLOATING_BALL: 1
+		}
 	}
 };
