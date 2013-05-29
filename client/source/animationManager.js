@@ -12,6 +12,8 @@ var AnimationManager = {
 		//Energy spike.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'EnergySpike_tentacle.plist', 
 														  assetsEffectDir + 'EnergySpike_tentacle.png');
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'EnergySpike_twisted.plist', 
+														  assetsEffectDir + 'EnergySpike_twisted.png');
 															  
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
