@@ -14,7 +14,7 @@ var Block = function (x, y, type, color) {
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
 	
-	this.sprite.setPosition(new cc.Point(this.x, this.y));
+	this.setPosition(this.x, this.y);
 }
 
 Block.prototype.init = function(){
@@ -25,7 +25,7 @@ Block.prototype.setPosition = function(x, y){
 	this.x = x;
 	this.y = y;
 	
-	this.sprite.setPosition(new cc.Point(x, y));
+	Client.camera.project(this.sprite, this.x, this.y);
 };
 
 Block.prototype.swapColor = function(color){
@@ -34,6 +34,7 @@ Block.prototype.swapColor = function(color){
 	Client.layer.addChild(this.sprite);
 	
 	this.color = color;
+	this.setPosition(this.x, this.y);
 };
 
 Block.prototype.explode = function(cause){

@@ -15,7 +15,7 @@ var Game = cc.Layer.extend({
 		var endScreen = EndScreen.create(s.width, s.height);
 		
 		//Init world.
-		Client.init(playGroundLayer, hud, endScreen);
+		Client.init(s.width, s.height, playGroundLayer, hud, endScreen);
 		
 		//Set the game layer (middle ground).
 		this.addChild(playGroundLayer);
