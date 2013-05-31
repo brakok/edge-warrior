@@ -53,7 +53,9 @@ Spike.prototype.init = function(){
 			
 			//Resize to good scale.
 			var factor = Constants.DeathZone.EnergySpike.HEIGHT/distance;
-			this.currentAnimation.setScaleY(1/factor);
+			this.ratioY = 1/factor;
+			
+			this.currentAnimation.setScaleY(this.ratioY);
 			this.currentAnimation.runAction(cc.RepeatForever.create(this.tentacleAnimation));
 			
 			Client.layer.addChild(this.lightBall);
@@ -89,7 +91,7 @@ Spike.prototype.setPosition = function(x, y){
 	this.x = x;
 	this.y = y;
 	
-	Client.camera.project(this.currentAnimation, this.x, this.y);
+	Client.camera.project(this.currentAnimation, this.x, this.y, 1, this.ratioY);
 };
 
 Spike.prototype.fromServer = function(remoteSpike){
