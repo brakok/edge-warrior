@@ -52,6 +52,10 @@ var Client = new function(){
 		this.leftWall.setPosition(new cc.Point(-150, this.height*0.5));
 		this.rightWall.setPosition(new cc.Point(this.width+150, this.height*0.5));
 		
+		this.floor._zOrder = 50;
+		this.leftWall._zOrder = 45;
+		this.rightWall._zOrder = 45;
+		
 		//Add walls and floor.
 		this.layer.addChild(this.leftWall);
 		this.layer.addChild(this.rightWall);
