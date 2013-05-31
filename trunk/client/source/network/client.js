@@ -43,31 +43,8 @@ var Client = new function(){
 		};
 		
 		//Create camera.
-		this.camera = new Camera(this.width*0.5, this.height*0.5, this.mapSize.width, this.mapSize.height, 1);
-		
-		//Create walls and floor.
-		this.floor = cc.Sprite.create(assestsPlaceHolderDir + 'floor.png');
-		this.leftWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
-		this.rightWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
-		
-		//Scale.
-		this.floor.setScaleX(this.width/50);
-		this.leftWall.setScale(3, this.height/50);
-		this.rightWall.setScale(3, this.height/50);
-		
-		//Position.
-		this.camera.project(this.floor, this.width*0.5, -40);
-		this.camera.project(this.leftWall, -150, this.height*0.5);
-		this.camera.project(this.rightWall, this.width+150, this.height*0.5);
-		
-		this.floor._zOrder = 50;
-		this.leftWall._zOrder = 45;
-		this.rightWall._zOrder = 45;
-		
-		//Add walls and floor.
-		this.layer.addChild(this.leftWall);
-		this.layer.addChild(this.rightWall);
-		this.layer.addChild(this.floor);
+		this.camera = new Camera(this.width*0.5-(this.width*0.5-this.mapSize.width*0.5), this.height*0.5, this.width, this.height, 1);
+		this.projectWorld();
 	
 		//Init dynamic elements.
 		this.player.init();
@@ -262,12 +239,40 @@ var Client = new function(){
 					this.enemies[i].die();
 	};
 	
+	this.projectWorld = function(){
+	
+		if(this.floor == null)
+		{
+			//Create walls and floor.
+			this.floor = cc.Sprite.create(assestsPlaceHolderDir + 'floor.png');
+			this.leftWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
+			this.rightWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
+									
+			this.floor._zOrder = 50;
+			this.leftWall._zOrder = 45;
+			this.rightWall._zOrder = 45;
+			
+			//Add walls and floor.
+			this.layer.addChild(this.leftWall);
+			this.layer.addChild(this.rightWall);
+			this.layer.addChild(this.floor);
+		}
+	
+		this.camera.project(this.floor, this.mapSize.width*0.5, -40, this.width/50, 1);
+		this.camera.project(this.leftWall, -150, this.mapSize.height*0.5, 3, this.height/50);
+		this.camera.project(this.rightWall, this.mapSize.width+150, this.mapSize.height*0.5, 3, this.height/50);
+	};
+	
 	//Update positions from server ones.
 	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal, remoteDeathZones){
 		
+		//Position.
+		this.projectWorld();
+		//this.camera.lookAt(remotePlayer.x, remotePlayer.y);
+		
 		//Update player.
 		this.player.fromServer(remotePlayer);
-		
+
 		//Update enemies.
 		for(var i in this.enemies)
 			for(var j in remoteEnemies)
