@@ -10,12 +10,13 @@ var Spike = function(x, y, type, finalX, finalY){
 	this.finalX = finalX;
 	this.finalY = finalY;
 	
+	this.currentAnimationType = Enum.Anim.Type.IDLE;
+	
+	//Call init immeditately to add to the layer.
 	this.init();
 };
 
 Spike.prototype.init = function(){
-
-	this.currentAnimationType = Enum.Anim.Type.IDLE;
 
 	switch(this.type){
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
@@ -23,7 +24,6 @@ Spike.prototype.init = function(){
 			//Base frame.
 			this.currentAnimation = cc.Sprite.createWithSpriteFrameName('EnergySpike_tentacle.0000.png');
 			this.currentAnimation.setPosition(new cc.Point(this.x, this.y));
-			this.currentAnimation._zOrder = 997;
 			
 			//Animations.
 			this.tentacleAnimation = AnimationManager.create('EnergySpike_tentacle', 0, 24, 24);
@@ -49,7 +49,7 @@ Spike.prototype.init = function(){
 					orbitTime = 0;
 			});
 			
-			this.lightBall._zOrder = 998;
+			this.lightBall._zOrder = 41;
 			
 			//Resize to good scale.
 			var factor = Constants.DeathZone.EnergySpike.HEIGHT/distance;
@@ -61,7 +61,7 @@ Spike.prototype.init = function(){
 	}
 
 	this.currentAnimation.setPosition(new cc.Point(this.x, this.y));	
-	this.currentAnimation._zOrder = 997;
+	this.currentAnimation._zOrder = 40;
 
 	Client.layer.addChild(this.currentAnimation);
 };

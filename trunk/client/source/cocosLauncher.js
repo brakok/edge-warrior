@@ -23,6 +23,7 @@
 				  'source/animationManager.js',
 				  'source/killCommand.js',
 				  'source/missile.js',
+				  'source/camera.js',
 				  'source/spike.js',
 				  'source/hud.js',
 				  'source/endScreen.js']
