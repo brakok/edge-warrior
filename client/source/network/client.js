@@ -267,8 +267,8 @@ var Client = new function(){
 	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal, remoteDeathZones){
 		
 		//Position.
-		this.projectWorld();
 		//this.camera.lookAt(remotePlayer.x, remotePlayer.y);
+		this.projectWorld();
 		
 		//Update player.
 		this.player.fromServer(remotePlayer);
