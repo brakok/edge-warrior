@@ -19,7 +19,10 @@ var Client = new function(){
 	this.keys[cc.KEY.q] = false;
 	
 	//Initialize the game client.
-	this.init = function (layer, hud, endScreen) {
+	this.init = function (width, height, layer, hud, endScreen) {
+	
+		this.width = width;
+		this.height = height;
 	
 		this.layer = layer;
 		this.hud = hud;
@@ -32,10 +35,15 @@ var Client = new function(){
 	};
 	
 	//Add elements on layer.
-	this.initLayers = function(width, height){
+	this.initLayers = function(mapWidth, mapHeight){
 	
-		this.width = width;
-		this.height = height;
+		this.mapSize = {
+			width: mapWidth,
+			height: mapHeight
+		};
+		
+		//Create camera.
+		this.camera = new Camera(this.width*0.5, this.height*0.5, this.mapSize.width, this.mapSize.height, 1);
 		
 		//Create walls and floor.
 		this.floor = cc.Sprite.create(assestsPlaceHolderDir + 'floor.png');
@@ -43,14 +51,14 @@ var Client = new function(){
 		this.rightWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
 		
 		//Scale.
-		this.floor.setScaleX(this.width/100);
+		this.floor.setScaleX(this.width/50);
 		this.leftWall.setScale(3, this.height/50);
 		this.rightWall.setScale(3, this.height/50);
 		
 		//Position.
-		this.floor.setPosition(new cc.Point(this.width*0.5, -40));
-		this.leftWall.setPosition(new cc.Point(-150, this.height*0.5));
-		this.rightWall.setPosition(new cc.Point(this.width+150, this.height*0.5));
+		this.camera.project(this.floor, this.width*0.5, -40);
+		this.camera.project(this.leftWall, -150, this.height*0.5);
+		this.camera.project(this.rightWall, this.width+150, this.height*0.5);
 		
 		this.floor._zOrder = 50;
 		this.leftWall._zOrder = 45;

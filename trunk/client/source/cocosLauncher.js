@@ -13,6 +13,7 @@
 				  'source/Enum.js',
 				  'source/network/socket.io.js',
 				  'source/blockOption.js',
+				  'source/camera.js',
 				  'source/network/client.js',
 				  'source/block.js',
 				  'source/player.js',
@@ -23,7 +24,6 @@
 				  'source/animationManager.js',
 				  'source/killCommand.js',
 				  'source/missile.js',
-				  'source/camera.js',
 				  'source/spike.js',
 				  'source/hud.js',
 				  'source/endScreen.js']

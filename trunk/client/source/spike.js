@@ -23,8 +23,7 @@ Spike.prototype.init = function(){
 		
 			//Base frame.
 			this.currentAnimation = cc.Sprite.createWithSpriteFrameName('EnergySpike_tentacle.0000.png');
-			this.currentAnimation.setPosition(new cc.Point(this.x, this.y));
-			
+
 			//Animations.
 			this.tentacleAnimation = AnimationManager.create('EnergySpike_tentacle', 0, 24, 24);
 			this.twistedAnimation = AnimationManager.create('EnergySpike_twisted', 0, 24, 24);
@@ -33,7 +32,7 @@ Spike.prototype.init = function(){
 			
 			//Creation of a floating light ball seeked by the shadow tentacle.
 			this.lightBall = cc.Sprite.create(assetsEffectDir + 'lightBall.png');
-			this.lightBall.setPosition(new cc.Point(this.finalX, this.finalY + distance*0.5));
+			Client.camera.project(this.lightBall, this.finalX, this.finalY + distance*0.5);
 			
 			//Create some movement for the floating light ball.
 			var orbitTime = 0;
@@ -42,7 +41,8 @@ Spike.prototype.init = function(){
 			
 			this.lightBall.schedule(function(dt){
 				var tmpY = finalY + distance*0.5 + (Math.sin(orbitTime)*Constants.DeathZone.EnergySpike.LIGHTBALL_ORBIT_RADIUS);
-				this.setPosition(new cc.Point(finalX, tmpY));
+				Client.camera.project(this, finalX, tmpY);
+				
 				orbitTime += dt*Constants.DeathZone.EnergySpike.LIGHTBALL_ORBIT_SPEED;
 				
 				if(orbitTime > 360)
@@ -60,7 +60,7 @@ Spike.prototype.init = function(){
 			break;
 	}
 
-	this.currentAnimation.setPosition(new cc.Point(this.x, this.y));	
+	this.setPosition(this.x, this.y);	
 	this.currentAnimation._zOrder = 40;
 
 	Client.layer.addChild(this.currentAnimation);
@@ -85,12 +85,16 @@ Spike.prototype.endProcess = function(){
 	this.isTransformed = true;
 };
 
+Spike.prototype.setPosition = function(x, y){
+	this.x = x;
+	this.y = y;
+	
+	Client.camera.project(this.currentAnimation, this.x, this.y);
+};
+
 Spike.prototype.fromServer = function(remoteSpike){
 
-	this.x = remoteSpike.x;
-	this.y = remoteSpike.y;
-	
-	this.currentAnimation.setPosition(new cc.Point(this.x, this.y));
+	this.setPosition(remoteSpike.x, remoteSpike.y);
 	
 	//Activate final process if needed.
 	if(this.y == this.finalY && !this.isTransformed)

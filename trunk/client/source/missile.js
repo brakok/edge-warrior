@@ -14,18 +14,21 @@ Missile.prototype.init = function(){
 			break;
 	}
 	
-	this.sprite.setPosition(new cc.Point(this.x, this.y));	
-	this.sprite._zOrder = 999;
+	this.setPosition(this.x, this.y);	
+	this.sprite._zOrder = 40;
 	
 	Client.layer.addChild(this.sprite);
 };
 
-Missile.prototype.fromServer = function(remoteMissile){
-
-	this.x = remoteMissile.x;
-	this.y = remoteMissile.y;
+Missile.prototype.setPosition = function(x, y){
+	this.x = x;
+	this.y = y;
 	
-	this.sprite.setPosition(new cc.Point(this.x, this.y));
+	Client.camera.project(this.sprite, this.x, this.y);
+};
+
+Missile.prototype.fromServer = function(remoteMissile){	
+	this.setPosition(remoteMissile.x, remoteMissile.y);
 };
 
 Missile.prototype.explode = function(){

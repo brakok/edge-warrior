@@ -80,7 +80,7 @@ Player.prototype.init = function(){
 
 	//Base frame.
 	this.currentAnimation = cc.Sprite.createWithSpriteFrameName(colorText + '_idle.0000.png');
-	this.currentAnimation.setPosition(new cc.Point(this.x, this.y));
+	this.setPosition(this.x, this.y);
 			
 	//Creation of the animations.
 	this.idleAnimation = AnimationManager.create(colorText + '_idle', 0, 24, 24);
@@ -97,7 +97,10 @@ Player.prototype.getPosition = function(){
 };
 
 Player.prototype.setPosition = function(x, y){
-	this.currentAnimation.setPosition(new cc.Point(x, y));
+	this.x = x;
+	this.y = y;
+	
+	Client.camera.project(this.currentAnimation, this.x, this.y);
 };
 
 Player.prototype.fromServer = function(data){
