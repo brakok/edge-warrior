@@ -1,6 +1,6 @@
 var Constants = {
 	Network: {
-		ADDRESS: 'http://localhost:80'
+		ADDRESS: 'http://192.168.2.18:80'
 	},
 	Block: {
 		Percent: {
