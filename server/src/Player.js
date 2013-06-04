@@ -287,7 +287,7 @@ Player.prototype.update = function(){
 		switch(this.stepReached)
 		{
 			case Enum.StepReached.PLAYER:
-				Overlord.assignKill(this, null);
+				Overlord.assignKill(this);
 				break;
 			case Enum.StepReached.OVERLORD:
 				Overlord.kill(this, null);
@@ -295,6 +295,12 @@ Player.prototype.update = function(){
 		}
 	}
 	
+	//Check timers related to player and trigger actions associated.
+	this.checkTimers();
+};
+
+Player.prototype.checkTimers = function(){
+
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
 	if(this.currentBlock == Enum.Block.Type.SPAWN && this.isAlive)
 	{
@@ -313,6 +319,7 @@ Player.prototype.update = function(){
 		if(this.spawnTimer < Constants.Block.Restriction.SPAWN_TIMER)
 			this.spawnTimer = Constants.Block.Restriction.SPAWN_TIMER;
 	}
+	
 };
 
 Player.prototype.turn = function(){

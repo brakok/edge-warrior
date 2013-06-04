@@ -3,6 +3,7 @@ var Overlord = {
 	hasActiveSpawnBlock: false,
 	killedList: null,
 	assignKill: function(killed){
+	
 		var killerIndex = Math.round((Math.random()*(Game.connectedPlayers-1))-0.5);
 		var otherPlayers = [];
 		
