@@ -353,6 +353,7 @@ var BlockListener = {
 		if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
+		
 		//Trigger spawn.
 		if(block1 != null && player == null && block1.type == Enum.Block.Type.SPAWN)
 			block1.mustTrigger = true;
@@ -375,7 +376,7 @@ var BlockListener = {
 					
 					for(var i in Game.players)
 					{
-						if(Game.players[i].color == killingBlock.color)
+						if(Game.players[i].id == killingBlock.ownerId)
 							killingPlayer = Game.players[i];
 					}
 
@@ -708,7 +709,7 @@ Player.prototype.update = function(){
 		switch(this.stepReached)
 		{
 			case Enum.StepReached.PLAYER:
-				Overlord.assignKill(this, null);
+				Overlord.assignKill(this);
 				break;
 			case Enum.StepReached.OVERLORD:
 				Overlord.kill(this, null);
@@ -716,6 +717,12 @@ Player.prototype.update = function(){
 		}
 	}
 	
+	//Check timers related to player and trigger actions associated.
+	this.checkTimers();
+};
+
+Player.prototype.checkTimers = function(){
+
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
 	if(this.currentBlock == Enum.Block.Type.SPAWN && this.isAlive)
 	{
@@ -734,6 +741,7 @@ Player.prototype.update = function(){
 		if(this.spawnTimer < Constants.Block.Restriction.SPAWN_TIMER)
 			this.spawnTimer = Constants.Block.Restriction.SPAWN_TIMER;
 	}
+	
 };
 
 Player.prototype.turn = function(){
@@ -885,7 +893,6 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.blockSensor.setCollisionType(Enum.Collision.Type.BLOCK);
 	this.blockSensor.sensor = true;
-
 };
 
 Block.prototype.markToDestroy = function(cause){
@@ -1066,7 +1073,7 @@ var Game = {
 	height: 800,
 	connectedPlayers: 0,
 	connectingPlayers:0,
-	maxPlayers: 2,
+	maxPlayers: 4,
 	keys: [],
 	state: false,
 	space: null,
@@ -1284,6 +1291,7 @@ var Overlord = {
 	hasActiveSpawnBlock: false,
 	killedList: null,
 	assignKill: function(killed){
+	
 		var killerIndex = Math.round((Math.random()*(Game.connectedPlayers-1))-0.5);
 		var otherPlayers = [];
 		

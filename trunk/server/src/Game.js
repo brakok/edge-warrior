@@ -16,7 +16,7 @@ var Game = {
 	height: 800,
 	connectedPlayers: 0,
 	connectingPlayers:0,
-	maxPlayers: 2,
+	maxPlayers: 4,
 	keys: [],
 	state: false,
 	space: null,

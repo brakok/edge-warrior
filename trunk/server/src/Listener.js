@@ -172,6 +172,7 @@ var BlockListener = {
 		if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
 			
+		
 		//Trigger spawn.
 		if(block1 != null && player == null && block1.type == Enum.Block.Type.SPAWN)
 			block1.mustTrigger = true;
@@ -194,7 +195,7 @@ var BlockListener = {
 					
 					for(var i in Game.players)
 					{
-						if(Game.players[i].color == killingBlock.color)
+						if(Game.players[i].id == killingBlock.ownerId)
 							killingPlayer = Game.players[i];
 					}
 
