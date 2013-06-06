@@ -47,7 +47,7 @@ var Player = function(id, x, y, color){
 	this.body = null;	
 };
 
-Player.prototype.kill = function(killed, blockType){
+Player.prototype.kill = function(killed, blockType, mustStealList){
 
 	killed.toBeDestroy = true;
 	
@@ -65,7 +65,7 @@ Player.prototype.kill = function(killed, blockType){
 	this.killedList.push(killed.id);
 	
 	//Steal killed killeds' list to killer.
-	if(killed.killedList != null)
+	if(killed.killedList != null && (mustStealList == null || mustStealList))
 	{
 		for(var i in killed.killedList)
 			this.killedList.push(killed.killedList[i]);
@@ -311,7 +311,7 @@ Player.prototype.checkTimers = function(){
 			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
 			
 			//Assign kill to a random player.
-			Overlord.assignKill(this);
+			Overlord.assignKill(this, true);
 		}
 	}
 	else
