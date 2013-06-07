@@ -1,7 +1,6 @@
 
 var Overlord = {
 	hasActiveSpawnBlock: false,
-	killedList: null,
 	assignKill: function(killed, keepList){
 	
 		var otherPlayers = [];
@@ -12,7 +11,7 @@ var Overlord = {
 		}
 		
 		if(otherPlayers.length == 0)
-		{
+		{		
 			this.kill(killed, null);
 			return;
 		}
@@ -52,20 +51,10 @@ var Overlord = {
 	},
 	kill: function(killed, cause){
 		
-		if(this.killedList == null)
-			this.killedList = [];
-		
-		//Assign killed id to list.
-		this.killedList.push(killed.id);
-		
 		//Steal killed's list.
-		if(killed.killedList != null)
-		{
-			for(var i in killed.killedList)
-				this.killedList.push(killed.killedList[i]);
-				
-			killed.killedList = null;
-		}
+		for(var i in Game.players)
+			if(Game.players[i].killerId == killed.id)
+				Game.players[i].killerId = null;
 		
 		//Force player to die.
 		killed.toBeDestroy = true;

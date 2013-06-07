@@ -129,55 +129,37 @@ Block.prototype.trigger = function(){
 };
 
 Block.prototype.spawn = function(){
-	
+
+	var killerId = this.ownerId;
 	var posY = Constants.Player.HEIGHT;
-	var factor = Math.PI*(Math.random()*2);
 	
-	var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-	var launchPowerY = Math.abs(Constants.Block.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+	//Respawn dead players.
+	for(var i in Game.players)
+	{
+		var factor = Math.PI*(Math.random()*2);
+		
+		var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
+		var launchPowerY = Math.abs(Constants.Block.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+		
+		//Prevent block to spawn player on the world edges.
+		if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
+		|| (this.body.getPos().x > Game.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
+			launchPowerX *= -1;
 	
-	//Prevent block to spawn player on the world edges.
-	if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
-	|| (this.body.getPos().x > Game.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
-		launchPowerX *= -1;
+		if(!Game.players[i].isAlive && Game.players[i].killerId == killerId)
+		{
+			//Spawn the player.
+			Game.players[i].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
+			
+			//Launch the player to random position.
+			Game.players[i].body.setVel(new chipmunk.Vect(0,0));
+			Game.players[i].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+		}
+	}
 	
 	//Check if spawn block is overlord's one.
 	if(this.ownerId == null)
-	{
-		for(var i in Overlord.killedList)
-		{
-			//Spawn the player.
-			Game.players[Overlord.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
-			
-			//Launch the player to random position.
-			Game.players[Overlord.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
-			Game.players[Overlord.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
-		}
-		
 		Overlord.hasActiveSpawnBlock = false;
-		Overlord.killedList = null;
-	}
-	else
-	{
-		//Spawn killeds related to killer.
-		var player = Game.players[this.ownerId];
-		
-		if(player != null && player.killedList != null)
-		{		
-			//Respawn enemies killed by player.
-			for(var i in player.killedList)
-			{				
-				//Spawn the player.
-				Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
-				
-				//Launch the player to random position.
-				Game.players[player.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
-				Game.players[player.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
-			}
-			
-			player.killedList = null;
-		}
-	}
 	
 	this.explode(Enum.Block.Destruction.SPAWN);
 };

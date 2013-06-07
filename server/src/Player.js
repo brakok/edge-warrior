@@ -30,8 +30,8 @@ var Player = function(id, x, y, color){
 	this.currentBlock = Enum.Block.Type.NEUTRAL;
 	this.hasGivenBlock = false;
 	
-	//Id list of people killed by player.
-	this.killedList = null;
+	//Killer's id.
+	this.killerId = null;
 	
 	this.facing = Enum.Facing.LEFT;
 	this.currentAction = Enum.Action.Type.STANDING;
@@ -59,18 +59,16 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 		this.hasGivenBlock = true;
 	}
 		
-	if(this.killedList == null)
-		this.killedList = [];
-	
-	this.killedList.push(killed.id);
-	
+	killed.killerId = this.id;
+		
 	//Steal killed killeds' list to killer.
-	if(killed.killedList != null && (mustStealList == null || mustStealList))
+	if(mustStealList == null || mustStealList)
 	{
-		for(var i in killed.killedList)
-			this.killedList.push(killed.killedList[i]);
-			
-		killed.killedList = null;
+		for(var i in Game.players)
+		{
+			if(Game.players[i].killerId == killed.id)
+				Game.players[i].killerId = this.id;
+		}
 	}
 	
 	//Swap killer colored blocks to killed complementary one.
@@ -97,6 +95,7 @@ Player.prototype.spawn = function(x, y){
 	Game.space.addShape(this.dropSensor);
 	
 	this.isAlive = true;
+	this.killerId = null;
 	this.isRemoved = false;
 	
 	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
@@ -125,6 +124,7 @@ Player.prototype.die = function(){
 	this.isAlive = false;
 	this.toBeDestroy = false;
 	this.isRemoved = true;
+	this.hasGivenBlock = false;
 		
 	this.stepReached = 0;
 	this.killTime = 0;
@@ -283,7 +283,7 @@ Player.prototype.update = function(){
 	
 	//Manage kill command.
 	if(this.stepReached > Enum.StepReached.STANDING && (!this.keys.kill || this.stepReached == Enum.StepReached.OVERLORD))
-	{
+	{	
 		switch(this.stepReached)
 		{
 			case Enum.StepReached.PLAYER:
@@ -308,10 +308,20 @@ Player.prototype.checkTimers = function(){
 		
 		if(this.spawnTimer < 0)
 		{
-			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
+			var hasLivingPlayer = false;
+			
+			for(var i in Game.players)
+				if(Game.players[i].isAlive)
+				{
+					hasLivingPlayer = true;
+					break;
+				}
+					
+			if(hasLivingPlayer)
+				this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
 			
 			//Assign kill to a random player.
-			Overlord.assignKill(this, true);
+			Overlord.assignKill(this, hasLivingPlayer);
 		}
 	}
 	else

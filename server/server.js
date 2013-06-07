@@ -452,8 +452,8 @@ var Player = function(id, x, y, color){
 	this.currentBlock = Enum.Block.Type.NEUTRAL;
 	this.hasGivenBlock = false;
 	
-	//Id list of people killed by player.
-	this.killedList = null;
+	//Killer's id.
+	this.killerId = null;
 	
 	this.facing = Enum.Facing.LEFT;
 	this.currentAction = Enum.Action.Type.STANDING;
@@ -481,18 +481,16 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 		this.hasGivenBlock = true;
 	}
 		
-	if(this.killedList == null)
-		this.killedList = [];
-	
-	this.killedList.push(killed.id);
-	
+	killed.killerId = this.id;
+		
 	//Steal killed killeds' list to killer.
-	if(killed.killedList != null && (mustStealList == null || mustStealList))
+	if(mustStealList == null || mustStealList)
 	{
-		for(var i in killed.killedList)
-			this.killedList.push(killed.killedList[i]);
-			
-		killed.killedList = null;
+		for(var i in Game.players)
+		{
+			if(Game.players[i].killerId == killed.id)
+				Game.players[i].killerId = this.id;
+		}
 	}
 	
 	//Swap killer colored blocks to killed complementary one.
@@ -519,6 +517,7 @@ Player.prototype.spawn = function(x, y){
 	Game.space.addShape(this.dropSensor);
 	
 	this.isAlive = true;
+	this.killerId = null;
 	this.isRemoved = false;
 	
 	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
@@ -547,6 +546,7 @@ Player.prototype.die = function(){
 	this.isAlive = false;
 	this.toBeDestroy = false;
 	this.isRemoved = true;
+	this.hasGivenBlock = false;
 		
 	this.stepReached = 0;
 	this.killTime = 0;
@@ -705,7 +705,7 @@ Player.prototype.update = function(){
 	
 	//Manage kill command.
 	if(this.stepReached > Enum.StepReached.STANDING && (!this.keys.kill || this.stepReached == Enum.StepReached.OVERLORD))
-	{
+	{	
 		switch(this.stepReached)
 		{
 			case Enum.StepReached.PLAYER:
@@ -730,10 +730,20 @@ Player.prototype.checkTimers = function(){
 		
 		if(this.spawnTimer < 0)
 		{
-			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
+			var hasLivingPlayer = false;
+			
+			for(var i in Game.players)
+				if(Game.players[i].isAlive)
+				{
+					hasLivingPlayer = true;
+					break;
+				}
+					
+			if(hasLivingPlayer)
+				this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
 			
 			//Assign kill to a random player.
-			Overlord.assignKill(this, true);
+			Overlord.assignKill(this, hasLivingPlayer);
 		}
 	}
 	else
@@ -978,55 +988,37 @@ Block.prototype.trigger = function(){
 };
 
 Block.prototype.spawn = function(){
-	
+
+	var killerId = this.ownerId;
 	var posY = Constants.Player.HEIGHT;
-	var factor = Math.PI*(Math.random()*2);
 	
-	var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-	var launchPowerY = Math.abs(Constants.Block.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+	//Respawn dead players.
+	for(var i in Game.players)
+	{
+		var factor = Math.PI*(Math.random()*2);
+		
+		var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
+		var launchPowerY = Math.abs(Constants.Block.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+		
+		//Prevent block to spawn player on the world edges.
+		if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
+		|| (this.body.getPos().x > Game.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
+			launchPowerX *= -1;
 	
-	//Prevent block to spawn player on the world edges.
-	if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
-	|| (this.body.getPos().x > Game.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
-		launchPowerX *= -1;
+		if(!Game.players[i].isAlive && Game.players[i].killerId == killerId)
+		{
+			//Spawn the player.
+			Game.players[i].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
+			
+			//Launch the player to random position.
+			Game.players[i].body.setVel(new chipmunk.Vect(0,0));
+			Game.players[i].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+		}
+	}
 	
 	//Check if spawn block is overlord's one.
 	if(this.ownerId == null)
-	{
-		for(var i in Overlord.killedList)
-		{
-			//Spawn the player.
-			Game.players[Overlord.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
-			
-			//Launch the player to random position.
-			Game.players[Overlord.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
-			Game.players[Overlord.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
-		}
-		
 		Overlord.hasActiveSpawnBlock = false;
-		Overlord.killedList = null;
-	}
-	else
-	{
-		//Spawn killeds related to killer.
-		var player = Game.players[this.ownerId];
-		
-		if(player != null && player.killedList != null)
-		{		
-			//Respawn enemies killed by player.
-			for(var i in player.killedList)
-			{				
-				//Spawn the player.
-				Game.players[player.killedList[i]].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
-				
-				//Launch the player to random position.
-				Game.players[player.killedList[i]].body.setVel(new chipmunk.Vect(0,0));
-				Game.players[player.killedList[i]].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
-			}
-			
-			player.killedList = null;
-		}
-	}
 	
 	this.explode(Enum.Block.Destruction.SPAWN);
 };
@@ -1194,7 +1186,17 @@ var Game = {
 					this.blocks[i].update();
 			}
 			
-			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
+			//Check if Overlord needs to use a spawn block.
+			var overlordGotKills = false;
+			
+			for(var i in this.players)
+				if(!this.players[i].isAlive && this.players[i].killerId == null)
+				{
+					overlordGotKills = true;
+					break;
+				}
+					
+			if(overlordGotKills && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(Enum.Block.Type.SPAWN);
 				
 			for(var i in this.deathZones)
@@ -1289,7 +1291,6 @@ var Game = {
 };
 var Overlord = {
 	hasActiveSpawnBlock: false,
-	killedList: null,
 	assignKill: function(killed, keepList){
 	
 		var otherPlayers = [];
@@ -1300,7 +1301,7 @@ var Overlord = {
 		}
 		
 		if(otherPlayers.length == 0)
-		{
+		{		
 			this.kill(killed, null);
 			return;
 		}
@@ -1340,20 +1341,10 @@ var Overlord = {
 	},
 	kill: function(killed, cause){
 		
-		if(this.killedList == null)
-			this.killedList = [];
-		
-		//Assign killed id to list.
-		this.killedList.push(killed.id);
-		
 		//Steal killed's list.
-		if(killed.killedList != null)
-		{
-			for(var i in killed.killedList)
-				this.killedList.push(killed.killedList[i]);
-				
-			killed.killedList = null;
-		}
+		for(var i in Game.players)
+			if(Game.players[i].killerId == killed.id)
+				Game.players[i].killerId = null;
 		
 		//Force player to die.
 		killed.toBeDestroy = true;
