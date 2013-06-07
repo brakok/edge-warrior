@@ -137,7 +137,17 @@ var Game = {
 					this.blocks[i].update();
 			}
 			
-			if(Overlord.killedList != null && !Overlord.hasActiveSpawnBlock)
+			//Check if Overlord needs to use a spawn block.
+			var overlordGotKills = false;
+			
+			for(var i in this.players)
+				if(!this.players[i].isAlive && this.players[i].killerId == null)
+				{
+					overlordGotKills = true;
+					break;
+				}
+					
+			if(overlordGotKills && !Overlord.hasActiveSpawnBlock)
 				Overlord.launch(Enum.Block.Type.SPAWN);
 				
 			for(var i in this.deathZones)
