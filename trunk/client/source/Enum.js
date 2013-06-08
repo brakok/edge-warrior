@@ -14,6 +14,16 @@ var Enum = {
 		PURPLE: 6,
 		BLACK: 7
 	},
+	Wall: {
+		Type: {
+			PIT: 0
+		}
+	},
+	Floor: {
+		Type: {
+			PIT: 0
+		}
+	},
 	Block: {
 		Type:{
 			NEUTRAL: 0,
@@ -64,5 +74,11 @@ var Enum = {
 		Type: {
 			FLOATING_BALL: 1
 		}
+	},
+	Direction: {
+		UP: 0,
+		LEFT: 1,
+		DOWN: 2,
+		RIGHT: 3
 	}
 };
