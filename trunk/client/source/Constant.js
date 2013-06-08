@@ -16,7 +16,6 @@ var Constants = {
 	},
 	DeathZone: {
 		EnergySpike: {
-			HEIGHT: 800,
 			LIGHTBALL_ORBIT_SPEED: 5,
 			LIGHTBALL_ORBIT_RADIUS: 8
 		}

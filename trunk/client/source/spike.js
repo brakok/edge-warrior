@@ -52,7 +52,7 @@ Spike.prototype.init = function(){
 			this.lightBall._zOrder = 41;
 			
 			//Resize to good scale.
-			var factor = Constants.DeathZone.EnergySpike.HEIGHT/distance;
+			var factor = this.currentAnimation.getTexture().height/distance;
 			this.ratioY = 1/factor;
 			
 			this.currentAnimation.setScaleY(this.ratioY);
