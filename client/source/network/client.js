@@ -239,28 +239,183 @@ var Client = new function(){
 					this.enemies[i].die();
 	};
 	
+	//Create a floor.
+	this.createFloor = function(x, y, width, hasCorner, type){
+		
+		var floorFragments = [];
+		var imgName = null;
+		var cornerImgName = null;
+		
+		switch(type)
+		{
+			case Enum.Wall.Type.PIT:
+				imgName = 'floor_pit.png';
+				cornerImgName = 'corner_pit.png';
+				break;
+		}
+		
+		var firstSegment = cc.Sprite.create(assetsWorldDir + imgName);
+		var numOfFragment = (width/firstSegment.getTexture().width)-1; //Remove last corner.
+		
+		var stepX = firstSegment.getTexture().width;
+		var tmpX = x - width*0.5 + stepX*0.5;
+		var zOrder = 45;
+		
+		//Add a corner at the bottom of the wall.
+		if(hasCorner)
+		{
+			var corner = cc.Sprite.create(assetsWorldDir + cornerImgName);
+			corner.setPosition(new cc.Point(x, tmpX - stepX));
+			corner._zOrder = zOrder;
+			
+			//Left corner.
+			floorFragments.push({
+				sprite: corner,
+				x: tmpX - stepX
+			});
+			
+			corner = cc.Sprite.create(assetsWorldDir + cornerImgName);
+			corner.setPosition(new cc.Point(x, tmpX + stepX*numOfFragment));
+			corner.setFlipX(true);
+			
+			//Right corner.
+			floorFragments.push({
+				sprite: corner,
+				x: tmpX + stepX*numOfFragment
+			});
+		}
+		
+		//Add first segment.
+		firstSegment.setPosition(new cc.Point(x, tmpX));
+		firstSegment._zOrder = zOrder;
+		
+		floorFragments.push({
+			sprite: firstSegment,
+			x: tmpX
+		});
+		
+		//Add other fragments to the wall.
+		for(var i = 0; i < numOfFragment; i++)
+		{
+			tmpX += stepX;
+			
+			var segment = cc.Sprite.create(assetsWorldDir + imgName);
+			segment.setPosition(new cc.Point(x, tmpX));
+			segment._zOrder = zOrder;
+			
+			floorFragments.push({
+				sprite: segment,
+				x: tmpX
+			});
+		}
+		
+		return {
+			fragments: floorFragments,
+			x: x,
+			y: y
+		};
+	};
+	
+	//Create a wall.
+	this.createWall = function(facing, x, y, height, hasCorner, type){
+	
+		var wallFragments = [];
+		var imgName = null;
+		var cornerImgName = null;
+		
+		switch(type)
+		{
+			case Enum.Wall.Type.PIT:
+				imgName = 'wall_pit.png';
+				cornerImgName = 'corner_pit.png';
+				break;
+		}
+		
+		var mustFlip = facing == Enum.Direction.LEFT;
+		var firstSegment = cc.Sprite.create(assetsWorldDir + imgName);
+		var numOfFragment = height/firstSegment.getTexture().height;
+		
+		var stepY = firstSegment.getTexture().height;
+		var tmpY = y - height*0.5 + stepY*0.5;
+		var zOrder = 45;
+		
+		//Add a corner at the bottom of the wall.
+		if(hasCorner)
+		{
+			var corner = cc.Sprite.create(assetsWorldDir + cornerImgName);
+			corner.setPosition(new cc.Point(x, tmpY - stepY));
+			corner.setFlipX(mustFlip);
+			corner._zOrder = zOrder;
+			
+			wallFragments.push({
+				sprite: corner,
+				y: tmpY - stepY
+			});
+		}
+		
+		//Add the first segment.
+		firstSegment.setFlipX(mustFlip);
+		firstSegment.setPosition(new cc.Point(x, tmpY));
+		firstSegment._zOrder = zOrder;
+		
+		wallFragments.push({
+			sprite: firstSegment,
+			y: tmpY
+		});
+		
+		//Add other fragments to the wall.
+		for(var i = 0; i < numOfFragment; i++)
+		{
+			tmpY += stepY;
+			
+			var segment = cc.Sprite.create(assetsWorldDir + imgName);
+			segment.setPosition(new cc.Point(x, tmpY));
+			segment.setFlipX(mustFlip);
+			segment._zOrder = zOrder;
+			
+			wallFragments.push({
+				sprite: segment,
+				y: tmpY
+			});
+		}
+		
+		return {
+			fragments: wallFragments,
+			x: x,
+			y: y
+		};
+	};
+	
+	//Project walls and floor.
 	this.projectWorld = function(){
 	
 		if(this.floor == null)
 		{
 			//Create walls and floor.
-			this.floor = cc.Sprite.create(assestsPlaceHolderDir + 'floor.png');
-			this.leftWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
-			this.rightWall = cc.Sprite.create(assestsPlaceHolderDir + 'wall.png');
-									
-			this.floor._zOrder = 50;
-			this.leftWall._zOrder = 45;
-			this.rightWall._zOrder = 45;
+			this.floor = this.createFloor(this.mapSize.width*0.5, -50, this.mapSize.width, false, Enum.Wall.Type.PIT);
+			this.leftWall = this.createWall(Enum.Direction.RIGHT, -50, this.mapSize.height*0.5, this.mapSize.height, true, Enum.Wall.Type.PIT);
+			this.rightWall = this.createWall(Enum.Direction.LEFT, this.mapSize.width + 50, this.mapSize.height*0.5, this.mapSize.height, true, Enum.Wall.Type.PIT);
+
+			//Add walls to layer.
+			for(var i in this.leftWall.fragments)
+				this.layer.addChild(this.leftWall.fragments[i].sprite);
 			
-			//Add walls and floor.
-			this.layer.addChild(this.leftWall);
-			this.layer.addChild(this.rightWall);
-			this.layer.addChild(this.floor);
+			for(var i in this.rightWall.fragments)
+				this.layer.addChild(this.rightWall.fragments[i].sprite);
+				
+			//Add floor to layer.
+			for(var i in this.floor.fragments)
+				this.layer.addChild(this.floor.fragments[i].sprite);
 		}
 	
-		this.camera.project(this.floor, this.mapSize.width*0.5, -40, this.width/50, 1);
-		this.camera.project(this.leftWall, -150, this.mapSize.height*0.5, 3, this.height/50);
-		this.camera.project(this.rightWall, this.mapSize.width+150, this.mapSize.height*0.5, 3, this.height/50);
+		for(var i in this.floor.fragments)
+			this.camera.project(this.floor.fragments[i].sprite, this.floor.fragments[i].x, this.floor.y);	
+		
+		for(var i in this.leftWall.fragments)
+			this.camera.project(this.leftWall.fragments[i].sprite, this.leftWall.x, this.leftWall.fragments[i].y);		
+			
+		for(var i in this.rightWall.fragments)
+			this.camera.project(this.rightWall.fragments[i].sprite, this.rightWall.x, this.rightWall.fragments[i].y);
 	};
 	
 	//Update positions from server ones.

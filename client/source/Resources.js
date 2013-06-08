@@ -1,5 +1,6 @@
 var assestsPlaceHolderDir = 'placeholders/';
 
+var assetsWorldDir = 'assets/world/';
 var assetsBlockDir = 'assets/blocks/';
 var assetsPlayerDir = 'assets/players/';
 var assetsHudDir = 'assets/hud/';
@@ -8,8 +9,9 @@ var assetsEffectDir = 'assets/effects/';
 
 var assets = [
 
-	{type:'image', src: assestsPlaceHolderDir + 'wall.png'},
-	{type:'image', src: assestsPlaceHolderDir + 'floor.png'},
+	{type:'image', src: assetsWorldDir + 'wall_pit.png'},
+	{type:'image', src: assetsWorldDir + 'floor_pit.png'},
+	{type:'image', src: assetsWorldDir + 'corner_pit.png'},
 
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
