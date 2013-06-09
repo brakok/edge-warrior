@@ -17,6 +17,8 @@
 				  'source/network/client.js',
 				  'source/block.js',
 				  'source/player.js',
+				  'source/wall.js',
+				  'source/floor.js',
 				  'source/winnerGoal/floatingBall.js',
 				  'source/gameScene.js',
 				  'source/Resources.js',
