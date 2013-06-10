@@ -177,7 +177,8 @@ var Constants = {
 		WIN: 'win',
 		DELETE_DEATHZONE: 'deleteDeathZone',
 		NEW_DEATHZONE: 'newDeathZone',
-		GOAL_ACTION: 'goalAction'
+		GOAL_ACTION: 'goalAction',
+		PLAYER_ACTION: 'playerAction'
 	}
 };//Mortal things listener.
 var DeathZoneListener = {
@@ -605,15 +606,15 @@ Player.prototype.update = function(){
 		if(this.groundContact == 0 && this.currentAction != Enum.Action.Type.FALLING && this.currentAction != Enum.Action.Type.NONE && this.jumpCooldown <= 0)
 		{
 			if(this.currentAction == Enum.Action.Type.RUNNING || this.currentAction == Enum.Action.Type.STANDING)
-				this.currentAction = Enum.Action.Type.FALLING;
+				this.execute(Enum.Action.Type.FALLING);
 			else
 				this.currentAction = Enum.Action.Type.NONE;
-		} 
+		}
 		
 		//Jump
 		if(this.keys.jump && this.groundContact > 0)
 		{
-			this.jump();
+			this.jump(false);
 			this.doubleJumpEnabled = false;
 		}
 			
@@ -637,7 +638,7 @@ Player.prototype.update = function(){
 			
 			//Switch current action to running if player is on the ground.
 			if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.RUNNING && this.currentAction != Enum.Action.Type.JUMPING)
-				this.currentAction = Enum.Action.Type.RUNNING;	
+				this.execute(Enum.Action.Type.RUNNING);	
 		}
 		else
 		{
@@ -647,7 +648,7 @@ Player.prototype.update = function(){
 				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
 				
 				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING)
-					this.currentAction = Enum.Action.Type.STANDING;					
+					this.execute(Enum.Action.Type.STANDING);					
 				
 				//Calculate standing time to a limit of 1 min.
 				if(this.isAlive)
@@ -758,12 +759,14 @@ Player.prototype.turn = function(){
 	this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.TURN_FRICTION_FACTOR, this.body.getVel().y));
 };
 
-Player.prototype.jump = function(){
+Player.prototype.jump = function(isDoubleJumping){
 
 	if(this.jumpCooldown <= 0)
 	{
 		this.jumpCooldown = Constants.Player.JUMP_COOLDOWN;
-		this.currentAction = Enum.Action.Type.JUMPING;
+		
+		if(!isDoubleJumping)
+			this.execute(Enum.Action.Type.JUMPING);
 		
 		this.body.setVel(new chipmunk.Vect(this.body.getVel().x, 0));
 		this.body.applyImpulse(new chipmunk.Vect(0, Constants.Player.JUMP_POWER), new chipmunk.Vect(0,0));
@@ -775,10 +778,10 @@ Player.prototype.doubleJump = function(){
 
 	if(this.jumpCooldown <= 0)
 	{
-		this.jump();
+		this.jump(true);
 		this.dropBlock();
 
-		this.currentAction = Enum.Action.Type.DOUBLE_JUMPING;
+		this.execute(Enum.Action.Type.DOUBLE_JUMPING);
 		this.doubleJumpUsed = true;
 		this.doubleJumpEnabled = false;
 	}
@@ -810,51 +813,55 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 //Init the physical part of the player.
 Player.prototype.initBody = function(space){
 	
-		var groundSensorHalfWidth = Constants.Player.WIDTH*0.33;
-		var playerHalfHeight = Constants.Player.HEIGHT*0.5;
-		var groundSensorHeight = 2;
+	var groundSensorHalfWidth = Constants.Player.WIDTH*0.33;
+	var playerHalfHeight = Constants.Player.HEIGHT*0.5;
+	var groundSensorHeight = 2;
+
+	//Body creation.
+	this.body = Game.space.addBody(new chipmunk.Body(Constants.Physic.MASS_PLAYER, Infinity));
+	this.body.setPos(new chipmunk.Vect(this.x, this.y));
+						
+	//Assign custom data to body.
+	this.body.userdata = {
+		type: Enum.UserData.Type.PLAYER,
+		object: this
+	};
+						
+	//Create a shape associated with the body.
+	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.shape.setCollisionType(Enum.Collision.Type.PLAYER);
 	
-		//Body creation.
-		this.body = Game.space.addBody(new chipmunk.Body(Constants.Physic.MASS_PLAYER, Infinity));
-		this.body.setPos(new chipmunk.Vect(this.x, this.y));
-							
-		//Assign custom data to body.
-		this.body.userdata = {
-			type: Enum.UserData.Type.PLAYER,
-			object: this
-		};
-							
-		//Create a shape associated with the body.
-		this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
-		this.shape.setCollisionType(Enum.Collision.Type.PLAYER);
-		
-		//Add ground sensor.
-		this.groundSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
-															new chipmunk.BB(-(groundSensorHalfWidth), 
-																			-(playerHalfHeight+groundSensorHeight), 
-																			(groundSensorHalfWidth), 
-																			-(playerHalfHeight))));
-		this.groundSensor.setCollisionType(Enum.Collision.Type.GROUND_SENSOR);
-		this.groundSensor.sensor = true;
-		
-		//Add drop sensor to prevent double jump when drop zone is obstructed.
-		this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
+	//Add ground sensor.
+	this.groundSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
+														new chipmunk.BB(-(groundSensorHalfWidth), 
+																		-(playerHalfHeight+groundSensorHeight), 
+																		(groundSensorHalfWidth), 
+																		-(playerHalfHeight))));
+	this.groundSensor.setCollisionType(Enum.Collision.Type.GROUND_SENSOR);
+	this.groundSensor.sensor = true;
+	
+	//Add drop sensor to prevent double jump when drop zone is obstructed.
+	this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body,
 															new chipmunk.BB(-(Constants.Block.WIDTH*0.33), 
 																			-(playerHalfHeight+(Constants.Block.HEIGHT*0.75)), 
 																			(Constants.Block.WIDTH*0.33), 
 																			-(playerHalfHeight))));
-																	
-		this.dropSensor.setCollisionType(Enum.Collision.Type.DROP_SENSOR);
-		this.dropSensor.sensor = true;
-	};
+																
+	this.dropSensor.setCollisionType(Enum.Collision.Type.DROP_SENSOR);
+	this.dropSensor.sensor = true;
+};
 
+Player.prototype.execute = function(action){
+	this.currentAction = action;
+	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_ACTION, action);
+};
+	
 //Format for client.
 Player.prototype.toClient = function(){
 	return {
 		x: this.getPosition().x,
 		y: this.getPosition().y,
 		color: this.color,
-		action: this.currentAction,
 		facing: this.facing
 	};
 };//Server version of the block.
