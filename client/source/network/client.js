@@ -18,7 +18,7 @@ var Client = new function(){
 	this.keys[cc.KEY.space] = false;
 	this.keys[cc.KEY.q] = false;
 	
-	//Initialize the game client.
+	//Initialize the game client. Get window information.
 	this.init = function (width, height, layer, hud, endScreen) {
 	
 		this.width = width;
@@ -34,8 +34,8 @@ var Client = new function(){
 		this.connect();
 	};
 	
-	//Add elements on layer.
-	this.initLayers = function(mapWidth, mapHeight){
+	//Add elements on layer. Retrieve map width and map height from server.
+	this.createWorld = function(mapWidth, mapHeight){
 	
 		this.mapSize = {
 			width: mapWidth,
@@ -43,8 +43,17 @@ var Client = new function(){
 		};
 		
 		//Create camera.
-		this.camera = new Camera(this.width*0.5-(this.width*0.5-this.mapSize.width*0.5), this.height*0.5, this.width, this.height, 1);
-		this.projectWorld();
+		this.camera = new Camera(this.width*0.5-(this.width*0.5-this.mapSize.width*0.5), this.height*0.5, this.width, this.height, this.width, this.height, 1);
+		
+		//Create walls and floor.
+		this.floor = new Floor(this.mapSize.width*0.5, -40, this.mapSize.width, false, Enum.Wall.Type.PIT);
+		this.leftWall = new Wall(Enum.Direction.RIGHT, -50, this.mapSize.height*0.5 + 10, this.mapSize.height, true, Enum.Wall.Type.PIT);
+		this.rightWall = new Wall(Enum.Direction.LEFT, this.mapSize.width + 50, this.mapSize.height*0.5 + 10, this.mapSize.height, true, Enum.Wall.Type.PIT);
+
+		//Add walls to layer.
+		this.leftWall.init();
+		this.rightWall.init();
+		this.floor.init();
 	
 		//Init dynamic elements.
 		this.player.init();
@@ -81,7 +90,7 @@ var Client = new function(){
 			this.hud.update(dt);
 			
 			//Position.
-			//this.camera.lookAt(remotePlayer.x, remotePlayer.y);
+			//this.camera.lookAt(this.player.x, this.player.y);
 			this.projectWorld();
 			
 			this.player.update();
@@ -103,7 +112,6 @@ var Client = new function(){
 		
 	//Connect to server.
 	this.connect = function(){
-		this.ready = false;
 		
 		var socket = io.connect(Constants.Network.ADDRESS);
 		
@@ -145,7 +153,7 @@ var Client = new function(){
 			}
 			
 			//Add received elements to the layer (render).
-			Client.initLayers(data.width, data.height);
+			Client.createWorld(data.width, data.height);
 			
 			//Lower neutral by quantity of enemies.
 			Client.player.changePercent(Enum.Block.Type.NEUTRAL, -Constants.Block.Percent.LOST_FOREACH_ENEMY*Client.enemies.length);
@@ -261,19 +269,6 @@ var Client = new function(){
 	//Project walls and floor.
 	this.projectWorld = function(){
 	
-		if(this.floor == null)
-		{
-			//Create walls and floor.
-			this.floor = new Floor(this.mapSize.width*0.5, -40, this.mapSize.width, false, Enum.Wall.Type.PIT);
-			this.leftWall = new Wall(Enum.Direction.RIGHT, -50, this.mapSize.height*0.5 + 10, this.mapSize.height, true, Enum.Wall.Type.PIT);
-			this.rightWall = new Wall(Enum.Direction.LEFT, this.mapSize.width + 50, this.mapSize.height*0.5 + 10, this.mapSize.height, true, Enum.Wall.Type.PIT);
-
-			//Add walls to layer.
-			this.leftWall.init();
-			this.rightWall.init();
-			this.floor.init();
-		}
-
 		this.floor.update();
 		this.leftWall.update();
 		this.rightWall.update();
