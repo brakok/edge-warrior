@@ -79,6 +79,25 @@ var Client = new function(){
 			this.pull();
 			
 			this.hud.update(dt);
+			
+			//Position.
+			//this.camera.lookAt(remotePlayer.x, remotePlayer.y);
+			this.projectWorld();
+			
+			this.player.update();
+			
+			//Update enemies.
+			for(var i in this.enemies)
+				this.enemies[i].update();
+				
+			//Update blocks.
+			for(var i in this.blocks)
+				this.blocks[i].update();
+			
+			for(var i in this.deathZones)
+				this.deathZones[i].update();
+				
+			this.goal.update();
 		}
 	};
 		
@@ -262,10 +281,6 @@ var Client = new function(){
 	
 	//Update positions from server ones.
 	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal, remoteDeathZones){
-		
-		//Position.
-		//this.camera.lookAt(remotePlayer.x, remotePlayer.y);
-		this.projectWorld();
 		
 		//Update player.
 		this.player.fromServer(remotePlayer);

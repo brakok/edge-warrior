@@ -23,7 +23,9 @@ Missile.prototype.init = function(){
 Missile.prototype.setPosition = function(x, y){
 	this.x = x;
 	this.y = y;
-	
+};
+
+Missile.prototype.update = function(){
 	Client.camera.project(this.sprite, this.x, this.y);
 };
 
