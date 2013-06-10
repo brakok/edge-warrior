@@ -38,6 +38,7 @@ var Constants = {
 		WIN: 'win',
 		DELETE_DEATHZONE: 'deleteDeathZone',
 		NEW_DEATHZONE: 'newDeathZone',
-		GOAL_ACTION: 'goalAction'
+		GOAL_ACTION: 'goalAction',
+		PLAYER_ACTION: 'playerAction'
 	}
 };

@@ -204,8 +204,14 @@ var Client = new function(){
 			Client.end(data);
 		});
 		
+		//Execute new action (goal).
 		socket.on(Constants.Message.GOAL_ACTION, function(actionType){
 			Client.goal.execute(actionType);
+		});
+		
+		//Execute new action (player).
+		socket.on(Constants.Message.PLAYER_ACTION, function(action){
+			Client.player.execute(action);
 		});
 		
 		//When a player touches the goal.

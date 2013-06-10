@@ -105,32 +105,32 @@ Player.prototype.update = function(){
 	Client.camera.project(this.currentAnimation, this.x, this.y);
 };
 
-Player.prototype.fromServer = function(data){
-	this.setPosition(data.x, data.y);
-		
-	if(data.action != this.currentAction)
+Player.prototype.execute = function(action){
+
+	//Assign good animation to the right action.
+	switch(action)
 	{
-		//Assign good animation to the right action.
-		switch(data.action)
-		{
-			case Enum.Action.Type.STANDING:
-				this.swapAnimation(Enum.Anim.Type.IDLE);
-				break;
-			case Enum.Action.Type.RUNNING:
-				this.swapAnimation(Enum.Anim.Type.RUNNING);
-				break;
-			case Enum.Action.Type.JUMPING:
-			case Enum.Action.Type.DOUBLE_JUMPING:
-				this.swapAnimation(Enum.Anim.Type.JUMPING);
-				break;
-			case Enum.Action.Type.FALLING:
-				this.swapAnimation(Enum.Anim.Type.FALLING);
-				break;
-		}
-		
-		this.currentAction = data.action;
+		case Enum.Action.Type.STANDING:
+			this.swapAnimation(Enum.Anim.Type.IDLE);
+			break;
+		case Enum.Action.Type.RUNNING:
+			this.swapAnimation(Enum.Anim.Type.RUNNING);
+			break;
+		case Enum.Action.Type.JUMPING:
+		case Enum.Action.Type.DOUBLE_JUMPING:
+			this.swapAnimation(Enum.Anim.Type.JUMPING);
+			break;
+		case Enum.Action.Type.FALLING:
+			this.swapAnimation(Enum.Anim.Type.FALLING);
+			break;
 	}
 	
+	this.currentAction = action;
+};
+
+Player.prototype.fromServer = function(data){
+	this.setPosition(data.x, data.y);
+			
 	if(data.facing != this.facing)
 	{
 		this.facing = data.facing;
