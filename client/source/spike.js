@@ -90,7 +90,9 @@ Spike.prototype.endProcess = function(){
 Spike.prototype.setPosition = function(x, y){
 	this.x = x;
 	this.y = y;
-	
+};
+
+Spike.prototype.update = function(){
 	Client.camera.project(this.currentAnimation, this.x, this.y, 1, this.ratioY);
 };
 

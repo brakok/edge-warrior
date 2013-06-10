@@ -24,7 +24,9 @@ Block.prototype.init = function(){
 Block.prototype.setPosition = function(x, y){
 	this.x = x;
 	this.y = y;
-	
+};
+
+Block.prototype.update = function(){
 	Client.camera.project(this.sprite, this.x, this.y);
 };
 

@@ -99,7 +99,9 @@ Player.prototype.getPosition = function(){
 Player.prototype.setPosition = function(x, y){
 	this.x = x;
 	this.y = y;
-	
+};
+
+Player.prototype.update = function(){
 	Client.camera.project(this.currentAnimation, this.x, this.y);
 };
 
