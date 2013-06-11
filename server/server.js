@@ -1066,7 +1066,6 @@ var Game = {
 	intervalId: null,
 	winner: null,
 	winningPhaseTimer: Constants.WinningGoal.PHASE_TIME,
-	spawnX: 100,
 	spawnY: 100,
 	width: 1200,
 	height: 800,
@@ -1381,7 +1380,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	for(var i in Game.players)
 		enemies.push(Game.players[i].toClient());
 	
-	var player = new Player(socket.id, Game.spawnX*(Game.connectingPlayers+1), Game.spawnY, Game.connectingPlayers);
+	var player = new Player(socket.id, Game.width*0.2*(Game.connectingPlayers+1), Game.spawnY, Game.connectingPlayers);
 	
 	//Value initiating a player.
 	var initData = {
