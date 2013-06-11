@@ -10,7 +10,6 @@ var Game = {
 	intervalId: null,
 	winner: null,
 	winningPhaseTimer: Constants.WinningGoal.PHASE_TIME,
-	spawnX: 100,
 	spawnY: 100,
 	width: 1200,
 	height: 800,
