@@ -5,6 +5,8 @@ var Player = function (x, y, color) {
 	this.nextBlock = Enum.Block.Type.COLORED;
 	this.givenBlock = null;
 	
+	this.isAlive = true;
+	
 	this.blockTypeAvailable = [];
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
 	
@@ -140,6 +142,7 @@ Player.prototype.fromServer = function(data){
 
 Player.prototype.die = function() {
 	Client.layer.removeChild(this.currentAnimation);
+	this.isAlive = false;
 };
 
 Player.prototype.win = function(){
@@ -154,6 +157,7 @@ Player.prototype.turn = function(){
 Player.prototype.spawn = function(x, y){
 	this.setPosition(x, y);
 	Client.layer.addChild(this.currentAnimation);
+	this.isAlive = true;
 };
 
 Player.prototype.swapAnimation = function(newAnim){

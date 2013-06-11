@@ -14,6 +14,9 @@ var Constants = {
 			FIRST_STEP: 5
 		}		
 	},
+	Camera: {
+		HIGHER: 150
+	},
 	DeathZone: {
 		EnergySpike: {
 			LIGHTBALL_ORBIT_SPEED: 5,

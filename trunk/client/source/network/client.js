@@ -91,6 +91,7 @@ var Client = new function(){
 			
 			//Position.
 			//this.camera.lookAt(this.player.x, this.player.y);
+			this.moveCamera();
 			this.projectWorld();
 			
 			this.player.update();
@@ -233,6 +234,40 @@ var Client = new function(){
 		this.socket = socket;
 	};
 	
+	//Set the new location and zoom of camera to catch all players.
+	this.moveCamera = function(){
+		
+		var minX = this.player.x;
+		var maxX = this.player.x;
+		var minY = this.player.y;
+		var maxY = this.player.y;
+		
+		var players = [];
+		
+		if(this.player.isAlive)
+			players.push(this.player);
+		
+		for(var i in this.enemies)
+			if(this.enemies[i].isAlive)
+				players.push(this.enemies[i]);
+			
+		//Get extremities.
+		for(var i in players)
+		{		
+			if(players[i].x < minX)
+				minX = players[i].x;
+			if(players[i].x > maxX)
+				maxX = players[i].x;
+			if(players[i].y < minY)
+				minY = players[i].y;
+			if(players[i].y > maxY)
+				maxY = players[i].y;
+		}
+		
+		this.camera.lookAt((maxX + minX)*0.5, ((maxY + minY)*0.5)+Constants.Camera.HIGHER);		
+	};
+	
+	//Trigger when someone touched the goal.
 	this.electWinner = function(winner){
 		
 		if(winner.color == this.player.color)
