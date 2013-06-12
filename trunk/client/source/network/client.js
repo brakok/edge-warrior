@@ -43,7 +43,16 @@ var Client = new function(){
 		};
 		
 		//Create camera.
-		this.camera = new Camera(this.width*0.5-(this.width*0.5-this.mapSize.width*0.5), this.height*0.5, this.width, this.height, this.width, this.height, 1);
+		this.camera = new Camera(this.width*0.5-(this.width*0.5-this.mapSize.width*0.5), 
+								 this.height*0.5, 
+								 this.width, 
+								 this.height, 
+								 this.width*0.75, 
+								 this.height*0.75, 
+								 1,
+								 Constants.Camera.SPEED_X,
+								 Constants.Camera.SPEED_Y,
+								 Constants.Camera.SPEED_ZOOM);
 		
 		//Create walls and floor.
 		this.floor = new Floor(this.mapSize.width*0.5, -40, this.mapSize.width, false, Enum.Wall.Type.PIT);
@@ -89,18 +98,19 @@ var Client = new function(){
 			
 			this.hud.update(dt);
 			
-			//Position.
-			//this.camera.lookAt(this.player.x, this.player.y);
+			//Position camera.
 			this.moveCamera();
+			this.camera.update();
+			
+			//Project static objects.
 			this.projectWorld();
 			
+			//Update dynamic objects.
 			this.player.update();
 			
-			//Update enemies.
 			for(var i in this.enemies)
 				this.enemies[i].update();
-				
-			//Update blocks.
+
 			for(var i in this.blocks)
 				this.blocks[i].update();
 			
@@ -242,29 +252,48 @@ var Client = new function(){
 		var minY = this.player.y;
 		var maxY = this.player.y;
 		
-		var players = [];
+		var containedObjects = [];
 		
 		if(this.player.isAlive)
-			players.push(this.player);
+			containedObjects.push(this.player);
 		
 		for(var i in this.enemies)
 			if(this.enemies[i].isAlive)
-				players.push(this.enemies[i]);
+				containedObjects.push(this.enemies[i]);
+				
+		for(var i in this.blocks)
+			if(this.blocks[i].type == Enum.Block.Type.SPAWN)
+				containedObjects.push(this.blocks[i]);
 			
 		//Get extremities.
-		for(var i in players)
+		for(var i in containedObjects)
 		{		
-			if(players[i].x < minX)
-				minX = players[i].x;
-			if(players[i].x > maxX)
-				maxX = players[i].x;
-			if(players[i].y < minY)
-				minY = players[i].y;
-			if(players[i].y > maxY)
-				maxY = players[i].y;
+			if(containedObjects[i].x < minX)
+				minX = containedObjects[i].x;
+			if(containedObjects[i].x > maxX)
+				maxX = containedObjects[i].x;
+			if(containedObjects[i].y < minY)
+				minY = containedObjects[i].y;
+			if(containedObjects[i].y > maxY)
+				maxY = containedObjects[i].y;
 		}
 		
 		this.camera.lookAt((maxX + minX)*0.5, ((maxY + minY)*0.5)+Constants.Camera.HIGHER);		
+		
+		var maxDistanceX = maxX - minX;
+		var maxDistanceY = maxY - minY;
+		
+		//Get ratio between viewport and distance of players.
+		var ratioX = (maxDistanceX*Constants.Camera.CONTAINER_FACTOR_X)/this.camera.viewport.width;
+		var ratioY = (maxDistanceY*Constants.Camera.CONTAINER_FACTOR_Y)/this.camera.viewport.height;
+		
+		//Get highest ratio.
+		var zoomRatio = (ratioX > ratioY ? ratioX : ratioY);
+
+		if(zoomRatio < 1)
+			this.camera.targetedZoom = 1;
+		else
+			this.camera.targetedZoom = 1/zoomRatio;
 	};
 	
 	//Trigger when someone touched the goal.
