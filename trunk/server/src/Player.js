@@ -430,7 +430,13 @@ Player.prototype.initBody = function(space){
 
 Player.prototype.execute = function(action){
 	this.currentAction = action;
-	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_ACTION, action);
+	
+	var data = {
+		action: action,
+		playerColor: this.color
+	};
+	
+	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_ACTION, data);
 };
 	
 //Format for client.
