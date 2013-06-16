@@ -16,11 +16,12 @@ var Constants = {
 	},
 	Camera: {
 		HIGHER: 75,
-		SPEED_X: 5,
-		SPEED_Y: 2,
-		SPEED_ZOOM: 0.01,
-		CONTAINER_FACTOR_X: 1.25,
-		CONTAINER_FACTOR_Y: 1.75
+		SPEED_X: 0.00001,
+		SPEED_Y: 0.000005,
+		SPEED_ZOOM: 0.2,
+		UPWARD_FACTOR: 0.3,
+		CONTAINER_FACTOR_X: 1.65,
+		CONTAINER_FACTOR_Y: 2
 	},
 	DeathZone: {
 		EnergySpike: {

@@ -6,6 +6,7 @@ var Player = function (x, y, color) {
 	this.givenBlock = null;
 	
 	this.isAlive = true;
+	this.hasWon = false;
 	
 	this.blockTypeAvailable = [];
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
@@ -147,6 +148,7 @@ Player.prototype.die = function() {
 
 Player.prototype.win = function(){
 	Client.layer.removeChild(this.currentAnimation);
+	this.hasWon = true;
 };
 
 Player.prototype.turn = function(){

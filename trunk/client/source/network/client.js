@@ -9,6 +9,8 @@ var Client = new function(){
 	
 	this.player = null;
 	this.currentState = Enum.Game.State.PLAYING;
+	this.currentPhase = Enum.Game.Phase.PLAYING;
+	
 	this.needPush = false;
 	this.goal = null;
 	
@@ -17,6 +19,22 @@ var Client = new function(){
 	this.keys[cc.KEY.a] = false;
 	this.keys[cc.KEY.space] = false;
 	this.keys[cc.KEY.q] = false;
+	
+	//This private variable is used in private function instead of 'this' to access public members in private stuff.
+	var that = this;
+	
+	//Get right player for specified color.
+	var getPlayer = function(color){
+	
+		if(that.player.color == color)
+			return that.player;
+		else
+			for(var i in that.enemies)
+				if(that.enemies[i].color == color)
+					return that.enemies[i];
+					
+		return null;
+	};
 	
 	//Initialize the game client. Get window information.
 	this.init = function (width, height, layer, hud, endScreen) {
@@ -47,8 +65,8 @@ var Client = new function(){
 								 this.height*0.5, 
 								 this.width, 
 								 this.height, 
-								 this.width*0.75, 
-								 this.height*0.75, 
+								 this.width*0.9, 
+								 this.height*0.9, 
 								 1,
 								 Constants.Camera.SPEED_X,
 								 Constants.Camera.SPEED_Y,
@@ -56,8 +74,8 @@ var Client = new function(){
 		
 		//Create walls and floor.
 		this.floor = new Floor(this.mapSize.width*0.5, -40, this.mapSize.width, false, Enum.Wall.Type.PIT);
-		this.leftWall = new Wall(Enum.Direction.RIGHT, -50, this.mapSize.height*0.5 + 10, this.mapSize.height, true, Enum.Wall.Type.PIT);
-		this.rightWall = new Wall(Enum.Direction.LEFT, this.mapSize.width + 50, this.mapSize.height*0.5 + 10, this.mapSize.height, true, Enum.Wall.Type.PIT);
+		this.leftWall = new Wall(Enum.Direction.RIGHT, -50, this.mapSize.height + 10, this.mapSize.height*2, true, Enum.Wall.Type.PIT);
+		this.rightWall = new Wall(Enum.Direction.LEFT, this.mapSize.width + 50, this.mapSize.height + 10, this.mapSize.height*2, true, Enum.Wall.Type.PIT);
 
 		//Add walls to layer.
 		this.leftWall.init();
@@ -221,8 +239,10 @@ var Client = new function(){
 		});
 		
 		//Execute new action (player).
-		socket.on(Constants.Message.PLAYER_ACTION, function(action){
-			Client.player.execute(action);
+		socket.on(Constants.Message.PLAYER_ACTION, function(data){
+			
+			//Redirect action to right player.
+			Client.redirectAction(data);
 		});
 		
 		//When a player touches the goal.
@@ -244,6 +264,13 @@ var Client = new function(){
 		this.socket = socket;
 	};
 	
+	//Redirect action to right player.
+	this.redirectAction = function(data){
+		
+		var player = getPlayer(data.playerColor);
+		player.execute(data.action);
+	};
+	
 	//Set the new location and zoom of camera to catch all players.
 	this.moveCamera = function(){
 		
@@ -254,17 +281,20 @@ var Client = new function(){
 		
 		var containedObjects = [];
 		
-		if(this.player.isAlive)
+		if(this.player.isAlive && !this.player.hasWon)
 			containedObjects.push(this.player);
 		
 		for(var i in this.enemies)
-			if(this.enemies[i].isAlive)
+			if(this.enemies[i].isAlive && !this.enemies[i].hasWon)
 				containedObjects.push(this.enemies[i]);
 				
 		for(var i in this.blocks)
 			if(this.blocks[i].type == Enum.Block.Type.SPAWN)
 				containedObjects.push(this.blocks[i]);
 			
+		if(this.currentPhase == Enum.Game.Phase.WINNER)
+			containedObjects.push(this.goal);
+		
 		//Get extremities.
 		for(var i in containedObjects)
 		{		
@@ -299,12 +329,10 @@ var Client = new function(){
 	//Trigger when someone touched the goal.
 	this.electWinner = function(winner){
 		
-		if(winner.color == this.player.color)
-			this.player.win();
-		else
-			for(var i in this.enemies)
-				if(this.enemies[i].color == winner.color)
-					this.enemies[i].win();
+		var player = getPlayer(winner.color);
+		player.win();
+		
+		this.currentPhase = Enum.Game.Phase.WINNER;
 	};
 	
 	//End of the round. Show splash screen of victorious.
@@ -373,12 +401,8 @@ var Client = new function(){
 	//Spawn player.
 	this.spawnPlayer = function(remotePlayer){
 		
-		if(remotePlayer.color == this.player.color)
-			this.player.spawn(remotePlayer.x, remotePlayer.y);
-		else
-			for(var i in this.enemies)
-				if(this.enemies[i].color == remotePlayer.color)
-					this.enemies[i].spawn(remotePlayer.x, remotePlayer.y);
+		var player = getPlayer(remotePlayer.color);
+		player.spawn(remotePlayer.x, remotePlayer.y);
 	};
 	
 	//Add a new block from the server.
@@ -445,4 +469,6 @@ var Client = new function(){
 	this.pull = function(){
 		this.socket.emit(Constants.Message.PULL);
 	};
+	
+	
 };
