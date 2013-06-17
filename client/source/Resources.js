@@ -38,6 +38,9 @@ var assets = [
 	{type:'image', src: assetsPlayerDir + 'yellow_idle.png'},
 	{type:'image', src: assetsPlayerDir + 'yellow_running.png'},
 	{type:'image', src: assetsPlayerDir + 'yellow_jumping.png'},
+	{type:'image', src: assetsPlayerDir + 'red_idle.png'},
+	{type:'image', src: assetsPlayerDir + 'red_running.png'},
+	{type:'image', src: assetsPlayerDir + 'red_jumping.png'},
 	
 	{type:'image', src: assetsHudDir + 'fieldset.png'},
 	
@@ -46,5 +49,8 @@ var assets = [
 	
 	{type:"plist", src: assetsPlayerDir + 'yellow_idle.plist'},
 	{type:"plist", src: assetsPlayerDir + 'yellow_running.plist'},
-	{type:"plist", src: assetsPlayerDir + 'yellow_jumping.plist'}
+	{type:"plist", src: assetsPlayerDir + 'yellow_jumping.plist'},
+	{type:"plist", src: assetsPlayerDir + 'red_idle.plist'},
+	{type:"plist", src: assetsPlayerDir + 'red_running.plist'},
+	{type:"plist", src: assetsPlayerDir + 'red_jumping.plist'}
 ];
