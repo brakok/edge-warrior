@@ -75,7 +75,7 @@ Player.prototype.init = function(){
 
 	this.facing = Enum.Facing.LEFT;
 	
-	var colorText = 'yellow';
+	var colorText = 'red';
 	
 	//Set current animation to idle.
 	this.currentAnimationType = Enum.Anim.Type.IDLE;	

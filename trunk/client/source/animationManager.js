@@ -25,6 +25,15 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_jumping.plist', 
 														  assetsPlayerDir + 'yellow_jumping.png');
 														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'red_idle.plist', 
+														  assetsPlayerDir + 'red_idle.png');	
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'red_running.plist', 
+														  assetsPlayerDir + 'red_running.png');
+		
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'red_jumping.plist', 
+														  assetsPlayerDir + 'red_jumping.png');
+														  
 		//Kill command.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsHudDir + 'killCommand.plist', 
 														  assetsHudDir + 'killCommand.png');
