@@ -75,7 +75,7 @@ Player.prototype.init = function(){
 
 	this.facing = Enum.Facing.LEFT;
 	
-	var colorText = 'red';
+	var colorText = (this.color == Enum.Color.RED ? 'red' : 'yellow');
 	
 	//Set current animation to idle.
 	this.currentAnimationType = Enum.Anim.Type.IDLE;	
@@ -105,7 +105,7 @@ Player.prototype.setPosition = function(x, y){
 };
 
 Player.prototype.update = function(){
-	Client.camera.project(this.currentAnimation, this.x, this.y);
+	Client.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5);
 };
 
 Player.prototype.execute = function(action){
