@@ -52,5 +52,8 @@ var assets = [
 	{type:"plist", src: assetsPlayerDir + 'yellow_jumping.plist'},
 	{type:"plist", src: assetsPlayerDir + 'red_idle.plist'},
 	{type:"plist", src: assetsPlayerDir + 'red_running.plist'},
-	{type:"plist", src: assetsPlayerDir + 'red_jumping.plist'}
+	{type:"plist", src: assetsPlayerDir + 'red_jumping.plist'},
+	{type:"plist", src: assetsPlayerDir + 'blue_idle.plist'},
+	{type:"plist", src: assetsPlayerDir + 'blue_running.plist'},
+	{type:"plist", src: assetsPlayerDir + 'blue_jumping.plist'}
 ];
