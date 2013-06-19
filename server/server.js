@@ -107,11 +107,14 @@ var Constants = {
 	Player: {
 		JUMP_COOLDOWN: 0.1,
 		JUMP_POWER: 1350,
-		RUN_POWER_ONGROUND: 1000,
+		RUN_POWER_ONGROUND: 650,
 		RUN_POWER_OFFGROUND: 15,
 		WIDTH: 40,
 		HEIGHT: 40,
-		MAX_SPEED_FACTOR: 0.01
+		MAX_SPEED_FACTOR: 0.0000001,
+		MAX_VELOCITY: 175,
+		VELOCITY_FACTOR: 0.4,
+		SPEED_LOWER_LIMIT: 100
 	},
 	Block: {
 		WIDTH: 80,
@@ -588,8 +591,17 @@ Player.prototype.update = function(){
 		
 		if(this.keys.right || this.keys.left)
 		{
-			var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*Constants.Player.MAX_SPEED_FACTOR);
-			impulse = Constants.Player.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
+			var velX = Math.abs(this.body.getVel().x);
+			var factor = 1;
+			
+			if(velX > Constants.Player.MAX_VELOCITY)
+				factor *= Constants.Player.MAX_SPEED_FACTOR;
+				
+			//Reduce impulse if velocity is above a specified limit.
+			if(velX > Constants.Player.SPEED_LOWER_LIMIT)
+				factor /= velX*Constants.Player.VELOCITY_FACTOR;
+				
+			impulse = Constants.Player.RUN_POWER_ONGROUND * factor;
 		}	
 		
 		//Move

@@ -165,8 +165,17 @@ Player.prototype.update = function(){
 		
 		if(this.keys.right || this.keys.left)
 		{
-			var factor = Math.abs(this.body.getVel().x*this.body.getVel().x*Constants.Player.MAX_SPEED_FACTOR);
-			impulse = Constants.Player.RUN_POWER_ONGROUND * 1/(factor < 1 ? 1 : factor);
+			var velX = Math.abs(this.body.getVel().x);
+			var factor = 1;
+			
+			if(velX > Constants.Player.MAX_VELOCITY)
+				factor *= Constants.Player.MAX_SPEED_FACTOR;
+				
+			//Reduce impulse if velocity is above a specified limit.
+			if(velX > Constants.Player.SPEED_LOWER_LIMIT)
+				factor /= velX*Constants.Player.VELOCITY_FACTOR;
+				
+			impulse = Constants.Player.RUN_POWER_ONGROUND * factor;
 		}	
 		
 		//Move
