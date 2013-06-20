@@ -178,7 +178,7 @@ var Game = {
 	},
 	electWinner: function(winner){
 		this.winner = winner;
-		this.winner.hasWon = true;;
+		this.winner.hasWon = true;
 	},
 	end: function(){
 		var survivors = 0;
