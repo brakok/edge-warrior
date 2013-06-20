@@ -77,6 +77,7 @@ Player.prototype.init = function(){
 	
 	var colorText = 'yellow';
 	
+	
 	switch(this.color)
 	{
 		case Enum.Color.RED:

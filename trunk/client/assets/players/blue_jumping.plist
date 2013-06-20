@@ -9,11 +9,11 @@
                 <key>frame</key>
                 <string>{{2,2},{66,151}}</string>
                 <key>offset</key>
-                <string>{-2,33}</string>
+                <string>{-2,19}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{229,40},{66,151}}</string>
+                <string>{{229,54},{66,151}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -22,11 +22,11 @@
                 <key>frame</key>
                 <string>{{70,2},{66,151}}</string>
                 <key>offset</key>
-                <string>{-3,33}</string>
+                <string>{-3,19}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{228,40},{66,151}}</string>
+                <string>{{228,54},{66,151}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -35,11 +35,11 @@
                 <key>frame</key>
                 <string>{{138,2},{66,153}}</string>
                 <key>offset</key>
-                <string>{-3,33}</string>
+                <string>{-3,20}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{228,39},{66,153}}</string>
+                <string>{{228,52},{66,153}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -48,11 +48,11 @@
                 <key>frame</key>
                 <string>{{206,2},{66,153}}</string>
                 <key>offset</key>
-                <string>{-3,33}</string>
+                <string>{-3,20}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{228,39},{66,153}}</string>
+                <string>{{228,52},{66,153}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -61,11 +61,11 @@
                 <key>frame</key>
                 <string>{{274,2},{66,153}}</string>
                 <key>offset</key>
-                <string>{-4,33}</string>
+                <string>{-4,19}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{227,39},{66,153}}</string>
+                <string>{{227,53},{66,153}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -74,11 +74,11 @@
                 <key>frame</key>
                 <string>{{342,2},{66,153}}</string>
                 <key>offset</key>
-                <string>{-4,32}</string>
+                <string>{-4,19}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{227,40},{66,153}}</string>
+                <string>{{227,53},{66,153}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -87,11 +87,11 @@
                 <key>frame</key>
                 <string>{{410,2},{68,153}}</string>
                 <key>offset</key>
-                <string>{-3,32}</string>
+                <string>{-3,19}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{227,40},{68,153}}</string>
+                <string>{{227,53},{68,153}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -100,11 +100,11 @@
                 <key>frame</key>
                 <string>{{2,157},{70,155}}</string>
                 <key>offset</key>
-                <string>{-1,32}</string>
+                <string>{-1,19}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{228,39},{70,155}}</string>
+                <string>{{228,52},{70,155}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -113,11 +113,11 @@
                 <key>frame</key>
                 <string>{{74,157},{74,155}}</string>
                 <key>offset</key>
-                <string>{0,32}</string>
+                <string>{0,19}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{227,39},{74,155}}</string>
+                <string>{{227,52},{74,155}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -126,11 +126,11 @@
                 <key>frame</key>
                 <string>{{150,157},{78,155}}</string>
                 <key>offset</key>
-                <string>{1,32}</string>
+                <string>{1,18}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{226,39},{78,155}}</string>
+                <string>{{226,53},{78,155}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -139,11 +139,11 @@
                 <key>frame</key>
                 <string>{{230,157},{80,155}}</string>
                 <key>offset</key>
-                <string>{3,31}</string>
+                <string>{3,18}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{227,40},{80,155}}</string>
+                <string>{{227,53},{80,155}}</string>
                 <key>sourceSize</key>
                 <string>{528,297}</string>
             </dict>
@@ -157,7 +157,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:eeb4cf37c73b02aa9e70b501b21d7184$</string>
+            <string>$TexturePacker:SmartUpdate:353f4f132a5e1e7eb82450fe54932986$</string>
             <key>textureFileName</key>
             <string>blue_jumping.png</string>
         </dict>
