@@ -19,6 +19,9 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 
 														  assetsEffectDir + 'PlayerDeath.png');
 		
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'BlockLanding.plist', 
+														  assetsEffectDir + 'BlockLanding.png');
+		
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
 														  assetsPlayerDir + 'yellow_idle.png');	

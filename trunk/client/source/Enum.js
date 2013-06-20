@@ -88,7 +88,8 @@ var Enum = {
 	},
 	Effect: {
 		Type: {
-			PLAYER_DEATH: 0
+			PLAYER_DEATH: 0,
+			BLOCK_LANDING: 1
 		}
 	}
 };

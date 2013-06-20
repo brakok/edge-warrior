@@ -22,6 +22,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('PlayerDeath.0000.png');
 			this.animation = AnimationManager.create('PlayerDeath', 0, 12, 24);
 			break;
+		case Enum.Effect.Type.BLOCK_LANDING:
+		
+			//Create fog animation on block landing.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('BlockLanding.0000.png');
+			this.animation = AnimationManager.create('BlockLanding', 0, 12, 24);
+			break;
 	}
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;
