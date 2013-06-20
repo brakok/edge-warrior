@@ -7,314 +7,314 @@
             <key>blue_idle.0000.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{80,180}}</string>
+                <string>{{2,2},{66,149}}</string>
                 <key>offset</key>
-                <string>{-3,46}</string>
+                <string>{-2,31}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,44},{80,180}}</string>
+                <string>{{229,43},{66,149}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{84,2},{80,180}}</string>
+                <string>{{70,2},{66,151}}</string>
                 <key>offset</key>
-                <string>{-3,46}</string>
+                <string>{-2,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,44},{80,180}}</string>
+                <string>{{229,41},{66,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{166,2},{80,180}}</string>
+                <string>{{138,2},{66,151}}</string>
                 <key>offset</key>
-                <string>{-3,46}</string>
+                <string>{-2,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,44},{80,180}}</string>
+                <string>{{229,41},{66,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0003.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{248,2},{80,182}}</string>
+                <string>{{206,2},{66,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-2,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,42},{80,182}}</string>
+                <string>{{229,41},{66,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0004.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{330,2},{80,182}}</string>
+                <string>{{274,2},{68,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,42},{80,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0005.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{412,2},{80,182}}</string>
+                <string>{{344,2},{66,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-2,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,42},{80,182}}</string>
+                <string>{{229,41},{66,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0006.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,186},{82,182}}</string>
+                <string>{{412,2},{68,151}}</string>
                 <key>offset</key>
-                <string>{-4,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{275,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0007.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{86,186},{82,182}}</string>
+                <string>{{2,155},{68,151}}</string>
                 <key>offset</key>
-                <string>{-4,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{275,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0008.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{170,186},{82,182}}</string>
+                <string>{{72,155},{68,151}}</string>
                 <key>offset</key>
-                <string>{-4,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{275,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0009.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{254,186},{82,182}}</string>
+                <string>{{142,155},{68,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{276,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0010.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{338,186},{82,182}}</string>
+                <string>{{212,155},{68,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{276,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0011.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{422,186},{82,182}}</string>
+                <string>{{282,155},{68,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{276,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0012.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,370},{82,182}}</string>
+                <string>{{352,155},{68,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{276,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0013.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{86,370},{82,182}}</string>
+                <string>{{422,155},{68,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{276,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0014.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{170,370},{82,182}}</string>
+                <string>{{2,308},{68,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{276,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0015.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{254,370},{82,182}}</string>
+                <string>{{72,308},{68,151}}</string>
                 <key>offset</key>
-                <string>{-4,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{275,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0016.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{338,370},{82,182}}</string>
+                <string>{{142,308},{68,151}}</string>
                 <key>offset</key>
-                <string>{-4,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{275,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0017.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{422,370},{82,182}}</string>
+                <string>{{212,308},{68,151}}</string>
                 <key>offset</key>
-                <string>{-4,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{275,42},{82,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0018.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,554},{80,182}}</string>
+                <string>{{282,308},{68,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-3,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,42},{80,182}}</string>
+                <string>{{227,41},{68,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0019.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{84,554},{80,182}}</string>
+                <string>{{352,308},{66,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-2,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,42},{80,182}}</string>
+                <string>{{229,41},{66,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0020.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{166,554},{80,182}}</string>
+                <string>{{420,308},{66,151}}</string>
                 <key>offset</key>
-                <string>{-3,47}</string>
+                <string>{-2,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,42},{80,182}}</string>
+                <string>{{229,41},{66,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0021.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{248,554},{80,180}}</string>
+                <string>{{2,461},{66,151}}</string>
                 <key>offset</key>
-                <string>{-3,46}</string>
+                <string>{-2,32}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,44},{80,180}}</string>
+                <string>{{229,41},{66,151}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0022.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{330,554},{80,180}}</string>
+                <string>{{70,461},{66,149}}</string>
                 <key>offset</key>
-                <string>{-3,46}</string>
+                <string>{-2,31}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,44},{80,180}}</string>
+                <string>{{229,43},{66,149}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
             <key>blue_idle.0023.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{412,554},{80,180}}</string>
+                <string>{{138,461},{66,149}}</string>
                 <key>offset</key>
-                <string>{-3,46}</string>
+                <string>{-2,31}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{277,44},{80,180}}</string>
+                <string>{{229,43},{66,149}}</string>
                 <key>sourceSize</key>
-                <string>{640,360}</string>
+                <string>{528,297}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -326,7 +326,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:ceb4b5b50fb673f16e815ad399eab45b$</string>
+            <string>$TexturePacker:SmartUpdate:0301f32ce5777b61fa59152ddf1aeba9$</string>
             <key>textureFileName</key>
             <string>blue_idle.png</string>
         </dict>
