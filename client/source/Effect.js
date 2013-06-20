@@ -28,6 +28,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('BlockLanding.0000.png');
 			this.animation = AnimationManager.create('BlockLanding', 0, 12, 24);
 			break;
+		case Enum.Effect.Type.BLOCK_DISAPPEARING:
+		
+			//Create fog animation on block landing.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('BlockDisappearing.0000.png');
+			this.animation = AnimationManager.create('BlockDisappearing', 0, 6, 24);
+			break;
 	}
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;

@@ -36,7 +36,9 @@ var Enum = {
 			SKILLED: 3
 		},
 		Destruction: {
-			COLOR_CONTACT: 0
+			COLOR_CONTACT: 0,
+			SPAWN: 1,
+			CRUSHED: 2
 		}
 	},
 	Anim:{
@@ -89,7 +91,8 @@ var Enum = {
 	Effect: {
 		Type: {
 			PLAYER_DEATH: 0,
-			BLOCK_LANDING: 1
+			BLOCK_LANDING: 1,
+			BLOCK_DISAPPEARING: 2
 		}
 	}
 };

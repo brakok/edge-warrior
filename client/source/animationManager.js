@@ -21,6 +21,9 @@ var AnimationManager = {
 		
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'BlockLanding.plist', 
 														  assetsEffectDir + 'BlockLanding.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'BlockDisappearing.plist', 
+														  assetsEffectDir + 'BlockDisappearing.png');
 		
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
