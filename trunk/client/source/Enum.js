@@ -92,7 +92,8 @@ var Enum = {
 		Type: {
 			PLAYER_DEATH: 0,
 			BLOCK_LANDING: 1,
-			BLOCK_DISAPPEARING: 2
+			BLOCK_DISAPPEARING: 2,
+			SWAP_COLOR: 3
 		}
 	}
 };

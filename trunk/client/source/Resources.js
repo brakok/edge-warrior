@@ -19,11 +19,14 @@ var assets = [
 	{type:'image', src: assetsEffectDir + 'PlayerDeath.png'},
 	{type:'image', src: assetsEffectDir + 'BlockLanding.png'},
 	{type:'image', src: assetsEffectDir + 'BlockDisappearing.png'},
+	{type:'image', src: assetsEffectDir + 'SwapColor.png'},
+	
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_tentacle.plist'},
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_twisted.plist'},
 	{type:"plist", src: assetsEffectDir + 'PlayerDeath.plist'},
 	{type:"plist", src: assetsEffectDir + 'BlockLanding.plist'},
 	{type:"plist", src: assetsEffectDir + 'BlockDisappearing.plist'},
+	{type:"plist", src: assetsEffectDir + 'SwapColor.plist'},
 
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_action.png'},
