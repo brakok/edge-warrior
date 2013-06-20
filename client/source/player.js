@@ -134,8 +134,13 @@ Player.prototype.execute = function(action){
 			this.swapAnimation(Enum.Anim.Type.RUNNING);
 			break;
 		case Enum.Action.Type.JUMPING:
+			this.swapAnimation(Enum.Anim.Type.JUMPING);
+			break;
 		case Enum.Action.Type.DOUBLE_JUMPING:
 			this.swapAnimation(Enum.Anim.Type.JUMPING);
+			
+			//Trigger double jump effect.
+			EffectManager.create(Enum.Effect.Type.DOUBLE_JUMP, this.x, this.y - 50);
 			break;
 		case Enum.Action.Type.FALLING:
 			this.swapAnimation(Enum.Anim.Type.FALLING);

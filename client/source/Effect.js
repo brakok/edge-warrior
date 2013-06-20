@@ -40,6 +40,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('SwapColor.0000.png');
 			this.animation = AnimationManager.create('SwapColor', 0, 12, 24);
 			break;
+		case Enum.Effect.Type.DOUBLE_JUMP:
+			
+			//Effect when double jumping.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('DoubleJump.0000.png');
+			this.animation = AnimationManager.create('DoubleJump', 0, 6, 24);
+			break;
 	}
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;
