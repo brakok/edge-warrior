@@ -8,6 +8,12 @@ var Constants = {
 			LOST_FOREACH_ENEMY: 5
 		}
 	},
+	Floor: {
+		Z_INDEX: 45
+	},
+	Wall: {
+		Z_INDEX: 45
+	},
 	KillCommand: {
 		Time: {
 			APPARITION: 3,
@@ -26,7 +32,28 @@ var Constants = {
 	DeathZone: {
 		EnergySpike: {
 			LIGHTBALL_ORBIT_SPEED: 5,
-			LIGHTBALL_ORBIT_RADIUS: 8
+			LIGHTBALL_ORBIT_RADIUS: 8,
+			LIGHTBALL_Z_INDEX: 51,
+			Z_INDEX: 40
+		},
+		Missile: {
+			Z_INDEX: 40
+		}
+	},
+	WinningGoal: {
+		FloatingBall: {
+			Z_INDEX: 50
+		}
+	},
+	EndScreen: {
+		Z_INDEX: 1000
+	},
+	HUD: {
+		ENDSCREEN_Z_INDEX: -1000,
+		Z_INDEX: 1000,
+		Inventory: {
+			CURRENT_Z_INDEX: 1002,
+			NEXT_Z_INDEX: 1001
 		}
 	},
 	Message:{

@@ -15,7 +15,7 @@ Missile.prototype.init = function(){
 	}
 	
 	this.setPosition(this.x, this.y);	
-	this.sprite._zOrder = 40;
+	this.sprite._zOrder = Constants.DeathZone.Missile.Z_INDEX;
 	
 	Client.layer.addChild(this.sprite);
 };

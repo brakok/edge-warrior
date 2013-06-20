@@ -37,7 +37,9 @@ Inventory.prototype.setBlocks = function(current, next){
 	this.nextBlock.setPosition(new cc.Point(this.x + this.defaultPosition.next.x, this.y + this.defaultPosition.next.y));
 	
 	//Place current above next.
-	this.currentBlock._zOrder = 1;
+	this.currentBlock._zOrder = Constants.HUD.Inventory.CURRENT_Z_INDEX;
+	this.nextBlock._zOrder = Constants.HUD.Inventory.NEXT_Z_INDEX;
+	
 	this.currentBlock.setScale(1.6);
 	this.nextBlock.setScale(1.2);
 	
@@ -54,7 +56,9 @@ Inventory.prototype.pushBlock = function(block){
 		this.nextBlock = block.sprite;
 		
 		//Set correct scale and good z-index on current.
-		this.currentBlock._zOrder = 1;
+		this.currentBlock._zOrder = Constants.HUD.Inventory.CURRENT_Z_INDEX;
+		this.nextBlock._zOrder = Constants.HUD.Inventory.NEXT_Z_INDEX;
+		
 		this.currentBlock.setScale(1.6);
 		this.nextBlock.setScale(1.2);
 		

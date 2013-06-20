@@ -13,7 +13,7 @@ var Block = function (x, y, type, color) {
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_spawn.png');
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
-	
+		
 	this.setPosition(this.x, this.y);
 }
 

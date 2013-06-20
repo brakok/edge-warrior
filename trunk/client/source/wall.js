@@ -28,7 +28,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		
 		var stepY = firstSegment.getTexture().height;
 		var tmpY = this.y - this.height*0.5 + stepY*0.5;
-		var zOrder = 45;
+		var zOrder = Constants.Wall.Z_INDEX;
 		
 		//Add a corner at the bottom of the wall.
 		if(this.hasCorner)
