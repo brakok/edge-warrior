@@ -16,6 +16,7 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.color = color;
 	
 	this.mustTrigger = false;
+	this.justLanded = false;
 	
 	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
 	this.toggleState = false;
@@ -82,12 +83,7 @@ Block.prototype.active = function(flag){
 			this.body.nodeIdleTime = Infinity;
 			this.body.setMass(Constants.Physic.MASS_BLOCK_STATIC);
 			
-			var data = {
-				action: Enum.Action.Type.LANDING,
-				id: this.id
-			};
 			
-			io.sockets.in(Game.id).emit(Constants.Message.BLOCK_ACTION, data);
 		}
 	}
 };
@@ -105,6 +101,18 @@ Block.prototype.update = function(){
 		
 		if(this.stillExist)
 		{
+			//Check if it just landed to tell client to activate animation.
+			if(this.justLanded)
+			{
+				var data = {
+					action: Enum.Action.Type.LANDING,
+					id: this.id
+				};
+			
+				io.sockets.in(Game.id).emit(Constants.Message.BLOCK_ACTION, data);
+				this.justLanded = false;
+			}
+		
 			//Activate or desactivate a block to become static or dynamic.
 			if(this.toggleState && (this.state == Enum.Block.State.STATIC || this.body.isSleeping()))
 			{
@@ -112,7 +120,7 @@ Block.prototype.update = function(){
 				this.toggleState = false;
 			}	
 		}
-	}	
+	}
 };
 
 Block.prototype.toClient = function(){
