@@ -71,7 +71,8 @@ var Enum = {
 			JUMPING: 2,
 			FALLING: 3,
 			DOUBLE_JUMPING: 4,
-			SUMMONING: 5
+			SUMMONING: 5,
+			LANDING: 6
 		}
 	},
 	DeathZone: {
@@ -180,6 +181,7 @@ var Constants = {
 		DELETE_DEATHZONE: 'deleteDeathZone',
 		NEW_DEATHZONE: 'newDeathZone',
 		GOAL_ACTION: 'goalAction',
-		PLAYER_ACTION: 'playerAction'
+		PLAYER_ACTION: 'playerAction',
+		BLOCK_ACTION: 'blockAction'
 	}
 };

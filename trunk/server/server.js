@@ -71,7 +71,8 @@ var Enum = {
 			JUMPING: 2,
 			FALLING: 3,
 			DOUBLE_JUMPING: 4,
-			SUMMONING: 5
+			SUMMONING: 5,
+			LANDING: 6
 		}
 	},
 	DeathZone: {
@@ -126,7 +127,6 @@ var Constants = {
 			SPAWN_TIMER: 6
 		}
 	},
-	
 	WinningGoal: {
 		OFFSET_Y: 100,
 		PHASE_TIME: 8,
@@ -181,7 +181,8 @@ var Constants = {
 		DELETE_DEATHZONE: 'deleteDeathZone',
 		NEW_DEATHZONE: 'newDeathZone',
 		GOAL_ACTION: 'goalAction',
-		PLAYER_ACTION: 'playerAction'
+		PLAYER_ACTION: 'playerAction',
+		BLOCK_ACTION: 'blockAction'
 	}
 };//Mortal things listener.
 var DeathZoneListener = {
@@ -965,6 +966,13 @@ Block.prototype.active = function(flag){
 			Game.space.removeBody(this.body);
 			this.body.nodeIdleTime = Infinity;
 			this.body.setMass(Constants.Physic.MASS_BLOCK_STATIC);
+			
+			var data = {
+				action: Enum.Action.Type.LANDING,
+				id: this.id
+			};
+			
+			io.sockets.in(Game.id).emit(Constants.Message.BLOCK_ACTION, data);
 		}
 	}
 };

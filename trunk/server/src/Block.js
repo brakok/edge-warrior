@@ -81,6 +81,13 @@ Block.prototype.active = function(flag){
 			Game.space.removeBody(this.body);
 			this.body.nodeIdleTime = Infinity;
 			this.body.setMass(Constants.Physic.MASS_BLOCK_STATIC);
+			
+			var data = {
+				action: Enum.Action.Type.LANDING,
+				id: this.id
+			};
+			
+			io.sockets.in(Game.id).emit(Constants.Message.BLOCK_ACTION, data);
 		}
 	}
 };
