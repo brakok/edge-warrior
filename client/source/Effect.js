@@ -34,6 +34,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('BlockDisappearing.0000.png');
 			this.animation = AnimationManager.create('BlockDisappearing', 0, 6, 24);
 			break;
+		case Enum.Effect.Type.SWAP_COLOR:
+		
+			//Trigger animation when a block swaps his color.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('SwapColor.0000.png');
+			this.animation = AnimationManager.create('SwapColor', 0, 12, 24);
+			break;
 	}
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;

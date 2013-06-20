@@ -48,6 +48,9 @@ Block.prototype.swapColor = function(color){
 	this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + color + '.png');
 	Client.layer.addChild(this.sprite);
 	
+	//Trigger swap effect.
+	EffectManager.create(Enum.Effect.Type.SWAP_COLOR, this.x, this.y);
+	
 	this.color = color;
 	this.setPosition(this.x, this.y);
 };

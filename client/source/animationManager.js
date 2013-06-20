@@ -24,6 +24,9 @@ var AnimationManager = {
 														  
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'BlockDisappearing.plist', 
 														  assetsEffectDir + 'BlockDisappearing.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'SwapColor.plist', 
+														  assetsEffectDir + 'SwapColor.png');
 		
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
