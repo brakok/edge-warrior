@@ -76,5 +76,8 @@ var Constants = {
 		NEW_DEATHZONE: 'newDeathZone',
 		GOAL_ACTION: 'goalAction',
 		PLAYER_ACTION: 'playerAction'
+	},
+	Effect: {
+		Z_INDEX: 10
 	}
 };
