@@ -16,8 +16,10 @@ var assets = [
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_twisted.png'},
+	{type:'image', src: assetsEffectDir + 'PlayerDeath.png'},
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_tentacle.plist'},
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_twisted.plist'},
+	{type:"plist", src: assetsEffectDir + 'PlayerDeath.plist'},
 
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_action.png'},
@@ -41,6 +43,9 @@ var assets = [
 	{type:'image', src: assetsPlayerDir + 'red_idle.png'},
 	{type:'image', src: assetsPlayerDir + 'red_running.png'},
 	{type:'image', src: assetsPlayerDir + 'red_jumping.png'},
+	{type:'image', src: assetsPlayerDir + 'blue_idle.png'},
+	{type:'image', src: assetsPlayerDir + 'blue_running.png'},
+	{type:'image', src: assetsPlayerDir + 'blue_jumping.png'},
 	
 	{type:'image', src: assetsHudDir + 'fieldset.png'},
 	

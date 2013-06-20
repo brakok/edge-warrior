@@ -15,6 +15,10 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'EnergySpike_twisted.plist', 
 														  assetsEffectDir + 'EnergySpike_twisted.png');
 															  
+		//Effects.
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 
+														  assetsEffectDir + 'PlayerDeath.png');
+		
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
 														  assetsPlayerDir + 'yellow_idle.png');	

@@ -157,6 +157,10 @@ Player.prototype.fromServer = function(data){
 
 Player.prototype.die = function() {
 	Client.layer.removeChild(this.currentAnimation);
+	
+	//Create an animation for the dying player.
+	EffectManager.create(Enum.Effect.Type.PLAYER_DEATH, this.x, this.y);
+	
 	this.isAlive = false;
 };
 

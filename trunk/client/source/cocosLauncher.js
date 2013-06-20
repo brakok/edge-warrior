@@ -27,6 +27,8 @@
 				  'source/killCommand.js',
 				  'source/missile.js',
 				  'source/spike.js',
+				  'source/EffectManager.js',
+				  'source/Effect.js',
 				  'source/hud.js',
 				  'source/endScreen.js']
 	};

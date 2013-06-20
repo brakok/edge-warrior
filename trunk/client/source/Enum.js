@@ -84,5 +84,10 @@ var Enum = {
 		LEFT: 1,
 		DOWN: 2,
 		RIGHT: 3
+	},
+	Effect: {
+		Type: {
+			PLAYER_DEATH: 0
+		}
 	}
 };

@@ -136,6 +136,9 @@ var Client = new function(){
 				this.deathZones[i].update();
 				
 			this.goal.update();
+			
+			//Update all effects.
+			EffectManager.update();
 		}
 	};
 		
