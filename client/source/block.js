@@ -36,7 +36,7 @@ Block.prototype.execute = function(type){
 };
 
 Block.prototype.land = function(){
-	EffectManager.create(Enum.Effect.Type.BLOCK_LANDING, this.x, this.y - (this.sprite.getTexture().height*0.5));
+	EffectManager.create(Enum.Effect.Type.BLOCK_LANDING, this.x, this.y - (this.sprite.getTexture().height*0.75));
 };
 
 Block.prototype.update = function(){
