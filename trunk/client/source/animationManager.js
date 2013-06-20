@@ -27,6 +27,9 @@ var AnimationManager = {
 														  
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'SwapColor.plist', 
 														  assetsEffectDir + 'SwapColor.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'DoubleJump.plist', 
+														  assetsEffectDir + 'DoubleJump.png');
 		
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
