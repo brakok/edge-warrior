@@ -126,7 +126,6 @@ var Constants = {
 			SPAWN_TIMER: 6
 		}
 	},
-	
 	WinningGoal: {
 		OFFSET_Y: 100,
 		PHASE_TIME: 8,
