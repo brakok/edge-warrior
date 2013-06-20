@@ -54,6 +54,13 @@ Block.prototype.swapColor = function(color){
 
 Block.prototype.explode = function(cause){
 	Client.layer.removeChild(this.sprite);
+	
+	//Trigger right animation depending of destruction cause.
+	switch(cause){
+		case Enum.Block.Destruction.COLOR_CONTACT:
+			EffectManager.create(Enum.Effect.Type.BLOCK_DISAPPEARING, this.x, this.y);
+			break;
+	}
 };
 
 //Update block information from server.
