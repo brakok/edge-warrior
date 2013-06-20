@@ -75,7 +75,8 @@ var Constants = {
 		DELETE_DEATHZONE: 'deleteDeathZone',
 		NEW_DEATHZONE: 'newDeathZone',
 		GOAL_ACTION: 'goalAction',
-		PLAYER_ACTION: 'playerAction'
+		PLAYER_ACTION: 'playerAction',
+		BLOCK_ACTION: 'blockAction'
 	},
 	Effect: {
 		Z_INDEX: 10
