@@ -49,7 +49,7 @@ Spike.prototype.init = function(){
 					orbitTime = 0;
 			});
 			
-			this.lightBall._zOrder = 41;
+			this.lightBall._zOrder = Constants.DeathZone.EnergySpike.LIGHTBALL_Z_INDEX;
 			
 			//Resize to good scale.
 			var factor = this.currentAnimation.getTexture().height/distance;
@@ -62,8 +62,8 @@ Spike.prototype.init = function(){
 			break;
 	}
 
-	this.setPosition(this.x, this.y);	
-	this.currentAnimation._zOrder = 40;
+	this.setPosition(this.x, this.y);
+	this.currentAnimation._zOrder = Constants.DeathZone.EnergySpike.Z_INDEX;
 
 	Client.layer.addChild(this.currentAnimation);
 };

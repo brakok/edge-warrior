@@ -337,7 +337,7 @@ var Client = new function(){
 	
 	//End of the round. Show splash screen of victorious.
 	this.end = function(data){
-		this.hud._zOrder = -1000;
+		this.hud._zOrder = Constants.HUD.ENDSCREEN_Z_INDEX;
 		this.endScreen.addWinner(data.winner, data.succeed);
 	};
 	

@@ -8,7 +8,7 @@ var EndScreen = cc.LayerColor.extend({
 		this._super(new cc.Color4B(0, 0, 0, 0), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
-		this._zOrder = 1000;
+		this._zOrder = Constants.EndScreen.Z_INDEX;
 	},
 	addWinner: function(winner, succeed){
 	

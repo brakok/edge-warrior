@@ -12,7 +12,7 @@ var HUD = cc.LayerColor.extend({
 		
 		//Add the kill command beside the inventory.
 		this.killCommand = new KillCommand(270, 65, width, this);
-		this._zOrder = 1000;
+		this._zOrder = Constants.HUD.Z_INDEX;
 	},
 	update: function(dt){
 		this.killCommand.update(dt);
