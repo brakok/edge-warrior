@@ -55,7 +55,8 @@ var Enum = {
 			JUMPING: 2,
 			FALLING: 3,
 			DOUBLE_JUMPING: 4,
-			SUMMONING: 5
+			SUMMONING: 5,
+			LANDING: 6
 		}
 	},
 	Facing:{

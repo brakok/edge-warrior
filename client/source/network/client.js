@@ -263,6 +263,11 @@ var Client = new function(){
 			Client.addDeathZone(data);
 		});
 		
+		//Execute new action for a specified block.
+		socket.on(Constants.Message.BLOCK_ACTION, function(data){
+			Client.blocks[data.id].execute(data.action);
+		});
+		
 		//Once defined, preserved the socket.
 		this.socket = socket;
 	};

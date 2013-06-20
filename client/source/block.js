@@ -26,6 +26,19 @@ Block.prototype.setPosition = function(x, y){
 	this.y = y;
 };
 
+Block.prototype.execute = function(type){
+
+	switch(type){
+		case Enum.Action.Type.LANDING:
+			this.land();
+			break;
+	}
+};
+
+Block.prototype.land = function(){
+	console.log('ici');
+};
+
 Block.prototype.update = function(){
 	Client.camera.project(this.sprite, this.x, this.y);
 };
