@@ -79,6 +79,9 @@ var Constants = {
 		BLOCK_ACTION: 'blockAction'
 	},
 	Effect: {
-		Z_INDEX: 10
+		Z_INDEX: 10,
+		DoubleJump: {
+			OFFSET: 50
+		}
 	}
 };

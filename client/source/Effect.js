@@ -44,7 +44,7 @@ Effect.prototype.init = function(){
 			
 			//Effect when double jumping.
 			this.sprite = cc.Sprite.createWithSpriteFrameName('DoubleJump.0000.png');
-			this.animation = AnimationManager.create('DoubleJump', 0, 6, 24);
+			this.animation = AnimationManager.create('DoubleJump', 0, 4, 24);
 			break;
 	}
 	
