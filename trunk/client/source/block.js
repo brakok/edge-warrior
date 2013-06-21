@@ -15,6 +15,9 @@ var Block = function (x, y, type, color) {
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
 		
 	this.setPosition(this.x, this.y);
+	
+	this.landingCountdown = 0;
+	this.hasDoneLandingAnimation = true;
 }
 
 Block.prototype.init = function(){
@@ -36,11 +39,26 @@ Block.prototype.execute = function(type){
 };
 
 Block.prototype.land = function(){
-	EffectManager.create(Enum.Effect.Type.BLOCK_LANDING, this.x, this.y - (this.sprite.getTexture().height*0.75));
+	
+	//Indicate that the landing animation needs to be triggered in a few milliseconds (in order to be at the right place).
+	this.hasDoneLandingAnimation = false;
+	this.landingCountdown = Constants.Effect.BlockLanding.TIMER;
 };
 
-Block.prototype.update = function(){
+Block.prototype.update = function(dt){
 	Client.camera.project(this.sprite, this.x, this.y);
+	
+	//Trigger landing animation if needed.
+	if(!this.hasDoneLandingAnimation)
+	{
+		if(this.landingCountdown < 0)
+		{
+			this.hasDoneLandingAnimation = true;
+			EffectManager.create(Enum.Effect.Type.BLOCK_LANDING, this.x, this.y - (this.sprite.getTexture().height*0.5 - Constants.Effect.BlockLanding.OFFSET));
+		}
+		else
+			this.landingCountdown -= dt;
+	}
 };
 
 Block.prototype.swapColor = function(color){
