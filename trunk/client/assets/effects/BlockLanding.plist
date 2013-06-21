@@ -7,158 +7,158 @@
             <key>BlockLanding.0000.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{164,2},{90,17}}</string>
+                <string>{{116,178},{74,8}}</string>
                 <key>offset</key>
-                <string>{-4,6}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{71,53},{90,17}}</string>
+                <string>{{13,16},{74,8}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{52,159},{96,19}}</string>
+                <string>{{116,98},{78,10}}</string>
                 <key>offset</key>
-                <string>{-4,4}</string>
+                <string>{0,-1}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{68,54},{96,19}}</string>
+                <string>{{11,16},{78,10}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{52,136},{106,21}}</string>
+                <string>{{2,136},{84,12}}</string>
                 <key>offset</key>
-                <string>{-4,2}</string>
+                <string>{0,-2}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{63,55},{106,21}}</string>
+                <string>{{8,16},{84,12}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0003.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{29,136},{116,21}}</string>
+                <string>{{2,120},{90,14}}</string>
                 <key>offset</key>
-                <string>{-5,0}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{57,57},{116,21}}</string>
+                <string>{{5,16},{90,14}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0004.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{52,180},{124,21}}</string>
+                <string>{{2,104},{92,14}}</string>
                 <key>offset</key>
-                <string>{-5,-1}</string>
+                <string>{0,-4}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{53,58},{124,21}}</string>
+                <string>{{4,17},{92,14}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0005.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{29,111},{130,23}}</string>
+                <string>{{98,98},{94,16}}</string>
                 <key>offset</key>
-                <string>{-4,-1}</string>
+                <string>{-1,-3}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{51,57},{130,23}}</string>
+                <string>{{2,15},{94,16}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0006.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,111},{136,25}}</string>
+                <string>{{2,86},{94,16}}</string>
                 <key>offset</key>
-                <string>{-3,0}</string>
+                <string>{-1,-2}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{49,55},{136,25}}</string>
+                <string>{{2,14},{94,16}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0007.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,82},{140,27}}</string>
+                <string>{{2,22},{96,16}}</string>
                 <key>offset</key>
-                <string>{-2,2}</string>
+                <string>{-1,-2}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{48,52},{140,27}}</string>
+                <string>{{1,14},{96,16}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0008.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,49},{144,31}}</string>
+                <string>{{2,2},{96,18}}</string>
                 <key>offset</key>
-                <string>{-1,5}</string>
+                <string>{-1,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{47,47},{144,31}}</string>
+                <string>{{1,11},{96,18}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0009.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{207,21},{148,37}}</string>
+                <string>{{2,64},{94,20}}</string>
                 <key>offset</key>
-                <string>{0,8}</string>
+                <string>{0,2}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{46,41},{148,37}}</string>
+                <string>{{3,8},{94,20}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0010.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{164,21},{152,41}}</string>
+                <string>{{2,40},{94,22}}</string>
                 <key>offset</key>
-                <string>{1,11}</string>
+                <string>{0,4}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{45,36},{152,41}}</string>
+                <string>{{3,5},{94,22}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
             <key>BlockLanding.0011.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{160,45}}</string>
+                <string>{{100,2},{94,24}}</string>
                 <key>offset</key>
-                <string>{2,15}</string>
+                <string>{0,5}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{42,30},{160,45}}</string>
+                <string>{{3,3},{94,24}}</string>
                 <key>sourceSize</key>
-                <string>{240,135}</string>
+                <string>{100,40}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -168,9 +168,9 @@
             <key>realTextureFileName</key>
             <string>BlockLanding.png</string>
             <key>size</key>
-            <string>{256,256}</string>
+            <string>{128,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:daff4fc8bb26a89c3ae7744e0a8c8a52$</string>
+            <string>$TexturePacker:SmartUpdate:37b4365e85740350ad2625e01e546da8$</string>
             <key>textureFileName</key>
             <string>BlockLanding.png</string>
         </dict>
