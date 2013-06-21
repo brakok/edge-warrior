@@ -82,6 +82,10 @@ var Constants = {
 		Z_INDEX: 10,
 		DoubleJump: {
 			OFFSET: 50
+		},
+		BlockLanding: {
+			OFFSET: 2,
+			TIMER: 0.05
 		}
 	}
 };

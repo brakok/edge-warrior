@@ -130,7 +130,7 @@ var Client = new function(){
 				this.enemies[i].update();
 
 			for(var i in this.blocks)
-				this.blocks[i].update();
+				this.blocks[i].update(dt);
 			
 			for(var i in this.deathZones)
 				this.deathZones[i].update();
