@@ -7,80 +7,54 @@
             <key>DoubleJump.0000.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{104,48},{62,6}}</string>
+                <string>{{2,66},{80,30}}</string>
                 <key>offset</key>
-                <string>{0,25}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{34,2},{62,6}}</string>
+                <string>{{0,0},{80,30}}</string>
                 <key>sourceSize</key>
-                <string>{130,60}</string>
+                <string>{80,30}</string>
             </dict>
             <key>DoubleJump.0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{112,2},{72,14}}</string>
+                <string>{{2,34},{80,30}}</string>
                 <key>offset</key>
-                <string>{0,21}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{29,2},{72,14}}</string>
+                <string>{{0,0},{80,30}}</string>
                 <key>sourceSize</key>
-                <string>{130,60}</string>
+                <string>{80,30}</string>
             </dict>
             <key>DoubleJump.0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{94,112},{82,20}}</string>
+                <string>{{84,2},{80,30}}</string>
                 <key>offset</key>
-                <string>{0,16}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{24,4},{82,20}}</string>
+                <string>{{0,0},{80,30}}</string>
                 <key>sourceSize</key>
-                <string>{130,60}</string>
+                <string>{80,30}</string>
             </dict>
             <key>DoubleJump.0003.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,88},{90,30}}</string>
+                <string>{{2,2},{80,30}}</string>
                 <key>offset</key>
-                <string>{0,12}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{20,3},{90,30}}</string>
+                <string>{{0,0},{80,30}}</string>
                 <key>sourceSize</key>
-                <string>{130,60}</string>
-            </dict>
-            <key>DoubleJump.0004.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,48},{100,38}}</string>
-                <key>offset</key>
-                <string>{0,8}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{15,3},{100,38}}</string>
-                <key>sourceSize</key>
-                <string>{130,60}</string>
-            </dict>
-            <key>DoubleJump.0005.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,2},{108,44}}</string>
-                <key>offset</key>
-                <string>{0,3}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{11,5},{108,44}}</string>
-                <key>sourceSize</key>
-                <string>{130,60}</string>
+                <string>{80,30}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -90,9 +64,9 @@
             <key>realTextureFileName</key>
             <string>DoubleJump.png</string>
             <key>size</key>
-            <string>{128,256}</string>
+            <string>{128,128}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:76ae8f2f4848e75767c820418eb2e382$</string>
+            <string>$TexturePacker:SmartUpdate:9348e2cf4784819aee819c068edd3d59$</string>
             <key>textureFileName</key>
             <string>DoubleJump.png</string>
         </dict>
