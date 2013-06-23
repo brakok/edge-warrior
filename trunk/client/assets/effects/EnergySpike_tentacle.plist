@@ -7,312 +7,312 @@
             <key>EnergySpike_tentacle.0000.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,972},{41,786}}</string>
+                <string>{{497,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-7}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,14},{41,786}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,929},{41,786}}</string>
+                <string>{{452,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-7}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,14},{41,786}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,843},{41,788}}</string>
+                <string>{{407,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,12},{41,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0003.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{786,2},{41,788}}</string>
+                <string>{{362,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,12},{41,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0004.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{743,2},{41,788}}</string>
+                <string>{{317,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,12},{41,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0005.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{700,2},{41,788}}</string>
+                <string>{{272,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,12},{41,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0006.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{657,2},{41,788}}</string>
+                <string>{{227,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{0,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,12},{41,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0007.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{526,2},{43,788}}</string>
+                <string>{{182,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{0,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,12},{43,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0008.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,796},{45,788}}</string>
+                <string>{{137,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{0,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,12},{45,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0009.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{481,2},{43,788}}</string>
+                <string>{{92,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{0,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,12},{43,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0010.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{438,2},{41,790}}</string>
+                <string>{{47,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{0,-5}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,10},{41,790}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0011.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{395,2},{41,790}}</string>
+                <string>{{2,798},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-5}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{3,10},{41,790}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0012.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{352,2},{41,790}}</string>
+                <string>{{2,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-5}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,10},{41,790}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0013.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{309,2},{41,790}}</string>
+                <string>{{2,798},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-5}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{3,10},{41,790}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0014.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{180,2},{41,792}}</string>
+                <string>{{47,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-4}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,8},{41,792}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0015.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{137,2},{41,792}}</string>
+                <string>{{92,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-4}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,8},{41,792}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0016.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{92,2},{43,792}}</string>
+                <string>{{137,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{0,-4}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,8},{43,792}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0017.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{47,2},{43,792}}</string>
+                <string>{{182,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{0,-4}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,8},{43,792}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0018.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{43,792}}</string>
+                <string>{{227,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{0,-4}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,8},{43,792}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0019.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{266,2},{41,790}}</string>
+                <string>{{272,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-5}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,10},{41,790}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0020.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{223,2},{41,790}}</string>
+                <string>{{317,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-5}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,10},{41,790}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0021.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{614,2},{41,788}}</string>
+                <string>{{362,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,12},{41,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0022.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,886},{41,786}}</string>
+                <string>{{407,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-7}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,14},{41,786}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
             <key>EnergySpike_tentacle.0023.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{571,2},{41,788}}</string>
+                <string>{{452,2},{43,794}}</string>
                 <key>offset</key>
-                <string>{1,-6}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,12},{41,788}}</string>
+                <string>{{1,6},{43,794}}</string>
                 <key>sourceSize</key>
                 <string>{45,800}</string>
             </dict>
@@ -326,7 +326,7 @@
             <key>size</key>
             <string>{1024,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:dddea66cd8b981873000652549b6b33d$</string>
+            <string>$TexturePacker:SmartUpdate:f6b26372f05113c42f675cec1085ca6f$</string>
             <key>textureFileName</key>
             <string>EnergySpike_tentacle.png</string>
         </dict>
