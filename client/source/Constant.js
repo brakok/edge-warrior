@@ -34,7 +34,8 @@ var Constants = {
 			LIGHTBALL_ORBIT_SPEED: 5,
 			LIGHTBALL_ORBIT_RADIUS: 8,
 			LIGHTBALL_Z_INDEX: 51,
-			Z_INDEX: 40
+			Z_INDEX: 40,
+			HEIGHT: 800
 		},
 		Missile: {
 			Z_INDEX: 40
