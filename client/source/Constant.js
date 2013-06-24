@@ -9,10 +9,13 @@ var Constants = {
 		}
 	},
 	Floor: {
-		Z_INDEX: 45
+		Z_INDEX: 50
 	},
 	Wall: {
-		Z_INDEX: 45
+		Z_INDEX: 50
+	},
+	BlackBox: {
+		Z_INDEX: 49
 	},
 	KillCommand: {
 		Time: {

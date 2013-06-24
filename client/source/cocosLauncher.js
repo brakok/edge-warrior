@@ -29,6 +29,7 @@
 				  'source/spike.js',
 				  'source/EffectManager.js',
 				  'source/Effect.js',
+				  'source/blackBox.js',
 				  'source/hud.js',
 				  'source/endScreen.js']
 	};
