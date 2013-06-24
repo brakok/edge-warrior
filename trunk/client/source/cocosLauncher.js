@@ -30,6 +30,7 @@
 				  'source/EffectManager.js',
 				  'source/Effect.js',
 				  'source/blackBox.js',
+				  'source/lightBall.js',
 				  'source/hud.js',
 				  'source/endScreen.js']
 	};

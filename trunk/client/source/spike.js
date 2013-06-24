@@ -32,26 +32,8 @@ Spike.prototype.init = function(){
 			var distance = Math.abs(this.y - this.finalY);
 			
 			//Creation of a floating light ball seeked by the shadow tentacle.
-			this.lightBall = cc.Sprite.create(assetsEffectDir + 'lightBall.png');
-			Client.camera.project(this.lightBall, this.finalX, this.finalY + distance*0.5);
-			
-			//Create some movement for the floating light ball.
-			var orbitTime = 0;
-			var finalX = this.finalX;
-			var finalY = this.finalY;
-			
-			this.lightBall.schedule(function(dt){
-				var tmpY = finalY + distance*0.5 + (Math.sin(orbitTime)*Constants.DeathZone.EnergySpike.LIGHTBALL_ORBIT_RADIUS);
-				Client.camera.project(this, finalX, tmpY);
-				
-				orbitTime += dt*Constants.DeathZone.EnergySpike.LIGHTBALL_ORBIT_SPEED;
-				
-				if(orbitTime > 360)
-					orbitTime = 0;
-			});
-			
-			this.lightBall._zOrder = Constants.DeathZone.EnergySpike.LIGHTBALL_Z_INDEX;
-			
+			this.lightBall = new LightBall(this.finalX, this.finalY + distance*0.5);
+
 			//Resize to good scale.
 			var factor = Constants.DeathZone.EnergySpike.HEIGHT/distance;
 			this.ratioY = 1/factor;
@@ -68,8 +50,6 @@ Spike.prototype.init = function(){
 										Client.layer.addChild(this.currentAnimation);
 									}, this);
 			
-			
-			Client.layer.addChild(this.lightBall);
 			break;
 	}
 
@@ -84,7 +64,7 @@ Spike.prototype.endProcess = function(){
 	switch(this.type){
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
 			//Remove light ball and previous tentacle.
-			Client.layer.removeChild(this.lightBall);
+			this.lightBall.explode();
 			Client.layer.removeChild(this.currentAnimation);
 			
 			//Add transformation animation.
@@ -102,8 +82,10 @@ Spike.prototype.setPosition = function(x, y){
 	this.y = y;
 };
 
-Spike.prototype.update = function(){
+Spike.prototype.update = function(dt){
+
 	Client.camera.project(this.currentAnimation, this.x, this.y, 1, this.ratioY);
+	this.lightBall.update(dt);
 };
 
 Spike.prototype.fromServer = function(remoteSpike){

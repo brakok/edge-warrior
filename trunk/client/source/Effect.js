@@ -46,6 +46,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('DoubleJump.0000.png');
 			this.animation = AnimationManager.create('DoubleJump', 0, 4, 24);
 			break;
+		case Enum.Effect.Type.SPARK:
+		
+			//Light explosion.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('Spark.0000.png');
+			this.animation = AnimationManager.create('Spark', 0, 6, 48);
+			break;
 	}
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;
