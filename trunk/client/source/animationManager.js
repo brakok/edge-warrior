@@ -14,6 +14,8 @@ var AnimationManager = {
 														  assetsEffectDir + 'EnergySpike_tentacle.png');
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'EnergySpike_twisted.plist', 
 														  assetsEffectDir + 'EnergySpike_twisted.png');
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'EnergySpike_transform.plist', 
+														  assetsEffectDir + 'EnergySpike_transform.png');
 															  
 		//Effects.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 

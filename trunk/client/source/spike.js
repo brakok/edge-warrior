@@ -27,6 +27,7 @@ Spike.prototype.init = function(){
 			//Animations.
 			this.tentacleAnimation = AnimationManager.create('EnergySpike_tentacle', 0, 24, 24);
 			this.twistedAnimation = AnimationManager.create('EnergySpike_twisted', 0, 24, 24);
+			this.transformAnimation = AnimationManager.create('EnergySpike_transform', 0, 24, 24);
 			
 			var distance = Math.abs(this.y - this.finalY);
 			
@@ -58,6 +59,16 @@ Spike.prototype.init = function(){
 			this.currentAnimation.setScaleY(this.ratioY);
 			this.currentAnimation.runAction(cc.RepeatForever.create(this.tentacleAnimation));
 			
+			//Callback after transformation to set twisted tentacle.
+			this.transformCallback = cc.CallFunc.create(function(node){
+										Client.layer.removeChild(this.currentAnimation);
+										
+										//Add twisted tentacle.
+										this.currentAnimation.runAction(cc.RepeatForever.create(this.twistedAnimation));
+										Client.layer.addChild(this.currentAnimation);
+									}, this);
+			
+			
 			Client.layer.addChild(this.lightBall);
 			break;
 	}
@@ -76,10 +87,9 @@ Spike.prototype.endProcess = function(){
 			Client.layer.removeChild(this.lightBall);
 			Client.layer.removeChild(this.currentAnimation);
 			
-			//TODO: transition anim.
-			
-			//Add twisted tentacle.
-			this.currentAnimation.runAction(cc.RepeatForever.create(this.twistedAnimation));
+			//Add transformation animation.
+			this.currentAnimation.runAction(cc.Sequence.create(this.transformAnimation,
+															   this.transformCallback));
 			Client.layer.addChild(this.currentAnimation);
 			break;
 	}
