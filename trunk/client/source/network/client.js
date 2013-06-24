@@ -65,8 +65,8 @@ var Client = new function(){
 								 this.height*0.5, 
 								 this.width, 
 								 this.height, 
-								 this.width*0.8, 
-								 this.height*0.8, 
+								 this.width*0.9, 
+								 this.height*0.9, 
 								 1,
 								 Constants.Camera.SPEED_X,
 								 Constants.Camera.SPEED_Y,
@@ -77,6 +77,12 @@ var Client = new function(){
 		this.leftWall = new Wall(Enum.Direction.RIGHT, -50, this.mapSize.height + 10, this.mapSize.height*2, true, Enum.Wall.Type.PIT);
 		this.rightWall = new Wall(Enum.Direction.LEFT, this.mapSize.width + 50, this.mapSize.height + 10, this.mapSize.height*2, true, Enum.Wall.Type.PIT);
 
+		//Black boxes are used to hide spikes when they raise from the ground.
+		this.blackBoxes = [];
+		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-5, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+5, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(this.mapSize.width*0.5, -this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
+		
 		//Add walls to layer.
 		this.leftWall.init();
 		this.rightWall.init();
@@ -134,6 +140,9 @@ var Client = new function(){
 			
 			for(var i in this.deathZones)
 				this.deathZones[i].update();
+				
+			for(var i in this.blackBoxes)
+				this.blackBoxes[i].update();
 				
 			this.goal.update();
 			
