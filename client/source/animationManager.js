@@ -33,6 +33,8 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'DoubleJump.plist', 
 														  assetsEffectDir + 'DoubleJump.png');
 		
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Spark.plist', 
+														  assetsEffectDir + 'Spark.png');
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
 														  assetsPlayerDir + 'yellow_idle.png');	

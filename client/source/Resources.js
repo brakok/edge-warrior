@@ -15,6 +15,7 @@ var assets = [
 	{type:'image', src: assetsWorldDir + 'black_box.png'},
 
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
+	{type:'image', src: assetsEffectDir + 'Spark.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_twisted.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_transform.png'},
@@ -32,6 +33,7 @@ var assets = [
 	{type:"plist", src: assetsEffectDir + 'BlockDisappearing.plist'},
 	{type:"plist", src: assetsEffectDir + 'SwapColor.plist'},
 	{type:"plist", src: assetsEffectDir + 'DoubleJump.plist'},
+	{type:"plist", src: assetsEffectDir + 'Spark.plist'},
 
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_action.png'},

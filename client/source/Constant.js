@@ -34,9 +34,7 @@ var Constants = {
 	},
 	DeathZone: {
 		EnergySpike: {
-			LIGHTBALL_ORBIT_SPEED: 5,
-			LIGHTBALL_ORBIT_RADIUS: 8,
-			LIGHTBALL_Z_INDEX: 51,
+			
 			Z_INDEX: 40,
 			HEIGHT: 800
 		},
@@ -90,6 +88,11 @@ var Constants = {
 		BlockLanding: {
 			OFFSET: 2,
 			TIMER: 0.05
+		},
+		LightBall: {
+			ORBIT_SPEED: 5,
+			ORBIT_RADIUS: 8,
+			Z_INDEX: 56,
 		}
 	}
 };
