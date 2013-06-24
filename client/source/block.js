@@ -79,6 +79,7 @@ Block.prototype.explode = function(cause){
 	//Trigger right animation depending of destruction cause.
 	switch(cause){
 		case Enum.Block.Destruction.COLOR_CONTACT:
+		case Enum.Block.Destruction.CRUSHED:
 			EffectManager.create(Enum.Effect.Type.BLOCK_DISAPPEARING, this.x, this.y);
 			break;
 	}

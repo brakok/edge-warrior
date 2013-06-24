@@ -46,7 +46,7 @@ var Constants = {
 	},
 	WinningGoal: {
 		FloatingBall: {
-			Z_INDEX: 50
+			Z_INDEX: 55
 		}
 	},
 	EndScreen: {
@@ -83,7 +83,7 @@ var Constants = {
 		BLOCK_ACTION: 'blockAction'
 	},
 	Effect: {
-		Z_INDEX: 10,
+		Z_INDEX: 60,
 		DoubleJump: {
 			OFFSET: 50
 		},
