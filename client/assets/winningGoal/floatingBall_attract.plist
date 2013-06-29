@@ -4,7 +4,46 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>floatingBall_action.0048.png</key>
+            <key>floatingBall_attract.0000.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,898},{110,110}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{110,110}}</string>
+                <key>sourceSize</key>
+                <string>{110,110}</string>
+            </dict>
+            <key>floatingBall_attract.0001.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,786},{110,110}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{110,110}}</string>
+                <key>sourceSize</key>
+                <string>{110,110}</string>
+            </dict>
+            <key>floatingBall_attract.0002.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,674},{110,110}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{110,110}}</string>
+                <key>sourceSize</key>
+                <string>{110,110}</string>
+            </dict>
+            <key>floatingBall_attract.0003.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,562},{110,110}}</string>
@@ -17,7 +56,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0049.png</key>
+            <key>floatingBall_attract.0004.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,450},{110,110}}</string>
@@ -30,7 +69,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0050.png</key>
+            <key>floatingBall_attract.0005.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,450},{110,110}}</string>
@@ -43,7 +82,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0051.png</key>
+            <key>floatingBall_attract.0006.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,450},{110,110}}</string>
@@ -56,7 +95,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0052.png</key>
+            <key>floatingBall_attract.0007.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,450},{110,110}}</string>
@@ -69,7 +108,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0053.png</key>
+            <key>floatingBall_attract.0008.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,338},{110,110}}</string>
@@ -82,7 +121,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0054.png</key>
+            <key>floatingBall_attract.0009.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,338},{110,110}}</string>
@@ -95,7 +134,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0055.png</key>
+            <key>floatingBall_attract.0010.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,338},{110,110}}</string>
@@ -108,7 +147,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0056.png</key>
+            <key>floatingBall_attract.0011.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,338},{110,110}}</string>
@@ -121,7 +160,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0057.png</key>
+            <key>floatingBall_attract.0012.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,226},{110,110}}</string>
@@ -134,7 +173,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0058.png</key>
+            <key>floatingBall_attract.0013.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,226},{110,110}}</string>
@@ -147,7 +186,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0059.png</key>
+            <key>floatingBall_attract.0014.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,226},{110,110}}</string>
@@ -160,7 +199,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0060.png</key>
+            <key>floatingBall_attract.0015.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,226},{110,110}}</string>
@@ -173,7 +212,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0061.png</key>
+            <key>floatingBall_attract.0016.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,114},{110,110}}</string>
@@ -186,7 +225,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0062.png</key>
+            <key>floatingBall_attract.0017.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,114},{110,110}}</string>
@@ -199,7 +238,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0063.png</key>
+            <key>floatingBall_attract.0018.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,114},{110,110}}</string>
@@ -212,7 +251,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0064.png</key>
+            <key>floatingBall_attract.0019.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,114},{110,110}}</string>
@@ -225,7 +264,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0065.png</key>
+            <key>floatingBall_attract.0020.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,2},{110,110}}</string>
@@ -238,7 +277,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0066.png</key>
+            <key>floatingBall_attract.0021.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,2},{110,110}}</string>
@@ -251,7 +290,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0067.png</key>
+            <key>floatingBall_attract.0022.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,2},{110,110}}</string>
@@ -264,46 +303,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_action.0068.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,2},{110,110}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{110,110}}</string>
-                <key>sourceSize</key>
-                <string>{110,110}</string>
-            </dict>
-            <key>floatingBall_action.0069.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,2},{110,110}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{110,110}}</string>
-                <key>sourceSize</key>
-                <string>{110,110}</string>
-            </dict>
-            <key>floatingBall_action.0070.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,2},{110,110}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{110,110}}</string>
-                <key>sourceSize</key>
-                <string>{110,110}</string>
-            </dict>
-            <key>floatingBall_action.0071.png</key>
+            <key>floatingBall_attract.0023.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,2},{110,110}}</string>
@@ -322,13 +322,13 @@
             <key>format</key>
             <integer>2</integer>
             <key>realTextureFileName</key>
-            <string>floatingBall_action.png</string>
+            <string>floatingBall_attract.png</string>
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:212ccf712841def3a65dc90003162dba$</string>
+            <string>$TexturePacker:SmartUpdate:8f76fe5da0bf0c08f12144c380c5c6c0$</string>
             <key>textureFileName</key>
-            <string>floatingBall_action.png</string>
+            <string>floatingBall_attract.png</string>
         </dict>
     </dict>
 </plist>

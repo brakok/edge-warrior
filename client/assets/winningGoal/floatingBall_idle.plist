@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>floatingBall_idle.0000.png</key>
+            <key>floatingBall_idle.0024.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,898},{110,110}}</string>
@@ -17,7 +17,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0001.png</key>
+            <key>floatingBall_idle.0025.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,786},{110,110}}</string>
@@ -30,7 +30,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0002.png</key>
+            <key>floatingBall_idle.0026.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,674},{110,110}}</string>
@@ -43,7 +43,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0003.png</key>
+            <key>floatingBall_idle.0027.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,562},{110,110}}</string>
@@ -56,7 +56,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0004.png</key>
+            <key>floatingBall_idle.0028.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,450},{110,110}}</string>
@@ -69,7 +69,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0005.png</key>
+            <key>floatingBall_idle.0029.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,450},{110,110}}</string>
@@ -82,7 +82,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0006.png</key>
+            <key>floatingBall_idle.0030.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,450},{110,110}}</string>
@@ -95,7 +95,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0007.png</key>
+            <key>floatingBall_idle.0031.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,450},{110,110}}</string>
@@ -108,7 +108,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0008.png</key>
+            <key>floatingBall_idle.0032.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,338},{110,110}}</string>
@@ -121,7 +121,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0009.png</key>
+            <key>floatingBall_idle.0033.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,338},{110,110}}</string>
@@ -134,7 +134,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0010.png</key>
+            <key>floatingBall_idle.0034.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,338},{110,110}}</string>
@@ -147,7 +147,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0011.png</key>
+            <key>floatingBall_idle.0035.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,338},{110,110}}</string>
@@ -160,7 +160,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0012.png</key>
+            <key>floatingBall_idle.0036.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,226},{110,110}}</string>
@@ -173,7 +173,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0013.png</key>
+            <key>floatingBall_idle.0037.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,226},{110,110}}</string>
@@ -186,7 +186,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0014.png</key>
+            <key>floatingBall_idle.0038.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,226},{110,110}}</string>
@@ -199,7 +199,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0015.png</key>
+            <key>floatingBall_idle.0039.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,226},{110,110}}</string>
@@ -212,7 +212,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0016.png</key>
+            <key>floatingBall_idle.0040.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,114},{110,110}}</string>
@@ -225,7 +225,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0017.png</key>
+            <key>floatingBall_idle.0041.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,114},{110,110}}</string>
@@ -238,7 +238,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0018.png</key>
+            <key>floatingBall_idle.0042.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,114},{110,110}}</string>
@@ -251,7 +251,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0019.png</key>
+            <key>floatingBall_idle.0043.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,114},{110,110}}</string>
@@ -264,7 +264,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0020.png</key>
+            <key>floatingBall_idle.0044.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{338,2},{110,110}}</string>
@@ -277,7 +277,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0021.png</key>
+            <key>floatingBall_idle.0045.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{226,2},{110,110}}</string>
@@ -290,7 +290,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0022.png</key>
+            <key>floatingBall_idle.0046.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{114,2},{110,110}}</string>
@@ -303,7 +303,7 @@
                 <key>sourceSize</key>
                 <string>{110,110}</string>
             </dict>
-            <key>floatingBall_idle.0023.png</key>
+            <key>floatingBall_idle.0047.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,2},{110,110}}</string>
@@ -326,7 +326,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:cb44c844f830603a960da7aa1ba5632d$</string>
+            <string>$TexturePacker:SmartUpdate:e48c231e10bd0b36313d271154a64180$</string>
             <key>textureFileName</key>
             <string>floatingBall_idle.png</string>
         </dict>

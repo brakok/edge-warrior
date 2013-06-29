@@ -37,8 +37,10 @@ var assets = [
 
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_action.png'},
+	{type:'image', src: assetsWinningGoalDir + 'floatingBall_attract.png'},
 	{type:"plist", src: assetsWinningGoalDir + 'floatingBall_idle.plist'},
 	{type:"plist", src: assetsWinningGoalDir + 'floatingBall_action.plist'},
+	{type:"plist", src: assetsWinningGoalDir + 'floatingBall_attract.plist'},
 	
 	{type:'image', src: assetsBlockDir + 'block.png'},
 	{type:'image', src: assetsBlockDir + 'block_0.png'},

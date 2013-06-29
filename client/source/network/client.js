@@ -350,6 +350,7 @@ var Client = new function(){
 		player.win();
 		
 		this.currentPhase = Enum.Game.Phase.WINNER;
+		this.goal.activate();
 	};
 	
 	//End of the round. Show splash screen of victorious.
