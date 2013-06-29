@@ -138,7 +138,8 @@ var Constants = {
 			FRICTION_FACTOR: 0.98,
 			ORBIT_RADIUS: 20,
 			ORBIT_SPEED: 0.05,
-			STUCK_TIME: 0.4
+			STUCK_TIME: 0.4,
+			TURN_FRICTION_FACTOR: 0.95
 		}
 	},
 	DeathZone: {
