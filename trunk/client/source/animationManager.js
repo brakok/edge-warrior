@@ -8,6 +8,8 @@ var AnimationManager = {
 														  assetsWinningGoalDir + 'floatingBall_idle.png');
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsWinningGoalDir + 'floatingBall_action.plist', 
 														  assetsWinningGoalDir + 'floatingBall_action.png');
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsWinningGoalDir + 'floatingBall_attract.plist', 
+														  assetsWinningGoalDir + 'floatingBall_attract.png');
 														  
 		//Energy spike.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'EnergySpike_tentacle.plist', 

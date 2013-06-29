@@ -47,7 +47,8 @@ var Enum = {
 			RUNNING: 1,
 			JUMPING: 2,
 			FALLING: 3,
-			SUMMONING: 4
+			SUMMONING: 4,
+			ATTRACT: 5
 		}
 	},
 	Action: {
