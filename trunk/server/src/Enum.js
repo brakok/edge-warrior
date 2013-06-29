@@ -134,10 +134,11 @@ var Constants = {
 			WIDTH: 90,
 			HEIGHT: 90,
 			SPEED: 1,
-			MAX_SPEED: 30,
+			MAX_SPEED: 12,
 			FRICTION_FACTOR: 0.98,
 			ORBIT_RADIUS: 20,
-			ORBIT_SPEED: 0.05
+			ORBIT_SPEED: 0.05,
+			STUCK_TIME: 0.4
 		}
 	},
 	DeathZone: {
