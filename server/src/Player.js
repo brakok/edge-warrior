@@ -320,7 +320,7 @@ Player.prototype.checkTimers = function(){
 			var hasLivingPlayer = false;
 			
 			for(var i in Game.players)
-				if(Game.players[i].isAlive)
+				if(Game.players[i].isAlive && Game.players[i].id != this.id)
 				{
 					hasLivingPlayer = true;
 					break;
