@@ -3,6 +3,8 @@ var Block = function (x, y, type, color) {
 	this.x = x;
 	this.y = y;
 	
+	this.scale = 1;
+	
 	this.type = type;
 	this.color = color;
 	
@@ -10,7 +12,12 @@ var Block = function (x, y, type, color) {
 	if(this.type == Enum.Block.Type.COLORED && this.color != null)
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + this.color + '.png');
 	else if(this.type == Enum.Block.Type.SPAWN)
+	{
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_spawn.png');
+		
+		//For a better quality, image is much bigger that the usual size.
+		this.scale = 0.1;
+	}
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
 		
@@ -46,7 +53,7 @@ Block.prototype.land = function(){
 };
 
 Block.prototype.update = function(dt){
-	Client.camera.project(this.sprite, this.x, this.y);
+	Client.camera.project(this.sprite, this.x, this.y, this.scale, this.scale);
 	
 	//Trigger landing animation if needed.
 	if(!this.hasDoneLandingAnimation)
