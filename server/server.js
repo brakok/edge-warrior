@@ -110,7 +110,7 @@ var Constants = {
 		JUMP_POWER: 1350,
 		RUN_POWER_ONGROUND: 650,
 		RUN_POWER_OFFGROUND: 15,
-		WIDTH: 40,
+		WIDTH: 30,
 		HEIGHT: 50,
 		MAX_SPEED_FACTOR: 0.0000001,
 		MAX_VELOCITY: 175,
@@ -300,7 +300,8 @@ var GroundListener = {
 		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
+		//Allow player to jump on other.
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || player.y < arbiter.body_b.userdata.object.y))
 			player = arbiter.body_b.userdata.object;
 		
 		if(player != null){
@@ -311,10 +312,12 @@ var GroundListener = {
 
 		var player = null;
 		
-		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
+		if(arbiter.body_a.userdata != null 
+			&& arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
+		//Allow player to jump on other.
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || player.y < arbiter.body_b.userdata.object.y))
 			player = arbiter.body_b.userdata.object;
 			
 		if(player != null){
@@ -777,7 +780,7 @@ Player.prototype.checkTimers = function(){
 			var hasLivingPlayer = false;
 			
 			for(var i in Game.players)
-				if(Game.players[i].isAlive)
+				if(Game.players[i].isAlive && Game.players[i].id != this.id)
 				{
 					hasLivingPlayer = true;
 					break;
@@ -873,13 +876,13 @@ Player.prototype.initBody = function(space){
 	//Create a shape associated with the body.
 	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.shape.setCollisionType(Enum.Collision.Type.PLAYER);
-	
+		
 	//Add ground sensor.
 	this.groundSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
-														new chipmunk.BB(-(groundSensorHalfWidth), 
-																		-(playerHalfHeight+groundSensorHeight), 
-																		(groundSensorHalfWidth), 
-																		-(playerHalfHeight))));
+																new chipmunk.BB(-(groundSensorHalfWidth), 
+																				-(playerHalfHeight+groundSensorHeight), 
+																				(groundSensorHalfWidth), 
+																				-(playerHalfHeight))));
 	this.groundSensor.setCollisionType(Enum.Collision.Type.GROUND_SENSOR);
 	this.groundSensor.sensor = true;
 	
@@ -1172,6 +1175,13 @@ var Game = {
 			//Add ground sensor callback.
 			this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
 										   Enum.Collision.Type.STATIC, 
+										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   function(arbiter, space){GroundListener.separate(arbiter, space);});
+										   
+			this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
+										   Enum.Collision.Type.PLAYER, 
 										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
 										   null, 
 										   null, 

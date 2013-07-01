@@ -416,13 +416,13 @@ Player.prototype.initBody = function(space){
 	//Create a shape associated with the body.
 	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.shape.setCollisionType(Enum.Collision.Type.PLAYER);
-	
+		
 	//Add ground sensor.
 	this.groundSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
-														new chipmunk.BB(-(groundSensorHalfWidth), 
-																		-(playerHalfHeight+groundSensorHeight), 
-																		(groundSensorHalfWidth), 
-																		-(playerHalfHeight))));
+																new chipmunk.BB(-(groundSensorHalfWidth), 
+																				-(playerHalfHeight+groundSensorHeight), 
+																				(groundSensorHalfWidth), 
+																				-(playerHalfHeight))));
 	this.groundSensor.setCollisionType(Enum.Collision.Type.GROUND_SENSOR);
 	this.groundSensor.sensor = true;
 	
