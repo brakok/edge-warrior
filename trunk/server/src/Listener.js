@@ -112,7 +112,8 @@ var GroundListener = {
 		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
+		//Allow player to jump on other.
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || player.y < arbiter.body_b.userdata.object.y))
 			player = arbiter.body_b.userdata.object;
 		
 		if(player != null){
@@ -123,10 +124,12 @@ var GroundListener = {
 
 		var player = null;
 		
-		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
+		if(arbiter.body_a.userdata != null 
+			&& arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
+		//Allow player to jump on other.
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || player.y < arbiter.body_b.userdata.object.y))
 			player = arbiter.body_b.userdata.object;
 			
 		if(player != null){

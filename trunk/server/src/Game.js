@@ -56,6 +56,13 @@ var Game = {
 										   null, 
 										   null, 
 										   function(arbiter, space){GroundListener.separate(arbiter, space);});
+										   
+			this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
+										   Enum.Collision.Type.PLAYER, 
+										   function(arbiter, space){ GroundListener.begin(arbiter, space);}, 
+										   null, 
+										   null, 
+										   function(arbiter, space){GroundListener.separate(arbiter, space);});
 						
 			//Add block listener callback.
 			this.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
