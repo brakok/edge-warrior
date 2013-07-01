@@ -54,8 +54,14 @@ var Constants = {
 		ENDSCREEN_Z_INDEX: -1000,
 		Z_INDEX: 1000,
 		Inventory: {
-			CURRENT_Z_INDEX: 1002,
-			NEXT_Z_INDEX: 1001
+			Current: {
+				Z_INDEX: 1002,
+				SCALE: 1.6
+			},
+			Next: {
+				Z_INDEX: 1001,
+				SCALE: 1.2
+			}
 		}
 	},
 	Message:{

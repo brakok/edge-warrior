@@ -25,46 +25,56 @@ var Inventory = function(offset, y, screenWidth, layer){
 Inventory.prototype.setBlocks = function(current, next){
 	
 	if(this.currentBlock != null)
-		this.layer.removeChild(this.currentBlock);
+		this.layer.removeChild(this.currentBlock.sprite);
 		
 	if(this.nextBlock != null)
-		this.layer.removeChild(this.nextBlock);
+		this.layer.removeChild(this.nextBlock.sprite);
 
-	this.currentBlock = current.sprite;
-	this.nextBlock = next.sprite;		
+	//Set the new blocks.
+	this.setCurrent(current);
+	this.setNext(next);		
 	
-	this.currentBlock.setPosition(new cc.Point(this.x + this.defaultPosition.current.x, this.y + this.defaultPosition.current.y));
-	this.nextBlock.setPosition(new cc.Point(this.x + this.defaultPosition.next.x, this.y + this.defaultPosition.next.y));
-	
-	//Place current above next.
-	this.currentBlock._zOrder = Constants.HUD.Inventory.CURRENT_Z_INDEX;
-	this.nextBlock._zOrder = Constants.HUD.Inventory.NEXT_Z_INDEX;
-	
-	this.currentBlock.setScale(1.6);
-	this.nextBlock.setScale(1.2);
-	
-	this.layer.addChild(this.currentBlock);
-	this.layer.addChild(this.nextBlock);
+	//Add to layer.
+	this.layer.addChild(this.currentBlock.sprite);
+	this.layer.addChild(this.nextBlock.sprite);
 };
 
 Inventory.prototype.pushBlock = function(block){
 		
-		this.layer.removeChild(this.currentBlock);
+		this.layer.removeChild(this.currentBlock.sprite);
 	
 		//Push the new block on the next and the next on the current.
-		this.currentBlock = this.nextBlock;
-		this.nextBlock = block.sprite;
-		
-		//Set correct scale and good z-index on current.
-		this.currentBlock._zOrder = Constants.HUD.Inventory.CURRENT_Z_INDEX;
-		this.nextBlock._zOrder = Constants.HUD.Inventory.NEXT_Z_INDEX;
-		
-		this.currentBlock.setScale(1.6);
-		this.nextBlock.setScale(1.2);
-		
-		//Set their position.
-		this.currentBlock.setPosition(new cc.Point(this.x + this.defaultPosition.current.x, this.y + this.defaultPosition.current.y));
-		this.nextBlock.setPosition(new cc.Point(this.x + this.defaultPosition.next.x, this.y + this.defaultPosition.next.y));
-		
-		this.layer.addChild(this.nextBlock);
+		this.setCurrent(this.nextBlock);
+		this.setNext(block);
+
+		//Add to layer.
+		this.layer.addChild(this.nextBlock.sprite);
+};
+
+//Set current block.
+Inventory.prototype.setCurrent = function(block){
+	this.currentBlock = block;
+	
+	//Set correct scale and good z-index on current.
+	this.currentBlock.sprite._zOrder = Constants.HUD.Inventory.Current.Z_INDEX;
+	
+	//Resize block.
+	this.currentBlock.sprite.setScale(Constants.HUD.Inventory.Current.SCALE * this.currentBlock.scale);
+	
+	//Set it position.
+	this.currentBlock.sprite.setPosition(new cc.Point(this.x + this.defaultPosition.current.x, this.y + this.defaultPosition.current.y));
+};
+
+//Set next block.
+Inventory.prototype.setNext = function(block){
+	this.nextBlock = block;
+	
+	//Set correct scale and good z-index on next block.
+	this.nextBlock.sprite._zOrder = Constants.HUD.Inventory.Next.Z_INDEX;
+	
+	//Resize block.
+	this.nextBlock.sprite.setScale(Constants.HUD.Inventory.Next.SCALE * this.nextBlock.scale);
+	
+	//Set it position.
+	this.nextBlock.sprite.setPosition(new cc.Point(this.x + this.defaultPosition.next.x, this.y + this.defaultPosition.next.y));
 };
