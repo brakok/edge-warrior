@@ -37,6 +37,10 @@ var AnimationManager = {
 		
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Spark.plist', 
 														  assetsEffectDir + 'Spark.png');
+		
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'spawn_unleashed.plist', 
+														  assetsEffectDir + 'spawn_unleashed.png');
+														  
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
 														  assetsPlayerDir + 'yellow_idle.png');	

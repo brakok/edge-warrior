@@ -96,7 +96,8 @@ var Enum = {
 			BLOCK_DISAPPEARING: 2,
 			SWAP_COLOR: 3,
 			DOUBLE_JUMP: 4,
-			SPARK: 5
+			SPARK: 5,
+			SPAWN_UNLEASHED: 6
 		}
 	}
 };
