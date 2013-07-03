@@ -52,6 +52,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('Spark.0000.png');
 			this.animation = AnimationManager.create('Spark', 0, 6, 48);
 			break;
+		case Enum.Effect.Type.SPAWN_UNLEASHED:
+		
+			//Effect created by spawn explosion.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('spawn_unleashed.0000.png');
+			this.animation = AnimationManager.create('spawn_unleashed', 0, 16, 24);
+			break;
 	}
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;
