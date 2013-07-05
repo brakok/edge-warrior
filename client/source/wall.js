@@ -16,7 +16,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		
 		switch(this.type)
 		{
-			case Enum.Wall.Type.PIT:
+			case Enum.World.Type.PIT:
 				imgName = 'wall_pit.png';
 				cornerImgName = 'corner_pit.png';
 				break;
@@ -28,7 +28,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		
 		var stepY = firstSegment.getTexture().height;
 		var tmpY = this.y - this.height*0.5 + stepY*0.5;
-		var zOrder = Constants.Wall.Z_INDEX;
+		var zOrder = Constants.World.Wall.Z_INDEX;
 		
 		//Add a corner at the bottom of the wall.
 		if(this.hasCorner)

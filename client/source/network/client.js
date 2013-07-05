@@ -77,16 +77,24 @@ var Client = new function(){
 		this.leftWall = new Wall(Enum.Direction.RIGHT, -50, this.mapSize.height + 10, this.mapSize.height*2, true, Enum.Wall.Type.PIT);
 		this.rightWall = new Wall(Enum.Direction.LEFT, this.mapSize.width + 50, this.mapSize.height + 10, this.mapSize.height*2, true, Enum.Wall.Type.PIT);
 
-		//Black boxes are used to hide spikes when they raise from the ground.
+		//Black boxes are used to hide spikes when they raise from the ground.	
 		this.blackBoxes = [];
-		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-5, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
-		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+5, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
-		this.blackBoxes.push(new BlackBox(this.mapSize.width*0.5, -this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-Constants.World.OFFSET, this.mapSize.height*1.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-Constants.World.OFFSET, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-Constants.World.OFFSET, -this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(this.mapSize.width*0.5, -this.mapSize.height*0.5, this.mapSize.width+(Constants.World.OFFSET*2), this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+Constants.World.OFFSET, -this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+Constants.World.OFFSET, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+Constants.World.OFFSET, this.mapSize.height*1.5, this.mapSize.width, this.mapSize.height));
+		
+		//Add background.
+		this.background = new Background(this.mapSize.width*0.5, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height, Enum.World.Type.PIT);
 		
 		//Add walls to layer.
 		this.leftWall.init();
 		this.rightWall.init();
 		this.floor.init();
+		this.background.init();
 	
 		//Init dynamic elements.
 		this.player.init();
@@ -388,6 +396,7 @@ var Client = new function(){
 		this.floor.update();
 		this.leftWall.update();
 		this.rightWall.update();
+		this.background.update();
 	};
 	
 	//Update positions from server ones.

@@ -28,6 +28,11 @@ var Enum = {
 			PIT: 0
 		}
 	},
+	World: {
+		Type: {
+			PIT: 0
+		}
+	},
 	Block: {
 		Type:{
 			NEUTRAL: 0,

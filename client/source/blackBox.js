@@ -13,7 +13,7 @@ BlackBox.prototype.init = function(){
 	//Create the black box.
 	this.sprite = cc.Sprite.create(assetsWorldDir + 'black_box.png');
 	this.sprite.setPosition(new cc.Point(this.x, this.y));
-	this.sprite._zOrder = Constants.BlackBox.Z_INDEX;
+	this.sprite._zOrder = Constants.World.BlackBox.Z_INDEX;
 	
 	Client.layer.addChild(this.sprite);
 };
