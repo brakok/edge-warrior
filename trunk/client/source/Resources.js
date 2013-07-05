@@ -13,6 +13,8 @@ var assets = [
 	{type:'image', src: assetsWorldDir + 'floor_pit.png'},
 	{type:'image', src: assetsWorldDir + 'corner_pit.png'},
 	{type:'image', src: assetsWorldDir + 'black_box.png'},
+	{type:'image', src: assetsWorldDir + 'background_pit.png'},
+	{type:'image', src: assetsWorldDir + 'sky.png'},
 
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'Spark.png'},

@@ -5,7 +5,7 @@ var Game = cc.Layer.extend({
 			
 		//Create color of the layer.
 		var s = cc.Director.getInstance().getWinSize();
-		var playGroundLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 255), s.width, s.height);
+		var playGroundLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 0), s.width, s.height);
 		playGroundLayer.setAnchorPoint(new cc.Point(0.5,0.5));	
 		
 		//Load spritesheets and other graphical stuffs.

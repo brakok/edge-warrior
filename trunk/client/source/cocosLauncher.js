@@ -32,7 +32,8 @@
 				  'source/blackBox.js',
 				  'source/lightBall.js',
 				  'source/hud.js',
-				  'source/endScreen.js']
+				  'source/endScreen.js',
+				  'source/Background.js']
 	};
 	
 	//Add event that load everything needed by Cocos2d.

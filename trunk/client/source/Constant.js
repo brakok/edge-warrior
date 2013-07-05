@@ -8,14 +8,20 @@ var Constants = {
 			LOST_FOREACH_ENEMY: 5
 		}
 	},
-	Floor: {
-		Z_INDEX: 50
-	},
-	Wall: {
-		Z_INDEX: 50
-	},
-	BlackBox: {
-		Z_INDEX: 49
+	World: {
+		OFFSET: 4,
+		Floor: {
+			Z_INDEX: 50
+		},
+		Wall: {
+			Z_INDEX: 50
+		},
+		BlackBox: {
+			Z_INDEX: 49
+		},
+		Background: {
+			Z_INDEX: -1000
+		}
 	},
 	KillCommand: {
 		Time: {
