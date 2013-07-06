@@ -79,13 +79,9 @@ var Client = new function(){
 
 		//Black boxes are used to hide spikes when they raise from the ground.	
 		this.blackBoxes = [];
-		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-Constants.World.OFFSET, this.mapSize.height*1.5, this.mapSize.width, this.mapSize.height));
-		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-Constants.World.OFFSET, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
-		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-Constants.World.OFFSET, -this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
-		this.blackBoxes.push(new BlackBox(this.mapSize.width*0.5, -this.mapSize.height*0.5, this.mapSize.width+(Constants.World.OFFSET*2), this.mapSize.height));
-		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+Constants.World.OFFSET, -this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
-		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+Constants.World.OFFSET, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height));
-		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+Constants.World.OFFSET, this.mapSize.height*1.5, this.mapSize.width, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-Constants.World.OFFSET, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height*3));
+		this.blackBoxes.push(new BlackBox(this.mapSize.width*0.5, -this.mapSize.height*0.5, this.mapSize.width*3, this.mapSize.height));
+		this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+Constants.World.OFFSET, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height*3));
 		
 		//Add background.
 		this.background = new Background(this.mapSize.width*0.5, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height, Enum.World.Type.PIT);

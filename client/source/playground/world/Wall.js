@@ -24,9 +24,11 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		
 		var mustFlip = this.facing == Enum.Direction.LEFT;
 		var firstSegment = cc.Sprite.create(assetsWorldDir + imgName);
-		var numOfFragment = height/firstSegment.getTexture().height;
 		
-		var stepY = firstSegment.getTexture().height;
+		var textHeight = firstSegment.getTexture().height;
+		var numOfFragment = height/textHeight;
+		
+		var stepY = textHeight;
 		var tmpY = this.y - this.height*0.5 + stepY*0.5;
 		var zOrder = Constants.World.Wall.Z_INDEX;
 		
