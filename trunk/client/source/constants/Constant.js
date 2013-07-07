@@ -106,5 +106,10 @@ var Constants = {
 			ORBIT_RADIUS: 8,
 			Z_INDEX: 56,
 		}
+	},
+	Sound: {
+		Effect: {
+			VOLUME: 0.5
+		}
 	}
 };

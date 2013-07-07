@@ -24,6 +24,7 @@
 				  'source/Resources.js',
 				  'source/playground/hud/Inventory.js',
 				  'source/playground/manager/AnimationManager.js',
+				  'source/playground/manager/AudioManager.js',
 				  'source/playground/hud/KillCommand.js',
 				  'source/playground/Missile.js',
 				  'source/playground/Spike.js',
