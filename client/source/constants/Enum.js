@@ -104,5 +104,10 @@ var Enum = {
 			SPARK: 5,
 			SPAWN_UNLEASHED: 6
 		}
+	},
+	Sound: {
+		Block: {
+			LANDING: 0
+		}
 	}
 };

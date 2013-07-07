@@ -6,9 +6,14 @@ var assetsPlayerDir = 'assets/players/';
 var assetsHudDir = 'assets/hud/';
 var assetsWinningGoalDir = 'assets/winningGoal/';
 var assetsEffectDir = 'assets/effects/';
+var soundDir = 'sounds/';
 
 var assets = [
 
+	//Sounds
+	{type:"sound", src: soundDir + 'block_land'},
+
+	//World
 	{type:'image', src: assetsWorldDir + 'wall_pit.png'},
 	{type:'image', src: assetsWorldDir + 'floor_pit.png'},
 	{type:'image', src: assetsWorldDir + 'corner_pit.png'},
@@ -16,6 +21,7 @@ var assets = [
 	{type:'image', src: assetsWorldDir + 'background_pit.png'},
 	{type:'image', src: assetsWorldDir + 'sky.png'},
 
+	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'Spark.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
@@ -39,6 +45,7 @@ var assets = [
 	{type:"plist", src: assetsEffectDir + 'Spark.plist'},
 	{type:"plist", src: assetsEffectDir + 'spawn_unleashed.plist'},
 
+	//Winning goal.
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_action.png'},
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_attract.png'},
@@ -46,6 +53,7 @@ var assets = [
 	{type:"plist", src: assetsWinningGoalDir + 'floatingBall_action.plist'},
 	{type:"plist", src: assetsWinningGoalDir + 'floatingBall_attract.plist'},
 	
+	//Block.
 	{type:'image', src: assetsBlockDir + 'block.png'},
 	{type:'image', src: assetsBlockDir + 'block_0.png'},
 	{type:'image', src: assetsBlockDir + 'block_1.png'},
@@ -57,6 +65,7 @@ var assets = [
 	{type:'image', src: assetsBlockDir + 'block_7.png'},
 	{type:'image', src: assetsBlockDir + 'block_spawn.png'},
 	
+	//Player
 	{type:'image', src: assetsPlayerDir + 'yellow_idle.png'},
 	{type:'image', src: assetsPlayerDir + 'yellow_running.png'},
 	{type:'image', src: assetsPlayerDir + 'yellow_jumping.png'},
@@ -67,11 +76,6 @@ var assets = [
 	{type:'image', src: assetsPlayerDir + 'blue_running.png'},
 	{type:'image', src: assetsPlayerDir + 'blue_jumping.png'},
 	
-	{type:'image', src: assetsHudDir + 'fieldset.png'},
-	
-	{type:'image', src: assetsHudDir + 'killCommand.png'},
-	{type:'plist', src: assetsHudDir + 'killCommand.plist'},
-	
 	{type:"plist", src: assetsPlayerDir + 'yellow_idle.plist'},
 	{type:"plist", src: assetsPlayerDir + 'yellow_running.plist'},
 	{type:"plist", src: assetsPlayerDir + 'yellow_jumping.plist'},
@@ -80,5 +84,10 @@ var assets = [
 	{type:"plist", src: assetsPlayerDir + 'red_jumping.plist'},
 	{type:"plist", src: assetsPlayerDir + 'blue_idle.plist'},
 	{type:"plist", src: assetsPlayerDir + 'blue_running.plist'},
-	{type:"plist", src: assetsPlayerDir + 'blue_jumping.plist'}
+	{type:"plist", src: assetsPlayerDir + 'blue_jumping.plist'},
+	
+	//Hud.
+	{type:'image', src: assetsHudDir + 'fieldset.png'},
+	{type:'image', src: assetsHudDir + 'killCommand.png'},
+	{type:'plist', src: assetsHudDir + 'killCommand.plist'}
 ];

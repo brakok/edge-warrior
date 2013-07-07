@@ -50,6 +50,9 @@ Block.prototype.land = function(){
 	//Indicate that the landing animation needs to be triggered in a few milliseconds (in order to be at the right place).
 	this.hasDoneLandingAnimation = false;
 	this.landingCountdown = Constants.Effect.BlockLanding.TIMER;
+	
+	//Trigger sound.
+	AudioManager.playSound(Enum.Sound.Block.LANDING);
 };
 
 Block.prototype.update = function(dt){
@@ -61,6 +64,8 @@ Block.prototype.update = function(dt){
 		if(this.landingCountdown < 0)
 		{
 			this.hasDoneLandingAnimation = true;
+			
+			//Create effect.
 			EffectManager.create(Enum.Effect.Type.BLOCK_LANDING, this.x, this.y - (this.sprite.getTexture().height*0.5 - Constants.Effect.BlockLanding.OFFSET));
 		}
 		else

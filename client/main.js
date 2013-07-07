@@ -20,9 +20,15 @@ var cocosApp = cc.Application.extend({
 		this.startScene = scene;
 		cc.COCOS2D_DEBUG = this.config['COCOS2D_DEBUG'];
 		cc.setup(this.config['tag']);
+		
+		//Init audio engine.
+		cc.AudioEngine.getInstance().init("wav,mp3,ogg");
+		cc.AudioEngine.getInstance().setEffectsVolume(Constants.Sound.Effect.VOLUME);
+		
 		cc.Loader.getInstance().onloading = function () {
 			cc.LoaderScene.getInstance().draw();
 		};
+		
 		cc.Loader.getInstance().onload = function (){
 			cc.AppController.shareAppController().didFinishLaunchingWithOptions();
 		};
