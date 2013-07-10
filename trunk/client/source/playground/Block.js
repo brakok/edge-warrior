@@ -52,7 +52,7 @@ Block.prototype.land = function(){
 	this.landingCountdown = Constants.Effect.BlockLanding.TIMER;
 	
 	//Trigger sound.
-	AudioManager.playSound(Enum.Sound.Block.LANDING);
+	AudioManager.playSound(Constants.Sound.File.Block.LANDING);
 };
 
 Block.prototype.update = function(dt){
@@ -80,6 +80,7 @@ Block.prototype.swapColor = function(color){
 	
 	//Trigger swap effect.
 	EffectManager.create(Enum.Effect.Type.SWAP_COLOR, this.x, this.y);
+	AudioManager.playSound(Constants.Sound.File.Block.SWAP_COLOR);
 	
 	this.color = color;
 	this.setPosition(this.x, this.y);

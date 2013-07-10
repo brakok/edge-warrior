@@ -1,14 +1,9 @@
 
 //Manage sound (music/effects).
 var AudioManager = {
-	playSound: function(type){
+	playSound: function(file){
 	
-		switch(type){
-			case Enum.Sound.Block.LANDING :
-				cc.AudioEngine.getInstance().playEffect(soundDir + 'block_land');
-				break;
-		}
-		
+		cc.AudioEngine.getInstance().playEffect(soundDir + file);
 	},
 	playMusic: function(type){
 		cc.AudioEngine.getInstance().playBackgroundMusic("Resources/background",false);

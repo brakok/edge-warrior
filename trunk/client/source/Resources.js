@@ -12,6 +12,7 @@ var assets = [
 
 	//Sounds
 	{type:"sound", src: soundDir + 'block_land'},
+	{type:"sound", src: soundDir + 'block_swapColor'},
 
 	//World
 	{type:'image', src: assetsWorldDir + 'wall_pit.png'},
