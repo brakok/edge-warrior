@@ -110,6 +110,12 @@ var Constants = {
 	Sound: {
 		Effect: {
 			VOLUME: 0.5
+		},
+		File: {
+			Block: {
+				LANDING: 'block_land',
+				SWAP_COLOR: 'block_swapColor'
+			}
 		}
 	}
 };
