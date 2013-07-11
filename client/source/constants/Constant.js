@@ -115,6 +115,9 @@ var Constants = {
 			Block: {
 				LANDING: 'block_land',
 				SWAP_COLOR: 'block_swapColor'
+			},
+			Player: {
+				DEATH: 'player_death'
 			}
 		}
 	}
