@@ -165,6 +165,7 @@ Player.prototype.die = function() {
 	
 	//Create an animation for the dying player.
 	EffectManager.create(Enum.Effect.Type.PLAYER_DEATH, this.x, this.y);
+	AudioManager.playSound(Constants.Sound.File.Player.DEATH);
 	
 	this.isAlive = false;
 };
