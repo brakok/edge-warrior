@@ -117,7 +117,8 @@ var Constants = {
 				SWAP_COLOR: 'block_swapColor'
 			},
 			Player: {
-				DEATH: 'player_death'
+				DEATH: 'player_death',
+				SPAWN: 'player_spawn'
 			}
 		}
 	}

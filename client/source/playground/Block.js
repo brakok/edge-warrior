@@ -97,6 +97,9 @@ Block.prototype.explode = function(cause){
 			break;
 		case Enum.Block.Destruction.SPAWN:
 			EffectManager.create(Enum.Effect.Type.SPAWN_UNLEASHED, this.x, this.y);
+			
+			//Trigger spawn sound.
+			AudioManager.playSound(Constants.Sound.File.Player.SPAWN);
 			break;
 	}
 };

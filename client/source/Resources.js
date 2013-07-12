@@ -13,6 +13,7 @@ var assets = [
 	//Sounds
 	{type:"sound", src: soundDir + 'block_land'},
 	{type:"sound", src: soundDir + 'block_swapColor'},
+	{type:"sound", src: soundDir + 'player_spawn'},
 	{type:"sound", src: soundDir + 'player_death'},
 
 	//World
