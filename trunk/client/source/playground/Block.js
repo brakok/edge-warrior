@@ -94,6 +94,9 @@ Block.prototype.explode = function(cause){
 		case Enum.Block.Destruction.COLOR_CONTACT:
 		case Enum.Block.Destruction.CRUSHED:
 			EffectManager.create(Enum.Effect.Type.BLOCK_DISAPPEARING, this.x, this.y);
+			
+			//Trigger explosion sound.
+			AudioManager.playSound(Constants.Sound.File.Block.EXPLODE);
 			break;
 		case Enum.Block.Destruction.SPAWN:
 			EffectManager.create(Enum.Effect.Type.SPAWN_UNLEASHED, this.x, this.y);
