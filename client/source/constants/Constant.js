@@ -114,7 +114,8 @@ var Constants = {
 		File: {
 			Block: {
 				LANDING: 'block_land',
-				SWAP_COLOR: 'block_swapColor'
+				SWAP_COLOR: 'block_swapColor',
+				EXPLODE: 'block_explode'
 			},
 			Player: {
 				DEATH: 'player_death',
