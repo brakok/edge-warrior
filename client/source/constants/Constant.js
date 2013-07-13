@@ -119,7 +119,8 @@ var Constants = {
 			},
 			Player: {
 				DEATH: 'player_death',
-				SPAWN: 'player_spawn'
+				SPAWN: 'player_spawn',
+				LAND: 'player_land'
 			}
 		}
 	}
