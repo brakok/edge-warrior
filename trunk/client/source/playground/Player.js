@@ -147,7 +147,23 @@ Player.prototype.execute = function(action){
 			break;
 	}
 	
+	//Check if player has just landed.
+	if(this.hasLanded(action))
+		this.land();		
+	
 	this.currentAction = action;
+};
+
+Player.prototype.hasLanded = function(action){
+	var wasMidAir = this.currentAction == Enum.Action.Type.JUMPING || this.currentAction == Enum.Action.Type.DOUBLE_JUMPING || this.currentAction == Enum.Action.Type.FALLING;
+	var isOnGround = action == Enum.Action.Type.STANDING || action == Enum.Action.Type.RUNNING;
+	
+	return wasMidAir && isOnGround;
+};
+
+Player.prototype.land = function(){
+	//Trigger landing sound.
+	AudioManager.playSound(Constants.Sound.File.Player.LAND);
 };
 
 Player.prototype.fromServer = function(data){

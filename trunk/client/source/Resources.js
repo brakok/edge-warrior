@@ -16,6 +16,7 @@ var assets = [
 	{type:"sound", src: soundDir + 'block_explode'},
 	{type:"sound", src: soundDir + 'player_spawn'},
 	{type:"sound", src: soundDir + 'player_death'},
+	{type:"sound", src: soundDir + 'player_land'},
 
 	//World
 	{type:'image', src: assetsWorldDir + 'wall_pit.png'},
