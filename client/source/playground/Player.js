@@ -158,7 +158,7 @@ Player.prototype.hasLanded = function(action){
 	var wasMidAir = this.currentAction == Enum.Action.Type.JUMPING || this.currentAction == Enum.Action.Type.DOUBLE_JUMPING || this.currentAction == Enum.Action.Type.FALLING;
 	var isOnGround = action == Enum.Action.Type.STANDING || action == Enum.Action.Type.RUNNING;
 	
-	return wasMidAir && isOnGround;
+	return wasMidAir && (isOnGround || action == Enum.Action.Type.JUMPING);
 };
 
 Player.prototype.land = function(){
