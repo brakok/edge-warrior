@@ -24,6 +24,7 @@ var cocosApp = cc.Application.extend({
 		//Init audio engine.
 		cc.AudioEngine.getInstance().init("wav,mp3,ogg");
 		cc.AudioEngine.getInstance().setEffectsVolume(Constants.Sound.Effect.VOLUME);
+		cc.AudioEngine.getInstance().setMusicVolume(Constants.Sound.Music.VOLUME);
 		
 		cc.Loader.getInstance().onloading = function () {
 			cc.LoaderScene.getInstance().draw();

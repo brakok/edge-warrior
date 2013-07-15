@@ -52,7 +52,7 @@ Block.prototype.land = function(){
 	this.landingCountdown = Constants.Effect.BlockLanding.TIMER;
 	
 	//Trigger sound.
-	AudioManager.playSound(Constants.Sound.File.Block.LANDING);
+	AudioManager.playEffect(Constants.Sound.File.Block.LANDING, false);
 };
 
 Block.prototype.update = function(dt){
@@ -80,7 +80,7 @@ Block.prototype.swapColor = function(color){
 	
 	//Trigger swap effect.
 	EffectManager.create(Enum.Effect.Type.SWAP_COLOR, this.x, this.y);
-	AudioManager.playSound(Constants.Sound.File.Block.SWAP_COLOR);
+	AudioManager.playEffect(Constants.Sound.File.Block.SWAP_COLOR, false);
 	
 	this.color = color;
 	this.setPosition(this.x, this.y);
@@ -96,13 +96,13 @@ Block.prototype.explode = function(cause){
 			EffectManager.create(Enum.Effect.Type.BLOCK_DISAPPEARING, this.x, this.y);
 			
 			//Trigger explosion sound.
-			AudioManager.playSound(Constants.Sound.File.Block.EXPLODE);
+			AudioManager.playEffect(Constants.Sound.File.Block.EXPLODE, false);
 			break;
 		case Enum.Block.Destruction.SPAWN:
 			EffectManager.create(Enum.Effect.Type.SPAWN_UNLEASHED, this.x, this.y);
 			
 			//Trigger spawn sound.
-			AudioManager.playSound(Constants.Sound.File.Player.SPAWN);
+			AudioManager.playEffect(Constants.Sound.File.Player.SPAWN, false);
 			break;
 	}
 };

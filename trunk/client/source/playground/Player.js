@@ -132,6 +132,9 @@ Player.prototype.execute = function(action){
 			break;
 		case Enum.Action.Type.RUNNING:
 			this.swapAnimation(Enum.Anim.Type.RUNNING);
+			
+			AudioManager.stopEffect(Constants.Sound.File.Player.FOOT_STEP);
+			AudioManager.playEffect(Constants.Sound.File.Player.FOOT_STEP, true);
 			break;
 		case Enum.Action.Type.JUMPING:
 			this.swapAnimation(Enum.Anim.Type.JUMPING);
@@ -146,6 +149,9 @@ Player.prototype.execute = function(action){
 			this.swapAnimation(Enum.Anim.Type.FALLING);
 			break;
 	}
+	
+	if(this.currentAction != action && this.currentAction == Enum.Action.Type.RUNNING)
+		AudioManager.stopEffect(Constants.Sound.File.Player.FOOT_STEP);
 	
 	//Check if player has just landed.
 	if(this.hasLanded(action))
@@ -163,7 +169,7 @@ Player.prototype.hasLanded = function(action){
 
 Player.prototype.land = function(){
 	//Trigger landing sound.
-	AudioManager.playSound(Constants.Sound.File.Player.LAND);
+	AudioManager.playEffect(Constants.Sound.File.Player.LAND, false);
 };
 
 Player.prototype.fromServer = function(data){
@@ -181,7 +187,7 @@ Player.prototype.die = function() {
 	
 	//Create an animation for the dying player.
 	EffectManager.create(Enum.Effect.Type.PLAYER_DEATH, this.x, this.y);
-	AudioManager.playSound(Constants.Sound.File.Player.DEATH);
+	AudioManager.playEffect(Constants.Sound.File.Player.DEATH, false);
 	
 	this.isAlive = false;
 };
@@ -194,6 +200,15 @@ Player.prototype.win = function(){
 Player.prototype.turn = function(){
 	//Flip the sprite to current direction.
 	this.currentAnimation.setFlipX(this.facing == Enum.Facing.RIGHT);
+	
+	//Reset anim when turning.
+	if(this.currentAction == Enum.Anim.Type.RUNNING)
+	{
+		this.swapAnimation(Enum.Anim.Type.RUNNING, true);
+			
+		AudioManager.stopEffect(Constants.Sound.File.Player.FOOT_STEP);
+		AudioManager.playEffect(Constants.Sound.File.Player.FOOT_STEP, true);
+	}
 };
 
 Player.prototype.spawn = function(x, y){
@@ -202,10 +217,11 @@ Player.prototype.spawn = function(x, y){
 	this.isAlive = true;
 };
 
-Player.prototype.swapAnimation = function(newAnim){
+Player.prototype.swapAnimation = function(newAnim, mustSwap){
 	
-	if(newAnim == this.currentAnimationType && newAnim != Enum.Anim.Type.JUMPING)
-		return;
+	if(mustSwap == null || !mustSwap)
+		if(newAnim == this.currentAnimationType && newAnim != Enum.Anim.Type.JUMPING)
+			return;
 			
 	this.currentAnimationType = newAnim;
 	Client.layer.removeChild(this.currentAnimation);
