@@ -1,16 +1,19 @@
 
 //Manage sound (music/effects).
 var AudioManager = {
-	playSound: function(file){
+	playEffect: function(file, mustLoop){
 	
-		cc.AudioEngine.getInstance().playEffect(soundDir + file);
+		cc.AudioEngine.getInstance().playEffect(soundDir + file, mustLoop);
 	},
-	playMusic: function(type){
-		cc.AudioEngine.getInstance().playBackgroundMusic("Resources/background",false);
+	stopEffect: function(file){
+		cc.AudioEngine.getInstance().stopEffect(soundDir + file);
+	},
+	playMusic: function(file, mustLoop){
+		cc.AudioEngine.getInstance().playMusic(soundDir + file, mustLoop);
 	},
 	stopMusic: function(){
 		
-		if(cc.AudioEngine.getInstance().isBackgroundMusicPlaying())
-           cc.AudioEngine.getInstance().stopBackgroundMusic();
+		if(cc.AudioEngine.getInstance().isMusicPlaying())
+           cc.AudioEngine.getInstance().stopMusic();
 	}
 };

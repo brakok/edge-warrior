@@ -111,6 +111,9 @@ var Constants = {
 		Effect: {
 			VOLUME: 0.5
 		},
+		Music: {
+			VOLUME: 0.5
+		},
 		File: {
 			Block: {
 				LANDING: 'block_land',
@@ -120,7 +123,8 @@ var Constants = {
 			Player: {
 				DEATH: 'player_death',
 				SPAWN: 'player_spawn',
-				LAND: 'player_land'
+				LAND: 'player_land',
+				FOOT_STEP: 'foot_step'
 			}
 		}
 	}
