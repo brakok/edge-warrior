@@ -128,6 +128,7 @@ Player.prototype.die = function(){
 		
 	this.stepReached = 0;
 	this.killTime = 0;
+	this.groundContact = 0;
 	
 	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_KILLED, this.toClient());
 	

@@ -106,14 +106,14 @@ var DropListener = {
 //Ground listener.
 var GroundListener = {
 	begin: function(arbiter, space){
-			
 		var player = null;
+		var sensorIsB = arbiter.b.sensor;
 		
 		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
 		//Allow player to jump on other.
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || player.y < arbiter.body_b.userdata.object.y))
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || sensorIsB))
 			player = arbiter.body_b.userdata.object;
 		
 		if(player != null){
@@ -121,15 +121,14 @@ var GroundListener = {
 		}
 	},
 	separate: function(arbiter, space){
-
 		var player = null;
+		var sensorIsB = arbiter.b.sensor;
 		
-		if(arbiter.body_a.userdata != null 
-			&& arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_a.userdata.object;
 
 		//Allow player to jump on other.
-		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || player.y < arbiter.body_b.userdata.object.y))
+		if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || sensorIsB))
 			player = arbiter.body_b.userdata.object;
 			
 		if(player != null){
@@ -200,7 +199,6 @@ var BlockListener = {
 
 		if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
 			player = arbiter.body_b.userdata.object;
-			
 		
 		//Trigger spawn.
 		if(block1 != null && player == null && block1.type == Enum.Block.Type.SPAWN)
@@ -209,8 +207,9 @@ var BlockListener = {
 			block2.mustTrigger = true;
 		
 		if(player != null)
-		{		
+		{
 			var killingBlock = (block1 != null ? block1 : block2);
+				
 			if(killingBlock != null && !killingBlock.landed && killingBlock.ownerId != player.id)
 			{
 				if(killingBlock.ownerId == null)
@@ -244,14 +243,13 @@ var BlockListener = {
 			//State can't be changed during callback.
 			block1.toggleState = true;
 			block1.isStatic = true;
-			block1.landed = true;
 			block1.justLanded = true;
 		}	
+		
 		if(block2 != null && !block2.isStatic)
 		{
 			block2.toggleState = true;
 			block2.isStatic = true;
-			block2.landed = true;
 			block2.justLanded = true;
 		}
 	},

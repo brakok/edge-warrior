@@ -79,6 +79,7 @@ Block.prototype.active = function(flag){
 		{
 			this.state = Enum.Block.State.STATIC;
 			
+			this.landed = true;
 			Game.space.removeBody(this.body);
 			this.body.nodeIdleTime = Infinity;
 			this.body.setMass(Constants.Physic.MASS_BLOCK_STATIC);
