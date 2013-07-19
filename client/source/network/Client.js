@@ -121,8 +121,8 @@ var Client = new function(){
 		//Update info from the server.
 		if(this.ready)
 		{
+			//Send 
 			this.push();
-			this.pull();
 			
 			this.hud.update(dt);
 			
@@ -216,7 +216,7 @@ var Client = new function(){
 		
 		//Pulling info from server.
 		socket.on(Constants.Message.PULL, function (data){	
-			Client.updateFromServer(data.player, data.enemies, data.blocks, data.goal, data.deathZones);
+			Client.updateFromServer(data.players, data.blocks, data.goal, data.deathZones);
 		});
 		
 		//Ask for next block.
@@ -396,17 +396,12 @@ var Client = new function(){
 	};
 	
 	//Update positions from server ones.
-	this.updateFromServer = function(remotePlayer, remoteEnemies, remoteBlocks, remoteGoal, remoteDeathZones){
+	this.updateFromServer = function(remotePlayers, remoteBlocks, remoteGoal, remoteDeathZones){
 		
-		//Update player.
-		this.player.fromServer(remotePlayer);
-
-		//Update enemies.
-		for(var i in this.enemies)
-			for(var j in remoteEnemies)
-				if(this.enemies[i].color == remoteEnemies[j].color)
-					this.enemies[i].fromServer(remoteEnemies[j]);
-			
+		//Update players.
+		for(var i in remotePlayers)
+			getPlayer(remotePlayers[i].color).fromServer(remotePlayers[i]);
+					
 		//Update blocks.
 		for(var i in remoteBlocks)
 			if(this.blocks[remoteBlocks[i].id] != null)
