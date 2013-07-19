@@ -81,12 +81,6 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	socket.on(Constants.Message.PUSH, function(inputs){
 		Game.push(inputs, socket.id);
 	});
-	
-	//Sending information upon pull request.
-	socket.on(Constants.Message.PULL, function(){
-		var data = Game.pull(socket.id);
-		socket.emit(Constants.Message.PULL, data);
-	});
 });
 
 console.log('Server created');

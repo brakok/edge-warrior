@@ -1304,6 +1304,9 @@ var Game = {
 			//Winner!
 			if(this.winningPhaseTimer <= 0)
 				this.end();
+			
+			//Send data to clients.
+			this.pull();
 		}
 	},
 	electWinner: function(winner){
@@ -1334,16 +1337,16 @@ var Game = {
 	push: function(inputs, id){
 		this.players[id].keys = inputs;
 	},
-	pull: function(id){
+	pull: function(){
 		
-		var enemies = [];
+		var players = [];
 		
+		//Players.
 		for(var i in this.players)
-		{
-			if(i != id && this.players[i].isAlive)
-				enemies.push(this.players[i].toClient());
-		}
+			if(this.players[i].isAlive)
+				players.push(this.players[i].toClient());
 		
+		//Blocks.
 		var blocks = [];
 		for(var i in this.blocks)
 		{
@@ -1351,18 +1354,21 @@ var Game = {
 				blocks.push(this.blocks[i].toClient());
 		}
 		
+		//Death zones.
 		var deathZones = [];
 		for(var i in this.deathZones)
 			if(this.deathZones[i] != null)
 				deathZones.push(this.deathZones[i].toClient());
 		
-		return {
-			player: this.players[id].toClient(),
-			enemies: enemies,
+		var data = {
+			players: players,
 			goal: this.goal.toClient(),
 			blocks: blocks,
 			deathZones: deathZones
 		};
+		
+		//Send message to all players.
+		io.sockets.in(this.id).emit(Constants.Message.PULL, data);
 	},
 	launch: function(){
 		//17 milliseconds = 60 FPS
@@ -1511,12 +1517,6 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Retrieving information from players.
 	socket.on(Constants.Message.PUSH, function(inputs){
 		Game.push(inputs, socket.id);
-	});
-	
-	//Sending information upon pull request.
-	socket.on(Constants.Message.PULL, function(){
-		var data = Game.pull(socket.id);
-		socket.emit(Constants.Message.PULL, data);
 	});
 });
 
