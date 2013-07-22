@@ -1,17 +1,12 @@
 var Inventory = function(offset, y, screenWidth, layer){
 
-	//Default position relative to fieldset.
-	this.defaultPosition = {
-		current: {x : -15, y: -10 },
-		next: { x : 40, y : 20 }
-	};
-
 	this.layer = layer;
 	this.x = screenWidth - offset;
 	this.y = y;
 	
 	this.currentBlock = null;
 	this.nextBlock = null;
+	this.killCommand = new KillCommand(this.x + Constants.HUD.Inventory.KillCommand.REL_X, this.y + Constants.HUD.Inventory.KillCommand.REL_Y, screenWidth, layer);
 	
 	//Add the fieldset containing player blocks.
 	this.fieldset = cc.Sprite.create(assetsHudDir + 'fieldset.png');
@@ -20,6 +15,10 @@ var Inventory = function(offset, y, screenWidth, layer){
 	this.fieldset.setPosition(new cc.Point(this.x, y));	
 		
 	this.layer.addChild(this.fieldset);
+};
+
+Inventory.prototype.update = function(dt){
+	this.killCommand.update(dt);
 };
 
 Inventory.prototype.setBlocks = function(current, next){
@@ -62,7 +61,7 @@ Inventory.prototype.setCurrent = function(block){
 	this.currentBlock.sprite.setScale(Constants.HUD.Inventory.Current.SCALE * this.currentBlock.scale);
 	
 	//Set it position.
-	this.currentBlock.sprite.setPosition(new cc.Point(this.x + this.defaultPosition.current.x, this.y + this.defaultPosition.current.y));
+	this.currentBlock.sprite.setPosition(new cc.Point(this.x + Constants.HUD.Inventory.Current.REL_X, this.y + Constants.HUD.Inventory.Current.REL_Y));
 };
 
 //Set next block.
@@ -76,5 +75,5 @@ Inventory.prototype.setNext = function(block){
 	this.nextBlock.sprite.setScale(Constants.HUD.Inventory.Next.SCALE * this.nextBlock.scale);
 	
 	//Set it position.
-	this.nextBlock.sprite.setPosition(new cc.Point(this.x + this.defaultPosition.next.x, this.y + this.defaultPosition.next.y));
+	this.nextBlock.sprite.setPosition(new cc.Point(this.x + Constants.HUD.Inventory.Next.REL_X, this.y + Constants.HUD.Inventory.Next.REL_Y));
 };

@@ -1,12 +1,12 @@
 
 //Animation shown in HUD for the kill command.
-var KillCommand = function(offset, y, screenWidth, layer){
-		this.x = screenWidth - offset;
+var KillCommand = function(x, y, screenWidth, layer){
+		this.x = x;
 		this.y = y;
 		this.layer = layer;
 		
 		this.mustAppear = false;
-		this.alphaStep = 255/(Constants.KillCommand.Time.FIRST_STEP - Constants.KillCommand.Time.APPARITION);
+		this.alphaStep = 255/(Constants.HUD.Inventory.KillCommand.Time.FIRST_STEP - Constants.HUD.Inventory.KillCommand.Time.APPARITION);
 		this.firstStepTimer = 0;
 			
 		//Base frame.
@@ -53,7 +53,7 @@ KillCommand.prototype.update = function(dt){
 	this.firstStepTimer += dt;
 	
 	//Appear only if in apparition phase.
-	if(this.firstStepTimer >= Constants.KillCommand.Time.FIRST_STEP)
+	if(this.firstStepTimer >= Constants.HUD.Inventory.KillCommand.Time.FIRST_STEP)
 	{
 		var tmpAlpha = this.currentAnimation._opacity;
 		tmpAlpha += this.alphaStep*dt;
