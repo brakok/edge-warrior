@@ -367,9 +367,9 @@ var Client = new function(){
 	this.changeStep = function(stepReached){
 	
 		if(stepReached == Enum.StepReached.NONE)
-			this.hud.killCommand.reset();
+			this.hud.inventory.killCommand.reset();
 		else
-			this.hud.killCommand.start(stepReached);
+			this.hud.inventory.killCommand.start(stepReached);
 	};
 	
 	//Kill a player and remove it from the layer.
@@ -377,7 +377,7 @@ var Client = new function(){
 		
 		if(killed.color == this.player.color)
 		{
-			this.hud.killCommand.reset();
+			this.hud.inventory.killCommand.reset();
 			this.player.die();
 		}
 		else

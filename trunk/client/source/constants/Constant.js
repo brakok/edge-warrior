@@ -23,12 +23,6 @@ var Constants = {
 			Z_INDEX: -1000
 		}
 	},
-	KillCommand: {
-		Time: {
-			APPARITION: 3,
-			FIRST_STEP: 5
-		}		
-	},
 	Camera: {
 		HIGHER: 75,
 		SPEED_X: 0.00001,
@@ -60,13 +54,27 @@ var Constants = {
 		ENDSCREEN_Z_INDEX: -1000,
 		Z_INDEX: 1000,
 		Inventory: {
+			OFFSET: 250,
+			Y: 100,
 			Current: {
 				Z_INDEX: 1002,
-				SCALE: 1.6
+				SCALE: 1.6,
+				REL_X: -122,
+				REL_Y: -41
 			},
 			Next: {
 				Z_INDEX: 1001,
-				SCALE: 1.2
+				SCALE: 1.4,
+				REL_X: -92,
+				REL_Y: -20
+			},
+			KillCommand: {
+				REL_X: 160,
+				REL_Y: 42,
+				Time: {
+					APPARITION: 3,
+					FIRST_STEP: 5
+				}		
 			}
 		}
 	},
