@@ -1,8 +1,6 @@
 var Player = function (x, y, color) {
 	this.color = color;
 	
-	this.currentBlock = Enum.Block.Type.NEUTRAL;
-	this.nextBlock = Enum.Block.Type.COLORED;
 	this.givenBlock = null;
 	
 	this.isAlive = true;
@@ -30,29 +28,31 @@ Player.prototype.changePercent = function(blockType, percent){
 //Add a block as the current block from an extern source.
 Player.prototype.addNextBlock = function(blockType){
 	this.givenBlock = blockType;
-	Client.hud.inventory.setBlocks(new Block(0,0, this.givenBlock, this.color), new Block(0,0, this.currentBlock, this.color));
+	Client.hud.inventory.setCurrent(new Block(0,0, this.givenBlock, this.color));
 };
 
 //Ask player to randomize next block in the list.
 Player.prototype.pushNextBlock = function(){
 	
+	//Use current block.
+	Client.hud.inventory.useBlock();
+	
 	if(this.givenBlock == null)
-	{
-		this.currentBlock = this.nextBlock;
-			
+	{			
 		var rnd = Math.round(Math.random()*100);
 		var found = false;
 		var min = 0;
 		
 		var end = this.blockTypeAvailable.length;
 		var i = 0;
+		var nextBlock = null;
 		
 		//Loop through block types available to the player to initiate next command.
 		while(i < end && !found)
 		{
 			if(rnd <= (this.blockTypeAvailable[i].percent + min))
 			{
-				this.nextBlock = this.blockTypeAvailable[i].type;
+				nextBlock = this.blockTypeAvailable[i].type;
 				found = true;
 			}
 			
@@ -62,13 +62,12 @@ Player.prototype.pushNextBlock = function(){
 		
 		//Colored if not found.
 		if(!found)
-			this.nextBlock = Enum.Block.Type.COLORED;
+			nextBlock = Enum.Block.Type.COLORED;
+			
+		Client.hud.inventory.addBlock(new Block(0,0, nextBlock, this.color));
 	}
 	else
 		this.givenBlock = null;
-
-	//Push the new block to the HUD.
-	Client.hud.inventory.pushBlock(new Block(0,0,this.nextBlock, this.color));
 };
 
 Player.prototype.init = function(){

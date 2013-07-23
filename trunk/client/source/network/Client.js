@@ -101,8 +101,8 @@ var Client = new function(){
 		this.goal.init();
 
 		//Set first blocks to the HUD.
-		this.hud.inventory.setBlocks(new Block(0,0, this.player.currentBlock, this.player.color), 
-									 new Block(0,0, this.player.nextBlock, this.player.color));
+		this.hud.inventory.setBlocks(new Block(0,0, Enum.Block.Type.NEUTRAL, this.player.color), 
+									 new Block(0,0, Enum.Block.Type.COLORED, this.player.color));
 		
 		this.ready = true;
 	};
@@ -112,7 +112,7 @@ var Client = new function(){
 		
 		//Ask player to create the next block and send the new one to the server.
 		this.player.pushNextBlock();
-		this.socket.emit(Constants.Message.NEXT_BLOCK, this.player.currentBlock);
+		this.socket.emit(Constants.Message.NEXT_BLOCK, this.hud.inventory.getCurrent().type);
 	};
 	
 	//Update elements contained in the container.
