@@ -57,16 +57,16 @@ var Constants = {
 			OFFSET: 250,
 			Y: 100,
 			Current: {
-				Z_INDEX: 1002,
+				Z_INDEX: 1005,
 				SCALE: 1.6,
 				REL_X: -122,
 				REL_Y: -41
 			},
 			Next: {
-				Z_INDEX: 1001,
-				SCALE: 1.4,
-				REL_X: -92,
-				REL_Y: -20
+				STEP_Z_INDEX: -1,
+				STEP_SCALE: -0.2,
+				STEP_X: 30,
+				STEP_Y: 21
 			},
 			KillCommand: {
 				REL_X: 160,

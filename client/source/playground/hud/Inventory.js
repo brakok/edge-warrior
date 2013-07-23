@@ -4,8 +4,8 @@ var Inventory = function(offset, y, screenWidth, layer){
 	this.x = screenWidth - offset;
 	this.y = y;
 	
-	this.currentBlock = null;
-	this.nextBlock = null;
+	this.blocks = null;
+	
 	this.killCommand = new KillCommand(this.x + Constants.HUD.Inventory.KillCommand.REL_X, this.y + Constants.HUD.Inventory.KillCommand.REL_Y, screenWidth, layer);
 	
 	//Add the fieldset containing player blocks.
@@ -21,59 +21,84 @@ Inventory.prototype.update = function(dt){
 	this.killCommand.update(dt);
 };
 
-Inventory.prototype.setBlocks = function(current, next){
-	
-	if(this.currentBlock != null)
-		this.layer.removeChild(this.currentBlock.sprite);
-		
-	if(this.nextBlock != null)
-		this.layer.removeChild(this.nextBlock.sprite);
-
-	//Set the new blocks.
-	this.setCurrent(current);
-	this.setNext(next);		
-	
-	//Add to layer.
-	this.layer.addChild(this.currentBlock.sprite);
-	this.layer.addChild(this.nextBlock.sprite);
+Inventory.prototype.getCurrent = function(){
+	return this.blocks[0];
 };
 
-Inventory.prototype.pushBlock = function(block){
-		
-		this.layer.removeChild(this.currentBlock.sprite);
+Inventory.prototype.setBlocks = function(current, next){
 	
-		//Push the new block on the next and the next on the current.
-		this.setCurrent(this.nextBlock);
-		this.setNext(block);
+	if(this.blocks != null)
+	{
+		for(var i in this.blocks)
+		{
+			if(this.blocks[i] != null)
+			{
+				this.layer.removeChild(this.blocks[i].sprite);
+				delete this.blocks[i];
+			}
+		}
+		
+		this.blocks = [];
+	}
+	else
+		this.blocks = [];
+	
+	//Set the new blocks.
+	this.setCurrent(current);
+	this.addBlock(next);
+};
 
-		//Add to layer.
-		this.layer.addChild(this.nextBlock.sprite);
+Inventory.prototype.useBlock = function(){
+
+	this.layer.removeChild(this.blocks[0].sprite);
+	
+	if(this.blocks[1] != null)
+		this.layer.removeChild(this.blocks[1].sprite);
+	
+	this.blocks.splice(0, 1);
+	
+	for(var i = 0; i < this.blocks.length; i++)
+		if(i < 2)
+			this.renderBlock(i);
+};
+
+//Add a block in the list.
+Inventory.prototype.addBlock = function(block){
+		
+		var index = this.blocks.length;
+		this.blocks.push(block);
+		
+		this.renderBlock(index);
 };
 
 //Set current block.
 Inventory.prototype.setCurrent = function(block){
-	this.currentBlock = block;
+
+	if(this.blocks[0] != null)
+		this.layer.removeChild(this.blocks[0].sprite);
 	
-	//Set correct scale and good z-index on current.
-	this.currentBlock.sprite._zOrder = Constants.HUD.Inventory.Current.Z_INDEX;
+	if(this.blocks[1] != null)
+		this.layer.removeChild(this.blocks[1].sprite);
+
+	this.blocks.unshift(block);
 	
-	//Resize block.
-	this.currentBlock.sprite.setScale(Constants.HUD.Inventory.Current.SCALE * this.currentBlock.scale);
-	
-	//Set it position.
-	this.currentBlock.sprite.setPosition(new cc.Point(this.x + Constants.HUD.Inventory.Current.REL_X, this.y + Constants.HUD.Inventory.Current.REL_Y));
+	//Render first two blocks.
+	for(var i = 0; i < (this.blocks.length > 2 ? 2 : this.blocks.length); i++)
+		this.renderBlock(i);
 };
 
-//Set next block.
-Inventory.prototype.setNext = function(block){
-	this.nextBlock = block;
+//Add to layer to be displayed.
+Inventory.prototype.renderBlock = function(index){
 	
-	//Set correct scale and good z-index on next block.
-	this.nextBlock.sprite._zOrder = Constants.HUD.Inventory.Next.Z_INDEX;
-	
+	//Set good Z-index.
+	this.blocks[index].sprite._zOrder = Constants.HUD.Inventory.Current.Z_INDEX + (index*Constants.HUD.Inventory.Next.STEP_Z_INDEX);
 	//Resize block.
-	this.nextBlock.sprite.setScale(Constants.HUD.Inventory.Next.SCALE * this.nextBlock.scale);
-	
+	this.blocks[index].sprite.setScale((Constants.HUD.Inventory.Current.SCALE*this.blocks[index].scale) +  (index*Constants.HUD.Inventory.Next.STEP_SCALE));
 	//Set it position.
-	this.nextBlock.sprite.setPosition(new cc.Point(this.x + Constants.HUD.Inventory.Next.REL_X, this.y + Constants.HUD.Inventory.Next.REL_Y));
+	this.blocks[index].sprite.setPosition(new cc.Point(this.x + Constants.HUD.Inventory.Current.REL_X + (index*Constants.HUD.Inventory.Next.STEP_X), 
+													   this.y + Constants.HUD.Inventory.Current.REL_Y + (index*Constants.HUD.Inventory.Next.STEP_Y)));
+	
+	//Add to layer if there's only one block in the inventory.
+	if(index < 2)
+		this.layer.addChild(this.blocks[index].sprite);
 };
