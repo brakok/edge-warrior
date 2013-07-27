@@ -20,6 +20,13 @@ var Client = new function(){
 	this.keys[cc.KEY.space] = false;
 	this.keys[cc.KEY.q] = false;
 	
+	//Option keys.
+	this.keys[cc.KEY.z] = false;
+	this.keys[cc.KEY.x] = false;
+	
+	this.option1Pressed = false;
+	this.option2Pressed = false;
+	
 	//This private variable is used in private function instead of 'this' to access public members in private stuff.
 	var that = this;
 	
@@ -34,6 +41,44 @@ var Client = new function(){
 					return that.enemies[i];
 					
 		return null;
+	};
+	
+	//Manage input from the player.
+	this.manageInput = function(){
+	
+		if(this.player.givenBlock == null)
+		{
+			var blockToSend = null;
+			
+			if(this.keys[cc.KEY.z] && !this.option1Pressed)
+			{				
+				if(this.hud.inventory.option1 == null)
+					this.hud.inventory.setOption(true);
+				else
+					this.hud.inventory.useOption(true);
+					
+				blockToSend = this.hud.inventory.getCurrent().type;
+				this.option1Pressed = true;
+			}
+			else if(!this.keys[cc.KEY.z] && this.option1Pressed)
+				this.option1Pressed = false;
+				
+			if(this.keys[cc.KEY.x] && !this.option2Pressed)
+			{
+				if(this.hud.inventory.option2 == null)
+					this.hud.inventory.setOption(false);
+				else
+					this.hud.inventory.useOption(false);
+					
+				blockToSend = this.hud.inventory.getCurrent().type;
+				this.option2Pressed = true;
+			}
+			else if(!this.keys[cc.KEY.x] && this.option2Pressed)
+				this.option2Pressed = false;
+			
+			if(blockToSend != null)
+				this.socket.emit(Constants.Message.NEXT_BLOCK, blockToSend);
+		}
 	};
 	
 	//Initialize the game client. Get window information.
@@ -121,6 +166,8 @@ var Client = new function(){
 		//Update info from the server.
 		if(this.ready)
 		{
+			this.manageInput();
+		
 			//Send 
 			this.push();
 			

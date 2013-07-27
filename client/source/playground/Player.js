@@ -8,11 +8,6 @@ var Player = function (x, y, color) {
 	
 	this.blockTypeAvailable = [];
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
-	
-	this.blockStorage = {
-		option1: null,
-		option2: null
-	};
 }
 
 //Change percent on a specific option. Negative percent lowers actual one.
@@ -119,6 +114,8 @@ Player.prototype.setPosition = function(x, y){
 
 Player.prototype.update = function(){
 	Client.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5);
+	
+	
 };
 
 Player.prototype.execute = function(action){

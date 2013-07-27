@@ -6,6 +6,9 @@ var Inventory = function(offset, y, screenWidth, layer){
 	
 	this.blocks = null;
 	
+	this.option1 = null;
+	this.option2 = null;
+	
 	this.killCommand = new KillCommand(this.x + Constants.HUD.Inventory.KillCommand.REL_X, this.y + Constants.HUD.Inventory.KillCommand.REL_Y, screenWidth, layer);
 	
 	//Add the fieldset containing player blocks.
@@ -85,6 +88,51 @@ Inventory.prototype.setCurrent = function(block){
 	//Render first two blocks.
 	for(var i = 0; i < (this.blocks.length > 2 ? 2 : this.blocks.length); i++)
 		this.renderBlock(i);
+};
+
+//Set a block into an option slot.
+Inventory.prototype.setOption = function(isFirst){
+
+	var option = null;
+	
+	if(isFirst)
+		this.option1 = option = this.blocks[0];
+	else
+		this.option2 = option = this.blocks[0];
+		
+	//Ask next block from player.
+	Client.player.pushNextBlock();
+	
+	//Set good Z-index.
+	option.sprite._zOrder = isFirst ? Constants.HUD.Inventory.Option1.Z_INDEX
+									: Constants.HUD.Inventory.Option2.Z_INDEX;
+	//Resize block.
+	option.sprite.setScale(isFirst ? Constants.HUD.Inventory.Option1.SCALE*option.scale
+								   : Constants.HUD.Inventory.Option2.SCALE*option.scale);
+	//Set it position.
+	option.sprite.setPosition(new cc.Point(this.x + (isFirst ? Constants.HUD.Inventory.Option1.REL_X : Constants.HUD.Inventory.Option2.REL_X), 
+										   this.y + (isFirst ? Constants.HUD.Inventory.Option1.REL_Y : Constants.HUD.Inventory.Option2.REL_Y)));
+										   
+	this.layer.addChild(option.sprite);
+};
+
+//Place a block in the option slot at the current position.
+Inventory.prototype.useOption = function(isFirst){
+	
+	if(isFirst && this.option1 != null)
+	{
+		this.layer.removeChild(this.option1.sprite);
+		this.setCurrent(this.option1);
+		
+		this.option1 = null;
+	}
+	else if(!isFirst && this.option2 != null)
+	{
+		this.layer.removeChild(this.option2.sprite);
+		this.setCurrent(this.option2);
+		
+		this.option2 = null;
+	}
 };
 
 //Add to layer to be displayed.

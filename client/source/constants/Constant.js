@@ -68,6 +68,18 @@ var Constants = {
 				STEP_X: 30,
 				STEP_Y: 21
 			},
+			Option1: {
+				Z_INDEX: 1005,
+				SCALE: 1.2,
+				REL_X: 31,
+				REL_Y: -47
+			},
+			Option2: {
+				Z_INDEX: 1005,
+				SCALE: 1.2,
+				REL_X: 142,
+				REL_Y: -47
+			},
 			KillCommand: {
 				REL_X: 160,
 				REL_Y: 42,
