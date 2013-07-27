@@ -18,6 +18,7 @@ var assets = [
 	{type:"sound", src: soundDir + 'player_death'},
 	{type:"sound", src: soundDir + 'player_land'},
 	{type:"sound", src: soundDir + 'foot_step'},
+	{type:"sound", src: soundDir + 'double_jump'},
 
 	//World
 	{type:'image', src: assetsWorldDir + 'wall_pit.png'},
