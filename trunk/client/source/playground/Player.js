@@ -114,8 +114,6 @@ Player.prototype.setPosition = function(x, y){
 
 Player.prototype.update = function(){
 	Client.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5);
-	
-	
 };
 
 Player.prototype.execute = function(action){
