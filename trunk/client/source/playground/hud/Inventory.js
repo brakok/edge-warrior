@@ -16,6 +16,7 @@ var Inventory = function(offset, y, screenWidth, layer){
 	
 	//Set the fieldset in the right corner.
 	this.fieldset.setPosition(new cc.Point(this.x, y));	
+	this.fieldset.setScale(0.5, 0.5);
 		
 	this.layer.addChild(this.fieldset);
 };

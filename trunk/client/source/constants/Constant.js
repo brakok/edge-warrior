@@ -60,25 +60,25 @@ var Constants = {
 				Z_INDEX: 1005,
 				SCALE: 1.6,
 				REL_X: -122,
-				REL_Y: -41
+				REL_Y: -43
 			},
 			Next: {
 				STEP_Z_INDEX: -1,
-				STEP_SCALE: -0.2,
-				STEP_X: 30,
-				STEP_Y: 21
+				STEP_SCALE: -0.4,
+				STEP_X: 35,
+				STEP_Y: 18
 			},
 			Option1: {
 				Z_INDEX: 1005,
 				SCALE: 1.2,
 				REL_X: 31,
-				REL_Y: -47
+				REL_Y: -49
 			},
 			Option2: {
 				Z_INDEX: 1005,
 				SCALE: 1.2,
 				REL_X: 142,
-				REL_Y: -47
+				REL_Y: -49
 			},
 			KillCommand: {
 				REL_X: 160,
