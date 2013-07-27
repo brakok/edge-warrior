@@ -138,6 +138,7 @@ Player.prototype.execute = function(action){
 			
 			//Trigger double jump effect.
 			EffectManager.create(Enum.Effect.Type.DOUBLE_JUMP, this.x, this.y - Constants.Effect.DoubleJump.OFFSET);
+			AudioManager.playEffect(Constants.Sound.File.Player.DOUBLE_JUMP);
 			break;
 		case Enum.Action.Type.FALLING:
 			this.swapAnimation(Enum.Anim.Type.FALLING);

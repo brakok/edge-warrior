@@ -144,7 +144,8 @@ var Constants = {
 				DEATH: 'player_death',
 				SPAWN: 'player_spawn',
 				LAND: 'player_land',
-				FOOT_STEP: 'foot_step'
+				FOOT_STEP: 'foot_step',
+				DOUBLE_JUMP: 'double_jump'
 			}
 		}
 	}
