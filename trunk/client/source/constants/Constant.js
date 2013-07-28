@@ -145,8 +145,15 @@ var Constants = {
 				SPAWN: 'player_spawn',
 				LAND: 'player_land',
 				FOOT_STEP: 'foot_step',
-				DOUBLE_JUMP: 'double_jump'
+				DOUBLE_JUMP: 'double_jump',
+				IDLE: '_idle',
+				JUMP: '_jump',
+				KILL: '_kill'
 			}
+		},
+		VoiceTimer: {
+			MIN: 6,
+			RANGE : 5
 		}
 	}
 };

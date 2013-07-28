@@ -7,6 +7,7 @@ var assetsHudDir = 'assets/hud/';
 var assetsWinningGoalDir = 'assets/winningGoal/';
 var assetsEffectDir = 'assets/effects/';
 var soundDir = 'sounds/';
+var soundVoiceDir = 'sounds/voices/';
 
 var assets = [
 
@@ -19,6 +20,14 @@ var assets = [
 	{type:"sound", src: soundDir + 'player_land'},
 	{type:"sound", src: soundDir + 'foot_step'},
 	{type:"sound", src: soundDir + 'double_jump'},
+	
+	//Voices
+	{type:"sound", src: soundVoiceDir + 'red_kill'},
+	{type:"sound", src: soundVoiceDir + 'red_jump01'},
+	{type:"sound", src: soundVoiceDir + 'red_jump02'},
+	{type:"sound", src: soundVoiceDir + 'red_idle01'},
+	{type:"sound", src: soundVoiceDir + 'red_idle02'},
+	{type:"sound", src: soundVoiceDir + 'red_idle03'},
 
 	//World
 	{type:'image', src: assetsWorldDir + 'wall_pit.png'},

@@ -1,4 +1,4 @@
-var Player = function (x, y, color) {
+var Player = function (x, y, color, isControlled) {
 	this.color = color;
 	
 	this.givenBlock = null;
@@ -6,8 +6,20 @@ var Player = function (x, y, color) {
 	this.isAlive = true;
 	this.hasWon = false;
 	
+	this.isControlled = isControlled;
+	
 	this.blockTypeAvailable = [];
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
+	
+	this.voices = null;
+	
+	this.maySpeak = false;
+	this.voiceTimer = 0;
+	this.lastVoice = null;
+	
+	//Options available in inventory.
+	this.option1Pressed = false;
+	this.option2Pressed = false;
 }
 
 //Change percent on a specific option. Negative percent lowers actual one.
@@ -65,12 +77,12 @@ Player.prototype.pushNextBlock = function(){
 		this.givenBlock = null;
 };
 
+//Initiation.
 Player.prototype.init = function(){
 
 	this.facing = Enum.Facing.LEFT;
 	
 	var colorText = 'yellow';
-	
 	
 	switch(this.color)
 	{
@@ -84,6 +96,14 @@ Player.prototype.init = function(){
 			//colorText = 'white';
 			break;
 	}
+	
+	this.voices = {
+		kill: new Voice(Enum.Voice.Type.KILL, 'red', 1),
+		jump: new Voice(Enum.Voice.Type.JUMP, 'red', 2),
+		idle: new Voice(Enum.Voice.Type.IDLE, 'red', 3)
+	};
+	
+	this.resetVoiceTimer();
 	
 	//Set current animation to idle.
 	this.currentAnimationType = Enum.Anim.Type.IDLE;	
@@ -103,6 +123,22 @@ Player.prototype.init = function(){
 	Client.layer.addChild(this.currentAnimation);
 };
 
+//Player killing.
+Player.prototype.kill = function(){
+
+	if(this.isControlled)
+	{		
+		if(this.lastVoice != null)
+			AudioManager.stopVoice(this.lastVoice);
+			
+		if(this.maySpeak)
+			this.resetVoiceTimer();
+		
+		this.lastVoice = this.voices.kill.getRandomVoice();
+		AudioManager.playVoice(this.lastVoice, false);
+	}
+};
+
 Player.prototype.getPosition = function(){
 	return this.currentAnimation.getPosition();
 };
@@ -112,8 +148,75 @@ Player.prototype.setPosition = function(x, y){
 	this.y = y;
 };
 
-Player.prototype.update = function(){
+//Reset the voice timer to a random value between minimum value and specified range.
+Player.prototype.resetVoiceTimer = function(){
+	this.voiceTimer = Constants.Sound.VoiceTimer.MIN + (Math.random()*Constants.Sound.VoiceTimer.RANGE);
+};
+
+//Handle inputs.
+Player.prototype.manageInput = function(){
+
+	if(this.givenBlock == null)
+	{
+		var blockToSend = null;
+		
+		//Store or use option 1.
+		if(Client.keys[cc.KEY.z] && !this.option1Pressed)
+		{				
+			if(Client.hud.inventory.option1 == null)
+				Client.hud.inventory.setOption(true);
+			else
+				Client.hud.inventory.useOption(true);
+				
+			blockToSend = Client.hud.inventory.getCurrent().type;
+			this.option1Pressed = true;
+		}
+		else if(!Client.keys[cc.KEY.z] && this.option1Pressed)
+			this.option1Pressed = false;
+			
+		//Store or use option 2.
+		if(Client.keys[cc.KEY.x] && !this.option2Pressed)
+		{
+			if(Client.hud.inventory.option2 == null)
+				Client.hud.inventory.setOption(false);
+			else
+				Client.hud.inventory.useOption(false);
+				
+			blockToSend = Client.hud.inventory.getCurrent().type;
+			this.option2Pressed = true;
+		}
+		else if(!Client.keys[cc.KEY.x] && this.option2Pressed)
+			this.option2Pressed = false;
+		
+		if(blockToSend != null)
+			Client.socket.emit(Constants.Message.NEXT_BLOCK, blockToSend);
+	}
+};
+
+Player.prototype.update = function(dt){
 	Client.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5);
+	
+	if(this.isControlled)
+	{
+		//Handle inputs.
+		this.manageInput();
+	
+		if(this.maySpeak)
+		{
+			if(this.voiceTimer <= 0)
+			{
+				if(this.lastVoice != null)
+					AudioManager.stopVoice(this.lastVoice);
+			
+				this.lastVoice = this.voices.idle.getRandomVoice();
+				AudioManager.playVoice(this.lastVoice, false);
+			
+				this.resetVoiceTimer();
+			}
+			else
+				this.voiceTimer -= dt;
+		}
+	}
 };
 
 Player.prototype.execute = function(action){
@@ -122,15 +225,40 @@ Player.prototype.execute = function(action){
 	switch(action)
 	{
 		case Enum.Action.Type.STANDING:
+			
+			//Allow player to speak randomly when on ground.
+			if(this.isControlled && !this.maySpeak)
+				this.maySpeak = true;
+		
 			this.swapAnimation(Enum.Anim.Type.IDLE);
 			break;
 		case Enum.Action.Type.RUNNING:
+			
+			//Allow player to speak randomly when on ground.
+			if(this.isControlled && !this.maySpeak)
+				this.maySpeak = true;
+		
 			this.swapAnimation(Enum.Anim.Type.RUNNING);
 			
 			AudioManager.stopEffect(Constants.Sound.File.Player.FOOT_STEP);
 			AudioManager.playEffect(Constants.Sound.File.Player.FOOT_STEP, true);
 			break;
 		case Enum.Action.Type.JUMPING:
+			
+			if(this.isControlled)
+			{
+				if(this.lastVoice != null)
+					AudioManager.stopVoice(this.lastVoice);
+					
+				//Get a random voice when jumping.
+				this.lastVoice = this.voices.jump.getRandomVoice();
+				AudioManager.playVoice(this.lastVoice, false);
+				
+				//Prevent player to talk randomly when in mid-air.
+				this.maySpeak = false;
+				this.resetVoiceTimer();
+			}
+			
 			this.swapAnimation(Enum.Anim.Type.JUMPING);
 			break;
 		case Enum.Action.Type.DOUBLE_JUMPING:
@@ -141,6 +269,13 @@ Player.prototype.execute = function(action){
 			AudioManager.playEffect(Constants.Sound.File.Player.DOUBLE_JUMP);
 			break;
 		case Enum.Action.Type.FALLING:
+			
+			if(this.maySpeak)
+			{
+				this.maySpeak = false;
+				this.resetVoiceTimer();
+			}
+		
 			this.swapAnimation(Enum.Anim.Type.FALLING);
 			break;
 	}
@@ -185,6 +320,8 @@ Player.prototype.die = function() {
 	AudioManager.playEffect(Constants.Sound.File.Player.DEATH, false);
 	
 	this.isAlive = false;
+	this.maySpeak = false;
+	this.resetVoiceTimer();
 };
 
 Player.prototype.win = function(){
@@ -208,6 +345,7 @@ Player.prototype.turn = function(){
 
 Player.prototype.spawn = function(x, y){
 	this.setPosition(x, y);
+	
 	Client.layer.addChild(this.currentAnimation);
 	this.isAlive = true;
 };

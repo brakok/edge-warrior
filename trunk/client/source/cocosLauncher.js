@@ -32,6 +32,7 @@
 				  'source/playground/Effect.js',
 				  'source/playground/world/BlackBox.js',
 				  'source/playground/LightBall.js',
+				  'source/playground/Voice.js',
 				  'source/playground/hud/Hud.js',
 				  'source/layer/EndScreen.js',
 				  'source/playground/world/Background.js']
