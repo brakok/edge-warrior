@@ -24,9 +24,6 @@ var Client = new function(){
 	this.keys[cc.KEY.z] = false;
 	this.keys[cc.KEY.x] = false;
 	
-	this.option1Pressed = false;
-	this.option2Pressed = false;
-	
 	//This private variable is used in private function instead of 'this' to access public members in private stuff.
 	var that = this;
 	
@@ -42,45 +39,7 @@ var Client = new function(){
 					
 		return null;
 	};
-	
-	//Manage input from the player.
-	this.manageInput = function(){
-	
-		if(this.player.givenBlock == null)
-		{
-			var blockToSend = null;
-			
-			if(this.keys[cc.KEY.z] && !this.option1Pressed)
-			{				
-				if(this.hud.inventory.option1 == null)
-					this.hud.inventory.setOption(true);
-				else
-					this.hud.inventory.useOption(true);
-					
-				blockToSend = this.hud.inventory.getCurrent().type;
-				this.option1Pressed = true;
-			}
-			else if(!this.keys[cc.KEY.z] && this.option1Pressed)
-				this.option1Pressed = false;
-				
-			if(this.keys[cc.KEY.x] && !this.option2Pressed)
-			{
-				if(this.hud.inventory.option2 == null)
-					this.hud.inventory.setOption(false);
-				else
-					this.hud.inventory.useOption(false);
-					
-				blockToSend = this.hud.inventory.getCurrent().type;
-				this.option2Pressed = true;
-			}
-			else if(!this.keys[cc.KEY.x] && this.option2Pressed)
-				this.option2Pressed = false;
-			
-			if(blockToSend != null)
-				this.socket.emit(Constants.Message.NEXT_BLOCK, blockToSend);
-		}
-	};
-	
+		
 	//Initialize the game client. Get window information.
 	this.init = function (width, height, layer, hud, endScreen) {
 	
@@ -166,8 +125,6 @@ var Client = new function(){
 		//Update info from the server.
 		if(this.ready)
 		{
-			this.manageInput();
-		
 			//Send 
 			this.push();
 			
@@ -181,10 +138,10 @@ var Client = new function(){
 			this.projectWorld();
 			
 			//Update dynamic objects.
-			this.player.update();
+			this.player.update(dt);
 			
 			for(var i in this.enemies)
-				this.enemies[i].update();
+				this.enemies[i].update(dt);
 
 			for(var i in this.blocks)
 				this.blocks[i].update(dt);
@@ -212,13 +169,14 @@ var Client = new function(){
 			console.log('Initialize');				
 			
 			//Server positioning and giving color to player.
-			Client.player = new Player(data.player.x, data.player.y, data.player.color);	
+			Client.player = new Player(data.player.x, data.player.y, data.player.color, true);	
 
 			for(var i in data.enemies)
 			{
 				Client.enemies.push(new Player(data.enemies[i].x,
 											   data.enemies[i].y,
-											   data.enemies[i].color));
+											   data.enemies[i].color,
+											   false));
 			}
 
 			socket.emit(Constants.Message.CONNECTED);
@@ -230,7 +188,8 @@ var Client = new function(){
 			
 			Client.enemies.push(new Player(data.x,
 										   data.y,
-										   data.color));
+										   data.color,
+										   false));
 		});
 		
 		socket.on(Constants.Message.LAUNCH, function(data){
@@ -270,10 +229,13 @@ var Client = new function(){
 		socket.on(Constants.Message.NEXT_BLOCK, function(data){
 			Client.randomBlock();
 		});
-		
+				
 		//Received dead people information.
-		socket.on(Constants.Message.PLAYER_KILLED, function(killed){
-			Client.kill(killed);
+		socket.on(Constants.Message.PLAYER_KILLED, function(data){
+			Client.kill(data.killed);
+			
+			var killer = getPlayer(data.killer.color);
+			killer.kill();
 		});
 		
 		//Received information to build spawn block.

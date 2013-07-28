@@ -104,5 +104,12 @@ var Enum = {
 			SPARK: 5,
 			SPAWN_UNLEASHED: 6
 		}
+	},
+	Voice: {
+		Type: {
+			IDLE: 0,
+			JUMP: 1,
+			KILL: 2
+		}
 	}
 };
