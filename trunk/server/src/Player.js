@@ -130,7 +130,21 @@ Player.prototype.die = function(){
 	this.killTime = 0;
 	this.groundContact = 0;
 	
-	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_KILLED, this.toClient());
+	var killer = null;
+	
+	for(var i in Game.players)
+		if(Game.players[i].id == this.killerId)
+		{
+			killer = Game.players[i];
+			break;
+		}
+	
+	var data = {
+		killed : this.toClient(),
+		killer : killer.toClient()
+	};
+	
+	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_KILLED, data);
 	
 	//Ask for the next block if player is currently holding a spawn block.
 	if(this.currentBlock == Enum.Block.Type.SPAWN)
