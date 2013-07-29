@@ -155,6 +155,7 @@ var Constants = {
 			},
 			WinningGoal: {
 				FloatingBall: {
+					IDLE: 'floatingBall_idle',
 					SUMMON: 'floatingBall_summon'
 				}
 			}

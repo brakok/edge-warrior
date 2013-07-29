@@ -126,8 +126,9 @@ Player.prototype.init = function(){
 //Player killing.
 Player.prototype.kill = function(){
 
-	if(this.isControlled)
+	if(this.isControlled && Client.currentPhase != Enum.Game.Phase.WINNER)
 	{		
+		//Taunt enemy.
 		if(this.lastVoice != null)
 			AudioManager.stopVoice(this.lastVoice);
 			
