@@ -98,9 +98,9 @@ Player.prototype.init = function(){
 	}
 	
 	this.voices = {
-		kill: new Voice(Enum.Voice.Type.KILL, 'red', 1),
-		jump: new Voice(Enum.Voice.Type.JUMP, 'red', 2),
-		idle: new Voice(Enum.Voice.Type.IDLE, 'red', 3)
+		kill: new Voice(Enum.Voice.Type.KILL, 'yellow', 1),
+		jump: new Voice(Enum.Voice.Type.JUMP, 'yellow', 2),
+		idle: new Voice(Enum.Voice.Type.IDLE, 'yellow', 3)
 	};
 	
 	this.resetVoiceTimer();
@@ -318,6 +318,9 @@ Player.prototype.die = function() {
 	//Create an animation for the dying player.
 	EffectManager.create(Enum.Effect.Type.PLAYER_DEATH, this.x, this.y);
 	AudioManager.playEffect(Constants.Sound.File.Player.DEATH, false);
+	
+	if(this.lastVoice != null)
+		AudioManager.stopVoice(this.lastVoice);
 	
 	this.isAlive = false;
 	this.maySpeak = false;
