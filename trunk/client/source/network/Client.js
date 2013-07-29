@@ -234,8 +234,11 @@ var Client = new function(){
 		socket.on(Constants.Message.PLAYER_KILLED, function(data){
 			Client.kill(data.killed);
 			
-			var killer = getPlayer(data.killer.color);
-			killer.kill();
+			if(data.killer != null)
+			{
+				var killer = getPlayer(data.killer.color);
+				killer.kill();
+			}
 		});
 		
 		//Received information to build spawn block.
