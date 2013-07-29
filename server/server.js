@@ -599,7 +599,7 @@ Player.prototype.die = function(){
 	
 	var data = {
 		killed : this.toClient(),
-		killer : killer.toClient()
+		killer : (killer != null ? killer.toClient() : null)
 	};
 	
 	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_KILLED, data);
