@@ -149,6 +149,14 @@ var Constants = {
 				IDLE: '_idle',
 				JUMP: '_jump',
 				KILL: '_kill'
+			},
+			Spike: {
+				TENTACLE_TRANSFORM: 'tentacle_transform'
+			},
+			WinningGoal: {
+				FloatingBall: {
+					SUMMON: 'floatingBall_summon'
+				}
 			}
 		},
 		VoiceTimer: {

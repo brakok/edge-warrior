@@ -20,6 +20,7 @@ var assets = [
 	{type:"sound", src: soundDir + 'player_land'},
 	{type:"sound", src: soundDir + 'foot_step'},
 	{type:"sound", src: soundDir + 'double_jump'},
+	{type:"sound", src: soundDir + 'tentacle_transform'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill'},
@@ -28,6 +29,14 @@ var assets = [
 	{type:"sound", src: soundVoiceDir + 'red_idle01'},
 	{type:"sound", src: soundVoiceDir + 'red_idle02'},
 	{type:"sound", src: soundVoiceDir + 'red_idle03'},
+	{type:"sound", src: soundVoiceDir + 'yellow_kill'},
+	{type:"sound", src: soundVoiceDir + 'yellow_jump01'},
+	{type:"sound", src: soundVoiceDir + 'yellow_jump02'},
+	{type:"sound", src: soundVoiceDir + 'yellow_idle01'},
+	{type:"sound", src: soundVoiceDir + 'yellow_idle02'},
+	{type:"sound", src: soundVoiceDir + 'yellow_idle03'},
+	
+	{type:"sound", src: soundVoiceDir + 'floatingBall_summon'},
 
 	//World
 	{type:'image', src: assetsWorldDir + 'wall_pit.png'},

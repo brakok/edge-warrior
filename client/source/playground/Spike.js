@@ -71,6 +71,8 @@ Spike.prototype.endProcess = function(){
 			this.currentAnimation.runAction(cc.Sequence.create(this.transformAnimation,
 															   this.transformCallback));
 			Client.layer.addChild(this.currentAnimation);
+			
+			AudioManager.playEffect(Constants.Sound.File.Spike.TENTACLE_TRANSFORM, false);
 			break;
 	}
 	
