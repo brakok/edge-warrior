@@ -90,6 +90,9 @@ var Enum = {
 
 //Constants
 var Constants = {
+	Game: {
+		MAX_PLAYERS: 4
+	},
 	Physic: {
 		GRAVITY: -150,
 		FRICTION: 0.97,
@@ -106,6 +109,7 @@ var Constants = {
 		}
 	},
 	Player: {
+		INITIAL_SPAWN_Y: 100,
 		JUMP_COOLDOWN: 0.1,
 		JUMP_POWER: 1350,
 		RUN_POWER_ONGROUND: 650,
@@ -171,7 +175,7 @@ var Constants = {
 		PULL: 'pull',
 		PUSH: 'push',
 		INIT: 'init',
-		CONNECTED: 'connected',
+		CONNECTING: 'connecting',
 		CONNECTION: 'connection',
 		NEW_PLAYER: 'newPlayer',
 		PLAYER_KILLED: 'playerKilled',
@@ -184,7 +188,12 @@ var Constants = {
 		NEW_DEATHZONE: 'newDeathZone',
 		GOAL_ACTION: 'goalAction',
 		PLAYER_ACTION: 'playerAction',
-		BLOCK_ACTION: 'blockAction'
+		BLOCK_ACTION: 'blockAction',
+		CREATE_LOBBY: 'createLobby',
+		JOIN_LOBBY: 'joinLobby',
+		DISCONNECT_LOBBY: 'disconnectLobby',
+		GAME_CREATED: 'gameCreated',
+		PLAYER_READY: 'playerReady'
 	}
 };//Mortal things listener.
 var DeathZoneListener = {
@@ -929,6 +938,13 @@ Player.prototype.toClient = function(){
 		color: this.color,
 		facing: this.facing
 	};
+};
+var Lobby = function(id){
+	this.id = id;
+	this.clientsId = [];
+	this.connectedPlayers = 0;
+	
+	this.settings = null;
 };//Server version of the block.
 var Block = function(id, x, y, type, color, ownerId){
 	
@@ -1135,30 +1151,49 @@ Block.prototype.explode = function(cause){
 	this.toBeDestroy = false;
 	
 	io.sockets.in(Game.id).emit(Constants.Message.DELETE_BLOCK, data);
-};//Game container server-side.
-var Game = {
-	id: 1,
-	players: [],
-	blocks: [],
-	deathZones: [],
-	blockSequence: 0,
-	deathZoneSequence: 0,
-	goal: null,
-	intervalId: null,
-	winner: null,
-	winningPhaseTimer: Constants.WinningGoal.PHASE_TIME,
-	spawnY: 100,
-	width: 1200,
-	height: 800,
-	connectedPlayers: 0,
-	connectingPlayers:0,
-	maxPlayers: 2,
-	keys: [],
-	state: false,
-	space: null,
-	createWorld: function() {
+};
+var GameSettings = function(id, width, height, maxPlayers){
+	//Assign when game is created by the server.
+	this.id = id;
 	
-		if(this.space == null || this.space == 'undefined')
+	this.width = width;
+	this.height = height;
+	this.maxPlayers = maxPlayers;
+};//Game container server-side.
+var Game = function(settings){
+	
+	//Members
+	this.id = settings.id;
+	this.players = [];
+	this.blocks = [];
+	this.deathZones = [];
+	
+	this.blockSequence = 0;
+	this.deathZoneSequence = 0;
+	
+	this.goal = null;
+	this.intervalId = null;
+	this.winner = null;
+	this.winningPhaseTimer = Constants.WinningGoal.PHASE_TIME;
+	
+	this.spawnY = Constants.Player.INITIAL_SPAWN_Y;
+	this.width = settings.width;
+	this.height = settings.height;
+	
+	this.connectedPlayers = 0;
+	this.connectingPlayers = 0;
+	this.maxPlayers = settings.maxPlayers;
+	
+	this.state = false;
+	this.space = null;
+	
+	var Game = this;
+	
+};
+
+Game.prototype.createWorld = function(){
+
+	if(this.space == null || this.space == 'undefined')
 		{
 			this.space = new chipmunk.Space();
 			this.space.gravity = new chipmunk.Vect(0, Constants.Physic.GRAVITY);
@@ -1263,131 +1298,138 @@ var Game = {
 			//Add the goal. TODO: Random between multiples goals.
 			this.goal = new FloatingBall(this.width*0.5, this.height - Constants.WinningGoal.OFFSET_Y);
 		}
-	},
-	update: function() {
-		//When world's ready...
-		if(this.ready)
-		{	
-			for(var i in this.players)
-				this.players[i].update();
+};
 
-			if(this.space != null)
-				this.space.step(Constants.Physic.TIME_STEP);
-				
-			for(var i in this.blocks)
-			{
-				if(this.blocks[i] != null)
-					this.blocks[i].update();
-			}
-			
-			//Check if Overlord needs to use a spawn block.
-			var overlordGotKills = false;
-			
-			for(var i in this.players)
-				if(!this.players[i].isAlive && this.players[i].killerId == null)
-				{
-					overlordGotKills = true;
-					break;
-				}
-					
-			if(overlordGotKills && !Overlord.hasActiveSpawnBlock)
-				Overlord.launch(Enum.Block.Type.SPAWN);
-				
-			for(var i in this.deathZones)
-				if(this.deathZones[i] != null)
-					this.deathZones[i].update();
-			
-			//Reduce winning phase timer when there's a winner.
-			if(this.winner != null)
-			{
-				var hasSurvivors = false;
-				for(var i in this.players)
-				{	
-					if(this.players[i].id != this.winner.id && this.players[i].isAlive)
-						hasSurvivors = true;
-				}
-				
-				//Stop countdown if there's no more survivor.
-				if(!hasSurvivors)
-					this.winningPhaseTimer = 0;
-			
-				if(this.winningPhaseTimer > 0)
-					this.winningPhaseTimer -= Constants.Physic.TIME_STEP*0.5;
-			}
-			
-			//Winner!
-			if(this.winningPhaseTimer <= 0)
-				this.end();
-			
-			//Send data to clients.
-			this.pull();
-		}
-	},
-	electWinner: function(winner){
-		this.winner = winner;
-		this.winner.hasWon = true;
-	},
-	end: function(){
-		var survivors = 0;
-			
-		//Count and kill survivors.
+Game.prototype.update = function(){
+
+	//When world's ready...
+	if(this.ready)
+	{	
 		for(var i in this.players)
-		{
-			if(this.players[i].isAlive && i != this.winner.id)
-			{
-				this.players[i].die();
-				survivors++;
-			}
-		}
-		
-		var data = {
-			winner: this.winner.toClient(),
-			succeed: (survivors == 0)
-		};
-		
-		io.sockets.in(this.id).emit(Constants.Message.WIN, data);
-		clearInterval(this.intervalId);
-	},
-	push: function(inputs, id){
-		this.players[id].keys = inputs;
-	},
-	pull: function(){
-		
-		var players = [];
-		
-		//Players.
-		for(var i in this.players)
-			if(this.players[i].isAlive)
-				players.push(this.players[i].toClient());
-		
-		//Blocks.
-		var blocks = [];
+			this.players[i].update();
+
+		if(this.space != null)
+			this.space.step(Constants.Physic.TIME_STEP);
+			
 		for(var i in this.blocks)
 		{
 			if(this.blocks[i] != null)
-				blocks.push(this.blocks[i].toClient());
+				this.blocks[i].update();
 		}
 		
-		//Death zones.
-		var deathZones = [];
+		//Check if Overlord needs to use a spawn block.
+		var overlordGotKills = false;
+		
+		for(var i in this.players)
+			if(!this.players[i].isAlive && this.players[i].killerId == null)
+			{
+				overlordGotKills = true;
+				break;
+			}
+				
+		if(overlordGotKills && !Overlord.hasActiveSpawnBlock)
+			Overlord.launch(Enum.Block.Type.SPAWN);
+			
 		for(var i in this.deathZones)
 			if(this.deathZones[i] != null)
-				deathZones.push(this.deathZones[i].toClient());
+				this.deathZones[i].update();
 		
-		var data = {
-			players: players,
-			goal: this.goal.toClient(),
-			blocks: blocks,
-			deathZones: deathZones
-		};
+		//Reduce winning phase timer when there's a winner.
+		if(this.winner != null)
+		{
+			var hasSurvivors = false;
+			for(var i in this.players)
+			{	
+				if(this.players[i].id != this.winner.id && this.players[i].isAlive)
+					hasSurvivors = true;
+			}
+			
+			//Stop countdown if there's no more survivor.
+			if(!hasSurvivors)
+				this.winningPhaseTimer = 0;
 		
-		//Send message to all players.
-		io.sockets.in(this.id).emit(Constants.Message.PULL, data);
-	},
-	launch: function(){
-		//17 milliseconds = 60 FPS
-		this.intervalId = setInterval(function(){Game.update()}, 8);
+			if(this.winningPhaseTimer > 0)
+				this.winningPhaseTimer -= Constants.Physic.TIME_STEP*0.5;
+		}
+		
+		//Winner!
+		if(this.winningPhaseTimer <= 0)
+			this.end();
+		
+		//Send data to clients.
+		this.pull();
 	}
+};
+
+Game.prototype.electWinner = function(winner){
+	this.winner = winner;
+	this.winner.hasWon = true;
+};
+
+Game.prototype.end = function(){
+	var survivors = 0;
+			
+	//Count and kill survivors.
+	for(var i in this.players)
+	{
+		if(this.players[i].isAlive && i != this.winner.id)
+		{
+			this.players[i].die();
+			survivors++;
+		}
+	}
+	
+	var data = {
+		winner: this.winner.toClient(),
+		succeed: (survivors == 0)
+	};
+	
+	io.sockets.in(this.id).emit(Constants.Message.WIN, data);
+	clearInterval(this.intervalId);
+};
+
+Game.prototype.push = function(inputs, id){
+	this.players[id].keys = inputs;
+};
+
+
+Game.prototype.pull = function(){
+		
+	var players = [];
+	
+	//Players.
+	for(var i in this.players)
+		if(this.players[i].isAlive)
+			players.push(this.players[i].toClient());
+	
+	//Blocks.
+	var blocks = [];
+	for(var i in this.blocks)
+	{
+		if(this.blocks[i] != null)
+			blocks.push(this.blocks[i].toClient());
+	}
+	
+	//Death zones.
+	var deathZones = [];
+	for(var i in this.deathZones)
+		if(this.deathZones[i] != null)
+			deathZones.push(this.deathZones[i].toClient());
+	
+	var data = {
+		players: players,
+		goal: this.goal.toClient(),
+		blocks: blocks,
+		deathZones: deathZones
+	};
+	
+	//Send message to all players.
+	io.sockets.in(this.id).emit(Constants.Message.PULL, data);
+}
+
+Game.prototype.launch = function(){
+	//17 milliseconds = 60 FPS
+	this.intervalId = setInterval(function(){Game.update()}, 8);
 };
 var Overlord = {
 	hasActiveSpawnBlock: false,
@@ -1462,75 +1504,140 @@ server.listen(80); //localhost
 //Remove log level or adjust it to have every log in console.
 var io = require('socket.io').listen(server).set('log level', 1);
 
+//Server object.
+var Server = new function(){
+	this.gameList = {};
+	this.gameSequenceId = 0;
+	this.lobbies = {};
+	
+	this.addGame = function(settings){	
+		this.gameList[settings.id] = new Game(settings);
+	};
+};
+
 //Bind listeners on sockets.
 io.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 	console.log('Connection to client established');
-	
-	//Room.
-	socket.join(Game.id);
-	
-	var enemies = [];
-	for(var i in Game.players)
-		enemies.push(Game.players[i].toClient());
-	
-	var player = new Player(socket.id, Game.width*0.2*(Game.connectingPlayers+1), Game.spawnY, Game.connectingPlayers);
-	
-	//Value initiating a player.
-	var initData = {
-		player: player.toClient(),
-		enemies: enemies
-	};
-	
-	Game.players[socket.id] = player;
-	Game.connectingPlayers++;
-
-	//Start initiation.
-	socket.emit(Constants.Message.INIT, initData);
-
-	//Continue when player connected.
-	socket.on(Constants.Message.CONNECTED, function(){
-		console.log('Connected player');
-		Game.connectedPlayers++;		
 		
-		//Send connected player to others.
-		for(var i in io.sockets.in(Game.id).sockets)
-		{			
-			if(i != socket.id)
-				io.sockets.sockets[i].emit(Constants.Message.NEW_PLAYER, Game.players[socket.id].toClient());
-		}
+	//Send game id to player.
+	socket.on(Constants.Message.CREATE_LOBBY, function(){
+			
+		console.log('Lobby created');
 		
-		if(Game.connectedPlayers == Game.maxPlayers)
+		Server.lobbies[Server.gameSequenceId] = new Lobby(Server.gameSequenceId);
+		Server.lobbies[Server.gameSequenceId].connectedPlayers++;
+		
+		socket.emit(Constants.Message.CREATE_LOBBY, Server.gameSequenceId);
+		
+		Server.gameSequenceId++;
+	});
+	
+	//Join a lobby.
+	socket.on(Constants.Message.JOIN_LOBBY, function(gameId){
+		console.log('Lobby joined');
+		
+		if(Server.lobbies[gameId].connectedPlayers <= Constants.Game.MAX_PLAYERS)
 		{
-			//Init physic world.
-			Game.createWorld();
-			Game.launch();
-		
-			console.log('Game launching!');
+			Server.lobbies[gameId].clientsId.push(socket.id);
+			Server.lobbies[gameId].connectedPlayers++;
 			
-			var data = {
-				goal: Game.goal.toClient(),
-				width: Game.width,
-				height: Game.height
-			};
-			
-			data.goal.type = Game.goal.type;
-			
-			io.sockets.in(Game.id).emit(Constants.Message.LAUNCH, data);
-			
-			Game.ready = true;
+			//Join the room.
+			socket.join(gameId);
 		}
 	});
 	
-	socket.on(Constants.Message.NEXT_BLOCK, function(command){
+	//Disconnect from lobby.
+	socket.on(Constants.Message.DISCONNECT_LOBBY, function(gameId){
+		//TODO.
+	});
+	
+	//Lobby to game.
+	socket.on(Constants.Message.START_GAME, function(settings){
+	
+		console.log('Creating game...');
+		
+		//Create game.
+		Server.addGame(new Game(settings));
+		
+		//Destroy old lobby.
+		delete Server.lobbies[settings.id];
+		
+		io.sockets.in(settings.id).emit(Constants.Message.GAME_CREATED);
+	});
+		
+	//Send information about enemies to the connecting player.
+	socket.on(Constants.Message.CONNECTING, function(data){
+	
+		console.log('Connecting player...');
+		var enemies = [];
+		console.log(Server.gameList);
+				
+		for(var i in Server.gameList[data.gameId].players)
+			enemies.push(Server.gameList[data.gameId].players[i].toClient());
+		
+		//Create connecting player.
+		var player = new Player(socket.id, 
+								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
+								Server.gameList[data.gameId].spawnY, 
+								data.color);
+		
+		//Value initiating a player.
+		var initData = {
+			player: player.toClient(),
+			enemies: enemies
+		};
+		
+		Server.gameList[data.gameId].players[socket.id] = player;
+		Server.gameList[data.gameId].connectingPlayers++;
+
+		//Start initiation.
+		socket.emit(Constants.Message.INIT, initData);
+	});
+
+	//When player ready, refresh information of his opponents about his existence.
+	socket.on(Constants.Message.PLAYER_READY, function(gameId){
+		console.log('Player ready!');
+		
+		Server.gameList[gameId].connectedPlayers++;		
+		
+		//Send connected player to others.
+		for(var i in io.sockets.in(gameId).sockets)
+			if(i != socket.id)
+				io.sockets.sockets[i].emit(Constants.Message.NEW_PLAYER, Server.gameList[gameId].players[socket.id].toClient());
+		
+		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
+		{
+			console.log('Game launching...');
+			
+			//Init physic world.
+			Server.gameList[gameId].createWorld();
+			Server.gameList[gameId].launch();
+		
+			var data = {
+				goal: Server.gameList[gameId].goal.toClient(),
+				width: Server.gameList[gameId].width,
+				height: Server.gameList[gameId].height
+			};
+			
+			data.goal.type = Server.gameList[gameId].goal.type;
+			
+			console.log('Game launched!');
+			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
+			
+			Server.gameList[gameId].ready = true;
+		}
+	});
+	
+	socket.on(Constants.Message.NEXT_BLOCK, function(data){
 		//Do not override if server has given a special block to player (as a Spawn Block).
-		if(!Game.players[socket.id].hasGivenBlock)
-			Game.players[socket.id].currentBlock = command;
+		if(!Server.gameList[data.gameId].players[socket.id].hasGivenBlock)
+			Server.gameList[data.gameId].players[socket.id].currentBlock = data.command;
 	});
 	
 	//Retrieving information from players.
-	socket.on(Constants.Message.PUSH, function(inputs){
-		Game.push(inputs, socket.id);
+	socket.on(Constants.Message.PUSH, function(data){
+		Server.gameList[data.gameId].push(data.inputs, socket.id);
 	});
 });
 
