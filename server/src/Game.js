@@ -1,27 +1,38 @@
 //Game container server-side.
-var Game = {
-	id: 1,
-	players: [],
-	blocks: [],
-	deathZones: [],
-	blockSequence: 0,
-	deathZoneSequence: 0,
-	goal: null,
-	intervalId: null,
-	winner: null,
-	winningPhaseTimer: Constants.WinningGoal.PHASE_TIME,
-	spawnY: 100,
-	width: 1200,
-	height: 800,
-	connectedPlayers: 0,
-	connectingPlayers:0,
-	maxPlayers: 2,
-	keys: [],
-	state: false,
-	space: null,
-	createWorld: function() {
+var Game = function(settings){
 	
-		if(this.space == null || this.space == 'undefined')
+	//Members
+	this.id = settings.id;
+	this.players = [];
+	this.blocks = [];
+	this.deathZones = [];
+	
+	this.blockSequence = 0;
+	this.deathZoneSequence = 0;
+	
+	this.goal = null;
+	this.intervalId = null;
+	this.winner = null;
+	this.winningPhaseTimer = Constants.WinningGoal.PHASE_TIME;
+	
+	this.spawnY = Constants.Player.INITIAL_SPAWN_Y;
+	this.width = settings.width;
+	this.height = settings.height;
+	
+	this.connectedPlayers = 0;
+	this.connectingPlayers = 0;
+	this.maxPlayers = settings.maxPlayers;
+	
+	this.state = false;
+	this.space = null;
+	
+	var Game = this;
+	
+};
+
+Game.prototype.createWorld = function(){
+
+	if(this.space == null || this.space == 'undefined')
 		{
 			this.space = new chipmunk.Space();
 			this.space.gravity = new chipmunk.Vect(0, Constants.Physic.GRAVITY);
@@ -126,129 +137,136 @@ var Game = {
 			//Add the goal. TODO: Random between multiples goals.
 			this.goal = new FloatingBall(this.width*0.5, this.height - Constants.WinningGoal.OFFSET_Y);
 		}
-	},
-	update: function() {
-		//When world's ready...
-		if(this.ready)
-		{	
-			for(var i in this.players)
-				this.players[i].update();
+};
 
-			if(this.space != null)
-				this.space.step(Constants.Physic.TIME_STEP);
-				
-			for(var i in this.blocks)
-			{
-				if(this.blocks[i] != null)
-					this.blocks[i].update();
-			}
-			
-			//Check if Overlord needs to use a spawn block.
-			var overlordGotKills = false;
-			
-			for(var i in this.players)
-				if(!this.players[i].isAlive && this.players[i].killerId == null)
-				{
-					overlordGotKills = true;
-					break;
-				}
-					
-			if(overlordGotKills && !Overlord.hasActiveSpawnBlock)
-				Overlord.launch(Enum.Block.Type.SPAWN);
-				
-			for(var i in this.deathZones)
-				if(this.deathZones[i] != null)
-					this.deathZones[i].update();
-			
-			//Reduce winning phase timer when there's a winner.
-			if(this.winner != null)
-			{
-				var hasSurvivors = false;
-				for(var i in this.players)
-				{	
-					if(this.players[i].id != this.winner.id && this.players[i].isAlive)
-						hasSurvivors = true;
-				}
-				
-				//Stop countdown if there's no more survivor.
-				if(!hasSurvivors)
-					this.winningPhaseTimer = 0;
-			
-				if(this.winningPhaseTimer > 0)
-					this.winningPhaseTimer -= Constants.Physic.TIME_STEP*0.5;
-			}
-			
-			//Winner!
-			if(this.winningPhaseTimer <= 0)
-				this.end();
-			
-			//Send data to clients.
-			this.pull();
-		}
-	},
-	electWinner: function(winner){
-		this.winner = winner;
-		this.winner.hasWon = true;
-	},
-	end: function(){
-		var survivors = 0;
-			
-		//Count and kill survivors.
+Game.prototype.update = function(){
+
+	//When world's ready...
+	if(this.ready)
+	{	
 		for(var i in this.players)
-		{
-			if(this.players[i].isAlive && i != this.winner.id)
-			{
-				this.players[i].die();
-				survivors++;
-			}
-		}
-		
-		var data = {
-			winner: this.winner.toClient(),
-			succeed: (survivors == 0)
-		};
-		
-		io.sockets.in(this.id).emit(Constants.Message.WIN, data);
-		clearInterval(this.intervalId);
-	},
-	push: function(inputs, id){
-		this.players[id].keys = inputs;
-	},
-	pull: function(){
-		
-		var players = [];
-		
-		//Players.
-		for(var i in this.players)
-			if(this.players[i].isAlive)
-				players.push(this.players[i].toClient());
-		
-		//Blocks.
-		var blocks = [];
+			this.players[i].update();
+
+		if(this.space != null)
+			this.space.step(Constants.Physic.TIME_STEP);
+			
 		for(var i in this.blocks)
 		{
 			if(this.blocks[i] != null)
-				blocks.push(this.blocks[i].toClient());
+				this.blocks[i].update();
 		}
 		
-		//Death zones.
-		var deathZones = [];
+		//Check if Overlord needs to use a spawn block.
+		var overlordGotKills = false;
+		
+		for(var i in this.players)
+			if(!this.players[i].isAlive && this.players[i].killerId == null)
+			{
+				overlordGotKills = true;
+				break;
+			}
+				
+		if(overlordGotKills && !Overlord.hasActiveSpawnBlock)
+			Overlord.launch(Enum.Block.Type.SPAWN);
+			
 		for(var i in this.deathZones)
 			if(this.deathZones[i] != null)
-				deathZones.push(this.deathZones[i].toClient());
+				this.deathZones[i].update();
 		
-		var data = {
-			players: players,
-			goal: this.goal.toClient(),
-			blocks: blocks,
-			deathZones: deathZones
-		};
+		//Reduce winning phase timer when there's a winner.
+		if(this.winner != null)
+		{
+			var hasSurvivors = false;
+			for(var i in this.players)
+			{	
+				if(this.players[i].id != this.winner.id && this.players[i].isAlive)
+					hasSurvivors = true;
+			}
+			
+			//Stop countdown if there's no more survivor.
+			if(!hasSurvivors)
+				this.winningPhaseTimer = 0;
 		
-		//Send message to all players.
-		io.sockets.in(this.id).emit(Constants.Message.PULL, data);
-	},
-	launch: function(){
-		//17 milliseconds = 60 FPS
-		this.intervalId = setInterval(function(){Game.update()}, 8);
+			if(this.winningPhaseTimer > 0)
+				this.winningPhaseTimer -= Constants.Physic.TIME_STEP*0.5;
+		}
+		
+		//Winner!
+		if(this.winningPhaseTimer <= 0)
+			this.end();
+		
+		//Send data to clients.
+		this.pull();
 	}
+};
+
+Game.prototype.electWinner = function(winner){
+	this.winner = winner;
+	this.winner.hasWon = true;
+};
+
+Game.prototype.end = function(){
+	var survivors = 0;
+			
+	//Count and kill survivors.
+	for(var i in this.players)
+	{
+		if(this.players[i].isAlive && i != this.winner.id)
+		{
+			this.players[i].die();
+			survivors++;
+		}
+	}
+	
+	var data = {
+		winner: this.winner.toClient(),
+		succeed: (survivors == 0)
+	};
+	
+	io.sockets.in(this.id).emit(Constants.Message.WIN, data);
+	clearInterval(this.intervalId);
+};
+
+Game.prototype.push = function(inputs, id){
+	this.players[id].keys = inputs;
+};
+
+
+Game.prototype.pull = function(){
+		
+	var players = [];
+	
+	//Players.
+	for(var i in this.players)
+		if(this.players[i].isAlive)
+			players.push(this.players[i].toClient());
+	
+	//Blocks.
+	var blocks = [];
+	for(var i in this.blocks)
+	{
+		if(this.blocks[i] != null)
+			blocks.push(this.blocks[i].toClient());
+	}
+	
+	//Death zones.
+	var deathZones = [];
+	for(var i in this.deathZones)
+		if(this.deathZones[i] != null)
+			deathZones.push(this.deathZones[i].toClient());
+	
+	var data = {
+		players: players,
+		goal: this.goal.toClient(),
+		blocks: blocks,
+		deathZones: deathZones
+	};
+	
+	//Send message to all players.
+	io.sockets.in(this.id).emit(Constants.Message.PULL, data);
+}
+
+Game.prototype.launch = function(){
+	//17 milliseconds = 60 FPS
+	this.intervalId = setInterval(function(){Game.update()}, 8);
 };
