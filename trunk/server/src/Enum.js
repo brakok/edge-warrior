@@ -90,6 +90,9 @@ var Enum = {
 
 //Constants
 var Constants = {
+	Game: {
+		MAX_PLAYERS: 4
+	},
 	Physic: {
 		GRAVITY: -150,
 		FRICTION: 0.97,
@@ -106,6 +109,7 @@ var Constants = {
 		}
 	},
 	Player: {
+		INITIAL_SPAWN_Y: 100,
 		JUMP_COOLDOWN: 0.1,
 		JUMP_POWER: 1350,
 		RUN_POWER_ONGROUND: 650,
@@ -171,7 +175,7 @@ var Constants = {
 		PULL: 'pull',
 		PUSH: 'push',
 		INIT: 'init',
-		CONNECTED: 'connected',
+		CONNECTING: 'connecting',
 		CONNECTION: 'connection',
 		NEW_PLAYER: 'newPlayer',
 		PLAYER_KILLED: 'playerKilled',
@@ -184,6 +188,11 @@ var Constants = {
 		NEW_DEATHZONE: 'newDeathZone',
 		GOAL_ACTION: 'goalAction',
 		PLAYER_ACTION: 'playerAction',
-		BLOCK_ACTION: 'blockAction'
+		BLOCK_ACTION: 'blockAction',
+		CREATE_LOBBY: 'createLobby',
+		JOIN_LOBBY: 'joinLobby',
+		DISCONNECT_LOBBY: 'disconnectLobby',
+		GAME_CREATED: 'gameCreated',
+		PLAYER_READY: 'playerReady'
 	}
 };
