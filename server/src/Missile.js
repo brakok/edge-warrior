@@ -1,5 +1,7 @@
 
-var Missile = function(id, x, y, width, height, stats){
+var Missile = function(id, x, y, width, height, stats, game){
+	
+	this.currentGame = game;
 	
 	this.stillExists = true;
 	this.id = id;
@@ -39,7 +41,7 @@ var Missile = function(id, x, y, width, height, stats){
 	};
 	
 	//Create a shape associated with the body.
-	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);
 	this.shape.sensor = true;
 };
@@ -63,12 +65,12 @@ Missile.prototype.toClient = function(){
 Missile.prototype.explode = function(){
 
 	//Remove physical presence.
-	Game.space.removeShape(this.shape);
+	this.currentGame.space.removeShape(this.shape);
 		
 	//Remove from game.
-	for(var i in Game.deathZones)
-		if(Game.deathZones[i] != null && Game.deathZones[i].id == this.id)
-			delete Game.deathZones[i];
+	for(var i in this.currentGame.deathZones)
+		if(this.currentGame.deathZones[i] != null && this.currentGame.deathZones[i].id == this.id)
+			delete this.currentGame.deathZones[i];
 	
 	var data = {
 		id: this.id
@@ -76,7 +78,7 @@ Missile.prototype.explode = function(){
 	
 	//Send info to client.
 	this.stillExists = false;
-	io.sockets.in(Game.id).emit(Constants.Message.DELETE_DEATHZONE, data);
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);
 };
 
 Missile.prototype.update = function(){

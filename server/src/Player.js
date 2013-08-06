@@ -1,5 +1,8 @@
 //Server version of the player.
-var Player = function(id, x, y, color){
+var Player = function(id, x, y, color, game){
+
+	this.currentGame = game;
+	
 	this.id = id;
 	this.x = x;
 	this.y = y;
@@ -64,21 +67,21 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	//Steal killed killeds' list to killer.
 	if(mustStealList == null || mustStealList)
 	{
-		for(var i in Game.players)
+		for(var i in this.currentGame.players)
 		{
-			if(Game.players[i].killerId == killed.id)
-				Game.players[i].killerId = this.id;
+			if(this.currentGame.players[i].killerId == killed.id)
+				this.currentGame.players[i].killerId = this.id;
 		}
 	}
 	
 	//Swap killer colored blocks to killed complementary one.
-	for(var i in Game.blocks)
+	for(var i in this.currentGame.blocks)
 	{
-		if(Game.blocks[i] != null 
-		   && Game.blocks[i].type != Enum.Block.Type.NEUTRAL 
-		   && Game.blocks[i].color == this.color)
+		if(this.currentGame.blocks[i] != null 
+		   && this.currentGame.blocks[i].type != Enum.Block.Type.NEUTRAL 
+		   && this.currentGame.blocks[i].color == this.color)
 	    {
-			Game.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
+			this.currentGame.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
 		}
 	}
 };
@@ -89,37 +92,37 @@ Player.prototype.spawn = function(x, y){
 	this.body.setPos(new chipmunk.Vect(x, y));
 
 	//Add physical presence.
-	Game.space.addBody(this.body);
-	Game.space.addShape(this.shape);
-	Game.space.addShape(this.groundSensor);
-	Game.space.addShape(this.dropSensor);
+	this.currentGame.space.addBody(this.body);
+	this.currentGame.space.addShape(this.shape);
+	this.currentGame.space.addShape(this.groundSensor);
+	this.currentGame.space.addShape(this.dropSensor);
 	
 	this.isAlive = true;
 	this.killerId = null;
 	this.isRemoved = false;
 	
-	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
 };
 
 Player.prototype.win = function(){
 	
 	//Remove physical presence.
-	Game.space.removeShape(this.shape);
-	Game.space.removeShape(this.groundSensor);
-	Game.space.removeShape(this.dropSensor);
-	Game.space.removeBody(this.body);
+	this.currentGame.space.removeShape(this.shape);
+	this.currentGame.space.removeShape(this.groundSensor);
+	this.currentGame.space.removeShape(this.dropSensor);
+	this.currentGame.space.removeBody(this.body);
 	
 	this.isRemoved = true;
-	io.sockets.in(Game.id).emit(Constants.Message.AT_GOAL, this.toClient());
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.AT_GOAL, this.toClient());
 };
 
 Player.prototype.die = function(){
 
 	//Remove physical presence.
-	Game.space.removeShape(this.shape);
-	Game.space.removeShape(this.groundSensor);
-	Game.space.removeShape(this.dropSensor);
-	Game.space.removeBody(this.body);
+	this.currentGame.space.removeShape(this.shape);
+	this.currentGame.space.removeShape(this.groundSensor);
+	this.currentGame.space.removeShape(this.dropSensor);
+	this.currentGame.space.removeBody(this.body);
 	
 	this.isAlive = false;
 	this.toBeDestroy = false;
@@ -132,10 +135,10 @@ Player.prototype.die = function(){
 	
 	var killer = null;
 	
-	for(var i in Game.players)
-		if(Game.players[i].id == this.killerId)
+	for(var i in this.currentGame.players)
+		if(this.currentGame.players[i].id == this.killerId)
 		{
-			killer = Game.players[i];
+			killer = this.currentGame.players[i];
 			break;
 		}
 	
@@ -144,7 +147,7 @@ Player.prototype.die = function(){
 		killer : (killer != null ? killer.toClient() : null)
 	};
 	
-	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_KILLED, data);
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_KILLED, data);
 	
 	//Ask for the next block if player is currently holding a spawn block.
 	if(this.currentBlock == Enum.Block.Type.SPAWN)
@@ -168,7 +171,7 @@ Player.prototype.update = function(){
 	
 	//Control goal for winner phase.
 	if(this.hasWon)
-		Game.goal.update(this.keys);
+		this.currentGame.goal.update(this.keys);
 	
 	if(this.isAlive && !this.hasWon)
 	{
@@ -311,10 +314,10 @@ Player.prototype.update = function(){
 		switch(this.stepReached)
 		{
 			case Enum.StepReached.PLAYER:
-				Overlord.assignKill(this);
+				this.currentGame.overlord.assignKill(this);
 				break;
 			case Enum.StepReached.OVERLORD:
-				Overlord.kill(this, null);
+				this.currentGame.overlord.kill(this, null);
 				break;
 		}
 	}
@@ -334,8 +337,8 @@ Player.prototype.checkTimers = function(){
 		{
 			var hasLivingPlayer = false;
 			
-			for(var i in Game.players)
-				if(Game.players[i].isAlive && Game.players[i].id != this.id)
+			for(var i in this.currentGame.players)
+				if(this.currentGame.players[i].isAlive && this.currentGame.players[i].id != this.id)
 				{
 					hasLivingPlayer = true;
 					break;
@@ -345,7 +348,7 @@ Player.prototype.checkTimers = function(){
 				this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
 			
 			//Assign kill to a random player.
-			Overlord.assignKill(this, hasLivingPlayer);
+			this.currentGame.overlord.assignKill(this, hasLivingPlayer);
 		}
 	}
 	else
@@ -397,12 +400,13 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
-		BlockManager.launch(new Block(Game.blockSequence, 
-									  tmpX, 
-									  tmpY, 
-									  this.currentBlock, 
-									  this.color,
-									  this.id));
+		this.currentGame.managers.BlockManager.launch(new Block(this.currentGame.blockSequence, 
+													  tmpX, 
+													  tmpY, 
+													  this.currentBlock, 
+													  this.color,
+													  this.id,
+													  this.currentGame));
 		
 		this.hasGivenBlock = false;
 		
@@ -419,7 +423,7 @@ Player.prototype.initBody = function(space){
 	var groundSensorHeight = 2;
 
 	//Body creation.
-	this.body = Game.space.addBody(new chipmunk.Body(Constants.Physic.MASS_PLAYER, Infinity));
+	this.body = this.currentGame.space.addBody(new chipmunk.Body(Constants.Physic.MASS_PLAYER, Infinity));
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 						
 	//Assign custom data to body.
@@ -429,11 +433,11 @@ Player.prototype.initBody = function(space){
 	};
 						
 	//Create a shape associated with the body.
-	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.shape.setCollisionType(Enum.Collision.Type.PLAYER);
 		
 	//Add ground sensor.
-	this.groundSensor = Game.space.addShape(chipmunk.BoxShape2(this.body, 
+	this.groundSensor = this.currentGame.space.addShape(chipmunk.BoxShape2(this.body, 
 																new chipmunk.BB(-(groundSensorHalfWidth), 
 																				-(playerHalfHeight+groundSensorHeight), 
 																				(groundSensorHalfWidth), 
@@ -442,7 +446,7 @@ Player.prototype.initBody = function(space){
 	this.groundSensor.sensor = true;
 	
 	//Add drop sensor to prevent double jump when drop zone is obstructed.
-	this.dropSensor = Game.space.addShape(chipmunk.BoxShape2(this.body,
+	this.dropSensor = this.currentGame.space.addShape(chipmunk.BoxShape2(this.body,
 															new chipmunk.BB(-(Constants.Block.WIDTH*0.33), 
 																			-(playerHalfHeight+(Constants.Block.HEIGHT*0.75)), 
 																			(Constants.Block.WIDTH*0.33), 
@@ -460,7 +464,7 @@ Player.prototype.execute = function(action){
 		playerColor: this.color
 	};
 	
-	io.sockets.in(Game.id).emit(Constants.Message.PLAYER_ACTION, data);
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_ACTION, data);
 };
 	
 //Format for client.

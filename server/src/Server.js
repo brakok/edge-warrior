@@ -78,7 +78,6 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 		console.log('Connecting player...');
 		var enemies = [];
-		console.log(Server.gameList);
 				
 		for(var i in Server.gameList[data.gameId].players)
 			enemies.push(Server.gameList[data.gameId].players[i].toClient());
@@ -87,7 +86,8 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		var player = new Player(socket.id, 
 								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
 								Server.gameList[data.gameId].spawnY, 
-								data.color);
+								data.color,
+								Server.gameList[data.gameId]);
 		
 		//Value initiating a player.
 		var initData = {
