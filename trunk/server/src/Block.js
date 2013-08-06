@@ -1,5 +1,7 @@
 //Server version of the block.
-var Block = function(id, x, y, type, color, ownerId){
+var Block = function(id, x, y, type, color, ownerId, game){
+	
+	this.currentGame = game;
 	
 	this.id = id;
 	this.linkedBlockId = null;
@@ -27,7 +29,7 @@ var Block = function(id, x, y, type, color, ownerId){
 	this.state = Enum.Block.State.DYNAMIC;
 		
 	//Body creation (when not static).
-	this.body = Game.space.addBody(new chipmunk.Body(Constants.Physic.MASS_BLOCK, Infinity));
+	this.body = this.currentGame.space.addBody(new chipmunk.Body(Constants.Physic.MASS_BLOCK, Infinity));
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 						
 	//Assign custom data to body.
@@ -37,12 +39,12 @@ var Block = function(id, x, y, type, color, ownerId){
 	};
 			
 	//Create a shape associated with the body.
-	this.shape = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.shape.setCollisionType(Enum.Collision.Type.STATIC);
 	this.shape.setFriction(1);
 	
 	//Sensor allowing shape to be defined as block, because listener overrides collision behavior.
-	this.blockSensor = Game.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.blockSensor = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
 	this.blockSensor.setCollisionType(Enum.Collision.Type.BLOCK);
 	this.blockSensor.sensor = true;
 };
@@ -69,7 +71,7 @@ Block.prototype.active = function(flag){
 			
 			this.body.nodeIdleTime = 0;
 			this.body.setMass(Constants.Physic.MASS_BLOCK);
-			Game.space.addBody(this.body);
+			this.currentGame.space.addBody(this.body);
 		}
 	}
 	else
@@ -80,7 +82,7 @@ Block.prototype.active = function(flag){
 			this.state = Enum.Block.State.STATIC;
 			
 			this.landed = true;
-			Game.space.removeBody(this.body);
+			this.currentGame.space.removeBody(this.body);
 			this.body.nodeIdleTime = Infinity;
 			this.body.setMass(Constants.Physic.MASS_BLOCK_STATIC);
 			
@@ -110,7 +112,7 @@ Block.prototype.update = function(){
 					id: this.id
 				};
 			
-				io.sockets.in(Game.id).emit(Constants.Message.BLOCK_ACTION, data);
+				io.sockets.in(this.currentGame.id).emit(Constants.Message.BLOCK_ACTION, data);
 				this.justLanded = false;
 			}
 		
@@ -150,7 +152,7 @@ Block.prototype.spawn = function(){
 	var posY = Constants.Player.HEIGHT;
 	
 	//Respawn dead players.
-	for(var i in Game.players)
+	for(var i in this.currentGame.players)
 	{
 		var factor = Math.PI*(Math.random()*2);
 		
@@ -159,23 +161,23 @@ Block.prototype.spawn = function(){
 		
 		//Prevent block to spawn player on the world edges.
 		if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
-		|| (this.body.getPos().x > Game.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
+		|| (this.body.getPos().x > this.currentGame.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
 			launchPowerX *= -1;
 	
-		if(!Game.players[i].isAlive && Game.players[i].killerId == killerId)
+		if(!this.currentGame.players[i].isAlive && this.currentGame.players[i].killerId == killerId)
 		{
 			//Spawn the player.
-			Game.players[i].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
+			this.currentGame.players[i].spawn(this.body.getPos().x +(launchPowerX*0.1), this.body.getPos().y + posY);
 			
 			//Launch the player to random position.
-			Game.players[i].body.setVel(new chipmunk.Vect(0,0));
-			Game.players[i].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+			this.currentGame.players[i].body.setVel(new chipmunk.Vect(0,0));
+			this.currentGame.players[i].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
 		}
 	}
 	
 	//Check if spawn block is overlord's one.
 	if(this.ownerId == null)
-		Overlord.hasActiveSpawnBlock = false;
+		this.currentGame.overlord.hasActiveSpawnBlock = false;
 	
 	this.explode(Enum.Block.Destruction.SPAWN);
 };
@@ -189,19 +191,19 @@ Block.prototype.explode = function(cause){
 	
 	//Strange behavior when trying to remove a static shape. Works fine when reactivated first.
 	this.active(true);
-	Game.space.removeShape(this.blockSensor);
-	Game.space.removeShape(this.shape);
-	Game.space.removeBody(this.body);
+	this.currentGame.space.removeShape(this.blockSensor);
+	this.currentGame.space.removeShape(this.shape);
+	this.currentGame.space.removeBody(this.body);
 
 	//Unreference from game's blocks list.
-	for(var i in Game.blocks)
+	for(var i in this.currentGame.blocks)
 	{
-		if(Game.blocks[i] != null && Game.blocks[i].id == this.id)
-			delete Game.blocks[i];
+		if(this.currentGame.blocks[i] != null && this.currentGame.blocks[i].id == this.id)
+			delete this.currentGame.blocks[i];
 	}
 	
 	this.stillExist = false;
 	this.toBeDestroy = false;
 	
-	io.sockets.in(Game.id).emit(Constants.Message.DELETE_BLOCK, data);
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_BLOCK, data);
 };
