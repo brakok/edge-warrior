@@ -126,13 +126,13 @@ Player.prototype.init = function(){
 //Player killing.
 Player.prototype.kill = function(){
 
-	if(this.isControlled && Client.currentPhase != Enum.Game.Phase.WINNER)
+	if(Client.currentPhase != Enum.Game.Phase.WINNER)
 	{		
 		//Taunt enemy.
 		if(this.lastVoice != null)
 			AudioManager.stopVoice(this.lastVoice);
 			
-		if(this.maySpeak)
+		if(this.isControlled && this.maySpeak)
 			this.resetVoiceTimer();
 		
 		this.lastVoice = this.voices.kill.getRandomVoice();
@@ -190,7 +190,10 @@ Player.prototype.manageInput = function(){
 			this.option2Pressed = false;
 		
 		if(blockToSend != null)
-			Client.socket.emit(Constants.Message.NEXT_BLOCK, blockToSend);
+			Client.socket.emit(Constants.Message.NEXT_BLOCK, {
+																gameId: Client.currentGameId,
+																command: blockToSend
+															});
 	}
 };
 
@@ -246,16 +249,16 @@ Player.prototype.execute = function(action){
 			break;
 		case Enum.Action.Type.JUMPING:
 			
+			if(this.lastVoice != null)
+				AudioManager.stopVoice(this.lastVoice);
+				
+			//Get a random voice when jumping.
+			this.lastVoice = this.voices.jump.getRandomVoice();
+			AudioManager.playVoice(this.lastVoice, false);
+			
+			//Prevent player to talk randomly when in mid-air.
 			if(this.isControlled)
 			{
-				if(this.lastVoice != null)
-					AudioManager.stopVoice(this.lastVoice);
-					
-				//Get a random voice when jumping.
-				this.lastVoice = this.voices.jump.getRandomVoice();
-				AudioManager.playVoice(this.lastVoice, false);
-				
-				//Prevent player to talk randomly when in mid-air.
 				this.maySpeak = false;
 				this.resetVoiceTimer();
 			}
