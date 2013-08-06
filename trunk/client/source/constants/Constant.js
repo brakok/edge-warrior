@@ -98,7 +98,7 @@ var Constants = {
 		PULL: 'pull',
 		PUSH: 'push',
 		INIT: 'init',
-		CONNECTED: 'connected',
+		CONNECTING: 'connecting',
 		NEW_PLAYER: 'newPlayer',
 		PLAYER_KILLED: 'playerKilled',
 		PLAYER_SPAWNED: 'playerSpawned',
@@ -110,7 +110,12 @@ var Constants = {
 		NEW_DEATHZONE: 'newDeathZone',
 		GOAL_ACTION: 'goalAction',
 		PLAYER_ACTION: 'playerAction',
-		BLOCK_ACTION: 'blockAction'
+		BLOCK_ACTION: 'blockAction',
+		CREATE_LOBBY: 'createLobby',
+		JOIN_LOBBY: 'joinLobby',
+		DISCONNECT_LOBBY: 'disconnectLobby',
+		GAME_CREATED: 'gameCreated',
+		PLAYER_READY: 'playerReady'
 	},
 	Effect: {
 		Z_INDEX: 60,

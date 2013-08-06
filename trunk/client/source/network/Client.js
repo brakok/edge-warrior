@@ -7,6 +7,10 @@ var Client = new function(){
 	this.blocks = [];
 	this.deathZones = {};
 	
+	//Connected game id.
+	this.currentGameId = null;
+	this.chosenColor = Enum.Color.RED;
+	
 	this.player = null;
 	this.currentState = Enum.Game.State.PLAYING;
 	this.currentPhase = Enum.Game.Phase.PLAYING;
@@ -54,6 +58,21 @@ var Client = new function(){
 		
 		//Creating client and connecting to server.
 		this.connect();
+	};
+	
+	//Create a lobby.
+	this.createLobby = function(){
+		this.socket.emit(Constants.Message.CREATE_LOBBY);
+	};
+	
+	//Join a lobby.
+	this.joinLobby = function(gameId){
+		this.socket.emit(Constants.Message.JOIN_LOBBY, gameId);
+	};
+	
+	//Start game.
+	this.startGame = function(settings){
+		this.socket.emit(Constants.Message.START_GAME, settings);
 	};
 	
 	//Add elements on layer. Retrieve map width and map height from server.
@@ -116,7 +135,10 @@ var Client = new function(){
 		
 		//Ask player to create the next block and send the new one to the server.
 		this.player.pushNextBlock();
-		this.socket.emit(Constants.Message.NEXT_BLOCK, this.hud.inventory.getCurrent().type);
+		this.socket.emit(Constants.Message.NEXT_BLOCK, {
+															command: this.hud.inventory.getCurrent().type,
+															gameId: this.currentGameId
+														});
 	};
 	
 	//Update elements contained in the container.
@@ -164,6 +186,24 @@ var Client = new function(){
 		
 		var socket = io.connect(Constants.Network.ADDRESS);
 		
+		//When lobby is created.
+		socket.on(Constants.Message.CREATE_LOBBY, function(gameId){
+			Client.currentGameId = gameId;
+			
+			//Client.startGame(new GameSettings(Client.currentGameId, 1200, 800, 1));
+		});
+		
+		//When game is created, send chosen color to server.
+		socket.on(Constants.Message.GAME_CREATED, function(){
+		
+			var data = {
+				gameId: Client.currentGameId, 
+				color: Client.chosenColor
+			 };
+			 
+			socket.emit(Constants.Message.CONNECTING, data);
+		});
+		
 		//Init.
 		socket.on(Constants.Message.INIT, function (data) {
 			console.log('Initialize');				
@@ -179,7 +219,7 @@ var Client = new function(){
 											   false));
 			}
 
-			socket.emit(Constants.Message.CONNECTED);
+			socket.emit(Constants.Message.PLAYER_READY, Client.currentGameId);
 		});
 		
 		//Incoming enemy.
@@ -295,6 +335,9 @@ var Client = new function(){
 		
 		//Once defined, preserved the socket.
 		this.socket = socket;
+		
+		//Test
+		//Client.createLobby();
 	};
 	
 	//Redirect action to right player.
@@ -495,14 +538,10 @@ var Client = new function(){
 		};
 	
 		//Send key pressed to server.
-		this.socket.emit(Constants.Message.PUSH, inputs);
+		this.socket.emit(Constants.Message.PUSH, {
+													inputs: inputs,
+													gameId: this.currentGameId
+												 });
 		this.needPush = false;
 	};
-	
-	//Pulling info from server.
-	this.pull = function(){
-		this.socket.emit(Constants.Message.PULL);
-	};
-	
-	
 };
