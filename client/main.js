@@ -15,9 +15,12 @@
 //Cocos2d configuration and instanciation.
 var cocosApp = cc.Application.extend({
 	config:document.ccConfig,
-	ctor:function(scene){
+	ctor:function(){
 		this._super();
-		this.startScene = scene;
+				
+		//Open socket toward server.
+		Client.connect();
+		
 		cc.COCOS2D_DEBUG = this.config['COCOS2D_DEBUG'];
 		cc.setup(this.config['tag']);
 		
@@ -36,14 +39,18 @@ var cocosApp = cc.Application.extend({
 		cc.Loader.getInstance().preload(assets);
 	},
 	applicationDidFinishLaunching: function (){
+	
+		this.MenuScene = new MenuScene();
+		this.GameScene = new GameScene();
+	
 		var director = cc.Director.getInstance();
 		director.setDisplayStats(this.config['showFPS']);
 		director.setAnimationInterval(1.0/this.config['frameRate']);
-		director.runWithScene(new this.startScene());
+		director.runWithScene(this.MenuScene);
 		
 		return true;
 	}
 });
 
 //Launch the first scene.
-var myApp = new cocosApp(GameScene);
+var myApp = new cocosApp();

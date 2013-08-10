@@ -1,6 +1,8 @@
 //Object containing network information.
 var Client = new function(){
 
+	this.username = null;
+
 	//Members.
 	this.keys = [];
 	this.enemies = [];
@@ -55,9 +57,14 @@ var Client = new function(){
 		this.endScreen = endScreen;
 		
 		this.ready = false;
-		
-		//Creating client and connecting to server.
-		this.connect();
+	};
+	
+	//Authentification.
+	this.authenticate = function(username, password){
+		//TODO: Add DB.
+	
+		this.username = username;
+		return true;
 	};
 	
 	//Create a lobby.
@@ -182,7 +189,7 @@ var Client = new function(){
 	};
 		
 	//Connect to server.
-	this.connect = function(){
+	this.connect = function(){		
 		
 		var socket = io.connect(Constants.Network.ADDRESS);
 		
