@@ -169,5 +169,15 @@ var Constants = {
 			MIN: 6,
 			RANGE : 5
 		}
+	},
+	Font: {
+		Name: "Arial",
+		Size: 16
+	},
+	Login: {
+		Z_INDEX: 0
+	},
+	MainMenu: {
+		Z_INDEX: 0
 	}
 };
