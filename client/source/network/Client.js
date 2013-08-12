@@ -9,8 +9,11 @@ var Client = new function(){
 	this.blocks = [];
 	this.deathZones = {};
 	
+	
+	
 	//Connected game id.
 	this.currentGameId = null;
+	this.isHost = false;
 	this.chosenColor = Enum.Color.RED;
 	
 	this.player = null;
@@ -65,6 +68,11 @@ var Client = new function(){
 	
 		this.username = username;
 		return true;
+	};
+	
+	//Find a game server.
+	this.findGameServer = function(){
+		this.masterSocket.emit(Constants.Message.CREATE_LOBBY);
 	};
 	
 	//Create a lobby.
@@ -187,16 +195,29 @@ var Client = new function(){
 			EffectManager.update();
 		}
 	};
+	
+	//Connect to master server.
+	this.connectToNetwork = function(){
+		var masterSocket = io.connect(Constants.Network.ADDRESS);
 		
-	//Connect to server.
-	this.connect = function(){		
+		//Connect to specified game server.
+		masterSocket.on(Constants.Message.CREATE_LOBBY, function(ipAddress){
+			Client.connect(ipAddress);
+			Client.createLobby();
+		});
 		
-		var socket = io.connect(Constants.Network.ADDRESS);
+		this.masterSocket = masterSocket;
+	};	
+	
+	//Connect to game server.
+	this.connect = function(ipAddress){		
+		
+		var socket = io.connect(ipAddress);
 		
 		//When lobby is created.
 		socket.on(Constants.Message.CREATE_LOBBY, function(gameId){
 			Client.currentGameId = gameId;
-			
+			Client.isHost = true;
 			//Client.startGame(new GameSettings(Client.currentGameId, 1200, 800, 1));
 		});
 		

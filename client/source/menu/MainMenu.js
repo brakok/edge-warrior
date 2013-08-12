@@ -24,7 +24,7 @@ var MainMenu = cc.LayerColor.extend({
 		this.addChild(this.menu);
 	},
 	create: function(){
-		
+		Client.findGameServer();
 	},
 	join: function(){
 	
