@@ -1,6 +1,6 @@
 var Constants = {
 	Network: {
-		ADDRESS: 'http://localhost:80'
+		ADDRESS: 'http://localhost:1050'
 	},
 	Block: {
 		Percent: {
@@ -115,7 +115,8 @@ var Constants = {
 		JOIN_LOBBY: 'joinLobby',
 		DISCONNECT_LOBBY: 'disconnectLobby',
 		GAME_CREATED: 'gameCreated',
-		PLAYER_READY: 'playerReady'
+		PLAYER_READY: 'playerReady',
+		SEARCH_LOBBY: 'searchLobby'
 	},
 	Effect: {
 		Z_INDEX: 60,

@@ -19,7 +19,7 @@ var cocosApp = cc.Application.extend({
 		this._super();
 				
 		//Open socket toward server.
-		Client.connect();
+		Client.connectToNetwork();
 		
 		cc.COCOS2D_DEBUG = this.config['COCOS2D_DEBUG'];
 		cc.setup(this.config['tag']);

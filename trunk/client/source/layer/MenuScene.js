@@ -8,13 +8,13 @@ var Menu = cc.Layer.extend({
 		//Screens creation.
 		var s = cc.Director.getInstance().getWinSize();
 		
-		this.menus = {
+		this.screens = {
 			login: Login.create(s.width, s.height),
 			mainMenu: MainMenu.create(s.width, s.height)
 		};
 		
 		//Switch to another screen.
-		this.switchTo(this.menus.login);
+		this.switchTo(this.screens.login);
 		
 		this.setKeyboardEnabled(true);
 		
@@ -50,9 +50,9 @@ var MenuScene = cc.Scene.extend({
 	onEnter: function (){
 		this._super();
 		
-		this.layer = new Menu();
-		this.layer.init();
+		this.menu = new Menu();
+		this.menu.init();
 		
-		this.addChild(this.layer);
+		this.addChild(this.menu);
 	}
 });
