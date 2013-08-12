@@ -167,6 +167,12 @@ var Constants = {
 			SECOND_STEP: 10
 		}
 	},
+	Network: {
+		ADDRESS: 'http://localhost:1060',
+		SERVER_PORT: 1051,
+		MASTER_PORT: 1050,
+		SERVER_TO_SERVER_PORT: 1060
+	},
 	Message: {
 		NEXT_BLOCK: 'nextBlock',
 		NEW_BLOCK: 'newBlock',
@@ -193,6 +199,8 @@ var Constants = {
 		JOIN_LOBBY: 'joinLobby',
 		DISCONNECT_LOBBY: 'disconnectLobby',
 		GAME_CREATED: 'gameCreated',
-		PLAYER_READY: 'playerReady'
+		PLAYER_READY: 'playerReady',
+		REGISTER: 'register',
+		SEARCH_LOBBY: 'searchLobby'
 	}
 };

@@ -167,6 +167,12 @@ var Constants = {
 			SECOND_STEP: 10
 		}
 	},
+	Network: {
+		ADDRESS: 'http://localhost:1060',
+		SERVER_PORT: 1051,
+		MASTER_PORT: 1050,
+		SERVER_TO_SERVER_PORT: 1060
+	},
 	Message: {
 		NEXT_BLOCK: 'nextBlock',
 		NEW_BLOCK: 'newBlock',
@@ -193,7 +199,9 @@ var Constants = {
 		JOIN_LOBBY: 'joinLobby',
 		DISCONNECT_LOBBY: 'disconnectLobby',
 		GAME_CREATED: 'gameCreated',
-		PLAYER_READY: 'playerReady'
+		PLAYER_READY: 'playerReady',
+		REGISTER: 'register',
+		SEARCH_LOBBY: 'searchLobby'
 	}
 };
 var Listeners = function(game){
@@ -1244,11 +1252,14 @@ Player.prototype.toClient = function(){
 		facing: this.facing
 	};
 };
-var Lobby = function(id){
+var Lobby = function(id, username){
+
 	this.id = id;
 	this.clientsId = [];
-	this.connectedPlayers = 0;
+	this.connectedPlayers = 1;
+	this.host = username;
 	
+	this.clientsId.push(this.username);
 	this.settings = null;
 };//Server version of the block.
 var Block = function(id, x, y, type, color, ownerId, game){
@@ -1816,15 +1827,68 @@ Overlord.prototype.kill = function(killed, cause){
 	
 	//Force player to die.
 	killed.toBeDestroy = true;
-};//Modules.
-var http = require('http');
-var chipmunk = require('chipmunk');
+};//Modules.var http = require('http');var chipmunk = require('chipmunk');//Create server.
+var masterServer = {
+	client: null,
+	server: null
+};
 
-//Create server.
+masterServer.client = http.createServer(function(req, res){});
+masterServer.server = http.createServer(function(req, res){});
+
+//Port.
+masterServer.client.listen(Constants.Network.MASTER_PORT); //localhost
+masterServer.server.listen(Constants.Network.SERVER_TO_SERVER_PORT);
+
+//Remove log level or adjust it to have every log in console.
+var ioMasterClient = require('socket.io').listen(masterServer.client).set('log level', 1);
+var ioMasterServer = require('socket.io').listen(masterServer.server).set('log level', 1);
+
+var MasterServer = new function(){
+	this.serverList = [];
+};
+
+//Bind listeners on sockets.
+//Server to client.
+ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
+
+	console.log('Connection to client established - Master');
+
+	socket.on(Constants.Message.CREATE_LOBBY, function(){
+	
+		if(MasterServer.serverList.length > 0)
+		{
+			var i = Math.round(Math.random()*(MasterServer.serverList.length-1));
+			var address = MasterServer.serverList[i];
+			
+			console.log('Server found : ' + address);
+			socket.emit(Constants.Message.CREATE_LOBBY, address);
+		}
+		else
+			console.log('No server found');
+	});
+});
+
+//Server to server.
+ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
+		
+	//Register game server.
+	socket.on(Constants.Message.REGISTER, function(ipAddress){
+		console.log('New server registred : ' + ipAddress);
+		MasterServer.serverList.push('http://' + ipAddress + ':' + Constants.Network.SERVER_PORT);
+	});
+	
+	//Search all lobbies available.
+	socket.on(Constants.Message.SEARCH_LOBBY, function(){
+		//TODO.
+	});
+});
+
+console.log('Master server created');//Create server.
 var server = http.createServer(function(req, res){});
 
 //Port.
-server.listen(80); //localhost
+server.listen(Constants.Network.SERVER_PORT); //localhost
 
 //Remove log level or adjust it to have every log in console.
 var io = require('socket.io').listen(server).set('log level', 1);
@@ -1838,7 +1902,37 @@ var Server = new function(){
 	this.addGame = function(settings){	
 		this.gameList[settings.id] = new Game(settings);
 	};
+		
+	this.register = function(){
+		var socket = require('socket.io-client').connect(Constants.Network.ADDRESS);
+		
+		//Get ip address.
+		var os = require('os')
+
+		var interfaces = os.networkInterfaces();
+		var addresses = [];
+		for (k in interfaces) {
+			for (k2 in interfaces[k]) {
+				var address = interfaces[k][k2];
+				
+				if (address.family == 'IPv4' && !address.internal)
+					addresses.push(address.address)
+			}
+		}
+		
+		//Register to master server.
+		socket.emit(Constants.Message.REGISTER, addresses[0]);
+		
+		//Push lobbies list to master.
+		socket.on(Constants.Message.SEARCH_LOBBY, function(){
+			socket.emit(Constants.Message.SEARCH_LOBBY, this.lobbies);
+		});
+		
+		this.socket = socket;
+	};
 };
+
+Server.register();
 
 //Bind listeners on sockets.
 io.sockets.on(Constants.Message.CONNECTION, function (socket){
@@ -1846,11 +1940,11 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	console.log('Connection to client established');
 		
 	//Send game id to player.
-	socket.on(Constants.Message.CREATE_LOBBY, function(){
+	socket.on(Constants.Message.CREATE_LOBBY, function(username){
 			
 		console.log('Lobby created');
 		
-		Server.lobbies[Server.gameSequenceId] = new Lobby(Server.gameSequenceId);
+		Server.lobbies[Server.gameSequenceId] = new Lobby(Server.gameSequenceId, username);
 		Server.lobbies[Server.gameSequenceId].connectedPlayers++;
 		
 		socket.emit(Constants.Message.CREATE_LOBBY, Server.gameSequenceId);
@@ -1878,15 +1972,15 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Lobby to game.
-	socket.on(Constants.Message.START_GAME, function(settings){
+	socket.on(Constants.Message.START_GAME, function(gameId){
 	
 		console.log('Creating game...');
 		
 		//Create game.
-		Server.addGame(new Game(settings));
+		Server.addGame(new Game(Server.lobbies[gameId].settings));
 		
 		//Destroy old lobby.
-		delete Server.lobbies[settings.id];
+		delete Server.lobbies[gameId];
 		
 		io.sockets.in(settings.id).emit(Constants.Message.GAME_CREATED);
 	});

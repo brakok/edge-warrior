@@ -1,12 +1,8 @@
-//Modules.
-var http = require('http');
-var chipmunk = require('chipmunk');
-
 //Create server.
 var server = http.createServer(function(req, res){});
 
 //Port.
-server.listen(80); //localhost
+server.listen(Constants.Network.SERVER_PORT); //localhost
 
 //Remove log level or adjust it to have every log in console.
 var io = require('socket.io').listen(server).set('log level', 1);
@@ -20,7 +16,37 @@ var Server = new function(){
 	this.addGame = function(settings){	
 		this.gameList[settings.id] = new Game(settings);
 	};
+		
+	this.register = function(){
+		var socket = require('socket.io-client').connect(Constants.Network.ADDRESS);
+		
+		//Get ip address.
+		var os = require('os')
+
+		var interfaces = os.networkInterfaces();
+		var addresses = [];
+		for (k in interfaces) {
+			for (k2 in interfaces[k]) {
+				var address = interfaces[k][k2];
+				
+				if (address.family == 'IPv4' && !address.internal)
+					addresses.push(address.address)
+			}
+		}
+		
+		//Register to master server.
+		socket.emit(Constants.Message.REGISTER, addresses[0]);
+		
+		//Push lobbies list to master.
+		socket.on(Constants.Message.SEARCH_LOBBY, function(){
+			socket.emit(Constants.Message.SEARCH_LOBBY, this.lobbies);
+		});
+		
+		this.socket = socket;
+	};
 };
+
+Server.register();
 
 //Bind listeners on sockets.
 io.sockets.on(Constants.Message.CONNECTION, function (socket){
@@ -28,11 +54,11 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	console.log('Connection to client established');
 		
 	//Send game id to player.
-	socket.on(Constants.Message.CREATE_LOBBY, function(){
+	socket.on(Constants.Message.CREATE_LOBBY, function(username){
 			
 		console.log('Lobby created');
 		
-		Server.lobbies[Server.gameSequenceId] = new Lobby(Server.gameSequenceId);
+		Server.lobbies[Server.gameSequenceId] = new Lobby(Server.gameSequenceId, username);
 		Server.lobbies[Server.gameSequenceId].connectedPlayers++;
 		
 		socket.emit(Constants.Message.CREATE_LOBBY, Server.gameSequenceId);
@@ -60,15 +86,15 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Lobby to game.
-	socket.on(Constants.Message.START_GAME, function(settings){
+	socket.on(Constants.Message.START_GAME, function(gameId){
 	
 		console.log('Creating game...');
 		
 		//Create game.
-		Server.addGame(new Game(settings));
+		Server.addGame(new Game(Server.lobbies[gameId].settings));
 		
 		//Destroy old lobby.
-		delete Server.lobbies[settings.id];
+		delete Server.lobbies[gameId];
 		
 		io.sockets.in(settings.id).emit(Constants.Message.GAME_CREATED);
 	});
