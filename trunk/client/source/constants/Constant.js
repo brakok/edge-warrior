@@ -98,7 +98,6 @@ var Constants = {
 		PULL: 'pull',
 		PUSH: 'push',
 		INIT: 'init',
-		CONNECTING: 'connecting',
 		NEW_PLAYER: 'newPlayer',
 		PLAYER_KILLED: 'playerKilled',
 		PLAYER_SPAWNED: 'playerSpawned',
@@ -116,7 +115,8 @@ var Constants = {
 		DISCONNECT_LOBBY: 'disconnectLobby',
 		GAME_CREATED: 'gameCreated',
 		PLAYER_READY: 'playerReady',
-		SEARCH_LOBBY: 'searchLobby'
+		SEARCH_LOBBY: 'searchLobby',
+		JOIN_GAME: 'joinGame'
 	},
 	Effect: {
 		Z_INDEX: 60,
