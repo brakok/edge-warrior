@@ -24,10 +24,11 @@ var MainMenu = cc.LayerColor.extend({
 		this.addChild(this.menu);
 	},
 	create: function(){
-		Client.findGameServer();
+		Client.createLobby();
 	},
 	join: function(){
-	
+		Client.joinLobby(0);
+		setTimeout(function() {Client.startGame();}, 1000);
 	},
 	toOptions: function(){
 	

@@ -69,25 +69,25 @@ var Client = new function(){
 		this.username = username;
 		return true;
 	};
-	
-	//Find a game server.
-	this.findGameServer = function(){
-		this.masterSocket.emit(Constants.Message.CREATE_LOBBY);
-	};
-	
+		
 	//Create a lobby.
 	this.createLobby = function(){
-		this.socket.emit(Constants.Message.CREATE_LOBBY);
+		this.masterSocket.emit(Constants.Message.CREATE_LOBBY, this.username);
+	};
+	
+	this.joinLobby = function(gameId){
+		this.masterSocket.emit(Constants.Message.JOIN_LOBBY, gameId);
+		this.currentGameId = gameId;
 	};
 	
 	//Join a lobby.
-	this.joinLobby = function(gameId){
-		this.socket.emit(Constants.Message.JOIN_LOBBY, gameId);
+	this.joinGame = function(data){
+		this.socket.emit(Constants.Message.JOIN_GAME, data);
 	};
 	
 	//Start game.
-	this.startGame = function(settings){
-		this.socket.emit(Constants.Message.START_GAME, settings);
+	this.startGame = function(){
+		this.masterSocket.emit(Constants.Message.START_GAME, this.currentGameId);
 	};
 	
 	//Add elements on layer. Retrieve map width and map height from server.
@@ -200,10 +200,22 @@ var Client = new function(){
 	this.connectToNetwork = function(){
 		var masterSocket = io.connect(Constants.Network.ADDRESS);
 		
-		//Connect to specified game server.
-		masterSocket.on(Constants.Message.CREATE_LOBBY, function(ipAddress){
+		//Create lobby and receive game id.
+		masterSocket.on(Constants.Message.CREATE_LOBBY, function(gameId){
+			Client.currentGameId = gameId;
+			Client.isHost = true;
+		});
+		
+		//Join game when game is created.
+		masterSocket.on(Constants.Message.GAME_CREATED, function(ipAddress){
 			Client.connect(ipAddress);
-			Client.createLobby();
+			
+			var data = {
+				gameId: Client.currentGameId, 
+				color: Client.chosenColor
+			 };
+			
+			Client.joinGame(data);
 		});
 		
 		this.masterSocket = masterSocket;
@@ -213,24 +225,6 @@ var Client = new function(){
 	this.connect = function(ipAddress){		
 		
 		var socket = io.connect(ipAddress);
-		
-		//When lobby is created.
-		socket.on(Constants.Message.CREATE_LOBBY, function(gameId){
-			Client.currentGameId = gameId;
-			Client.isHost = true;
-			//Client.startGame(new GameSettings(Client.currentGameId, 1200, 800, 1));
-		});
-		
-		//When game is created, send chosen color to server.
-		socket.on(Constants.Message.GAME_CREATED, function(){
-		
-			var data = {
-				gameId: Client.currentGameId, 
-				color: Client.chosenColor
-			 };
-			 
-			socket.emit(Constants.Message.CONNECTING, data);
-		});
 		
 		//Init.
 		socket.on(Constants.Message.INIT, function (data) {
@@ -363,9 +357,6 @@ var Client = new function(){
 		
 		//Once defined, preserved the socket.
 		this.socket = socket;
-		
-		//Test
-		//Client.createLobby();
 	};
 	
 	//Redirect action to right player.
