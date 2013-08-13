@@ -181,7 +181,6 @@ var Constants = {
 		PULL: 'pull',
 		PUSH: 'push',
 		INIT: 'init',
-		CONNECTING: 'connecting',
 		CONNECTION: 'connection',
 		NEW_PLAYER: 'newPlayer',
 		PLAYER_KILLED: 'playerKilled',
@@ -201,6 +200,7 @@ var Constants = {
 		GAME_CREATED: 'gameCreated',
 		PLAYER_READY: 'playerReady',
 		REGISTER: 'register',
-		SEARCH_LOBBY: 'searchLobby'
+		SEARCH_LOBBY: 'searchLobby',
+		JOIN_GAME: 'joinGame'
 	}
 };

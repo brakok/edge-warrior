@@ -16,7 +16,8 @@ var ioMasterClient = require('socket.io').listen(masterServer.client).set('log l
 var ioMasterServer = require('socket.io').listen(masterServer.server).set('log level', 1);
 
 var MasterServer = new function(){
-	this.serverList = [];
+	this.lobbies = {};
+	this.gameSequenceId = 0;
 };
 
 //Bind listeners on sockets.
@@ -25,15 +26,76 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 	console.log('Connection to client established - Master');
 
-	socket.on(Constants.Message.CREATE_LOBBY, function(){
+	//Return lobbies to client.
+	socket.on(Constants.Message.SEARCH_LOBBY, function(){
 	
-		if(MasterServer.serverList.length > 0)
-		{
-			var i = Math.round(Math.random()*(MasterServer.serverList.length-1));
-			var address = MasterServer.serverList[i];
+		var lobbies = [];
+		
+		for(var i in this.lobbies)
+			lobbies.push(this.lobbies[i].toClient());
+	
+		socket.emit(Constants.Message.SEARCH_LOBBY, lobbies);
+	});
+	
+	//Send game id to player.
+	socket.on(Constants.Message.CREATE_LOBBY, function(username){
 			
-			console.log('Server found : ' + address);
-			socket.emit(Constants.Message.CREATE_LOBBY, address);
+		console.log('Lobby created (' + MasterServer.gameSequenceId + ')');
+		MasterServer.lobbies[MasterServer.gameSequenceId] = new Lobby(MasterServer.gameSequenceId, username);
+		
+		socket.emit(Constants.Message.CREATE_LOBBY, MasterServer.gameSequenceId);
+		
+		MasterServer.gameSequenceId++;
+	});
+	
+	//Join a lobby.
+	socket.on(Constants.Message.JOIN_LOBBY, function(gameId){
+		console.log('Lobby joined');
+		
+		if(MasterServer.lobbies[gameId].connectedPlayers <= Constants.Game.MAX_PLAYERS)
+		{
+			MasterServer.lobbies[gameId].connectedPlayers++;
+			
+			//Join the room.
+			socket.join(gameId);
+		}
+	});
+	
+	//Disconnect from lobby.
+	socket.on(Constants.Message.DISCONNECT_LOBBY, function(gameId){
+		//TODO.
+	});
+	
+	//Lobby to game.
+	socket.on(Constants.Message.START_GAME, function(gameId){
+		
+		if(ioMasterServer.sockets.clients().length > 0)
+		{
+			var index = Math.round(Math.random()*(ioMasterServer.sockets.clients().length-1));
+			var count = 0;
+			
+			var serverSocket = null;
+			var socketId = null;
+			
+			for(var i in ioMasterServer.sockets.sockets)
+			{
+				if(count == index)
+				{
+					serverSocket = ioMasterServer.sockets.sockets[i];
+					break;
+				}
+				
+				count++;
+			}
+
+			//Ask specified server to create a game.
+			if(serverSocket != null)
+			{
+				console.log('Server found : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
+				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[gameId].settings);
+			}
+			else
+				console.log('No server socket found');
 		}
 		else
 			console.log('No server found');
@@ -42,16 +104,13 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 //Server to server.
 ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
-		
-	//Register game server.
-	socket.on(Constants.Message.REGISTER, function(ipAddress){
-		console.log('New server registred : ' + ipAddress);
-		MasterServer.serverList.push('http://' + ipAddress + ':' + Constants.Network.SERVER_PORT);
-	});
 	
-	//Search all lobbies available.
-	socket.on(Constants.Message.SEARCH_LOBBY, function(){
-		//TODO.
+	console.log('Server connected : ' + socket.manager.handshaken[socket.id].address.address);
+	
+	//Send to client ip address for their game server.
+	socket.on(Constants.Message.GAME_CREATED, function(data){
+		console.log('Game created : ' + data.gameId);
+		ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.GAME_CREATED, 'http://' + data.address + ':' + Constants.Network.SERVER_PORT);
 	});
 });
 
