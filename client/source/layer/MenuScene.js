@@ -10,7 +10,8 @@ var Menu = cc.Layer.extend({
 		
 		this.screens = {
 			login: Login.create(s.width, s.height),
-			mainMenu: MainMenu.create(s.width, s.height)
+			mainMenu: MainMenu.create(s.width, s.height),
+			lobbyScreen: LobbyScreen.create(s.width, s.height)
 		};
 		
 		//Switch to another screen.

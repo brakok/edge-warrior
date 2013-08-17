@@ -8,7 +8,7 @@ var MainMenu = cc.LayerColor.extend({
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
 		this._zOrder = Constants.MainMenu.Z_INDEX;
-		
+
 		//Menu creation.	
 		this.cmdCreate = new cc.MenuItemFont.create("Create lobby", this.create, this);
 		this.cmdJoin = new cc.MenuItemFont.create("Join lobby", this.join, this);
@@ -25,10 +25,11 @@ var MainMenu = cc.LayerColor.extend({
 	},
 	create: function(){
 		Client.createLobby();
+		
+		myApp.MenuScene.menu.switchTo(myApp.MenuScene.menu.screens.lobbyScreen);
 	},
 	join: function(){
-		Client.joinLobby(0);
-		setTimeout(function() {Client.startGame();}, 1000);
+
 	},
 	toOptions: function(){
 	

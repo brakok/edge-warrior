@@ -1,6 +1,7 @@
 var assestsPlaceHolderDir = 'placeholders/';
 
 var assetsWorldDir = 'assets/world/';
+var assetsMenuDir = 'assets/menu/';
 var assetsBlockDir = 'assets/blocks/';
 var assetsPlayerDir = 'assets/players/';
 var assetsHudDir = 'assets/hud/';
@@ -10,6 +11,15 @@ var soundDir = 'sounds/';
 var soundVoiceDir = 'sounds/voices/';
 
 var assets = [
+
+	//Menu
+	{type:'image', src: assetsMenuDir + '0.png'},
+	{type:'image', src: assetsMenuDir + '1.png'},
+	{type:'image', src: assetsMenuDir + '2.png'},
+	{type:'image', src: assetsMenuDir + '3.png'},
+	{type:'image', src: assetsMenuDir + '4.png'},
+	{type:'image', src: assetsMenuDir + 'true.png'},
+	{type:'image', src: assetsMenuDir + 'false.png'},
 
 	//Sounds
 	{type:"sound", src: soundDir + 'block_land'},

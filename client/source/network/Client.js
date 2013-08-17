@@ -9,8 +9,6 @@ var Client = new function(){
 	this.blocks = [];
 	this.deathZones = {};
 	
-	
-	
 	//Connected game id.
 	this.currentGameId = null;
 	this.isHost = false;
@@ -75,12 +73,21 @@ var Client = new function(){
 		this.masterSocket.emit(Constants.Message.CREATE_LOBBY, this.username);
 	};
 	
-	this.joinLobby = function(gameId){
-		this.masterSocket.emit(Constants.Message.JOIN_LOBBY, gameId);
-		this.currentGameId = gameId;
+	//Close lobby.
+	this.closeLobby = function(){
+		this.masterSocket.emit(Constants.Message.DISCONNECT_LOBBY, this.currentGameId);
 	};
 	
 	//Join a lobby.
+	this.joinLobby = function(gameId){
+		this.masterSocket.emit(Constants.Message.JOIN_LOBBY, {
+																gameId: gameId,
+																username: this.username
+															});
+		this.currentGameId = gameId;
+	};
+	
+	//Join a game.
 	this.joinGame = function(data){
 		this.socket.emit(Constants.Message.JOIN_GAME, data);
 	};
@@ -204,6 +211,9 @@ var Client = new function(){
 		masterSocket.on(Constants.Message.CREATE_LOBBY, function(gameId){
 			Client.currentGameId = gameId;
 			Client.isHost = true;
+			
+			//Set current lobby online when ID received.
+			myApp.MenuScene.menu.screens.lobbyScreen.setOnline();
 		});
 		
 		//Join game when game is created.
@@ -216,6 +226,11 @@ var Client = new function(){
 			 };
 			
 			Client.joinGame(data);
+		});
+		
+		//Add user to lobby.
+		masterSocket.on(Constants.Message.JOIN_LOBBY, function(username){
+			myApp.MenuScene.menu.screens.lobbyScreen.addSlot(username);
 		});
 		
 		this.masterSocket = masterSocket;
