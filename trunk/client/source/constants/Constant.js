@@ -172,13 +172,28 @@ var Constants = {
 		}
 	},
 	Font: {
-		Name: "Arial",
-		Size: 16
+		NAME: "Arial",
+		SIZE: 16
 	},
 	Login: {
 		Z_INDEX: 0
 	},
 	MainMenu: {
 		Z_INDEX: 0
-	}
+	},
+	LobbyScreen: {
+		Z_INDEX: 0,
+		Slot: {
+			Color: {
+				UNASSIGNED: 0,
+				RED: 1,
+				BLUE: 2,
+				YELLOW: 3,
+				WHITE: 4
+			}
+		}
+	},
+	ServerList: {
+		Z_INDEX: 0
+	}	
 };
