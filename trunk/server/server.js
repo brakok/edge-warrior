@@ -1885,21 +1885,24 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Join a lobby.
-	socket.on(Constants.Message.JOIN_LOBBY, function(gameId){
-		console.log('Lobby joined');
+	socket.on(Constants.Message.JOIN_LOBBY, function(data){
 		
-		if(MasterServer.lobbies[gameId].connectedPlayers <= Constants.Game.MAX_PLAYERS)
+		if(MasterServer.lobbies[data.gameId].connectedPlayers <= Constants.Game.MAX_PLAYERS)
 		{
-			MasterServer.lobbies[gameId].connectedPlayers++;
+			console.log('Lobby joined :' + data.username);
+			MasterServer.lobbies[data.gameId].connectedPlayers++;
+			
+			ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.JOIN_LOBBY, data.username);
 			
 			//Join the room.
-			socket.join(gameId);
+			socket.join(data.gameId);
 		}
 	});
 	
 	//Disconnect from lobby.
 	socket.on(Constants.Message.DISCONNECT_LOBBY, function(gameId){
-		//TODO.
+		console.log('Lobby closed (' + gameId + ')');
+		delete MasterServer.lobbies[gameId];
 	});
 	
 	//Lobby to game.
