@@ -25,11 +25,10 @@ var MainMenu = cc.LayerColor.extend({
 	},
 	create: function(){
 		Client.createLobby();
-		
-		myApp.MenuScene.menu.switchTo(myApp.MenuScene.menu.screens.lobbyScreen);
+		MenuScreens.switchTo(MenuScreens.lobbyScreen);
 	},
 	join: function(){
-
+		MenuScreens.switchTo(MenuScreens.serverList);
 	},
 	toOptions: function(){
 	

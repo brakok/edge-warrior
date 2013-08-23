@@ -27,8 +27,8 @@ ColorBox.prototype.init = function(){
 
 ColorBox.prototype.switchColor = function(){
 	
-	if(this.colorType >= Constants.LobbyScreen.Slot.Color.WHITE)
-		this.colorType = Constants.LobbyScreen.Slot.Color.UNASSIGNED;
+	if(this.colorType >= Enum.Slot.Color.WHITE)
+		this.colorType = Enum.Slot.Color.UNASSIGNED;
 	else
 		this.colorType++;
 		

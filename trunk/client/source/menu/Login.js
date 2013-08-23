@@ -43,7 +43,7 @@ var Login = cc.LayerColor.extend({
 
 		//Authentication.
 		if(Client.authenticate(this.txtUsername.value, this.txtPassword.value))
-			myApp.MenuScene.menu.switchTo(myApp.MenuScene.menu.screens.mainMenu);
+			MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
 	createAccount: function(){
 		console.log('create');

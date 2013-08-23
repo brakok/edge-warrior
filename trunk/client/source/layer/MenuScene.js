@@ -4,18 +4,14 @@ var Menu = cc.Layer.extend({
 		this._super();
 		
 		this.currentScreen = null;
-		
+				
 		//Screens creation.
 		var s = cc.Director.getInstance().getWinSize();
-		
-		this.screens = {
-			login: Login.create(s.width, s.height),
-			mainMenu: MainMenu.create(s.width, s.height),
-			lobbyScreen: LobbyScreen.create(s.width, s.height)
-		};
-		
+				
+		MenuScreens.init(s.width, s.height);
+				
 		//Switch to another screen.
-		this.switchTo(this.screens.login);
+		this.switchTo(MenuScreens.login);
 		
 		this.setKeyboardEnabled(true);
 		
