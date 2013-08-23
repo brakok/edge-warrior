@@ -17,7 +17,7 @@ var ioMasterServer = require('socket.io').listen(masterServer.server).set('log l
 
 var MasterServer = new function(){
 	this.lobbies = {};
-	this.gameSequenceId = 0;
+	this.gameSequenceId = 1;
 };
 
 //Bind listeners on sockets.
@@ -31,8 +31,9 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 		var lobbies = [];
 		
-		for(var i in this.lobbies)
-			lobbies.push(this.lobbies[i].toClient());
+		for(var i in MasterServer.lobbies)
+			if(MasterServer.lobbies[i] != null)
+				lobbies.push(MasterServer.lobbies[i].toClient());
 	
 		socket.emit(Constants.Message.SEARCH_LOBBY, lobbies);
 	});
@@ -44,6 +45,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		MasterServer.lobbies[MasterServer.gameSequenceId] = new Lobby(MasterServer.gameSequenceId, username);
 		
 		socket.emit(Constants.Message.CREATE_LOBBY, MasterServer.gameSequenceId);
+		socket.join(MasterServer.gameSequenceId);
 		
 		MasterServer.gameSequenceId++;
 	});
@@ -53,19 +55,50 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		if(MasterServer.lobbies[data.gameId].connectedPlayers <= Constants.Game.MAX_PLAYERS)
 		{
-			console.log('Lobby joined :' + data.username);
+			console.log('Lobby joined (' + data.gameId + ') :' + data.username);
 			MasterServer.lobbies[data.gameId].connectedPlayers++;
+			MasterServer.lobbies[data.gameId].addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
 			
 			ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.JOIN_LOBBY, data.username);
+						
+			var returnData = {
+				gameId: data.gameId,
+				players: MasterServer.lobbies[data.gameId].toClient().players
+			};
 			
 			//Join the room.
 			socket.join(data.gameId);
+			socket.emit(Constants.Message.CONNECTED_LOBBY, returnData);
 		}
 	});
 	
 	//Disconnect from lobby.
-	socket.on(Constants.Message.DISCONNECT_LOBBY, function(gameId){
+	socket.on(Constants.Message.LEAVE_LOBBY, function(data){
+		console.log(data.username + ' left lobby (' + data.gameId + ')');
+		
+		//Remove player from lobby.
+		MasterServer.lobbies[data.gameId].removePlayer(data.username);		
+		
+		socket.leave(data.gameId);
+		
+		for(var i in ioMasterClient.sockets.in(data.gameId).sockets)
+			if(i != socket.id)
+				ioMasterClient.sockets.sockets[i].emit(Constants.Message.LEAVE_LOBBY, data.username);
+	});
+	
+	//Close lobby.
+	socket.on(Constants.Message.CLOSE_LOBBY, function(gameId){
 		console.log('Lobby closed (' + gameId + ')');
+						
+		//Disconnect all players from game room.
+		for(var i in ioMasterClient.sockets.in(gameId).sockets)
+		{			
+			if(i != socket.id)
+				ioMasterClient.sockets.sockets[i].emit(Constants.Message.CLOSE_LOBBY, gameId);
+				
+			ioMasterClient.sockets.sockets[i].leave(gameId);
+		}
+		
 		delete MasterServer.lobbies[gameId];
 	});
 	
@@ -95,6 +128,8 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			if(serverSocket != null)
 			{
 				console.log('Server found : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
+				MasterServer.lobbies[gameId].settings.maxPlayers = MasterServer.lobbies[gameId].settings.connectedPlayers;
+				
 				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[gameId].settings);
 			}
 			else

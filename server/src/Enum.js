@@ -10,6 +10,15 @@ var Enum = {
 		PURPLE: 6,
 		BLACK: 7
 	},
+	Slot: {
+		Color: {
+			UNASSIGNED: 0,
+			RED: 1,
+			BLUE: 2,
+			YELLOW: 3,
+			WHITE: 4
+		}
+	},
 	UserData: {
 		Type: {
 			PLAYER: 0,
@@ -196,7 +205,9 @@ var Constants = {
 		BLOCK_ACTION: 'blockAction',
 		CREATE_LOBBY: 'createLobby',
 		JOIN_LOBBY: 'joinLobby',
-		DISCONNECT_LOBBY: 'disconnectLobby',
+		CLOSE_LOBBY: 'closeLobby',
+		LEAVE_LOBBY: 'leaveLobby',
+		CONNECTED_LOBBY: 'connectedLobby',
 		GAME_CREATED: 'gameCreated',
 		PLAYER_READY: 'playerReady',
 		REGISTER: 'register',
