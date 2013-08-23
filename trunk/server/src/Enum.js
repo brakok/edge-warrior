@@ -212,6 +212,7 @@ var Constants = {
 		PLAYER_READY: 'playerReady',
 		REGISTER: 'register',
 		SEARCH_LOBBY: 'searchLobby',
-		JOIN_GAME: 'joinGame'
+		JOIN_GAME: 'joinGame',
+		UPDATE_SLOT: 'updateSlot'
 	}
 };

@@ -7,6 +7,8 @@ var Game = function(settings){
 	this.blocks = [];
 	this.deathZones = [];
 	
+	this.playerInfos = settings.players;
+	
 	this.blockSequence = 0;
 	this.deathZoneSequence = 0;
 	
@@ -21,8 +23,8 @@ var Game = function(settings){
 	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
-	this.maxPlayers = settings.maxPlayers;
 	
+	this.maxPlayers = settings.maxPlayers;
 	this.state = false;
 	this.space = null;
 	

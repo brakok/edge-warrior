@@ -57,13 +57,13 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		{
 			console.log('Lobby joined (' + data.gameId + ') :' + data.username);
 			MasterServer.lobbies[data.gameId].connectedPlayers++;
-			MasterServer.lobbies[data.gameId].addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
+			MasterServer.lobbies[data.gameId].settings.addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
 			
 			ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.JOIN_LOBBY, data.username);
 						
 			var returnData = {
 				gameId: data.gameId,
-				players: MasterServer.lobbies[data.gameId].toClient().players
+				players: MasterServer.lobbies[data.gameId].settings.players
 			};
 			
 			//Join the room.
@@ -77,7 +77,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		console.log(data.username + ' left lobby (' + data.gameId + ')');
 		
 		//Remove player from lobby.
-		MasterServer.lobbies[data.gameId].removePlayer(data.username);		
+		MasterServer.lobbies[data.gameId].settings.removePlayer(data.username);		
 		
 		socket.leave(data.gameId);
 		
@@ -100,6 +100,16 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		}
 		
 		delete MasterServer.lobbies[gameId];
+	});
+	
+	//When player updates his slot info.
+	socket.on(Constants.Message.UPDATE_SLOT, function(data){
+	
+		MasterServer.lobbies[data.gameId].settings.updatePlayer(data.username, data.color, data.ready);
+		
+		for(var i in ioMasterClient.sockets.in(data.gameId).sockets)			
+			if(i != socket.id)
+				ioMasterClient.sockets.sockets[i].emit(Constants.Message.UPDATE_SLOT, data);
 	});
 	
 	//Lobby to game.
@@ -128,7 +138,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			if(serverSocket != null)
 			{
 				console.log('Server found : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
-				MasterServer.lobbies[gameId].settings.maxPlayers = MasterServer.lobbies[gameId].settings.connectedPlayers;
+				MasterServer.lobbies[gameId].settings.maxPlayers = MasterServer.lobbies[gameId].connectedPlayers;
 				
 				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[gameId].settings);
 			}
