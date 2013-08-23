@@ -75,7 +75,23 @@ var Client = new function(){
 	
 	//Close lobby.
 	this.closeLobby = function(){
-		this.masterSocket.emit(Constants.Message.DISCONNECT_LOBBY, this.currentGameId);
+	
+		if(this.isHost)
+		{
+			this.masterSocket.emit(Constants.Message.CLOSE_LOBBY, this.currentGameId);
+			this.isHost = false;
+		}
+		else
+		{
+			var data = {
+				gameId: this.currentGameId,
+				username: this.username
+			};
+			
+			this.masterSocket.emit(Constants.Message.LEAVE_LOBBY, data);	
+		}
+		
+		this.currentGameId = null;
 	};
 	
 	//Join a lobby.
@@ -95,6 +111,11 @@ var Client = new function(){
 	//Start game.
 	this.startGame = function(){
 		this.masterSocket.emit(Constants.Message.START_GAME, this.currentGameId);
+	};
+	
+	//Search lobbies.
+	this.search = function(){
+		this.masterSocket.emit(Constants.Message.SEARCH_LOBBY);
 	};
 	
 	//Add elements on layer. Retrieve map width and map height from server.
@@ -209,15 +230,18 @@ var Client = new function(){
 		
 		//Create lobby and receive game id.
 		masterSocket.on(Constants.Message.CREATE_LOBBY, function(gameId){
+			console.log('Lobby created');
 			Client.currentGameId = gameId;
 			Client.isHost = true;
+			MenuScreens.lobbyScreen.addSlot(Client.username, Enum.Slot.Color.UNASSIGNED, false);
 			
 			//Set current lobby online when ID received.
-			myApp.MenuScene.menu.screens.lobbyScreen.setOnline();
+			MenuScreens.lobbyScreen.setOnline();
 		});
 		
 		//Join game when game is created.
 		masterSocket.on(Constants.Message.GAME_CREATED, function(ipAddress){
+			console.log('Game created');
 			Client.connect(ipAddress);
 			
 			var data = {
@@ -228,9 +252,46 @@ var Client = new function(){
 			Client.joinGame(data);
 		});
 		
+		//Get lobbies' list.
+		masterSocket.on(Constants.Message.SEARCH_LOBBY, function(lobbies){
+			MenuScreens.serverList.list.lobbies = lobbies;
+			MenuScreens.serverList.list.refresh();
+		});
+		
 		//Add user to lobby.
 		masterSocket.on(Constants.Message.JOIN_LOBBY, function(username){
-			myApp.MenuScene.menu.screens.lobbyScreen.addSlot(username);
+			console.log('Lobby joined');
+			MenuScreens.lobbyScreen.addSlot(username, Enum.Slot.Color.UNASSIGNED, false);
+		});
+		
+		//When correctly connected to lobby.
+		masterSocket.on(Constants.Message.CONNECTED_LOBBY, function(data){
+			console.log('Connected to lobby');
+			
+			for(var i in data.players)
+				MenuScreens.lobbyScreen.addSlot(data.players[i].username, data.players[i].color, data.players[i].ready);
+				
+			MenuScreens.switchTo(MenuScreens.lobbyScreen);
+			
+			Client.currentGameId = data.gameId;
+			MenuScreens.lobbyScreen.setOnline();
+		});
+		
+		//Player leaving...
+		masterSocket.on(Constants.Message.LEAVE_LOBBY, function(username){
+			MenuScreens.lobbyScreen.removeSlot(username);
+		});
+		
+		//When lobby is closing...
+		masterSocket.on(Constants.Message.CLOSE_LOBBY, function(gameId){
+			console.log('Lobby closed (' + gameId + ')');
+			if(Client.currentGameId == gameId)
+			{
+				Client.currentGameId = null;
+				Client.isHost = false;
+				
+				MenuScreens.switchTo(MenuScreens.mainMenu);
+			}
 		});
 		
 		this.masterSocket = masterSocket;

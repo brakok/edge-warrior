@@ -18,6 +18,15 @@ var Enum = {
 		PURPLE: 6,
 		BLACK: 7
 	},
+	Slot: {
+		Color: {
+			UNASSIGNED: 0,
+			RED: 1,
+			BLUE: 2,
+			YELLOW: 3,
+			WHITE: 4
+		}
+	},
 	Wall: {
 		Type: {
 			PIT: 0
