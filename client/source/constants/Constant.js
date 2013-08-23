@@ -118,7 +118,8 @@ var Constants = {
 		GAME_CREATED: 'gameCreated',
 		PLAYER_READY: 'playerReady',
 		SEARCH_LOBBY: 'searchLobby',
-		JOIN_GAME: 'joinGame'
+		JOIN_GAME: 'joinGame',
+		UPDATE_SLOT: 'updateSlot'
 	},
 	Effect: {
 		Z_INDEX: 60,

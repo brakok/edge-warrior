@@ -1,8 +1,9 @@
 
-var CheckBox = function(layer, x, y, checked){
+var CheckBox = function(layer, x, y, checked, callback){
 	this.layer = layer;
 	this.x = x;
 	this.y = y;
+	this.callback = callback;
 	
 	if(checked != null)
 		this.checked = checked;
@@ -29,11 +30,13 @@ CheckBox.prototype.init = function(){
 	this.layer.addChild(this.menu);
 };
 
-//Toggle between true and false.
-CheckBox.prototype.toggle = function(){
+CheckBox.prototype.setEnabled = function(enabled){
+	this.button.setEnabled(enabled);
+};
 
-	this.checked = !this.checked;
-		
+CheckBox.prototype.setChecked = function(checked){
+	this.checked = checked;
+
 	//Toggle both selected and normal images for the desired.
 	this.button.removeChild(this.button._normalImage);
 	this.button._normalImage = cc.Sprite.create(assetsMenuDir + this.checked + '.png');
@@ -44,6 +47,16 @@ CheckBox.prototype.toggle = function(){
 	this.button._selectedImage = cc.Sprite.create(assetsMenuDir + this.checked + '.png');
 	this.button._selectedImage.setAnchorPoint(cc.p(0, 0));
 	this.button.addChild(this.button._selectedImage);
+};
+
+//Toggle between true and false.
+CheckBox.prototype.toggle = function(){
+
+	this.setChecked(!this.checked);
+	
+	//Trigger callback.
+	if(this.callback != null)
+		this.callback();
 };
 
 CheckBox.prototype.removeChildren = function(){
