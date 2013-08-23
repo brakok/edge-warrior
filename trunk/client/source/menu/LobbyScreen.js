@@ -33,7 +33,12 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.addChild(this.lblOnline);
 	},
 	launch: function(){
-		
+				
+		for(var i in this.slots)
+			if(!this.slots[i].isReady() || this.slots[i].getColor() == Enum.Slot.Color.UNASSIGNED)
+				return;
+				
+		Client.startGame();
 	},
 	onLeaving: function(){
 		this.reset();
@@ -68,6 +73,18 @@ var LobbyScreen = cc.LayerColor.extend({
 			this.slots[i].close();
 			this.slots.splice(index, 1);
 		}
+	},
+	getSlot: function(username){
+		
+		var slot = null;
+		for(var i in this.slots)
+			if(this.slots[i].username == username)
+			{
+				slot = this.slots[i];
+				break;
+			}
+			
+		return slot;
 	},
 	reset: function(){
 	

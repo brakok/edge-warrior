@@ -29,6 +29,9 @@ var Game = cc.Layer.extend({
 			this.update(dt);
 		});
 		
+		//Launch game when initiation ends.
+		Client.launchGame();
+		
 		return this;
 	},
 	onKeyDown: function(e){

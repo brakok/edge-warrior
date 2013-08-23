@@ -12,7 +12,6 @@ var Client = new function(){
 	//Connected game id.
 	this.currentGameId = null;
 	this.isHost = false;
-	this.chosenColor = Enum.Color.RED;
 	
 	this.player = null;
 	this.currentState = Enum.Game.State.PLAYING;
@@ -58,6 +57,16 @@ var Client = new function(){
 		this.endScreen = endScreen;
 		
 		this.ready = false;
+		
+		
+	};
+	
+	this.launchGame = function(){
+		//Add received elements to the layer (render).
+		this.createWorld();
+		
+		//Lower neutral by quantity of enemies.
+		this.player.changePercent(Enum.Block.Type.NEUTRAL, -Constants.Block.Percent.LOST_FOREACH_ENEMY*this.enemies.length);
 	};
 	
 	//Authentification.
@@ -119,13 +128,8 @@ var Client = new function(){
 	};
 	
 	//Add elements on layer. Retrieve map width and map height from server.
-	this.createWorld = function(mapWidth, mapHeight){
-	
-		this.mapSize = {
-			width: mapWidth,
-			height: mapHeight
-		};
-		
+	this.createWorld = function(){
+			
 		//Create camera.
 		this.camera = new Camera(this.width*0.5-(this.width*0.5-this.mapSize.width*0.5), 
 								 this.height*0.5, 
@@ -246,7 +250,7 @@ var Client = new function(){
 			
 			var data = {
 				gameId: Client.currentGameId, 
-				color: Client.chosenColor
+				username: Client.username
 			 };
 			
 			Client.joinGame(data);
@@ -280,6 +284,14 @@ var Client = new function(){
 		//Player leaving...
 		masterSocket.on(Constants.Message.LEAVE_LOBBY, function(username){
 			MenuScreens.lobbyScreen.removeSlot(username);
+		});
+		
+		//Update slot's informations from server.
+		masterSocket.on(Constants.Message.UPDATE_SLOT, function(data){
+			var slot = MenuScreens.lobbyScreen.getSlot(data.username);
+			
+			if(slot != null)
+				slot.fromServer(data);
 		});
 		
 		//When lobby is closing...
@@ -341,11 +353,14 @@ var Client = new function(){
 					break;
 			}
 			
-			//Add received elements to the layer (render).
-			Client.createWorld(data.width, data.height);
+			Client.mapSize = {
+				width: data.width,
+				height: data.height
+			};
 			
-			//Lower neutral by quantity of enemies.
-			Client.player.changePercent(Enum.Block.Type.NEUTRAL, -Constants.Block.Percent.LOST_FOREACH_ENEMY*Client.enemies.length);
+			cc.Director.getInstance().replaceScene(myApp.GameScene);
+			
+			
 		});
 		
 		socket.on(Constants.Message.NEW_BLOCK, function(block){
