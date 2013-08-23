@@ -212,7 +212,8 @@ var Constants = {
 		PLAYER_READY: 'playerReady',
 		REGISTER: 'register',
 		SEARCH_LOBBY: 'searchLobby',
-		JOIN_GAME: 'joinGame'
+		JOIN_GAME: 'joinGame',
+		UPDATE_SLOT: 'updateSlot'
 	}
 };
 var Listeners = function(game){
@@ -1264,49 +1265,15 @@ Player.prototype.toClient = function(){
 	};
 };
 var Lobby = function(id, username){
-
 	this.id = id;
 	this.connectedPlayers = 1;
-	
-	this.players = [];
-	this.addPlayer(username, Enum.Slot.Color.UNASSIGNED);
-	
-	this.settings = new GameSettings(id, 1200, 800, 2);
-};
-
-Lobby.prototype.addPlayer = function(username, color){
-	this.players.push({
-		username: username,
-		color: color,
-		ready: false
-	});
-};
-
-Lobby.prototype.removePlayer = function(username){
-	
-	var index = null;
-	for(var i in this.players)	
-		if(this.players[i].username == username)
-		{
-			index = i;
-			break;
-		}
-	
-	if(index != null)
-		this.players.splice(index, 1);
+	this.settings = new GameSettings(id, 1200, 800, 2, username);
 };
 
 Lobby.prototype.toClient = function(){
 
-	var players = [];
-	
-	for(var i in this.players)
-		if(this.players[i] != null)
-			players.push(this.players[i]);
-
 	return {
 		id: this.id,
-		players: players,
 		settings: this.settings,
 		connectedPlayers: this.connectedPlayers
 	};
@@ -1519,13 +1486,52 @@ Block.prototype.explode = function(cause){
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_BLOCK, data);
 };
-var GameSettings = function(id, width, height, maxPlayers){
+var GameSettings = function(id, width, height, maxPlayers, username){
 	//Assign when game is created by the server.
 	this.id = id;
+	
+	this.players = [];
+	this.addPlayer(username, Enum.Slot.Color.UNASSIGNED);
 	
 	this.width = width;
 	this.height = height;
 	this.maxPlayers = maxPlayers;
+};
+
+GameSettings.prototype.getPlayer = function(username){
+	for(var i in this.players)
+		if(this.players[i] != null && this.players[i].username == username)
+			return this.players[i];
+		
+	return null;
+};
+
+GameSettings.prototype.updatePlayer = function(username, color, ready){
+	var player = this.getPlayer(username);
+	player.color = color;
+	player.ready = ready;
+};
+
+GameSettings.prototype.addPlayer = function(username, color){
+	this.players.push({
+		username: username,
+		color: color,
+		ready: false
+	});
+};
+
+GameSettings.prototype.removePlayer = function(username){
+	
+	var index = null;
+	for(var i in this.players)	
+		if(this.players[i].username == username)
+		{
+			index = i;
+			break;
+		}
+	
+	if(index != null)
+		this.players.splice(index, 1);
 };//Game container server-side.
 var Game = function(settings){
 	
@@ -1534,6 +1540,8 @@ var Game = function(settings){
 	this.players = [];
 	this.blocks = [];
 	this.deathZones = [];
+	
+	this.playerInfos = settings.players;
 	
 	this.blockSequence = 0;
 	this.deathZoneSequence = 0;
@@ -1549,8 +1557,8 @@ var Game = function(settings){
 	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
-	this.maxPlayers = settings.maxPlayers;
 	
+	this.maxPlayers = settings.maxPlayers;
 	this.state = false;
 	this.space = null;
 	
@@ -1935,13 +1943,13 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		{
 			console.log('Lobby joined (' + data.gameId + ') :' + data.username);
 			MasterServer.lobbies[data.gameId].connectedPlayers++;
-			MasterServer.lobbies[data.gameId].addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
+			MasterServer.lobbies[data.gameId].settings.addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
 			
 			ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.JOIN_LOBBY, data.username);
 						
 			var returnData = {
 				gameId: data.gameId,
-				players: MasterServer.lobbies[data.gameId].toClient().players
+				players: MasterServer.lobbies[data.gameId].settings.players
 			};
 			
 			//Join the room.
@@ -1955,7 +1963,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		console.log(data.username + ' left lobby (' + data.gameId + ')');
 		
 		//Remove player from lobby.
-		MasterServer.lobbies[data.gameId].removePlayer(data.username);		
+		MasterServer.lobbies[data.gameId].settings.removePlayer(data.username);		
 		
 		socket.leave(data.gameId);
 		
@@ -1978,6 +1986,16 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		}
 		
 		delete MasterServer.lobbies[gameId];
+	});
+	
+	//When player updates his slot info.
+	socket.on(Constants.Message.UPDATE_SLOT, function(data){
+	
+		MasterServer.lobbies[data.gameId].settings.updatePlayer(data.username, data.color, data.ready);
+		
+		for(var i in ioMasterClient.sockets.in(data.gameId).sockets)			
+			if(i != socket.id)
+				ioMasterClient.sockets.sockets[i].emit(Constants.Message.UPDATE_SLOT, data);
 	});
 	
 	//Lobby to game.
@@ -2006,7 +2024,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			if(serverSocket != null)
 			{
 				console.log('Server found : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
-				MasterServer.lobbies[gameId].settings.maxPlayers = MasterServer.lobbies[gameId].settings.connectedPlayers;
+				MasterServer.lobbies[gameId].settings.maxPlayers = MasterServer.lobbies[gameId].connectedPlayers;
 				
 				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[gameId].settings);
 			}
@@ -2082,15 +2100,15 @@ var Server = new function(){
 			};
 			
 			//Create game.
-			Server.addGame(new Game(settings));
+			Server.addGame(settings);
 			socket.emit(Constants.Message.GAME_CREATED, data);
 		});
 		
 		this.socket = socket;
 	};
+	
+	this.register();
 };
-
-Server.register();
 
 //Bind listeners on sockets.
 io.sockets.on(Constants.Message.CONNECTION, function (socket){
@@ -2100,7 +2118,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Send information about enemies to the connecting player.
 	socket.on(Constants.Message.JOIN_GAME, function(data){
 	
-		console.log('Connecting player... (' + data.gameId + ')');
+		console.log('Connecting player... (' + data.gameId + ') :' + data.username);
 		socket.join(data.gameId);
 		
 		var enemies = [];
@@ -2108,11 +2126,16 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		for(var i in Server.gameList[data.gameId].players)
 			enemies.push(Server.gameList[data.gameId].players[i].toClient());
 		
+		var color = null;
+		for(var i in Server.gameList[data.gameId].playerInfos)
+			if(Server.gameList[data.gameId].playerInfos[i].username == data.username)
+				color = Server.gameList[data.gameId].playerInfos[i].color-1;
+		
 		//Create connecting player.
 		var player = new Player(socket.id, 
 								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
 								Server.gameList[data.gameId].spawnY, 
-								data.color,
+								color,
 								Server.gameList[data.gameId]);
 		
 		//Value initiating a player.

@@ -50,15 +50,15 @@ var Server = new function(){
 			};
 			
 			//Create game.
-			Server.addGame(new Game(settings));
+			Server.addGame(settings);
 			socket.emit(Constants.Message.GAME_CREATED, data);
 		});
 		
 		this.socket = socket;
 	};
+	
+	this.register();
 };
-
-Server.register();
 
 //Bind listeners on sockets.
 io.sockets.on(Constants.Message.CONNECTION, function (socket){
@@ -68,7 +68,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Send information about enemies to the connecting player.
 	socket.on(Constants.Message.JOIN_GAME, function(data){
 	
-		console.log('Connecting player... (' + data.gameId + ')');
+		console.log('Connecting player... (' + data.gameId + ') : ' + data.username);
 		socket.join(data.gameId);
 		
 		var enemies = [];
@@ -76,11 +76,16 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		for(var i in Server.gameList[data.gameId].players)
 			enemies.push(Server.gameList[data.gameId].players[i].toClient());
 		
+		var color = null;
+		for(var i in Server.gameList[data.gameId].playerInfos)
+			if(Server.gameList[data.gameId].playerInfos[i].username == data.username)
+				color = Server.gameList[data.gameId].playerInfos[i].color-1;
+		
 		//Create connecting player.
 		var player = new Player(socket.id, 
 								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
 								Server.gameList[data.gameId].spawnY, 
-								data.color,
+								color,
 								Server.gameList[data.gameId]);
 		
 		//Value initiating a player.
