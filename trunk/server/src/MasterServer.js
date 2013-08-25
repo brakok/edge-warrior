@@ -79,25 +79,19 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		//Remove player from lobby.
 		MasterServer.lobbies[data.gameId].settings.removePlayer(data.username);		
 		
+		socket.broadcast.to(data.gameId).emit(Constants.Message.LEAVE_LOBBY, data.username);
 		socket.leave(data.gameId);
-		
-		for(var i in ioMasterClient.sockets.in(data.gameId).sockets)
-			if(i != socket.id)
-				ioMasterClient.sockets.sockets[i].emit(Constants.Message.LEAVE_LOBBY, data.username);
 	});
 	
 	//Close lobby.
 	socket.on(Constants.Message.CLOSE_LOBBY, function(gameId){
 		console.log('Lobby closed (' + gameId + ')');
 						
+		socket.broadcast.to(gameId).emit(Constants.Message.CLOSE_LOBBY, gameId);
+		
 		//Disconnect all players from game room.
-		for(var i in ioMasterClient.sockets.in(gameId).sockets)
-		{			
-			if(i != socket.id)
-				ioMasterClient.sockets.sockets[i].emit(Constants.Message.CLOSE_LOBBY, gameId);
-				
+		for(var i in ioMasterClient.sockets.in(gameId).sockets)			
 			ioMasterClient.sockets.sockets[i].leave(gameId);
-		}
 		
 		delete MasterServer.lobbies[gameId];
 	});
@@ -106,14 +100,15 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	socket.on(Constants.Message.UPDATE_SLOT, function(data){
 	
 		MasterServer.lobbies[data.gameId].settings.updatePlayer(data.username, data.color, data.ready);
-		
-		for(var i in ioMasterClient.sockets.in(data.gameId).sockets)			
-			if(i != socket.id)
-				ioMasterClient.sockets.sockets[i].emit(Constants.Message.UPDATE_SLOT, data);
+		socket.broadcast.to(data.gameId).emit(Constants.Message.UPDATE_SLOT, data);
 	});
 	
 	//Lobby to game.
 	socket.on(Constants.Message.START_GAME, function(gameId){
+		
+		//Tweaks some informations.
+		MasterServer.lobbies[gameId].settings.maxPlayers = MasterServer.lobbies[gameId].connectedPlayers;
+		MasterServer.lobbies[gameId].settings.validateColors();		
 		
 		if(ioMasterServer.sockets.clients().length > 0)
 		{
@@ -138,8 +133,6 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			if(serverSocket != null)
 			{
 				console.log('Server found : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
-				MasterServer.lobbies[gameId].settings.maxPlayers = MasterServer.lobbies[gameId].connectedPlayers;
-				
 				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[gameId].settings);
 			}
 			else
@@ -158,6 +151,8 @@ ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Send to client ip address for their game server.
 	socket.on(Constants.Message.GAME_CREATED, function(data){
 		console.log('Game created : ' + data.gameId);
+		
+		delete MasterServer.lobbies[data.gameId];
 		ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.GAME_CREATED, 'http://' + data.address + ':' + Constants.Network.SERVER_PORT);
 	});
 });
