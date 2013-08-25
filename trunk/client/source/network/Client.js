@@ -253,6 +253,7 @@ var Client = new function(){
 				username: Client.username
 			 };
 			
+			console.log('Joining... ' + Client.currentGameId);
 			Client.joinGame(data);
 		});
 		
