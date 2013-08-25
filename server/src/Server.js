@@ -103,14 +103,12 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 	//When player ready, refresh information of his opponents about his existence.
 	socket.on(Constants.Message.PLAYER_READY, function(gameId){
-		console.log('Player ready!');
+		console.log('Player ready! (' + gameId + ')');
 		
 		Server.gameList[gameId].connectedPlayers++;		
 		
-		//Send connected player to others.
-		for(var i in io.sockets.in(gameId).sockets)
-			if(i != socket.id)
-				io.sockets.sockets[i].emit(Constants.Message.NEW_PLAYER, Server.gameList[gameId].players[socket.id].toClient());
+		//Send connected players to others.
+		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, Server.gameList[gameId].players[socket.id].toClient());
 		
 		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
 		{

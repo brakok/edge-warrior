@@ -46,3 +46,38 @@ GameSettings.prototype.removePlayer = function(username){
 	if(index != null)
 		this.players.splice(index, 1);
 };
+
+//Assign good color to duplicata.
+GameSettings.prototype.validateColors = function(){
+		
+	//Find duplicated colors.
+	var usedColors = {};
+	var wrongColors = {};
+	for(var i in this.players)
+		if(usedColors[this.players[i].color] == null)
+			usedColors[this.players[i].color] = 1;
+		else
+		{
+			usedColors[this.players[i].color]++;
+			wrongColors[this.players[i].color] = usedColors[this.players[i].color];
+		}
+	
+	//Find unused colors.
+	var unusedColors = [];
+	for(var i = 1; i < 5; i++)
+		if(usedColors[i] == null)
+			unusedColors.push(i);
+	
+	//Assign unused color to player with duplicated color.
+	for(var i = this.players.length-1; i > -1; i--)
+	{
+		if(wrongColors[this.players[i].color] != null && wrongColors[this.players[i].color] > 1)
+		{
+			wrongColors[this.players[i].color]--;
+			
+			var index = Math.round(Math.random()*(unusedColors.length-1));
+			this.players[i].color = unusedColors[index];
+			unusedColors.splice(index, 1);
+		}
+	}
+};
