@@ -25,7 +25,7 @@ var Constants = {
 	},
 	Camera: {
 		HIGHER: 75,
-		SPEED_X: 0.00001,
+		SPEED_X: 0.00012,
 		SPEED_Y: 0.000005,
 		SPEED_ZOOM: 0.2,
 		UPWARD_FACTOR: 0.3,

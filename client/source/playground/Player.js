@@ -197,8 +197,11 @@ Player.prototype.manageInput = function(){
 	}
 };
 
+var oldX = 0;
 Player.prototype.update = function(dt){
-	Client.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5);
+	
+	Client.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5, (oldX > this.x));
+	oldX = this.x;
 	
 	if(this.isControlled)
 	{
