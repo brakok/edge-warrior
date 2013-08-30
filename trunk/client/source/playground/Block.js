@@ -28,7 +28,7 @@ var Block = function (x, y, type, color) {
 }
 
 Block.prototype.init = function(){
-	Client.layer.addChild(this.sprite);
+	Client.game.layer.addChild(this.sprite);
 };
 
 Block.prototype.setPosition = function(x, y){
@@ -56,7 +56,7 @@ Block.prototype.land = function(){
 };
 
 Block.prototype.update = function(dt){
-	Client.camera.project(this.sprite, this.x, this.y, this.scale, this.scale);
+	Client.game.camera.project(this.sprite, this.x, this.y, this.scale, this.scale);
 	
 	//Trigger landing animation if needed.
 	if(!this.hasDoneLandingAnimation)
@@ -74,9 +74,9 @@ Block.prototype.update = function(dt){
 };
 
 Block.prototype.swapColor = function(color){
-	Client.layer.removeChild(this.sprite);
+	Client.game.layer.removeChild(this.sprite);
 	this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + color + '.png');
-	Client.layer.addChild(this.sprite);
+	Client.game.layer.addChild(this.sprite);
 	
 	//Trigger swap effect.
 	EffectManager.create(Enum.Effect.Type.SWAP_COLOR, this.x, this.y);
@@ -87,7 +87,7 @@ Block.prototype.swapColor = function(color){
 };
 
 Block.prototype.explode = function(cause){
-	Client.layer.removeChild(this.sprite);
+	Client.game.layer.removeChild(this.sprite);
 	
 	//Trigger right animation depending of destruction cause.
 	switch(cause){

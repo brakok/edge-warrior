@@ -43,11 +43,11 @@ Spike.prototype.init = function(){
 			
 			//Callback after transformation to set twisted tentacle.
 			this.transformCallback = cc.CallFunc.create(function(node){
-										Client.layer.removeChild(this.currentAnimation);
+										Client.game.layer.removeChild(this.currentAnimation);
 										
 										//Add twisted tentacle.
 										this.currentAnimation.runAction(cc.RepeatForever.create(this.twistedAnimation));
-										Client.layer.addChild(this.currentAnimation);
+										Client.game.layer.addChild(this.currentAnimation);
 									}, this);
 			
 			break;
@@ -56,7 +56,7 @@ Spike.prototype.init = function(){
 	this.setPosition(this.x, this.y);
 	this.currentAnimation._zOrder = Constants.DeathZone.EnergySpike.Z_INDEX;
 
-	Client.layer.addChild(this.currentAnimation);
+	Client.game.layer.addChild(this.currentAnimation);
 };
 
 Spike.prototype.endProcess = function(){
@@ -65,12 +65,12 @@ Spike.prototype.endProcess = function(){
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
 			//Remove light ball and previous tentacle.
 			this.lightBall.explode();
-			Client.layer.removeChild(this.currentAnimation);
+			Client.game.layer.removeChild(this.currentAnimation);
 			
 			//Add transformation animation.
 			this.currentAnimation.runAction(cc.Sequence.create(this.transformAnimation,
 															   this.transformCallback));
-			Client.layer.addChild(this.currentAnimation);
+			Client.game.layer.addChild(this.currentAnimation);
 			
 			AudioManager.playEffect(Constants.Sound.File.Spike.TENTACLE_TRANSFORM, false);
 			break;
@@ -86,7 +86,7 @@ Spike.prototype.setPosition = function(x, y){
 
 Spike.prototype.update = function(dt){
 
-	Client.camera.project(this.currentAnimation, this.x, this.y, 1, this.ratioY);
+	Client.game.camera.project(this.currentAnimation, this.x, this.y, 1, this.ratioY);
 	this.lightBall.update(dt);
 };
 
@@ -100,5 +100,5 @@ Spike.prototype.fromServer = function(remoteSpike){
 };
 
 Spike.prototype.explode = function(){
-	Client.layer.removeChild(this.currentAnimation);
+	Client.game.layer.removeChild(this.currentAnimation);
 };

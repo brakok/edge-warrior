@@ -102,7 +102,7 @@ Inventory.prototype.setOption = function(isFirst){
 		this.option2 = option = this.blocks[0];
 		
 	//Ask next block from player.
-	Client.player.pushNextBlock();
+	Client.game.player.pushNextBlock();
 	
 	//Set good Z-index.
 	option.sprite._zOrder = isFirst ? Constants.HUD.Inventory.Option1.Z_INDEX

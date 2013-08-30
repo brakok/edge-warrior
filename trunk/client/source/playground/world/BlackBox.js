@@ -15,9 +15,9 @@ BlackBox.prototype.init = function(){
 	this.sprite.setPosition(new cc.Point(this.x, this.y));
 	this.sprite._zOrder = Constants.World.BlackBox.Z_INDEX;
 	
-	Client.layer.addChild(this.sprite);
+	Client.game.layer.addChild(this.sprite);
 };
 
 BlackBox.prototype.update = function(){
-	Client.camera.project(this.sprite, this.x, this.y, this.width/100, this.height/100);
+	Client.game.camera.project(this.sprite, this.x, this.y, this.width/100, this.height/100);
 };
