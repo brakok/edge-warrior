@@ -80,12 +80,12 @@ Floor.prototype.init = function(){
 
 	//Add floor to layer.
 	for(var i in this.fragments)
-		Client.layer.addChild(this.fragments[i].sprite);
+		Client.game.layer.addChild(this.fragments[i].sprite);
 };
 
 Floor.prototype.update = function(){
 
 	//Project fragments.
 	for(var i in this.fragments)
-			Client.camera.project(this.fragments[i].sprite, this.fragments[i].x, this.y);	
+			Client.game.camera.project(this.fragments[i].sprite, this.fragments[i].x, this.y);	
 };

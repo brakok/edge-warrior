@@ -32,6 +32,7 @@
 				  'source/menu/MainMenu.js',
 				  'source/menu/ServerList.js',
 				  'source/Resources.js',
+				  'source/playground/Game.js',
 				  'source/playground/hud/Inventory.js',
 				  'source/playground/manager/AnimationManager.js',
 				  'source/playground/manager/AudioManager.js',

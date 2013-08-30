@@ -1,4 +1,4 @@
-var Game = cc.Layer.extend({
+var GameLayer = cc.Layer.extend({
 	init: function ()
 	{
 		this._super();
@@ -14,8 +14,8 @@ var Game = cc.Layer.extend({
 		var hud = HUD.create(s.width, s.height);
 		var endScreen = EndScreen.create(s.width, s.height);
 		
-		//Init world.
-		Client.init(s.width, s.height, playGroundLayer, hud, endScreen);
+		//Create game.
+		Client.game.init(s.width, s.height, playGroundLayer, hud, endScreen);
 		
 		//Set the game layer (middle ground).
 		this.addChild(playGroundLayer);
@@ -30,7 +30,7 @@ var Game = cc.Layer.extend({
 		});
 		
 		//Launch game when initiation ends.
-		Client.launchGame();
+		Client.game.launch();
 		
 		return this;
 	},
@@ -42,18 +42,17 @@ var Game = cc.Layer.extend({
 	},
 	update: function(dt){
 
-		if(Client.currentState == Enum.Game.State.PLAYING)
-		{
-			Client.update(dt);
-		}
+		if(Client.game.currentState == Enum.Game.State.PLAYING)
+			Client.game.update(dt);
 	}
 });
 
 var GameScene = cc.Scene.extend({
 	onEnter: function (){
 		this._super();
-		var layer = new Game();
-		layer.init();
-		this.addChild(layer);
+		this.layer = new GameLayer();
+		this.layer.init();
+		
+		this.addChild(this.layer);
 	}
 });

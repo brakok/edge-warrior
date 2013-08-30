@@ -62,7 +62,7 @@ Effect.prototype.init = function(){
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;
 	this.callback = cc.CallFunc.create(function(node){
-								Client.layer.removeChild(node);
+								Client.game.layer.removeChild(node);
 								this.hasEnded = true;
 							}, this.sprite);
 };
@@ -74,9 +74,9 @@ Effect.prototype.launch = function(){
 											 this.callback));
 			 
 	this.sprite.setPosition(new cc.Point(this.x, this.y));
-	Client.layer.addChild(this.sprite);
+	Client.game.layer.addChild(this.sprite);
 };
 
 Effect.prototype.update = function(){
-	Client.camera.project(this.sprite, this.x, this.y);
+	Client.game.camera.project(this.sprite, this.x, this.y);
 };

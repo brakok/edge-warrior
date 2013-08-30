@@ -76,12 +76,12 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 Wall.prototype.init = function(){
 
 	for(var i in this.fragments)
-		Client.layer.addChild(this.fragments[i].sprite);
+		Client.game.layer.addChild(this.fragments[i].sprite);
 };
 
 Wall.prototype.update = function(){
 	
 	//Project fragments.
 	for(var i in this.fragments)
-		Client.camera.project(this.fragments[i].sprite, this.x, this.fragments[i].y);	
+		Client.game.camera.project(this.fragments[i].sprite, this.x, this.fragments[i].y);	
 };

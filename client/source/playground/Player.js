@@ -35,14 +35,14 @@ Player.prototype.changePercent = function(blockType, percent){
 //Add a block as the current block from an extern source.
 Player.prototype.addNextBlock = function(blockType){
 	this.givenBlock = blockType;
-	Client.hud.inventory.setCurrent(new Block(0,0, this.givenBlock, this.color));
+	Client.game.hud.inventory.setCurrent(new Block(0,0, this.givenBlock, this.color));
 };
 
 //Ask player to randomize next block in the list.
 Player.prototype.pushNextBlock = function(){
 	
 	//Use current block.
-	Client.hud.inventory.useBlock();
+	Client.game.hud.inventory.useBlock();
 	
 	if(this.givenBlock == null)
 	{			
@@ -71,7 +71,7 @@ Player.prototype.pushNextBlock = function(){
 		if(!found)
 			nextBlock = Enum.Block.Type.COLORED;
 			
-		Client.hud.inventory.addBlock(new Block(0,0, nextBlock, this.color));
+		Client.game.hud.inventory.addBlock(new Block(0,0, nextBlock, this.color));
 	}
 	else
 		this.givenBlock = null;
@@ -120,13 +120,13 @@ Player.prototype.init = function(){
 	
 	//Starting animation is idle.
 	this.currentAnimation.runAction(cc.RepeatForever.create(this.idleAnimation));
-	Client.layer.addChild(this.currentAnimation);
+	Client.game.layer.addChild(this.currentAnimation);
 };
 
 //Player killing.
 Player.prototype.kill = function(){
 
-	if(Client.currentPhase != Enum.Game.Phase.WINNER)
+	if(Client.game.currentPhase != Enum.Game.Phase.WINNER)
 	{		
 		//Taunt enemy.
 		if(this.lastVoice != null)
@@ -164,12 +164,12 @@ Player.prototype.manageInput = function(){
 		//Store or use option 1.
 		if(Client.keys[cc.KEY.z] && !this.option1Pressed)
 		{				
-			if(Client.hud.inventory.option1 == null)
-				Client.hud.inventory.setOption(true);
+			if(Client.game.hud.inventory.option1 == null)
+				Client.game.hud.inventory.setOption(true);
 			else
-				Client.hud.inventory.useOption(true);
+				Client.game.hud.inventory.useOption(true);
 				
-			blockToSend = Client.hud.inventory.getCurrent().type;
+			blockToSend = Client.game.hud.inventory.getCurrent().type;
 			this.option1Pressed = true;
 		}
 		else if(!Client.keys[cc.KEY.z] && this.option1Pressed)
@@ -178,12 +178,12 @@ Player.prototype.manageInput = function(){
 		//Store or use option 2.
 		if(Client.keys[cc.KEY.x] && !this.option2Pressed)
 		{
-			if(Client.hud.inventory.option2 == null)
-				Client.hud.inventory.setOption(false);
+			if(Client.game.hud.inventory.option2 == null)
+				Client.game.hud.inventory.setOption(false);
 			else
-				Client.hud.inventory.useOption(false);
+				Client.game.hud.inventory.useOption(false);
 				
-			blockToSend = Client.hud.inventory.getCurrent().type;
+			blockToSend = Client.game.hud.inventory.getCurrent().type;
 			this.option2Pressed = true;
 		}
 		else if(!Client.keys[cc.KEY.x] && this.option2Pressed)
@@ -197,11 +197,10 @@ Player.prototype.manageInput = function(){
 	}
 };
 
-var oldX = 0;
+
 Player.prototype.update = function(dt){
 	
-	Client.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5, (oldX > this.x));
-	oldX = this.x;
+	Client.game.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5);
 	
 	if(this.isControlled)
 	{
@@ -320,7 +319,7 @@ Player.prototype.fromServer = function(data){
 };
 
 Player.prototype.die = function() {
-	Client.layer.removeChild(this.currentAnimation);
+	Client.game.layer.removeChild(this.currentAnimation);
 	
 	//Create an animation for the dying player.
 	EffectManager.create(Enum.Effect.Type.PLAYER_DEATH, this.x, this.y);
@@ -335,7 +334,7 @@ Player.prototype.die = function() {
 };
 
 Player.prototype.win = function(){
-	Client.layer.removeChild(this.currentAnimation);
+	Client.game.layer.removeChild(this.currentAnimation);
 	this.hasWon = true;
 };
 
@@ -356,7 +355,7 @@ Player.prototype.turn = function(){
 Player.prototype.spawn = function(x, y){
 	this.setPosition(x, y);
 	
-	Client.layer.addChild(this.currentAnimation);
+	Client.game.layer.addChild(this.currentAnimation);
 	this.isAlive = true;
 };
 
@@ -367,7 +366,7 @@ Player.prototype.swapAnimation = function(newAnim, mustSwap){
 			return;
 			
 	this.currentAnimationType = newAnim;
-	Client.layer.removeChild(this.currentAnimation);
+	Client.game.layer.removeChild(this.currentAnimation);
 	
 	switch(newAnim)
 	{
@@ -385,6 +384,6 @@ Player.prototype.swapAnimation = function(newAnim, mustSwap){
 			break;
 	}
 
-	Client.layer.addChild(this.currentAnimation);
+	Client.game.layer.addChild(this.currentAnimation);
 };
 

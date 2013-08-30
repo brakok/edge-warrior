@@ -27,11 +27,11 @@ Background.prototype.init = function(){
 	this.sky._zOrder = Constants.World.Background.Z_INDEX - 1;
 	this.background._zOrder = Constants.World.Background.Z_INDEX;
 	
-	Client.layer.addChild(this.sky);
-	Client.layer.addChild(this.background);
+	Client.game.layer.addChild(this.sky);
+	Client.game.layer.addChild(this.background);
 };
 
 Background.prototype.update = function(){
-	Client.camera.project(this.sky, this.x, this.y + this.height, this.width*0.015, this.height*0.02);
-	Client.camera.project(this.background, this.x, this.y);
+	Client.game.camera.project(this.sky, this.x, this.y + this.height, this.width*0.015, this.height*0.02);
+	Client.game.camera.project(this.background, this.x, this.y);
 };
