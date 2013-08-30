@@ -24,13 +24,15 @@
 				  'source/playground/world/Wall.js',
 				  'source/playground/world/Floor.js',
 				  'source/playground/winnerGoal/FloatingBall.js',
-				  'source/layer/GameScene.js',
-				  'source/layer/MenuScene.js',
+				  'source/scene/GameScene.js',
+				  'source/scene/MenuScene.js',
 				  'source/menu/Screens.js',
 				  'source/menu/LobbyScreen.js',
 				  'source/menu/Login.js',
 				  'source/menu/MainMenu.js',
 				  'source/menu/ServerList.js',
+				  'source/menu/EndScreen.js',
+				  'source/menu/PauseMenu.js',
 				  'source/Resources.js',
 				  'source/playground/Game.js',
 				  'source/playground/hud/Inventory.js',
@@ -46,7 +48,6 @@
 				  'source/playground/Voice.js',
 				  'source/setup/GameSettings.js',
 				  'source/playground/hud/Hud.js',
-				  'source/layer/EndScreen.js',
 				  'source/playground/world/Background.js']
 	};
 	

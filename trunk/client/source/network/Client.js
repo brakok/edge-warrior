@@ -55,6 +55,11 @@ var Client = new function(){
 		this.currentGameId = null;
 	};
 	
+	//Disconnect from a game.
+	this.disconnect = function(){
+		
+	};
+	
 	//Join a lobby.
 	this.joinLobby = function(gameId){
 		this.masterSocket.emit(Constants.Message.JOIN_LOBBY, {
