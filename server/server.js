@@ -1537,6 +1537,7 @@ GameSettings.prototype.removePlayer = function(username){
 //Assign good color to duplicata.
 GameSettings.prototype.validateColors = function(){
 		
+	//Find duplicated colors.
 	var usedColors = {};
 	var wrongColors = {};
 	for(var i in this.players)
@@ -1548,12 +1549,13 @@ GameSettings.prototype.validateColors = function(){
 			wrongColors[this.players[i].color] = usedColors[this.players[i].color];
 		}
 	
+	//Find unused colors.
 	var unusedColors = [];
 	for(var i = 1; i < 5; i++)
 		if(usedColors[i] == null)
 			unusedColors.push(i);
 	
-	console.log(unusedColors);
+	//Assign unused color to player with duplicated color.
 	for(var i = this.players.length-1; i > -1; i--)
 	{
 		if(wrongColors[this.players[i].color] != null && wrongColors[this.players[i].color] > 1)
@@ -1561,7 +1563,6 @@ GameSettings.prototype.validateColors = function(){
 			wrongColors[this.players[i].color]--;
 			
 			var index = Math.round(Math.random()*(unusedColors.length-1));
-			console.log(this.players[i].color + ' : ' + unusedColors[index]);
 			this.players[i].color = unusedColors[index];
 			unusedColors.splice(index, 1);
 		}
@@ -1862,10 +1863,10 @@ var Overlord = function(game){
 Overlord.prototype.assignKill = function(killed, keepList){
 	
 	var otherPlayers = [];
-	for(var i in Game.players)
+	for(var i in this.currentGame.players)
 	{
-		if(Game.players[i].id != killed.id && Game.players[i].isAlive)
-			otherPlayers.push(Game.players[i]);
+		if(this.currentGame.players[i].id != killed.id && this.currentGame.players[i].isAlive)
+			otherPlayers.push(this.currentGame.players[i]);
 	}
 	
 	if(otherPlayers.length == 0)
@@ -1887,22 +1888,23 @@ Overlord.prototype.launch = function(blockType){
 		//Spawn block falls from the sky.
 		if(!this.hasActiveSpawnBlock)
 		{
-			var spawnY = Game.height + 100;
-			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(Game.width-Constants.Block.WIDTH));
+			var spawnY = this.currentGame.height + 100;
+			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(this.currentGame.width-Constants.Block.WIDTH));
 			
 			//Create a block and launch it.
-			var block = new Block(Game.blockSequence, 
+			var block = new Block(this.currentGame.blockSequence, 
 								  spawnX, 
 								  spawnY, 
 								  Enum.Block.Type.SPAWN, 
 								  null,
-								  null);
+								  null, 
+								  this.currentGame);
 			
-			Game.blocks.push(block);
+			this.currentGame.blocks.push(block);
 			block.launch();
 			
-			Game.blockSequence++;	
-			io.sockets.in(Game.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
+			this.currentGame.blockSequence++;	
+			io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
 			
 			this.hasActiveSpawnBlock = true;
 		}
@@ -1912,9 +1914,9 @@ Overlord.prototype.launch = function(blockType){
 Overlord.prototype.kill = function(killed, cause){
 		
 	//Steal killed's list.
-	for(var i in Game.players)
-		if(Game.players[i].killerId == killed.id)
-			Game.players[i].killerId = null;
+	for(var i in this.currentGame.players)
+		if(this.currentGame.players[i].killerId == killed.id)
+			this.currentGame.players[i].killerId = null;
 	
 	//Force player to die.
 	killed.toBeDestroy = true;
