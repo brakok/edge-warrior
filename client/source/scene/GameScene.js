@@ -13,14 +13,14 @@ var GameLayer = cc.Layer.extend({
 		
 		var hud = HUD.create(s.width, s.height);
 		var endScreen = EndScreen.create(s.width, s.height);
+		var pauseMenu = PauseMenu.create(s.width, s.height);
 		
 		//Create game.
-		Client.game.init(s.width, s.height, playGroundLayer, hud, endScreen);
+		Client.game.init(s.width, s.height, playGroundLayer, hud, endScreen, pauseMenu);
 		
 		//Set the game layer (middle ground).
 		this.addChild(playGroundLayer);
 		this.addChild(hud);
-		this.addChild(endScreen);
 		
 		this.setKeyboardEnabled(true);
 				

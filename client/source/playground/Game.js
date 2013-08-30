@@ -22,6 +22,19 @@ var Game = function(){
 	
 	this.camera = null;
 	this.ready = false;
+	this.isPaused = false;
+	
+	this.mayPause = true;
+};
+
+Game.prototype.pause = function(){
+	this.isPaused = true;
+	myApp.GameScene.layer.addChild(this.pauseMenu);
+};
+
+Game.prototype.unpause = function(){
+	this.isPaused = false;
+	myApp.GameScene.layer.removeChild(this.pauseMenu);
 };
 
 //Get right player for specified color.
@@ -37,7 +50,7 @@ Game.prototype.getPlayer = function(color){
 	return null;
 };
 
-Game.prototype.init = function(width, height, layer, hud, endScreen){
+Game.prototype.init = function(width, height, layer, hud, endScreen, pauseMenu){
 
 	this.width = width;
 	this.height = height;
@@ -46,6 +59,7 @@ Game.prototype.init = function(width, height, layer, hud, endScreen){
 	this.layer = layer;
 	this.hud = hud;
 	this.endScreen = endScreen;
+	this.pauseMenu = pauseMenu;
 	
 	this.ready = false;
 };
@@ -115,37 +129,52 @@ Game.prototype.update = function (dt){
 	//Update info from the server.
 	if(this.ready)
 	{
-		//Send 
-		Client.push();
+		if(Client.keys[cc.KEY.p] && this.mayPause)
+		{
+			if(!this.isPaused)
+				this.pause();
+			else
+				this.unpause();
+			
+			this.mayPause = false;
+		}
+		else if(!Client.keys[cc.KEY.p] && !this.mayPause)
+			this.mayPause = true;
+			
+		if(!this.isPaused)
+		{
+			//Send 
+			Client.push();
 		
-		this.hud.update(dt);
-		
-		//Position camera.
-		this.moveCamera();
-		this.camera.update();
-		
-		//Project static objects.
-		this.projectWorld();
-		
-		//Update dynamic objects.
-		this.player.update(dt);
-		
-		for(var i in this.enemies)
-			this.enemies[i].update(dt);
+			this.hud.update(dt);
+			
+			//Position camera.
+			this.moveCamera();
+			this.camera.update();
+			
+			//Project static objects.
+			this.projectWorld();
+			
+			//Update dynamic objects.
+			this.player.update(dt);
+			
+			for(var i in this.enemies)
+				this.enemies[i].update(dt);
 
-		for(var i in this.blocks)
-			this.blocks[i].update(dt);
-		
-		for(var i in this.deathZones)
-			this.deathZones[i].update(dt);
+			for(var i in this.blocks)
+				this.blocks[i].update(dt);
 			
-		for(var i in this.blackBoxes)
-			this.blackBoxes[i].update();
+			for(var i in this.deathZones)
+				this.deathZones[i].update(dt);
+				
+			for(var i in this.blackBoxes)
+				this.blackBoxes[i].update();
+				
+			this.goal.update();
 			
-		this.goal.update();
-		
-		//Update all effects.
-		EffectManager.update();
+			//Update all effects.
+			EffectManager.update();
+		}
 	}
 };
 
@@ -258,7 +287,9 @@ Game.prototype.end = function(data){
 	//Stop winning goal.
 	this.goal.end();
 
-	this.hud._zOrder = Constants.HUD.ENDSCREEN_Z_INDEX;
+	myApp.GameScene.layer.removeChild(this.hud);
+	myApp.GameScene.layer.addChild(this.endScreen);
+	
 	this.endScreen.addWinner(data.winner, data.succeed);
 };
 

@@ -25,7 +25,7 @@ var Constants = {
 	},
 	Camera: {
 		HIGHER: 75,
-		SPEED_X: 0.00012,
+		SPEED_X: 0.0000003,
 		SPEED_Y: 0.000005,
 		SPEED_ZOOM: 0.2,
 		UPWARD_FACTOR: 0.3,
@@ -51,7 +51,6 @@ var Constants = {
 		Z_INDEX: 1000
 	},
 	HUD: {
-		ENDSCREEN_Z_INDEX: -1000,
 		Z_INDEX: 1000,
 		Inventory: {
 			OFFSET: 250,
@@ -189,5 +188,8 @@ var Constants = {
 	},
 	ServerList: {
 		Z_INDEX: 0
-	}	
+	},
+	OptionsScreen: {
+		Z_INDEX: 5000
+	}
 };
