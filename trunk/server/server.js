@@ -213,6 +213,7 @@ var Constants = {
 		REGISTER: 'register',
 		SEARCH_LOBBY: 'searchLobby',
 		JOIN_GAME: 'joinGame',
+		DISCONNECT_PLAYER: 'disconnectPlayer',
 		UPDATE_SLOT: 'updateSlot'
 	}
 };
@@ -787,9 +788,10 @@ var Managers = function(game){
 	this.BlockManager = new BlockManager(this.currentGame);
 	this.DeathZoneManager = new DeathZoneManager(this.currentGame);
 };//Server version of the player.
-var Player = function(id, x, y, color, game){
+var Player = function(id, username, x, y, color, game){
 
 	this.currentGame = game;
+	this.username = username;
 	
 	this.id = id;
 	this.x = x;
@@ -940,6 +942,19 @@ Player.prototype.die = function(){
 	//Ask for the next block if player is currently holding a spawn block.
 	if(this.currentBlock == Enum.Block.Type.SPAWN)
 		io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
+};
+
+//Leave current game.
+Player.prototype.leave = function(){
+	
+	if(this.isAlive && !this.isRemoved)
+	{
+		//Remove physical presence.
+		this.currentGame.space.removeShape(this.shape);
+		this.currentGame.space.removeShape(this.groundSensor);
+		this.currentGame.space.removeShape(this.dropSensor);
+		this.currentGame.space.removeBody(this.body);
+	}
 };
 
 Player.prototype.getPosition = function(){
@@ -2155,7 +2170,11 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		var enemies = [];
 		
 		for(var i in Server.gameList[data.gameId].players)
-			enemies.push(Server.gameList[data.gameId].players[i].toClient());
+		{
+			var enemy = Server.gameList[data.gameId].players[i].toClient();
+			enemy.username = Server.gameList[data.gameId].players[i].username;
+			enemies.push(enemy);
+		}
 		
 		var color = null;
 		for(var i in Server.gameList[data.gameId].playerInfos)
@@ -2164,6 +2183,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		//Create connecting player.
 		var player = new Player(socket.id, 
+								data.username,
 								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
 								Server.gameList[data.gameId].spawnY, 
 								color,
@@ -2181,6 +2201,29 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		//Start initiation.
 		socket.emit(Constants.Message.INIT, initData);
 	});
+	
+	//Disconnect player.
+	socket.on(Constants.Message.DISCONNECT_PLAYER, function(data){
+		console.log('Player left (' + data.gameId + ') : ' + data.username);
+		
+		var game = Server.gameList[data.gameId];
+		var index = null;
+		
+		for(var i in game.players)
+			if(game.players[i].username == data.username)
+			{
+				index = i;
+				break;
+			}
+			
+		socket.broadcast.to(data.gameId).emit(Constants.Message.DISCONNECT_PLAYER, data.username);	
+		
+		if(index != null)
+		{
+			Server.gameList[data.gameId].players[index].leave();
+			delete Server.gameList[data.gameId].players[index];
+		}
+	});
 
 	//When player ready, refresh information of his opponents about his existence.
 	socket.on(Constants.Message.PLAYER_READY, function(gameId){
@@ -2188,8 +2231,11 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		Server.gameList[gameId].connectedPlayers++;		
 		
+		var player = Server.gameList[gameId].players[socket.id].toClient();
+		player.username = Server.gameList[gameId].players[socket.id].username;
+		
 		//Send connected players to others.
-		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, Server.gameList[gameId].players[socket.id].toClient());
+		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, player);
 		
 		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
 		{
