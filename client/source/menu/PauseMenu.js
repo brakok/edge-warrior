@@ -11,10 +11,13 @@ var PauseMenu = cc.LayerColor.extend({
 		this.home = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 255), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
-		this._zOrder = Constants.OptionsScreen.Z_INDEX;
-				
+		this._zOrder = Constants.PauseMenu.Z_INDEX;
+		
+		//Set options' screen.
+		this.optionsScreen = OptionsScreen.create(width, height, function(){ Client.game.pauseMenu.switchTo(Client.game.pauseMenu.home);});
+
 		//Menu creation.
-		this.cmdOptions = new cc.MenuItemFont.create("Options", this.openOptions, this);
+		this.cmdOptions = new cc.MenuItemFont.create("Options", this.toOptions, this);
 		this.cmdDisconnect = new cc.MenuItemFont.create("Disconnect", this.disconnect, this);
 		this.cmdClose = new cc.MenuItemFont.create("Close", this.close, this);
 		
@@ -54,8 +57,8 @@ var PauseMenu = cc.LayerColor.extend({
 				this.currentScreen.onEntering();
 		
 	},
-	openOptions: function(){
-	
+	toOptions: function(){
+		this.switchTo(this.optionsScreen);
 	},
 	disconnect: function(){
 		Client.disconnect();

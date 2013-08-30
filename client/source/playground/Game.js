@@ -29,12 +29,14 @@ var Game = function(){
 
 Game.prototype.pause = function(){
 	this.isPaused = true;
+	myApp.GameScene.layer.removeChild(this.hud);
 	myApp.GameScene.layer.addChild(this.pauseMenu);
 };
 
 Game.prototype.unpause = function(){
 	this.isPaused = false;
 	myApp.GameScene.layer.removeChild(this.pauseMenu);
+	myApp.GameScene.layer.addChild(this.hud);
 };
 
 //Get right player for specified color.

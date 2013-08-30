@@ -31,7 +31,7 @@ var Menu = cc.Layer.extend({
 		this.currentScreen = menu;
 		
 		if(this.currentScreen.onEntering != null && this.currentScreen.onEntering != 'undefined')
-				this.currentScreen.onEntering();
+			this.currentScreen.onEntering();
 	},
 	onKeyDown: function(e){
 		if(this.currentScreen != null && this.currentScreen.onKeyDown != null && this.currentScreen.onKeyDown != 'undefined')
