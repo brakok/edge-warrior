@@ -192,5 +192,8 @@ var Constants = {
 	},
 	OptionsScreen: {
 		Z_INDEX: 5000
+	},
+	PauseMenu: {
+		Z_INDEX: 5000
 	}
 };

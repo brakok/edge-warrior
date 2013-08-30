@@ -31,7 +31,7 @@ var MainMenu = cc.LayerColor.extend({
 		MenuScreens.switchTo(MenuScreens.serverList);
 	},
 	toOptions: function(){
-	
+		MenuScreens.switchTo(MenuScreens.optionsScreen);
 	}
 });
 

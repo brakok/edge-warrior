@@ -17,11 +17,11 @@
 
 	<div id="login" style="position:absolute; z-index: 10; display: none; ">
 		<div>
-			<label style="color:red"> Username : </label>
+			<label style="color:white"> Username : </label>
 			<input type="text" id="username" name="username" maxlength="150" style="width:200px" />
 		</div>
 		<div>
-			<label style="color:red"> Password : </label>
+			<label style="color:white"> Password : </label>
 			<input type="password" id="password" name="password" maxlength="150" style="width:200px" />
 		</div>
 	</div>
@@ -32,6 +32,37 @@
 				<th><span style="color: white"> Name </span></th>
 			</tr>
 		</table>
+	</div>
+	
+	<div id="keys" style="position: absolute; z-index: 10; display:none;">
+		<div>
+			<label style="color:white"> Right &nbsp; </label>
+			<input type="text" id="keyRight" name="keyRight" maxlength="1" style="width:75px" />
+		</div>
+		<div>
+			<label style="color:white"> Left &nbsp; </label>
+			<input type="text" id="keyLeft" name="keyLeft" maxlength="1" style="width:75px" />
+		</div>
+		<div>
+			<label style="color:white"> Jump &nbsp; </label>
+			<input type="text" id="keyJump" name="keyJump" maxlength="1" style="width:75px" />
+		</div>
+		<div>
+			<label style="color:white"> Kill command &nbsp; </label>
+			<input type="text" id="keyKC" name="keyKC" maxlength="1" style="width:75px" />
+		</div>
+		<div>
+			<label style="color:white"> Inventory 1 &nbsp; </label>
+			<input type="text" id="keyOpt1" name="keyOpt1" maxlength="1" style="width:75px" />
+		</div>
+		<div>
+			<label style="color:white"> Inventory 2 &nbsp; </label>
+			<input type="text" id="keyOpt2" name="keyOpt2" maxlength="1" style="width:75px" />
+		</div>
+		<div>
+			<label style="color:white"> Pause &nbsp; </label>
+			<input type="text" id="keyPause" name="keyPause" maxlength="1" style="width:75px" />
+		</div>
 	</div>
 	
 	<canvas id="gameCanvas">
