@@ -42,7 +42,7 @@ var GameLayer = cc.Layer.extend({
 	},
 	update: function(dt){
 
-		if(Client.game.currentState == Enum.Game.State.PLAYING)
+		if(Client.game != null && Client.game.currentState == Enum.Game.State.PLAYING)
 			Client.game.update(dt);
 	}
 });
@@ -54,5 +54,8 @@ var GameScene = cc.Scene.extend({
 		this.layer.init();
 		
 		this.addChild(this.layer);
+	},
+	onExit: function(){
+		this.layer.removeChild(this.layer);
 	}
 });

@@ -7,11 +7,11 @@ var Menu = cc.Layer.extend({
 				
 		//Screens creation.
 		var s = cc.Director.getInstance().getWinSize();
-				
+			
 		MenuScreens.init(s.width, s.height);
-				
+
 		//Switch to another screen.
-		this.switchTo(MenuScreens.login);
+		this.switchTo(Client.username == null ? MenuScreens.login : MenuScreens.mainMenu);
 		
 		this.setKeyboardEnabled(true);
 		
@@ -51,5 +51,8 @@ var MenuScene = cc.Scene.extend({
 		this.menu.init();
 		
 		this.addChild(this.menu);
+	},
+	onExit: function(){
+		this.removeChild(this.menu);
 	}
 });

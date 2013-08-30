@@ -1,5 +1,6 @@
-var Player = function (x, y, color, isControlled) {
+var Player = function (x, y, color, isControlled, username) {
 	this.color = color;
+	this.username = username;
 	
 	this.givenBlock = null;
 	
@@ -350,6 +351,11 @@ Player.prototype.turn = function(){
 		AudioManager.stopEffect(Constants.Sound.File.Player.FOOT_STEP);
 		AudioManager.playEffect(Constants.Sound.File.Player.FOOT_STEP, true);
 	}
+};
+
+//Leave from a game.
+Player.prototype.leave = function(){
+	Client.game.layer.removeChild(this.currentAnimation);
 };
 
 Player.prototype.spawn = function(x, y){
