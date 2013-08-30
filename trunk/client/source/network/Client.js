@@ -57,7 +57,15 @@ var Client = new function(){
 	
 	//Disconnect from a game.
 	this.disconnect = function(){
+		this.socket.emit(Constants.Message.DISCONNECT_PLAYER, {
+																gameId: this.currentGameId,
+																username: this.username
+															});
+															
+		this.socket.disconnect();
 		
+		cc.Director.getInstance().replaceScene(myApp.MenuScene);
+		delete this.game;
 	};
 	
 	//Join a lobby.
@@ -86,6 +94,7 @@ var Client = new function(){
 	
 	//Connect to master server.
 	this.connectToNetwork = function(){
+		
 		var masterSocket = io.connect(Constants.Network.ADDRESS);
 		
 		//Create lobby and receive game id.
@@ -168,8 +177,12 @@ var Client = new function(){
 	
 	//Connect to game server.
 	this.connect = function(ipAddress){		
+		console.log('Connected to :' + ipAddress);
 		
-		var socket = io.connect(ipAddress);
+		var socketOptions = {
+			'force new connection': true
+		};
+		var socket = io.connect(ipAddress, socketOptions);
 		
 		//Init.
 		socket.on(Constants.Message.INIT, function (data) {
@@ -177,14 +190,15 @@ var Client = new function(){
 			Client.game = new Game();
 			
 			//Server positioning and giving color to player.
-			Client.game.player = new Player(data.player.x, data.player.y, data.player.color, true);	
+			Client.game.player = new Player(data.player.x, data.player.y, data.player.color, true, Client.username);	
 
 			for(var i in data.enemies)
 			{
 				Client.game.enemies.push(new Player(data.enemies[i].x,
 											   data.enemies[i].y,
 											   data.enemies[i].color,
-											   false));
+											   false,
+											   data.enemies[i].username));
 			}
 
 			socket.emit(Constants.Message.PLAYER_READY, Client.currentGameId);
@@ -195,9 +209,16 @@ var Client = new function(){
 			console.log('New player...');
 			
 			Client.game.enemies.push(new Player(data.x,
-										   data.y,
-										   data.color,
-										   false));
+											   data.y,
+											   data.color,
+											   false,
+											   data.username));
+		});
+		
+		//Disconnecting player.
+		socket.on(Constants.Message.DISCONNECT_PLAYER, function(username){
+			console.log('Player left : ' + username);
+			Client.game.removeEnemy(username);
 		});
 		
 		socket.on(Constants.Message.LAUNCH, function(data){
@@ -231,7 +252,8 @@ var Client = new function(){
 		
 		//Pulling info from server.
 		socket.on(Constants.Message.PULL, function (data){	
-			Client.game.updateFromServer(data.players, data.blocks, data.goal, data.deathZones);
+			if(Client.game != null)
+				Client.game.updateFromServer(data.players, data.blocks, data.goal, data.deathZones);
 		});
 		
 		//Ask for next block.

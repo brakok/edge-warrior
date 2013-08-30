@@ -383,3 +383,21 @@ Game.prototype.deleteBlock = function(remoteBlockId, cause){
 		delete this.blocks[remoteBlockId];
 	}
 };
+
+//Remove a player from the game.
+Game.prototype.removeEnemy = function(username){
+
+	var index = null;
+	for(var i in this.enemies)
+		if(this.enemies[i].username == username)
+		{
+			index = i;
+			break;
+		}
+		
+	if(index != null)
+	{
+		this.enemies[i].leave();
+		delete this.enemies[i];
+	}
+};

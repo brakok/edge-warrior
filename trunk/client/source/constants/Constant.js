@@ -118,6 +118,7 @@ var Constants = {
 		PLAYER_READY: 'playerReady',
 		SEARCH_LOBBY: 'searchLobby',
 		JOIN_GAME: 'joinGame',
+		DISCONNECT_PLAYER: 'disconnectPlayer',
 		UPDATE_SLOT: 'updateSlot'
 	},
 	Effect: {
