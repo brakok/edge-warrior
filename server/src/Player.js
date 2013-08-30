@@ -1,7 +1,8 @@
 //Server version of the player.
-var Player = function(id, x, y, color, game){
+var Player = function(id, username, x, y, color, game){
 
 	this.currentGame = game;
+	this.username = username;
 	
 	this.id = id;
 	this.x = x;
@@ -152,6 +153,19 @@ Player.prototype.die = function(){
 	//Ask for the next block if player is currently holding a spawn block.
 	if(this.currentBlock == Enum.Block.Type.SPAWN)
 		io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
+};
+
+//Leave current game.
+Player.prototype.leave = function(){
+	
+	if(this.isAlive && !this.isRemoved)
+	{
+		//Remove physical presence.
+		this.currentGame.space.removeShape(this.shape);
+		this.currentGame.space.removeShape(this.groundSensor);
+		this.currentGame.space.removeShape(this.dropSensor);
+		this.currentGame.space.removeBody(this.body);
+	}
 };
 
 Player.prototype.getPosition = function(){

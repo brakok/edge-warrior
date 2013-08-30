@@ -74,7 +74,11 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		var enemies = [];
 		
 		for(var i in Server.gameList[data.gameId].players)
-			enemies.push(Server.gameList[data.gameId].players[i].toClient());
+		{
+			var enemy = Server.gameList[data.gameId].players[i].toClient();
+			enemy.username = Server.gameList[data.gameId].players[i].username;
+			enemies.push(enemy);
+		}
 		
 		var color = null;
 		for(var i in Server.gameList[data.gameId].playerInfos)
@@ -83,6 +87,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		//Create connecting player.
 		var player = new Player(socket.id, 
+								data.username,
 								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
 								Server.gameList[data.gameId].spawnY, 
 								color,
@@ -100,6 +105,29 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		//Start initiation.
 		socket.emit(Constants.Message.INIT, initData);
 	});
+	
+	//Disconnect player.
+	socket.on(Constants.Message.DISCONNECT_PLAYER, function(data){
+		console.log('Player left (' + data.gameId + ') : ' + data.username);
+		
+		var game = Server.gameList[data.gameId];
+		var index = null;
+		
+		for(var i in game.players)
+			if(game.players[i].username == data.username)
+			{
+				index = i;
+				break;
+			}
+			
+		socket.broadcast.to(data.gameId).emit(Constants.Message.DISCONNECT_PLAYER, data.username);	
+		
+		if(index != null)
+		{
+			Server.gameList[data.gameId].players[index].leave();
+			delete Server.gameList[data.gameId].players[index];
+		}
+	});
 
 	//When player ready, refresh information of his opponents about his existence.
 	socket.on(Constants.Message.PLAYER_READY, function(gameId){
@@ -107,8 +135,11 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		Server.gameList[gameId].connectedPlayers++;		
 		
+		var player = Server.gameList[gameId].players[socket.id].toClient();
+		player.username = Server.gameList[gameId].players[socket.id].username;
+		
 		//Send connected players to others.
-		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, Server.gameList[gameId].players[socket.id].toClient());
+		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, player);
 		
 		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
 		{
