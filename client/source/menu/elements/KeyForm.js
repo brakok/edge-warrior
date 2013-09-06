@@ -1,42 +1,21 @@
 
 var KeyForm = function(){
 	this.div = document.getElementById('keys');
-	
-	this.defaultKeys = {
-		RIGHT: cc.KEY.d,
-		LEFT: cc.KEY.a,
-		JUMP: cc.KEY.space,
-		KILL: cc.KEY.q,
-		OPT1: cc.KEY.z,
-		OPT2: cc.KEY.x,
-		PAUSE: cc.KEY.p
-	};
-	
-	var tmpKeys = null;
-	chrome.storage.sync.get('keys', function(keys){
-		console.log(keys);
-		tmpKeys = keys;
-	});
-	
-	if(tmpKeys == null)
-		this.keys = this.defaultKeys;
-	else
-		this.keys = tmpKeys;
+	this.keys = Options.keys;
 	
 	//Get key fields.
-	var txtKeyRight = new KeyInput('keyRight', this.keys.RIGHT);
-	var txtKeyLeft = new KeyInput('keyLeft', this.keys.LEFT);
+	var txtKeyRight = new KeyInput('keyRight', this.keys.RIGHT, this);
+	var txtKeyLeft = new KeyInput('keyLeft', this.keys.LEFT, this);
 	
-	var txtKeyJump = new KeyInput('keyJump', this.keys.JUMP);
-	var txtKeyKC = new KeyInput('keyKC', this.keys.KILL);
+	var txtKeyJump = new KeyInput('keyJump', this.keys.JUMP, this);
+	var txtKeyKC = new KeyInput('keyKC', this.keys.KILL, this);
 	
-	var txtKeyOpt1 = new KeyInput('keyOpt1', this.keys.OPT1);
-	var txtKeyOpt2 = new KeyInput('keyOpt2', this.keys.OPT2);
-	var txtKeyPause = new KeyInput('keyPause', this.keys.PAUSE);
+	var txtKeyOpt1 = new KeyInput('keyOpt1', this.keys.OPT1, this);
+	var txtKeyOpt2 = new KeyInput('keyOpt2', this.keys.OPT2, this);
+	var txtKeyPause = new KeyInput('keyPause', this.keys.PAUSE, this);
 	
-	//Save keys.
-	this.save = function(){
-	
+	//Update keys for new ones.
+	this.updateKeys = function(){
 		this.keys.RIGHT = txtKeyRight.value;
 		this.keys.LEFT = txtKeyLeft.value;
 		this.keys.JUMP = txtKeyJump.value;
@@ -44,26 +23,54 @@ var KeyForm = function(){
 		this.keys.OPT1 = txtKeyOpt1.value;
 		this.keys.OPT2 = txtKeyOpt2.value;
 		this.keys.PAUSE = txtKeyPause.value;
-
+	};
+	
+	//Save keys.
+	this.save = function(){
 		var tmpKeys = this.keys;
-		chrome.storage.sync.set({'keys': tmpKeys});
+		Options.saveKeys(this.keys);
 	};
 	
 	//Set default keys.
 	this.reset = function(){
-		this.keys = this.defaultKeys;
+
+		this.keys.reset();
+		
+		this.save();
 		this.load();
 	};
 	
+	//Valid uniqueness of key.
+	this.valid = function(code){
+		
+		if(this.keys.RIGHT == code
+		   || this.keys.LEFT == code
+		   || this.keys.JUMP == code
+		   || this.keys.KILL == code
+		   || this.keys.OPT1 == code
+		   || this.keys.OPT2 == code
+		   || this.keys.PAUSE == code)
+		 {
+			return false;
+		 }
+		  
+		 return true;
+	};
+		
 	//Set values in inputs.
 	this.load = function(){
-		txtKeyRight.setValue(this.keys.RIGHT);
-		txtKeyLeft.setValue(this.keys.LEFT);
-		txtKeyJump.setValue(this.keys.JUMP);
-		txtKeyKC.setValue(this.keys.KILL);
-		txtKeyOpt1.setValue(this.keys.OPT1);
-		txtKeyOpt2.setValue(this.keys.OPT2);
-		txtKeyPause.setValue(this.keys.PAUSE);
+		txtKeyRight.setValue(this.keys.RIGHT, false);
+		txtKeyLeft.setValue(this.keys.LEFT, false);
+		txtKeyJump.setValue(this.keys.JUMP, false);
+		txtKeyKC.setValue(this.keys.KILL, false);
+		txtKeyOpt1.setValue(this.keys.OPT1, false);
+		txtKeyOpt2.setValue(this.keys.OPT2, false);
+		txtKeyPause.setValue(this.keys.PAUSE, false);
+	};
+	
+	this.init = function(){
+		this.keys = Options.keys;
+		this.load();		
 	};
 };
 

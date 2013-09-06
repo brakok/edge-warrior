@@ -12,14 +12,14 @@ var Client = new function(){
 	this.isHost = false;
 		
 	//Init keys.
-	this.keys[cc.KEY.d] = false;
-	this.keys[cc.KEY.a] = false;
-	this.keys[cc.KEY.space] = false;
-	this.keys[cc.KEY.q] = false;
+	this.keys[Options.keys.RIGHT] = false;
+	this.keys[Options.keys.LEFT] = false;
+	this.keys[Options.keys.JUMP] = false;
+	this.keys[Options.keys.KILL] = false;
 	
 	//Option keys.
-	this.keys[cc.KEY.z] = false;
-	this.keys[cc.KEY.x] = false;
+	this.keys[Options.keys.OPT1] = false;
+	this.keys[Options.keys.OPT2] = false;
 	
 	//Authentification.
 	this.authenticate = function(username, password){
@@ -326,10 +326,10 @@ var Client = new function(){
 	this.push = function(){
 		
 		var inputs = {
-			right: this.keys[cc.KEY.d],
-			left: this.keys[cc.KEY.a],
-			jump: this.keys[cc.KEY.space],
-			kill: this.keys[cc.KEY.q]
+			right: this.keys[Options.keys.RIGHT],
+			left: this.keys[Options.keys.LEFT],
+			jump: this.keys[Options.keys.JUMP],
+			kill: this.keys[Options.keys.KILL]
 		};
 	
 		//Send key pressed to server.

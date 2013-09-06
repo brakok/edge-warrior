@@ -28,7 +28,7 @@ var cocosApp = cc.Application.extend({
 		cc.AudioEngine.getInstance().init("wav,mp3,ogg");
 		cc.AudioEngine.getInstance().setEffectsVolume(Constants.Sound.Effect.VOLUME);
 		cc.AudioEngine.getInstance().setMusicVolume(Constants.Sound.Music.VOLUME);
-		
+				
 		cc.Loader.getInstance().onloading = function () {
 			cc.LoaderScene.getInstance().draw();
 		};
@@ -42,6 +42,9 @@ var cocosApp = cc.Application.extend({
 	
 		this.MenuScene = new MenuScene();
 		this.GameScene = new GameScene();
+		
+		//Load spritesheets and other graphical stuffs.
+		AnimationManager.init();
 	
 		var director = cc.Director.getInstance();
 		director.setDisplayStats(this.config['showFPS']);

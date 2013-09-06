@@ -131,7 +131,7 @@ Game.prototype.update = function (dt){
 	//Update info from the server.
 	if(this.ready)
 	{
-		if(Client.keys[cc.KEY.p] && this.mayPause)
+		if(Client.keys[Options.keys.PAUSE] && this.mayPause)
 		{
 			if(!this.isPaused)
 				this.pause();
@@ -140,7 +140,7 @@ Game.prototype.update = function (dt){
 			
 			this.mayPause = false;
 		}
-		else if(!Client.keys[cc.KEY.p] && !this.mayPause)
+		else if(!Client.keys[Options.keys.PAUSE] && !this.mayPause)
 			this.mayPause = true;
 			
 		if(!this.isPaused)
