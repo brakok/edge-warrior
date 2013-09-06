@@ -1,47 +1,59 @@
 
-var KeyInput = function(id, value){
+var KeyInput = function(id, value, parent){
 	
 	this.id = id;
 	
 	this.input = document.getElementById(id);
 	this.value = value;
 	
+	this.parent = parent;
+	
 	this.displayText = this.convert(value);
 	this.input.value = this.displayText;
 	
+	var that = this;
+	
 	//Bind event.
-	(function(keyInput){
-		keyInput.input.onkeyup = function() { 
-			if(keyInput.input.value != '' && keyInput.input.value != null)
-				keyInput.setValue(keyInput.input.value.toUpperCase().charCodeAt(0));
-				
-			//keyInput.input.blur();
-		};
-		keyInput.input.onblur = function() { 
-			if(keyInput.input.value == '' || keyInput.input.value == null)
-				keyInput.reset();
-		};
-		keyInput.input.onfocus = function(){
-			keyInput.input.value = '';
-		};
-	})(this);
+	this.input.onkeydown = function(e) { 
+		
+		var code = e.keyCode;
+		
+		if(code > 96 && code < 123)
+			code -= 32;
+		
+		if(that.parent.valid(code))
+			that.setValue(code, true);
+
+		that.input.blur();
+	};
+	
+	this.input.onblur = function() { 
+		if(that.input.value == '' || that.input.value == null)
+			that.reset();
+	};
+	
+	this.input.onfocus = function(){
+		that.input.value = '';
+	};
 };
 
 KeyInput.prototype.reset = function(){
 	this.input.value = this.displayText;
 };
 
-KeyInput.prototype.setValue = function(value){
+KeyInput.prototype.setValue = function(value, mustValidate){
 	this.value = value;
-	this.displayText = this.convert(value);
 	
+	if(mustValidate != null && mustValidate)
+		this.parent.updateKeys();
+	
+	this.displayText = this.convert(value);
 	this.input.value = this.displayText;
 };
 
 //Convert ASCII to character.
 KeyInput.prototype.convert = function(input){
-	
-	console.log('Code: ' + input);
+
 	var value = null;
 	switch(input){
 		case cc.KEY.space:

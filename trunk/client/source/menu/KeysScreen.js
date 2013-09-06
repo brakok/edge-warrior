@@ -12,30 +12,39 @@ var KeysScreen = cc.LayerColor.extend({
 		this.keyForm = new KeyForm();
 		this.keyForm.setPosition(300, 200);
 		
+		this.parent = parent;
+		
 		//Menu creation.
-		this.cmdSave = new cc.MenuItemFont.create("Keys", this.save, this);
+		this.cmdSave = new cc.MenuItemFont.create("Save", this.save, this);
+		this.cmdReset = new cc.MenuItemFont.create("Reset", this.reset, this);
 		this.cmdBack = new cc.MenuItemFont.create("Back", this.back, this);
 		
 		this.cmdSave.setPosition(new cc.Point(100, 100));
-		this.cmdBack.setPosition(new cc.Point(250, 100));
+		this.cmdReset.setPosition(new cc.Point(250, 100));
+		this.cmdBack.setPosition(new cc.Point(400, 100));
 		
-		this.menu = new cc.Menu.create(this.cmdSave, this.cmdBack);
+		this.menu = new cc.Menu.create(this.cmdSave, this.cmdReset, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
 
 		//Add elements.
 		this.addChild(this.menu);
 	},
 	onEntering: function(){
+		this.keyForm.init();
 		this.keyForm.setVisible(true);
 	},
 	onLeaving: function(){
 		this.keyForm.setVisible(false);
 	},
+	reset: function(){
+		this.keyForm.reset();
+	},
 	save: function(){
 		this.keyForm.save();
+		this.back();
 	},
 	back: function(){
-		parent.switchTo(parent.home);
+		this.parent.switchTo(this.parent.home);
 	}
 });
 

@@ -163,7 +163,7 @@ Player.prototype.manageInput = function(){
 		var blockToSend = null;
 		
 		//Store or use option 1.
-		if(Client.keys[cc.KEY.z] && !this.option1Pressed)
+		if(Client.keys[Options.keys.OPT1] && !this.option1Pressed)
 		{				
 			if(Client.game.hud.inventory.option1 == null)
 				Client.game.hud.inventory.setOption(true);
@@ -173,11 +173,11 @@ Player.prototype.manageInput = function(){
 			blockToSend = Client.game.hud.inventory.getCurrent().type;
 			this.option1Pressed = true;
 		}
-		else if(!Client.keys[cc.KEY.z] && this.option1Pressed)
+		else if(!Client.keys[Options.keys.OPT1] && this.option1Pressed)
 			this.option1Pressed = false;
 			
 		//Store or use option 2.
-		if(Client.keys[cc.KEY.x] && !this.option2Pressed)
+		if(Client.keys[Options.keys.OPT2] && !this.option2Pressed)
 		{
 			if(Client.game.hud.inventory.option2 == null)
 				Client.game.hud.inventory.setOption(false);
@@ -187,7 +187,7 @@ Player.prototype.manageInput = function(){
 			blockToSend = Client.game.hud.inventory.getCurrent().type;
 			this.option2Pressed = true;
 		}
-		else if(!Client.keys[cc.KEY.x] && this.option2Pressed)
+		else if(!Client.keys[Options.keys.OPT2] && this.option2Pressed)
 			this.option2Pressed = false;
 		
 		if(blockToSend != null)
@@ -340,8 +340,10 @@ Player.prototype.win = function(){
 };
 
 Player.prototype.turn = function(){
+
 	//Flip the sprite to current direction.
-	this.currentAnimation.setFlipX(this.facing == Enum.Facing.RIGHT);
+	if(this.currentAnimation != null)
+		this.currentAnimation.setFlipX(this.facing == Enum.Facing.RIGHT);
 	
 	//Reset anim when turning.
 	if(this.currentAction == Enum.Anim.Type.RUNNING)

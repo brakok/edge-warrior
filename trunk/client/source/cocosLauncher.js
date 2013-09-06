@@ -12,6 +12,8 @@
 		appFiles:['source/constants/Constant.js',
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
+				  'source/settings/GameSettings.js',
+				  'source/settings/Options.js',
 				  'source/menu/elements/Slot.js',
 				  'source/menu/elements/ColorBox.js',
 				  'source/menu/elements/CheckBox.js',
@@ -50,7 +52,6 @@
 				  'source/playground/world/BlackBox.js',
 				  'source/playground/LightBall.js',
 				  'source/playground/Voice.js',
-				  'source/setup/GameSettings.js',
 				  'source/playground/hud/Hud.js',
 				  'source/playground/world/Background.js']
 	};

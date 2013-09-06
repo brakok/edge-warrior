@@ -19,13 +19,8 @@ var Menu = cc.Layer.extend({
 	},
 	switchTo: function(menu){
 
-		if(this.currentScreen != null)
-		{
-			if(this.currentScreen.onLeaving != null && this.currentScreen.onLeaving != 'undefined')
-				this.currentScreen.onLeaving();
-			
-			this.removeChild(this.currentScreen);
-		}
+		//Remove current menu.
+		this.unload();
 			
 		this.addChild(menu);
 		this.currentScreen = menu;
@@ -40,6 +35,17 @@ var Menu = cc.Layer.extend({
 	onKeyUp: function(e){
 		if(this.currentScreen != null && this.currentScreen.onKeyDown != null && this.currentScreen.onKeyDown != 'undefined')
 			this.currentScreen.onKeyUp(e);
+	},
+	unload: function(){
+	
+		if(this.currentScreen != null)
+		{
+			if(this.currentScreen.onLeaving != null && this.currentScreen.onLeaving != 'undefined')
+				this.currentScreen.onLeaving();
+			
+			this.removeChild(this.currentScreen);
+			this.currentScreen = null;
+		}
 	}
 });
 
@@ -53,6 +59,7 @@ var MenuScene = cc.Scene.extend({
 		this.addChild(this.menu);
 	},
 	onExit: function(){
+		this.menu.unload();
 		this.removeChild(this.menu);
 	}
 });
