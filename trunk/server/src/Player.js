@@ -56,7 +56,7 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	killed.toBeDestroy = true;
 	
 	//Assign spawn block.
-	if(blockType != Enum.Block.Type.SPAWN)
+	if(this.currentBlock != Enum.Block.Type.SPAWN && blockType != Enum.Block.Type.SPAWN)
 	{
 		this.currentBlock = Enum.Block.Type.SPAWN;
 		io.sockets.sockets[this.id].emit(Constants.Message.SEND_BLOCK, Enum.Block.Type.SPAWN);
