@@ -7,6 +7,10 @@ var Game = function(settings){
 	this.blocks = [];
 	this.deathZones = [];
 	
+	//Create delta.
+	this.previousTime = new Date();
+	this.dt = 0;
+	
 	this.playerInfos = settings.players;
 	
 	this.blockSequence = 0;
@@ -151,6 +155,11 @@ Game.prototype.createWorld = function(){
 
 Game.prototype.update = function(){
 
+	//Get delta.
+	var currentTime = new Date();
+	this.dt = (currentTime - this.previousTime)*0.001;
+	this.previousTime = currentTime;
+
 	//When world's ready...
 	if(this.ready)
 	{	
@@ -158,7 +167,16 @@ Game.prototype.update = function(){
 			this.players[i].update();
 
 		if(this.space != null)
-			this.space.step(Constants.Physic.TIME_STEP);
+		{
+			//Update space.
+			var stepcounter = this.dt;
+			
+			while(stepcounter > 0)
+			{
+				this.space.step(Constants.Physic.TIME_STEP);
+				stepcounter -= Constants.Physic.TIME_STEP;
+			}
+		}
 			
 		for(var i in this.blocks)
 		{
@@ -186,6 +204,7 @@ Game.prototype.update = function(){
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
 		{
+		
 			var hasSurvivors = false;
 			for(var i in this.players)
 			{	
@@ -198,7 +217,7 @@ Game.prototype.update = function(){
 				this.winningPhaseTimer = 0;
 		
 			if(this.winningPhaseTimer > 0)
-				this.winningPhaseTimer -= Constants.Physic.TIME_STEP*0.5;
+				this.winningPhaseTimer -= this.dt;
 		}
 		
 		//Winner!
@@ -284,5 +303,5 @@ Game.prototype.launch = function(){
 	};
 
 	//17 milliseconds = 60 FPS
-	this.intervalId = setInterval(updateFunc, 8);
+	this.intervalId = setInterval(updateFunc, 17);
 };

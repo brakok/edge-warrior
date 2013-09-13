@@ -227,287 +227,6 @@ var Listeners = function(game){
 	this.GroundListener = new GroundListener(this.currentGame);
 	this.BlockListener = new BlockListener(this.currentGame);
 };
-
-//Mortal things listener.
-var DeathZoneListener = function(game){
-	this.currentGame = game;
-};
-
-DeathZoneListener.prototype.begin = function(arbiter, space){
-	
-	var player = null;
-	var block = null;
-	var deathZone = null;
-	
-	if(arbiter.body_a.userdata != null)
-	{
-		if(arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
-			player = arbiter.body_a.userdata.object;
-		else if(arbiter.body_a.userdata.type == Enum.UserData.Type.BLOCK)
-			block = arbiter.body_a.userdata.object;
-		else	
-			deathZone = arbiter.body_a.userdata.object;
-	}	
-	if(arbiter.body_b.userdata != null)
-	{
-		if(arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
-			player = arbiter.body_b.userdata.object;
-		else if(arbiter.body_b.userdata.type == Enum.UserData.Type.BLOCK)
-			block = arbiter.body_b.userdata.object;
-		else	
-			deathZone = arbiter.body_b.userdata.object;
-	}	
-	
-	if(player != null)
-	{
-		if(deathZone != null)
-		{
-			//Find killing player.
-			var killingPlayer = null;
-			
-			for(var i in this.currentGame.players)
-			{
-				if(this.currentGame.players[i].id == deathZone.ownerId)
-					killingPlayer = this.currentGame.players[i];
-			}
-
-			//If found, mark the player to be inserted in the next update in the killer blocks list.
-			if(killingPlayer != null)
-				killingPlayer.kill(player, deathZone.stats.type);
-			else
-				player.toBeDestroy = true;
-		}
-		else
-			player.toBeDestroy = true;
-	}
-		
-	if(block != null)
-		block.markToDestroy(Enum.Block.Destruction.CRUSHED);
-};
-
-
-//Goal listener.
-var GoalListener = function(game){
-	this.currentGame = game;
-};
-
-GoalListener.prototype.begin = function(arbiter, space){
-
-	var player = null;
-	
-	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_a.userdata.object;
-
-	if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_b.userdata.object;
-		
-	if(this.currentGame.winner == null)
-		this.currentGame.electWinner(player);
-	else
-		player.toBeDestroy = true;
-};
-
-
-//Drop listener.
-var DropListener = function(game){
-	this.currentGame = game;
-};
-
-DropListener.prototype.begin = function(arbiter, space){
-	var player = null;
-	
-	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_a.userdata.object;
-
-	if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_b.userdata.object;
-	
-	if(player != null)
-		player.obstruction++;
-};
-		
-DropListener.prototype.separate = function(arbiter, space){
-	var player = null;
-	
-	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_a.userdata.object;
-
-	if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_b.userdata.object;
-	
-	if(player != null)
-		player.obstruction--;
-};
-
-//Ground listener.
-var GroundListener = function(game){
-	this.currentGame = game;
-};
-
-GroundListener.prototype.begin = function(arbiter, space){
-
-	var player = null;
-	var sensorIsB = arbiter.b.sensor;
-	
-	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_a.userdata.object;
-
-	//Allow player to jump on other.
-	if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || sensorIsB))
-		player = arbiter.body_b.userdata.object;
-	
-	if(player != null)
-		player.groundContact++;
-};
-
-GroundListener.prototype.separate = function(arbiter, space){
-	var player = null;
-	var sensorIsB = arbiter.b.sensor;
-	
-	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_a.userdata.object;
-
-	//Allow player to jump on other.
-	if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || sensorIsB))
-		player = arbiter.body_b.userdata.object;
-		
-	if(player != null){
-		player.groundContact--;
-		return;
-	}
-};
-
-//Block listener.
-var BlockListener = function(game){
-	this.currentGame = game;
-};
-
-BlockListener.prototype.begin = function(arbiter, space){
-	
-	var block1 = null;
-	var block2 = null;
-			
-	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.BLOCK)
-		block1 = arbiter.body_a.userdata.object;
-
-	if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.BLOCK)
-		block2 = arbiter.body_b.userdata.object;
-
-	//Special process for collision with two blocks.
-	if(block1 != null && block2 != null)
-	{	
-		if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED
-		&& block1.color == block2.color && block1.color < Enum.Color.GREEN)
-		{			
-			//If blocks are touching a third one, destroy them all.
-			if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
-				|| (block2.linkedBlockId != null && block2.linkedBlockId != block1.id))
-			{
-				block1.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
-				block2.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
-				
-				//Destroy linked leaves.
-				if(block1.linkedBlockId != null)
-					this.destroyLeaves(block1.linkedBlockId, block1.id);
-				if(block2.linkedBlockId != null)
-					this.destroyLeaves(block2.linkedBlockId, block2.id);
-								
-				block1 = null;
-				block2 = null;
-			}
-			else
-			{
-				block1.linkedBlockId = block2.id;
-				block2.linkedBlockId = block1.id;
-			}
-		}
-		else if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED 
-				&& Math.abs(block1.color - block2.color) == 4)
-		{
-			//Destroy complementary blocks on contact.
-			block1.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
-			block2.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
-			
-			block1 = null;
-			block2 = null;
-		}
-	}
-	
-	//Treament for player within contact.
-	var player = null;
-	
-	if(block1 == null && arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_a.userdata.object;
-
-	if(block2 == null && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
-		player = arbiter.body_b.userdata.object;
-	
-	//Trigger spawn.
-	if(block1 != null && player == null && block1.type == Enum.Block.Type.SPAWN)
-		block1.mustTrigger = true;
-	if(block2 != null && player == null && block2.type == Enum.Block.Type.SPAWN)
-		block2.mustTrigger = true;
-	
-	if(player != null)
-	{
-		var killingBlock = (block1 != null ? block1 : block2);
-			
-		if(killingBlock != null && !killingBlock.landed && killingBlock.ownerId != player.id)
-		{
-			if(killingBlock.ownerId == null)
-			{
-				Overlord.kill(player, killingBlock.type);
-			}
-			else
-			{
-				//Find killing player.
-				var killingPlayer = null;
-				
-				for(var i in this.currentGame.players)
-				{
-					if(this.currentGame.players[i].id == killingBlock.ownerId)
-						killingPlayer = this.currentGame.players[i];
-				}
-
-				//If found, mark the player to be inserted in the next update in the killer blocks list.
-				if(killingPlayer != null)
-					killingPlayer.kill(player, killingBlock.type);
-			}
-		}
-		
-		block1 = null;
-		block2 = null;
-	}
-		
-	//Check if blocks land.
-	if(block1 != null && !block1.isStatic)
-	{
-		//State can't be changed during callback.
-		block1.toggleState = true;
-		block1.isStatic = true;
-		block1.justLanded = true;
-	}	
-	
-	if(block2 != null && !block2.isStatic)
-	{
-		block2.toggleState = true;
-		block2.isStatic = true;
-		block2.justLanded = true;
-	}
-};
-	
-BlockListener.prototype.destroyLeaves = function(blockId, previousId){
-		
-	var block = this.currentGame.blocks[blockId];
-	
-	if(block != null)
-	{
-		block.markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);
-		
-		if(block.linkedBlockId != null && block.linkedBlockId != previousId)
-			this.destroyLeaves(block.linkedBlockId, blockId);
-	}
-};
 //Block listener.
 var BlockListener = function(game){
 	this.currentGame = game;
@@ -1093,7 +812,7 @@ Player.prototype.update = function(){
 						io.sockets.sockets[this.id].emit(Constants.Message.KILL_COMMAND, this.stepReached);
 				
 					if(addTime)
-						this.killTime += Constants.Physic.TIME_STEP*0.5;	
+						this.killTime += this.currentGame.dt;	
 				}	
 			}
 		}
@@ -1108,7 +827,7 @@ Player.prototype.update = function(){
 		}	
 		
 		if(this.jumpCooldown > 0)
-			this.jumpCooldown -= Constants.Physic.TIME_STEP*0.5;
+			this.jumpCooldown -= this.currentGame.dt;
 	}
 	
 	//Manage kill command.
@@ -1134,7 +853,7 @@ Player.prototype.checkTimers = function(){
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
 	if(this.currentBlock == Enum.Block.Type.SPAWN && this.isAlive)
 	{
-		this.spawnTimer -= Constants.Physic.TIME_STEP*0.5;
+		this.spawnTimer -= this.currentGame.dt;
 		
 		if(this.spawnTimer < 0)
 		{
@@ -1591,6 +1310,10 @@ var Game = function(settings){
 	this.blocks = [];
 	this.deathZones = [];
 	
+	//Create delta.
+	this.previousTime = new Date();
+	this.dt = 0;
+	
 	this.playerInfos = settings.players;
 	
 	this.blockSequence = 0;
@@ -1735,6 +1458,11 @@ Game.prototype.createWorld = function(){
 
 Game.prototype.update = function(){
 
+	//Get delta.
+	var currentTime = new Date();
+	this.dt = (currentTime - this.previousTime)*0.001;
+	this.previousTime = currentTime;
+
 	//When world's ready...
 	if(this.ready)
 	{	
@@ -1742,7 +1470,16 @@ Game.prototype.update = function(){
 			this.players[i].update();
 
 		if(this.space != null)
-			this.space.step(Constants.Physic.TIME_STEP);
+		{
+			//Update space.
+			var stepcounter = this.dt;
+			
+			while(stepcounter > 0)
+			{
+				this.space.step(Constants.Physic.TIME_STEP);
+				stepcounter -= Constants.Physic.TIME_STEP;
+			}
+		}
 			
 		for(var i in this.blocks)
 		{
@@ -1770,6 +1507,7 @@ Game.prototype.update = function(){
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
 		{
+		
 			var hasSurvivors = false;
 			for(var i in this.players)
 			{	
@@ -1782,7 +1520,7 @@ Game.prototype.update = function(){
 				this.winningPhaseTimer = 0;
 		
 			if(this.winningPhaseTimer > 0)
-				this.winningPhaseTimer -= Constants.Physic.TIME_STEP*0.5;
+				this.winningPhaseTimer -= this.dt;
 		}
 		
 		//Winner!
@@ -1868,7 +1606,7 @@ Game.prototype.launch = function(){
 	};
 
 	//17 milliseconds = 60 FPS
-	this.intervalId = setInterval(updateFunc, 8);
+	this.intervalId = setInterval(updateFunc, 17);
 };
 var Overlord = function(game){
 	this.currentGame = game;
@@ -2272,7 +2010,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 });
 
-console.log('Server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED,		direction: Enum.Direction.UP,		type: Enum.DeathZone.Type.ENERGY_SPIKE,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= Constants.Physic.TIME_STEP*0.5;		if(this.stuckTime > 0)		this.stuckTime -= Constants.Physic.TIME_STEP*0.5;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.currentGame.deathZoneSequence,													  this.x, 													  0, 													  Constants.DeathZone.EnergySpike.WIDTH, 													  this.y, 													  this.currentGame.winner.id,													  this.spikeStats, 													  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+console.log('Server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED,		direction: Enum.Direction.UP,		type: Enum.DeathZone.Type.ENERGY_SPIKE,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.currentGame.deathZoneSequence,													  this.x, 													  0, 													  Constants.DeathZone.EnergySpike.WIDTH, 													  this.y, 													  this.currentGame.winner.id,													  this.spikeStats, 													  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
 var Missile = function(id, x, y, width, height, stats, game){
 	
 	this.currentGame = game;
