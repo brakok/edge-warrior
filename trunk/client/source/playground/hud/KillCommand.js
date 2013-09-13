@@ -47,13 +47,14 @@ KillCommand.prototype.start = function(stepReached){
 
 KillCommand.prototype.update = function(dt){
 
+	
 	if(!this.mustAppear || this.currentAnimation._opacity == 255)
 		return;
 		
 	this.firstStepTimer += dt;
 	
 	//Appear only if in apparition phase.
-	if(this.firstStepTimer >= Constants.HUD.Inventory.KillCommand.Time.FIRST_STEP)
+	if(this.firstStepTimer >= Constants.HUD.Inventory.KillCommand.Time.APPARITION)
 	{
 		var tmpAlpha = this.currentAnimation._opacity;
 		tmpAlpha += this.alphaStep*dt;

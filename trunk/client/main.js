@@ -10,6 +10,7 @@
 		
 	document.getElementById('gameCanvas').width = x;
 	document.getElementById('gameCanvas').height = y - 25; //25 = Top offset due to top-right action.
+	
 })();
 
 //Cocos2d configuration and instanciation.
