@@ -304,7 +304,7 @@ Player.prototype.update = function(){
 						io.sockets.sockets[this.id].emit(Constants.Message.KILL_COMMAND, this.stepReached);
 				
 					if(addTime)
-						this.killTime += Constants.Physic.TIME_STEP*0.5;	
+						this.killTime += this.currentGame.dt;	
 				}	
 			}
 		}
@@ -319,7 +319,7 @@ Player.prototype.update = function(){
 		}	
 		
 		if(this.jumpCooldown > 0)
-			this.jumpCooldown -= Constants.Physic.TIME_STEP*0.5;
+			this.jumpCooldown -= this.currentGame.dt;
 	}
 	
 	//Manage kill command.
@@ -345,7 +345,7 @@ Player.prototype.checkTimers = function(){
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
 	if(this.currentBlock == Enum.Block.Type.SPAWN && this.isAlive)
 	{
-		this.spawnTimer -= Constants.Physic.TIME_STEP*0.5;
+		this.spawnTimer -= this.currentGame.dt;
 		
 		if(this.spawnTimer < 0)
 		{
