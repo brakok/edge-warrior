@@ -1,16 +1,7 @@
-//Resize canvas to fit whole window.
-(function () {
-
-	var w = window,
-		d = document,
-		e = d.documentElement,
-		g = d.getElementsByTagName('body')[0],
-		x = w.innerWidth || e.clientWidth || g.clientWidth,
-		y = w.innerHeight|| e.clientHeight|| g.clientHeight;
-		
-	document.getElementById('gameCanvas').width = x;
-	document.getElementById('gameCanvas').height = y - 25; //25 = Top offset due to top-right action.
-	
+(function(){
+	var canvas = document.getElementById('gameCanvas');
+	canvas.width = 1920;
+	canvas.height = 1280;
 })();
 
 //Cocos2d configuration and instanciation.
@@ -40,18 +31,20 @@ var cocosApp = cc.Application.extend({
 		cc.Loader.getInstance().preload(assets);
 	},
 	applicationDidFinishLaunching: function (){
-	
+		
+		Options.init();
+		
 		this.MenuScene = new MenuScene();
 		this.GameScene = new GameScene();
 		
 		//Load spritesheets and other graphical stuffs.
 		AnimationManager.init();
-	
+		
 		var director = cc.Director.getInstance();
 		director.setDisplayStats(this.config['showFPS']);
 		director.setAnimationInterval(1.0/this.config['frameRate']);
 		director.runWithScene(this.MenuScene);
-		
+
 		return true;
 	}
 });

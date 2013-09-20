@@ -1,47 +1,51 @@
 
-var KeysScreen = cc.LayerColor.extend({
+var VideoScreen = cc.LayerColor.extend({
 	init: function(width, height, parent){
 		this.width = width;
 		this.height = height;
+		this.parent = parent;
 	
+		//Layer creation.
 		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
 		this._zOrder = Constants.OptionsScreen.Z_INDEX;
 		
-		this.keyForm = new KeyForm();
-		this.keyForm.setPosition(300, 200);
+		this.div = document.getElementById('video');
+		this.select = document.getElementById('resolution');
 		
-		this.parent = parent;
-		
+		this.div.style.left = 100 + 'px';
+		this.div.style.top = 100 + 'px';
+
 		//Menu creation.
 		this.cmdSave = new cc.MenuItemFont.create("Save", this.save, this);
-		this.cmdReset = new cc.MenuItemFont.create("Reset", this.reset, this);
 		this.cmdBack = new cc.MenuItemFont.create("Back", this.back, this);
 		
 		this.cmdSave.setPosition(new cc.Point(100, 100));
-		this.cmdReset.setPosition(new cc.Point(250, 100));
-		this.cmdBack.setPosition(new cc.Point(400, 100));
+		this.cmdBack.setPosition(new cc.Point(250, 100));
 		
-		this.menu = new cc.Menu.create(this.cmdSave, this.cmdReset, this.cmdBack);
+		this.menu = new cc.Menu.create(this.cmdSave, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
 
 		//Add elements.
 		this.addChild(this.menu);
 	},
 	onEntering: function(){
-		this.keyForm.init();
-		this.keyForm.setVisible(true);
+		this.select.value = Options.resolution.width + 'x' + Options.resolution.height;
+		this.div.style.display = "block";
 	},
 	onLeaving: function(){
-		this.keyForm.setVisible(false);
-	},
-	reset: function(){
-		this.keyForm.reset();
+		this.div.style.display = "none";
 	},
 	save: function(){
-		this.keyForm.save();
-		this.back();
+		var values = this.select.value.split("x");
+		var res = {
+			width: values[0],
+			height: values[1]
+		};
+	
+		Options.saveResolution(res);
+		Options.resizeWindow();
 	},
 	back: function(){
 		this.parent.switchTo(this.parent.home);
@@ -50,13 +54,14 @@ var KeysScreen = cc.LayerColor.extend({
 		this.width = Options.resolution.width;
 		this.height = Options.resolution.height;
 	
-		this.keyForm.setPosition(300, 200);
+		this.div.style.left = 100 + 'px';
+		this.div.style.top = 100 + 'px';
 	}
 });
 
-KeysScreen.create = function(width, height, parent){
+VideoScreen.create = function(width, height, parent){
 	
-	var layer = new KeysScreen();
+	var layer = new VideoScreen();
 	layer.init(width, height, parent);
 	
 	return layer;

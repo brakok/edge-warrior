@@ -12,9 +12,9 @@ var Login = cc.LayerColor.extend({
 		this._zOrder = Constants.Login.Z_INDEX;
 		
 		//Seek login div (created in html file).
-		var loginDiv = document.getElementById('login');
-		loginDiv.style.left = (width*0.5-125) + 'px';
-		loginDiv.style.top = (height*0.5-75) + 'px';
+		this.loginDiv = document.getElementById('login');
+		this.loginDiv.style.left = (width*0.5-125) + 'px';
+		this.loginDiv.style.top = (height*0.5-125) + 'px';
 		
 		//Menu creation.
 		this.txtUsername = document.getElementById('username');
@@ -32,12 +32,10 @@ var Login = cc.LayerColor.extend({
 		this.addChild(this.menu);
 	},
 	onEntering: function(){
-		var loginDiv = document.getElementById('login');
-		loginDiv.style.display = 'block'; 
+		this.loginDiv.style.display = 'block'; 
 	},
 	onLeaving: function(){
-		var loginDiv = document.getElementById('login');
-		loginDiv.style.display = 'none';
+		this.loginDiv.style.display = 'none';
 	},
 	connect: function(){
 
@@ -47,6 +45,13 @@ var Login = cc.LayerColor.extend({
 	},
 	createAccount: function(){
 		console.log('create');
+	},
+	resize: function(){
+		this.width = Options.resolution.width;
+		this.height = Options.resolution.height;
+	
+		this.loginDiv.style.left = (this.width*0.5-125) + 'px';
+		this.loginDiv.style.top = (this.height*0.5-125) + 'px';
 	}
 });
 

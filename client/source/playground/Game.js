@@ -35,6 +35,7 @@ Game.prototype.pause = function(){
 
 Game.prototype.unpause = function(){
 	this.isPaused = false;
+	this.pauseMenu.switchTo(this.pauseMenu.home);
 	myApp.GameScene.layer.removeChild(this.pauseMenu);
 	myApp.GameScene.layer.addChild(this.hud);
 };
@@ -80,12 +81,9 @@ Game.prototype.createWorld = function(){
 
 	//Create camera.
 	this.camera = new Camera(this.width*0.5-(this.width*0.5-this.mapSize.width*0.5), 
-							 this.height*0.5, 
-							 this.width, 
-							 this.height, 
-							 this.width*0.9, 
-							 this.height*0.9, 
+							 this.height*0.5,
 							 1,
+							 Constants.Camera.ZOOM_FACTOR,
 							 Constants.Camera.SPEED_X,
 							 Constants.Camera.SPEED_Y,
 							 Constants.Camera.SPEED_ZOOM);
@@ -261,8 +259,8 @@ Game.prototype.moveCamera = function(){
 	var maxDistanceY = maxY - minY;
 	
 	//Get ratio between viewport and distance of players.
-	var ratioX = (maxDistanceX*Constants.Camera.CONTAINER_FACTOR_X)/this.camera.viewport.width;
-	var ratioY = (maxDistanceY*Constants.Camera.CONTAINER_FACTOR_Y)/this.camera.viewport.height;
+	var ratioX = (maxDistanceX*Constants.Camera.CONTAINER_FACTOR_X)/Options.viewport.width;
+	var ratioY = (maxDistanceY*Constants.Camera.CONTAINER_FACTOR_Y)/Options.viewport.height;
 	
 	//Get highest ratio.
 	var zoomRatio = (ratioX > ratioY ? ratioX : ratioY);
