@@ -12,18 +12,20 @@ var ServerList = cc.LayerColor.extend({
 		
 		//Get server list table.
 		this.list = new LobbyList('serverList');
-		this.list.setPosition(400, 100);
+		this.list.setPosition(200, 100);
 		
 		//Menu creation.	
 		this.cmdJoin = new cc.MenuItemFont.create("Join", this.join, this);
 		this.cmdRandom = new cc.MenuItemFont.create("Random", this.random, this);
+		this.cmdRefresh = new cc.MenuItemFont.create("Resfresh", this.refresh, this);
 		this.cmdBack = new cc.MenuItemFont.create("Back", this.back, this);
 		
 		this.cmdJoin.setPosition(new cc.Point(100, 50));
 		this.cmdRandom.setPosition(new cc.Point(250, 50));
-		this.cmdBack.setPosition(new cc.Point(400, 50));
+		this.cmdRefresh.setPosition(new cc.Point(400, 50));
+		this.cmdBack.setPosition(new cc.Point(550, 50));
 		
-		this.menu = new cc.Menu.create(this.cmdJoin, this.cmdRandom, this.cmdBack);
+		this.menu = new cc.Menu.create(this.cmdJoin, this.cmdRandom, this.cmdRefresh, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
 
 		//Add elements.
@@ -51,8 +53,14 @@ var ServerList = cc.LayerColor.extend({
 	back: function(){
 		MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
-	reset: function(){
-		
+	refresh: function(){
+		Client.search();
+	},
+	resize: function(){
+		this.width = Options.resolution.width;
+		this.height = Options.resolution.height;
+	
+		this.list.setPosition(200, 100);
 	}
 });
 

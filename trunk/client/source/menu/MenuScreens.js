@@ -18,6 +18,15 @@ var MenuScreens = new function(){
 		}
 	};
 	
+	this.resize = function(){
+		if(this.login != null)
+		{
+			this.login.resize();
+			this.serverList.resize();
+			this.optionsScreen.resize();
+		}
+	};
+	
 	this.switchTo = function(menu){
 		myApp.MenuScene.menu.switchTo(menu);
 	};

@@ -16,19 +16,20 @@ var OptionsScreen = cc.LayerColor.extend({
 		
 		//Sub-menus.
 		this.submenus = {
-			keysScreen: KeysScreen.create(width, height, this)
+			keysScreen: KeysScreen.create(width, height, this),
+			videoScreen: VideoScreen.create(width, height, this)
 		};
 		
 		//Menu creation.
 		this.cmdKeys = new cc.MenuItemFont.create("Keys", this.toKeys, this);
-		this.cmdScreen = new cc.MenuItemFont.create("Resolution", this.toResolution, this);
+		this.cmdVideo = new cc.MenuItemFont.create("Video", this.toVideo, this);
 		this.cmdBack = new cc.MenuItemFont.create("Back", backAction);
 		
 		this.cmdKeys.setPosition(new cc.Point(width*0.5, (height*0.5)+50));
-		this.cmdScreen.setPosition(new cc.Point(width*0.5, height*0.5));
+		this.cmdVideo.setPosition(new cc.Point(width*0.5, height*0.5));
 		this.cmdBack.setPosition(new cc.Point(width*0.5, (height*0.5)-50));
 		
-		this.menu = new cc.Menu.create(this.cmdKeys, this.cmdScreen, this.cmdBack);
+		this.menu = new cc.Menu.create(this.cmdKeys, this.cmdVideo, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
 
 		//Add elements.
@@ -41,7 +42,10 @@ var OptionsScreen = cc.LayerColor.extend({
 
 	},
 	onLeaving: function(){
-
+		this.submenus.keysScreen.onLeaving();
+		this.submenus.videoScreen.onLeaving();
+		
+		this.switchTo(this.home);
 	},
 	switchTo: function(menu){
 	
@@ -63,8 +67,12 @@ var OptionsScreen = cc.LayerColor.extend({
 	toKeys: function(){
 		this.switchTo(this.submenus.keysScreen);
 	},
-	toResolution: function(){
-	
+	toVideo: function(){
+		this.switchTo(this.submenus.videoScreen);
+	},
+	resize: function(){
+		this.submenus.keysScreen.resize();
+		this.submenus.videoScreen.resize();
 	}
 });
 
