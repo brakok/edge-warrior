@@ -1,5 +1,6 @@
 
 var GameSettings = function(id, width, height, maxPlayers, username){
+
 	//Assign when game is created by the server.
 	this.id = id;
 	

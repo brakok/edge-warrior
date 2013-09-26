@@ -113,7 +113,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Socket disconnected.
 	socket.on(Constants.Message.DISCONNECT, function(){
 		console.log('Disconnect : ' + socket.userdata.gameId);
-		if(socket.userdata.gameId != null && Server.gameList[socket.userdata.gameId] != null)
+		if(socket.userdata != null && socket.userdata.gameId != null && Server.gameList[socket.userdata.gameId] != null)
 			Server.disconnectPlayer(socket);
 	});
 		

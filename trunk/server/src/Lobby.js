@@ -1,6 +1,7 @@
 
-var Lobby = function(id, username){
+var Lobby = function(id, hostId, username){
 	this.id = id;
+	this.hostId = hostId;
 	this.connectedPlayers = 1;
 	this.settings = new GameSettings(id, 1200, 800, 2, username);
 };
