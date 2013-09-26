@@ -256,6 +256,11 @@ Game.prototype.end = function(){
 	clearInterval(this.intervalId);
 };
 
+//Interrupt game to be removed.
+Game.prototype.trash = function(){
+	clearInterval(this.intervalId);
+};
+
 Game.prototype.push = function(inputs, id){
 	this.players[id].keys = inputs;
 };
