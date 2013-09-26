@@ -57,20 +57,76 @@ var Server = new function(){
 		this.socket = socket;
 	};
 	
+	//Disconnect player.
+	this.disconnectPlayer = function(socket){
+		console.log('Player left (' + socket.userdata.gameId + ') : ' + socket.userdata.username);
+		
+		var game = this.gameList[socket.userdata.gameId];
+		var index = null;
+		
+		for(var i in game.players)
+			if(game.players[i].username == socket.userdata.username)
+			{
+				index = i;
+				break;
+			}
+			
+		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.DISCONNECT_PLAYER, socket.userdata.username);	
+		
+		if(index != null)
+		{
+			var disconnectingPlayer = this.gameList[socket.userdata.gameId].players[index]
+			disconnectingPlayer.leave();
+			io.sockets.sockets[disconnectingPlayer.id].gameId = null;
+			
+			delete this.gameList[socket.userdata.gameId].players[index];
+			
+			var hasPlayers = false;
+			
+			//Check if game has players.
+			for(var i in this.gameList[socket.userdata.gameId].players)
+				if(this.gameList[socket.userdata.gameId].players[i] != null)
+				{
+					hasPlayers = true;
+					break;
+				}
+			
+			//Remove game instance if empty.
+			if(!hasPlayers)
+			{
+				this.gameList[socket.userdata.gameId].trash();
+				delete this.gameList[socket.userdata.gameId];
+			}
+		}
+	};
+	
 	this.register();
 };
 
 //Bind listeners on sockets.
 io.sockets.on(Constants.Message.CONNECTION, function (socket){
+	socket.set("heartbeat interval", 20);
+	socket.set("heartbeat timeout", 60);
 
 	console.log('Connection to client established');
+		
+	//Socket disconnected.
+	socket.on(Constants.Message.DISCONNECT, function(){
+		console.log('Disconnect : ' + socket.userdata.gameId);
+		if(socket.userdata.gameId != null && Server.gameList[socket.userdata.gameId] != null)
+			Server.disconnectPlayer(socket);
+	});
 		
 	//Send information about enemies to the connecting player.
 	socket.on(Constants.Message.JOIN_GAME, function(data){
 	
 		console.log('Connecting player... (' + data.gameId + ') : ' + data.username);
 		socket.join(data.gameId);
-		socket.gameId = data.gameId;
+		
+		socket.userdata = {
+			gameId: data.gameId,
+			username: data.username
+		};
 		
 		var enemies = [];
 		
@@ -108,72 +164,57 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Disconnect player.
-	socket.on(Constants.Message.DISCONNECT_PLAYER, function(username){
-		console.log('Player left (' + socket.gameId + ') : ' + username);
-		
-		var game = Server.gameList[socket.gameId];
-		var index = null;
-		
-		for(var i in game.players)
-			if(game.players[i].username == username)
-			{
-				index = i;
-				break;
-			}
-			
-		socket.broadcast.to(socket.gameId).emit(Constants.Message.DISCONNECT_PLAYER, username);	
-		
-		if(index != null)
-		{
-			Server.gameList[socket.gameId].players[index].leave();
-			delete Server.gameList[socket.gameId].players[index];
-		}
+	socket.on(Constants.Message.DISCONNECT_PLAYER, function(){
+		Server.disconnectPlayer(socket);
 	});
 
 	//When player ready, refresh information of his opponents about his existence.
 	socket.on(Constants.Message.PLAYER_READY, function(){
-		console.log('Player ready! (' + socket.gameId + ')');
+		var gameId = socket.userdata.gameId;
 		
-		Server.gameList[socket.gameId].connectedPlayers++;		
+		console.log('Player ready! (' + gameId + ')');
 		
-		var player = Server.gameList[socket.gameId].players[socket.id].toClient();
-		player.username = Server.gameList[socket.gameId].players[socket.id].username;
+		Server.gameList[gameId].connectedPlayers++;		
+		
+		var player = Server.gameList[gameId].players[socket.id].toClient();
+		player.username = Server.gameList[gameId].players[socket.id].username;
 		
 		//Send connected players to others.
-		socket.broadcast.to(socket.gameId).emit(Constants.Message.NEW_PLAYER, player);
+		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, player);
 		
-		if(Server.gameList[socket.gameId].connectedPlayers == Server.gameList[socket.gameId].maxPlayers)
+		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
 		{
 			console.log('Game launching...');
 			
 			//Init physic world.
-			Server.gameList[socket.gameId].createWorld();
-			Server.gameList[socket.gameId].launch();
+			Server.gameList[gameId].createWorld();
+			Server.gameList[gameId].launch();
 		
 			var data = {
-				goal: Server.gameList[socket.gameId].goal.toClient(),
-				width: Server.gameList[socket.gameId].width,
-				height: Server.gameList[socket.gameId].height
+				goal: Server.gameList[gameId].goal.toClient(),
+				width: Server.gameList[gameId].width,
+				height: Server.gameList[gameId].height
 			};
 			
-			data.goal.type = Server.gameList[socket.gameId].goal.type;
+			data.goal.type = Server.gameList[gameId].goal.type;
 			
 			console.log('Game launched!');
-			io.sockets.in(socket.gameId).emit(Constants.Message.LAUNCH, data);
+			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
 			
-			Server.gameList[socket.gameId].ready = true;
+			Server.gameList[gameId].ready = true;
 		}
 	});
 	
 	socket.on(Constants.Message.NEXT_BLOCK, function(command){
 		//Do not override if server has given a special block to player (as a Spawn Block).
-		if(!Server.gameList[socket.gameId].players[socket.id].hasGivenBlock)
-			Server.gameList[socket.gameId].players[socket.id].currentBlock = command;
+		if(!Server.gameList[socket.userdata.gameId].players[socket.id].hasGivenBlock)
+			Server.gameList[socket.userdata.gameId].players[socket.id].currentBlock = command;
 	});
 	
 	//Retrieving information from players.
 	socket.on(Constants.Message.PUSH, function(inputs){
-		Server.gameList[socket.gameId].push(inputs, socket.id);
+		if(socket.userdata.gameId != null)
+			Server.gameList[socket.userdata.gameId].push(inputs, socket.id);
 	});
 });
 
