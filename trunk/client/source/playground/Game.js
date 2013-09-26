@@ -183,10 +183,7 @@ Game.prototype.randomBlock = function(){
 		
 	//Ask player to create the next block and send the new one to the server.
 	this.player.pushNextBlock();
-	Client.socket.emit(Constants.Message.NEXT_BLOCK, {
-														command: this.hud.inventory.getCurrent().type,
-														gameId: Client.currentGameId
-													});
+	Client.socket.emit(Constants.Message.NEXT_BLOCK, this.hud.inventory.getCurrent().type);
 };
 
 //Kill a player and remove it from the layer.

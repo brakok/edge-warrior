@@ -32,8 +32,6 @@ var cocosApp = cc.Application.extend({
 	},
 	applicationDidFinishLaunching: function (){
 		
-		Options.init();
-		
 		this.MenuScene = new MenuScene();
 		this.GameScene = new GameScene();
 		
@@ -45,6 +43,8 @@ var cocosApp = cc.Application.extend({
 		director.setAnimationInterval(1.0/this.config['frameRate']);
 		director.runWithScene(this.MenuScene);
 
+		Options.init();
+		
 		return true;
 	}
 });

@@ -70,8 +70,8 @@ var Options = new function(){
         cc.canvas.width = cc.originalCanvasSize.width * xScale;
         cc.canvas.height = cc.originalCanvasSize.height * xScale;
 		
-		this.viewport.width = cc.canvas.width;
-		this.viewport.height = cc.canvas.height;
+		this.viewport.width = this.resolution.width = cc.canvas.width;
+		this.viewport.height = this.resolution.height = cc.canvas.height;
 		
 		var parentDiv = document.getElementById("Cocos2dGameContainer");
         if (parentDiv) {
@@ -86,7 +86,7 @@ var Options = new function(){
 		
 		//Resize menus.
 		MenuScreens.resize();
-		window.resizeTo(this.resolution.width, cc.canvas.height + 50);
+		window.resizeTo(cc.canvas.width, cc.canvas.height + 50);
 	};
 	
 	this.init = function(){
