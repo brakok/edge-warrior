@@ -70,6 +70,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 		console.log('Connecting player... (' + data.gameId + ') : ' + data.username);
 		socket.join(data.gameId);
+		socket.gameId = data.gameId;
 		
 		var enemies = [];
 		
@@ -107,72 +108,72 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Disconnect player.
-	socket.on(Constants.Message.DISCONNECT_PLAYER, function(data){
-		console.log('Player left (' + data.gameId + ') : ' + data.username);
+	socket.on(Constants.Message.DISCONNECT_PLAYER, function(username){
+		console.log('Player left (' + socket.gameId + ') : ' + username);
 		
-		var game = Server.gameList[data.gameId];
+		var game = Server.gameList[socket.gameId];
 		var index = null;
 		
 		for(var i in game.players)
-			if(game.players[i].username == data.username)
+			if(game.players[i].username == username)
 			{
 				index = i;
 				break;
 			}
 			
-		socket.broadcast.to(data.gameId).emit(Constants.Message.DISCONNECT_PLAYER, data.username);	
+		socket.broadcast.to(socket.gameId).emit(Constants.Message.DISCONNECT_PLAYER, username);	
 		
 		if(index != null)
 		{
-			Server.gameList[data.gameId].players[index].leave();
-			delete Server.gameList[data.gameId].players[index];
+			Server.gameList[socket.gameId].players[index].leave();
+			delete Server.gameList[socket.gameId].players[index];
 		}
 	});
 
 	//When player ready, refresh information of his opponents about his existence.
-	socket.on(Constants.Message.PLAYER_READY, function(gameId){
-		console.log('Player ready! (' + gameId + ')');
+	socket.on(Constants.Message.PLAYER_READY, function(){
+		console.log('Player ready! (' + socket.gameId + ')');
 		
-		Server.gameList[gameId].connectedPlayers++;		
+		Server.gameList[socket.gameId].connectedPlayers++;		
 		
-		var player = Server.gameList[gameId].players[socket.id].toClient();
-		player.username = Server.gameList[gameId].players[socket.id].username;
+		var player = Server.gameList[socket.gameId].players[socket.id].toClient();
+		player.username = Server.gameList[socket.gameId].players[socket.id].username;
 		
 		//Send connected players to others.
-		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, player);
+		socket.broadcast.to(socket.gameId).emit(Constants.Message.NEW_PLAYER, player);
 		
-		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
+		if(Server.gameList[socket.gameId].connectedPlayers == Server.gameList[socket.gameId].maxPlayers)
 		{
 			console.log('Game launching...');
 			
 			//Init physic world.
-			Server.gameList[gameId].createWorld();
-			Server.gameList[gameId].launch();
+			Server.gameList[socket.gameId].createWorld();
+			Server.gameList[socket.gameId].launch();
 		
 			var data = {
-				goal: Server.gameList[gameId].goal.toClient(),
-				width: Server.gameList[gameId].width,
-				height: Server.gameList[gameId].height
+				goal: Server.gameList[socket.gameId].goal.toClient(),
+				width: Server.gameList[socket.gameId].width,
+				height: Server.gameList[socket.gameId].height
 			};
 			
-			data.goal.type = Server.gameList[gameId].goal.type;
+			data.goal.type = Server.gameList[socket.gameId].goal.type;
 			
 			console.log('Game launched!');
-			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
+			io.sockets.in(socket.gameId).emit(Constants.Message.LAUNCH, data);
 			
-			Server.gameList[gameId].ready = true;
+			Server.gameList[socket.gameId].ready = true;
 		}
 	});
 	
-	socket.on(Constants.Message.NEXT_BLOCK, function(data){
+	socket.on(Constants.Message.NEXT_BLOCK, function(command){
 		//Do not override if server has given a special block to player (as a Spawn Block).
-		if(!Server.gameList[data.gameId].players[socket.id].hasGivenBlock)
-			Server.gameList[data.gameId].players[socket.id].currentBlock = data.command;
+		if(!Server.gameList[socket.gameId].players[socket.id].hasGivenBlock)
+			Server.gameList[socket.gameId].players[socket.id].currentBlock = command;
 	});
 	
 	//Retrieving information from players.
-	socket.on(Constants.Message.PUSH, function(data){
-		Server.gameList[data.gameId].push(data.inputs, socket.id);
+	socket.on(Constants.Message.PUSH, function(inputs){
+		Server.gameList[socket.gameId].push(inputs, socket.id);
 	});
 });
 

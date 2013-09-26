@@ -191,6 +191,7 @@ var Constants = {
 		PUSH: 'push',
 		INIT: 'init',
 		CONNECTION: 'connection',
+		DISCONNECT: 'disconnect',
 		NEW_PLAYER: 'newPlayer',
 		PLAYER_KILLED: 'playerKilled',
 		PLAYER_SPAWNED: 'playerSpawned',

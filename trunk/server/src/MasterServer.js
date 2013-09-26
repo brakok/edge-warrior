@@ -18,14 +18,34 @@ var ioMasterServer = require('socket.io').listen(masterServer.server).set('log l
 var MasterServer = new function(){
 	this.lobbies = {};
 	this.gameSequenceId = 1;
+	
+	this.closeLobby = function(socket){
+		console.log('Lobby closed (' + socket.gameId + ')');
+						
+		socket.broadcast.to(socket.gameId).emit(Constants.Message.CLOSE_LOBBY, socket.gameId);
+		
+		//Disconnect all players from game room.
+		for(var i in ioMasterClient.sockets.in(socket.gameId).sockets)			
+			ioMasterClient.sockets.sockets[i].leave(socket.gameId);
+		
+		delete MasterServer.lobbies[socket.gameId];
+	};
 };
 
 //Bind listeners on sockets.
 //Server to client.
 ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
+	socket.set("heartbeat interval", 20);
+	socket.set("heartbeat timeout", 60);
 
 	console.log('Connection to client established - Master');
 
+	//Socket disconnected.
+	socket.on(Constants.Message.DISCONNECT, function(){
+		if(socket.gameId != null)
+			MasterServer.closeLobby(socket);
+	});
+	
 	//Return lobbies to client.
 	socket.on(Constants.Message.SEARCH_LOBBY, function(){
 	
@@ -46,6 +66,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		socket.emit(Constants.Message.CREATE_LOBBY, MasterServer.gameSequenceId);
 		socket.join(MasterServer.gameSequenceId);
+		socket.gameId = MasterServer.gameSequenceId;
 		
 		MasterServer.gameSequenceId++;
 	});
@@ -73,42 +94,37 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Disconnect from lobby.
-	socket.on(Constants.Message.LEAVE_LOBBY, function(data){
-		console.log(data.username + ' left lobby (' + data.gameId + ')');
-		
-		//Remove player from lobby.
-		MasterServer.lobbies[data.gameId].settings.removePlayer(data.username);		
-		
-		socket.broadcast.to(data.gameId).emit(Constants.Message.LEAVE_LOBBY, data.username);
-		socket.leave(data.gameId);
+	socket.on(Constants.Message.LEAVE_LOBBY, function(username){
+		if(socket.gameId != null)
+		{
+			console.log(username + ' left lobby (' + socket.gameId + ')');
+			
+			//Remove player from lobby.
+			MasterServer.lobbies[socket.gameId].settings.removePlayer(username);		
+			
+			socket.broadcast.to(socket.gameId).emit(Constants.Message.LEAVE_LOBBY, username);
+			socket.leave(socket.gameId);
+		}
 	});
 	
 	//Close lobby.
-	socket.on(Constants.Message.CLOSE_LOBBY, function(gameId){
-		console.log('Lobby closed (' + gameId + ')');
-						
-		socket.broadcast.to(gameId).emit(Constants.Message.CLOSE_LOBBY, gameId);
-		
-		//Disconnect all players from game room.
-		for(var i in ioMasterClient.sockets.in(gameId).sockets)			
-			ioMasterClient.sockets.sockets[i].leave(gameId);
-		
-		delete MasterServer.lobbies[gameId];
+	socket.on(Constants.Message.CLOSE_LOBBY, function() {
+		MasterServer.closeLobby(socket);
 	});
 	
 	//When player updates his slot info.
 	socket.on(Constants.Message.UPDATE_SLOT, function(data){
 	
-		MasterServer.lobbies[data.gameId].settings.updatePlayer(data.username, data.color, data.ready);
-		socket.broadcast.to(data.gameId).emit(Constants.Message.UPDATE_SLOT, data);
+		MasterServer.lobbies[socket.gameId].settings.updatePlayer(data.username, data.color, data.ready);
+		socket.broadcast.to(socket.gameId).emit(Constants.Message.UPDATE_SLOT, data);
 	});
 	
 	//Lobby to game.
-	socket.on(Constants.Message.START_GAME, function(gameId){
+	socket.on(Constants.Message.START_GAME, function(){
 		
 		//Tweaks some informations.
-		MasterServer.lobbies[gameId].settings.maxPlayers = MasterServer.lobbies[gameId].connectedPlayers;
-		MasterServer.lobbies[gameId].settings.validateColors();		
+		MasterServer.lobbies[socket.gameId].settings.maxPlayers = MasterServer.lobbies[socket.gameId].connectedPlayers;
+		MasterServer.lobbies[socket.gameId].settings.validateColors();		
 		
 		if(ioMasterServer.sockets.clients().length > 0)
 		{
@@ -133,7 +149,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			if(serverSocket != null)
 			{
 				console.log('Server found : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
-				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[gameId].settings);
+				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[socket.gameId].settings);
 			}
 			else
 				console.log('No server socket found');
