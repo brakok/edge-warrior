@@ -28,7 +28,21 @@ var MasterServer = new function(){
 		for(var i in ioMasterClient.sockets.in(socket.userdata.gameId).sockets)			
 			ioMasterClient.sockets.sockets[i].leave(socket.userdata.gameId);
 		
-		delete MasterServer.lobbies[socket.userdata.gameId];
+		delete this.lobbies[socket.userdata.gameId];
+	};
+	
+	this.disconnectPlayer = function(socket){
+		if(socket.userdata.gameId != null)
+		{
+			console.log(socket.userdata.username + ' left lobby (' + socket.userdata.gameId + ')');
+			
+			//Remove player from lobby.
+			this.lobbies[socket.userdata.gameId].settings.removePlayer(socket.userdata.username);
+			this.lobbies[socket.userdata.gameId].connectedPlayers--;
+			
+			socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.LEAVE_LOBBY, socket.userdata.username);
+			socket.leave(socket.userdata.gameId);
+		}
 	};
 };
 
@@ -42,8 +56,13 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 	//Socket disconnected.
 	socket.on(Constants.Message.DISCONNECT, function(){
-		if(socket.userdata.gameId != null && MasterServer.lobbies[socket.userdata.gameId] != null)
-			MasterServer.closeLobby(socket);
+		if(socket.userdata != null && socket.userdata.gameId != null && MasterServer.lobbies[socket.userdata.gameId] != null)
+		{
+			if(MasterServer.lobbies[socket.userdata.gameId].hostId == socket.id)
+				MasterServer.closeLobby(socket);
+			else
+				MasterServer.disconnectPlayer(socket);
+		}
 	});
 	
 	//Return lobbies to client.
@@ -60,14 +79,14 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	//Send game id to player.
 	socket.on(Constants.Message.CREATE_LOBBY, function(username){
-			
-		console.log('Lobby created (' + MasterServer.gameSequenceId + ')');
-		MasterServer.lobbies[MasterServer.gameSequenceId] = new Lobby(MasterServer.gameSequenceId, username);
+		console.log('Lobby created (' + MasterServer.gameSequenceId + ') : ' + username);
+		MasterServer.lobbies[MasterServer.gameSequenceId] = new Lobby(MasterServer.gameSequenceId, socket.id, username);
 		
 		socket.emit(Constants.Message.CREATE_LOBBY, MasterServer.gameSequenceId);
 		socket.join(MasterServer.gameSequenceId);
 		socket.userdata = { 
-			gameId: MasterServer.gameSequenceId
+			gameId: MasterServer.gameSequenceId,
+			username: username
 		};
 		
 		MasterServer.gameSequenceId++;
@@ -92,7 +111,8 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			//Join the room.
 			socket.join(data.gameId);
 			socket.userdata = {
-				gameId: data.gameId
+				gameId: data.gameId,
+				username: data.username
 			};
 			
 			socket.emit(Constants.Message.CONNECTED_LOBBY, returnData);
@@ -100,17 +120,8 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Disconnect from lobby.
-	socket.on(Constants.Message.LEAVE_LOBBY, function(username){
-		if(socket.userdata.gameId != null)
-		{
-			console.log(username + ' left lobby (' + socket.userdata.gameId + ')');
-			
-			//Remove player from lobby.
-			MasterServer.lobbies[socket.userdata.gameId].settings.removePlayer(username);		
-			
-			socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.LEAVE_LOBBY, username);
-			socket.leave(socket.userdata.gameId);
-		}
+	socket.on(Constants.Message.LEAVE_LOBBY, function(){
+		MasterServer.disconnectPlayer(socket);
 	});
 	
 	//Close lobby.
@@ -120,8 +131,9 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	//When player updates his slot info.
 	socket.on(Constants.Message.UPDATE_SLOT, function(data){
-	
-		MasterServer.lobbies[socket.userdata.gameId].settings.updatePlayer(data.username, data.color, data.ready);
+		MasterServer.lobbies[socket.userdata.gameId].settings.updatePlayer(socket.userdata.username, data.color, data.ready);
+		
+		data.username = socket.userdata.username;
 		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.UPDATE_SLOT, data);
 	});
 	
