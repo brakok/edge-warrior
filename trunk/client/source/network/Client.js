@@ -28,6 +28,12 @@ var Client = new function(){
 		this.username = username;
 		return true;
 	};
+	
+	//Log off.
+	this.logout = function(){
+		this.username = null;
+		MenuScreens.switchTo(MenuScreens.login);
+	};
 		
 	//Create a lobby.
 	this.createLobby = function(){
@@ -43,14 +49,14 @@ var Client = new function(){
 			this.isHost = false;
 		}
 		else
-			this.masterSocket.emit(Constants.Message.LEAVE_LOBBY, this.username);	
+			this.masterSocket.emit(Constants.Message.LEAVE_LOBBY);	
 		
 		this.currentGameId = null;
 	};
 	
 	//Disconnect from a game.
 	this.disconnect = function(){
-		this.socket.emit(Constants.Message.DISCONNECT_PLAYER, this.username);						
+		this.socket.emit(Constants.Message.DISCONNECT_PLAYER);						
 		this.socket.disconnect();
 		
 		cc.Director.getInstance().replaceScene(myApp.MenuScene);

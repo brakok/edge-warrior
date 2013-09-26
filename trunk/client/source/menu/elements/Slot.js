@@ -47,8 +47,6 @@ Slot.prototype.pushUpdates = function(){
 
 	//Send new color to server.
 	Client.masterSocket.emit(Constants.Message.UPDATE_SLOT, {
-								gameId: Client.currentGameId,
-								username: Client.username,
 								color: this.getColor(),
 								ready: this.isReady()
 							});

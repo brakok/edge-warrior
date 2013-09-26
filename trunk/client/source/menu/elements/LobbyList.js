@@ -56,6 +56,17 @@ LobbyList.prototype.selectLobby = function(lobbyId, rowIndex){
 	}	
 };
 
+//Return random lobby.
+LobbyList.prototype.random = function(){
+	var lobby = null;
+	console.log(this.lobbies);
+	
+	if(this.lobbies != null && this.lobbies.length > 0)
+		lobby = this.lobbies[Math.round((this.lobbies.length-1)*Math.random())];
+			
+	return lobby;
+};
+
 //Clean previous row.
 LobbyList.prototype.clear = function(){
 	

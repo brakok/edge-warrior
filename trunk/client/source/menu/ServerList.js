@@ -43,12 +43,11 @@ var ServerList = cc.LayerColor.extend({
 			Client.joinLobby(this.list.selectedValue);
 	},
 	random: function(){
-		if(this.lobbies != null && this.lobbies.length > 0)
-		{
-			var lobby = this.lobbies[(Math.round(this.lobbies.length*Math.random())-1)];
+		
+		var lobby = this.list.random();
+		
+		if(lobby != null)
 			Client.joinLobby(lobby.id);
-			MenuScreens.switchTo(MenuScreens.lobbyScreen);
-		}
 	},
 	back: function(){
 		MenuScreens.switchTo(MenuScreens.mainMenu);
