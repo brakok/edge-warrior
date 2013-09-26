@@ -19,6 +19,7 @@ var MenuScreens = new function(){
 	};
 	
 	this.resize = function(){
+	
 		if(this.login != null)
 		{
 			this.login.resize();

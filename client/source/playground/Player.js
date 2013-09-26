@@ -191,10 +191,7 @@ Player.prototype.manageInput = function(){
 			this.option2Pressed = false;
 		
 		if(blockToSend != null)
-			Client.socket.emit(Constants.Message.NEXT_BLOCK, {
-																gameId: Client.currentGameId,
-																command: blockToSend
-															});
+			Client.socket.emit(Constants.Message.NEXT_BLOCK, blockToSend);
 	}
 };
 

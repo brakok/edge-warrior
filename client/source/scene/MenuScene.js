@@ -5,9 +5,7 @@ var Menu = cc.Layer.extend({
 		
 		this.currentScreen = null;
 				
-		//Screens creation.
-		var s = cc.Director.getInstance().getWinSize();
-			
+		var s = cc.Director.getInstance().getWinSize();			
 		MenuScreens.init(s.width, s.height);
 
 		//Switch to another screen.

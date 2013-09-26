@@ -39,29 +39,18 @@ var Client = new function(){
 	
 		if(this.isHost)
 		{
-			this.masterSocket.emit(Constants.Message.CLOSE_LOBBY, this.currentGameId);
+			this.masterSocket.emit(Constants.Message.CLOSE_LOBBY);
 			this.isHost = false;
 		}
 		else
-		{
-			var data = {
-				gameId: this.currentGameId,
-				username: this.username
-			};
-			
-			this.masterSocket.emit(Constants.Message.LEAVE_LOBBY, data);	
-		}
+			this.masterSocket.emit(Constants.Message.LEAVE_LOBBY, this.username);	
 		
 		this.currentGameId = null;
 	};
 	
 	//Disconnect from a game.
 	this.disconnect = function(){
-		this.socket.emit(Constants.Message.DISCONNECT_PLAYER, {
-																gameId: this.currentGameId,
-																username: this.username
-															});
-															
+		this.socket.emit(Constants.Message.DISCONNECT_PLAYER, this.username);						
 		this.socket.disconnect();
 		
 		cc.Director.getInstance().replaceScene(myApp.MenuScene);
@@ -84,7 +73,7 @@ var Client = new function(){
 	
 	//Start game.
 	this.startGame = function(){
-		this.masterSocket.emit(Constants.Message.START_GAME, this.currentGameId);
+		this.masterSocket.emit(Constants.Message.START_GAME);
 	};
 	
 	//Search lobbies.
@@ -182,6 +171,7 @@ var Client = new function(){
 		var socketOptions = {
 			'force new connection': true
 		};
+		
 		var socket = io.connect(ipAddress, socketOptions);
 		
 		//Init.
@@ -201,7 +191,7 @@ var Client = new function(){
 											   data.enemies[i].username));
 			}
 
-			socket.emit(Constants.Message.PLAYER_READY, Client.currentGameId);
+			socket.emit(Constants.Message.PLAYER_READY);
 		});
 		
 		//Incoming enemy.
@@ -333,9 +323,6 @@ var Client = new function(){
 		};
 	
 		//Send key pressed to server.
-		this.socket.emit(Constants.Message.PUSH, {
-													inputs: inputs,
-													gameId: this.currentGameId
-												 });
+		this.socket.emit(Constants.Message.PUSH, inputs);
 	};
 };
