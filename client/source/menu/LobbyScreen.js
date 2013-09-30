@@ -11,12 +11,24 @@ var LobbyScreen = cc.LayerColor.extend({
 		this._zOrder = Constants.LobbyScreen.Z_INDEX;
 		
 		this.slots = [];
+		this.isRenaming = false;
 		
 		//Add label indicating if lobby is online.
 		this.lblOnline = cc.LabelTTF.create("Offline", Constants.Font.NAME, Constants.Font.SIZE);
 		this.setOnline();
 			
 		this.lblOnline.setPosition(new cc.Point(this.width - 150, this.height - 100));
+		
+		this.div = document.getElementById('lobby');
+		this.div.style.left = '100px';
+		this.div.style.top = '50px';
+		
+		//Lobby name.
+		this.txtName = document.getElementById('lobbyName');
+		
+		this.cmdRename = new cc.MenuItemFont.create("Rename", this.rename, this);
+		this.cmdRename.setPosition(new cc.Point(400, this.height - 50));
+		this.cmdRename.setEnabled(false);
 		
 		//Menu creation.
 		this.cmdLaunch = new cc.MenuItemFont.create("Launch", this.launch, this);
@@ -25,7 +37,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.cmdLaunch.setPosition(new cc.Point(this.width - 100, 150));
 		this.cmdBack.setPosition(new cc.Point(this.width - 100, 100));
 		
-		this.menu = new cc.Menu.create(this.cmdLaunch, this.cmdBack);
+		this.menu = new cc.Menu.create(this.cmdLaunch, this.cmdBack, this.cmdRename);
 		this.menu.setPosition(new cc.Point(0,0));
 
 		//Add elements.
@@ -40,6 +52,9 @@ var LobbyScreen = cc.LayerColor.extend({
 				
 		Client.startGame();
 	},
+	onEntering: function(){
+		this.div.style.display = "block";
+	},
 	onLeaving: function(){
 		this.reset();
 	},
@@ -50,7 +65,12 @@ var LobbyScreen = cc.LayerColor.extend({
 	setOnline: function(){
 		
 		if(Client.currentGameId != null && Client.currentGameId > -1)
+		{
 			this.lblOnline._string = "Online (" + Client.currentGameId + ")";
+			
+			if(Client.isHost)
+				this.cmdRename.setEnabled(true);
+		}
 		else
 			this.lblOnline._string = "Offline";
 	},
@@ -97,7 +117,33 @@ var LobbyScreen = cc.LayerColor.extend({
 		
 		this.slots = [];
 		
+		this.div.style.display = "none";
 		this.lblOnline._string = "Offline";
+	},
+	rename: function(){
+		if(this.isRenaming)
+		{
+			this.pushUpdates();
+			
+			this.cmdRename._label.setString("Rename");
+			this.txtName.readOnly = true;			
+			this.isRenaming = false;
+		}
+		else
+		{
+			this.txtName.readOnly = false;
+			this.cmdRename._label.setString("Modify");
+			this.isRenaming = true;
+		}
+	},
+	pushUpdates: function(){
+	
+		Client.masterSocket.emit(Constants.Message.UPDATE_LOBBY, {
+									name: this.txtName.value
+								});
+	},
+	update: function(data){
+		this.txtName.value = data.name;
 	}
 });
 
