@@ -215,7 +215,8 @@ var Constants = {
 		SEARCH_LOBBY: 'searchLobby',
 		JOIN_GAME: 'joinGame',
 		DISCONNECT_PLAYER: 'disconnectPlayer',
-		UPDATE_SLOT: 'updateSlot'
+		UPDATE_SLOT: 'updateSlot',
+		UPDATE_LOBBY: 'updateLobby'
 	}
 };
 var Listeners = function(game){
@@ -1001,17 +1002,25 @@ Player.prototype.toClient = function(){
 };
 var Lobby = function(id, hostId, username){
 	this.id = id;
+	this.name = 'Lobby of ' + username;
+	
 	this.hostId = hostId;
 	this.connectedPlayers = 1;
 	this.settings = new GameSettings(id, 1200, 800, 2, username);
+};
+
+Lobby.prototype.update = function(data){
+	this.name = data.name;
 };
 
 Lobby.prototype.toClient = function(){
 
 	return {
 		id: this.id,
+		name: this.name,
 		settings: this.settings,
-		connectedPlayers: this.connectedPlayers
+		connectedPlayers: this.connectedPlayers,
+		maxPlayers: Constants.Game.MAX_PLAYERS
 	};
 };//Server version of the block.
 var Block = function(id, x, y, type, color, ownerId, game){
@@ -1781,6 +1790,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		if(MasterServer.lobbies[data.gameId].connectedPlayers <= Constants.Game.MAX_PLAYERS)
 		{
 			console.log('Lobby joined (' + data.gameId + ') :' + data.username);
+
 			MasterServer.lobbies[data.gameId].connectedPlayers++;
 			MasterServer.lobbies[data.gameId].settings.addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
 			
@@ -1788,6 +1798,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 						
 			var returnData = {
 				gameId: data.gameId,
+				name: MasterServer.lobbies[data.gameId].name,
 				players: MasterServer.lobbies[data.gameId].settings.players
 			};
 			
@@ -1818,6 +1829,14 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		data.username = socket.userdata.username;
 		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.UPDATE_SLOT, data);
+	});
+	
+	//Update lobby informations.
+	socket.on(Constants.Message.UPDATE_LOBBY, function(data){
+		var lobby = MasterServer.lobbies[socket.userdata.gameId];
+		lobby.update(data);
+		
+		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.UPDATE_LOBBY, data);
 	});
 	
 	//Lobby to game.
