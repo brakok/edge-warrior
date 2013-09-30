@@ -125,7 +125,6 @@ var Client = new function(){
 		
 		//Get lobbies' list.
 		masterSocket.on(Constants.Message.SEARCH_LOBBY, function(lobbies){
-			console.log(lobbies);
 			MenuScreens.serverList.list.lobbies = lobbies;
 			MenuScreens.serverList.list.refresh();
 		});
