@@ -97,10 +97,16 @@ var Client = new function(){
 			console.log('Lobby created');
 			Client.currentGameId = gameId;
 			Client.isHost = true;
+			
 			MenuScreens.lobbyScreen.addSlot(Client.username, Enum.Slot.Color.UNASSIGNED, false);
+			MenuScreens.lobbyScreen.update({name: 'Lobby of ' + Client.username });
 			
 			//Set current lobby online when ID received.
 			MenuScreens.lobbyScreen.setOnline();
+		});
+		
+		masterSocket.on(Constants.Message.UPDATE_LOBBY, function(data){
+			MenuScreens.lobbyScreen.update(data);
 		});
 		
 		//Join game when game is created.
@@ -119,6 +125,7 @@ var Client = new function(){
 		
 		//Get lobbies' list.
 		masterSocket.on(Constants.Message.SEARCH_LOBBY, function(lobbies){
+			console.log(lobbies);
 			MenuScreens.serverList.list.lobbies = lobbies;
 			MenuScreens.serverList.list.refresh();
 		});
@@ -136,6 +143,7 @@ var Client = new function(){
 			for(var i in data.players)
 				MenuScreens.lobbyScreen.addSlot(data.players[i].username, data.players[i].color, data.players[i].ready);
 				
+			MenuScreens.lobbyScreen.update({ name: data.name });
 			MenuScreens.switchTo(MenuScreens.lobbyScreen);
 			
 			Client.currentGameId = data.gameId;
