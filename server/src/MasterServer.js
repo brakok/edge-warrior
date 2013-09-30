@@ -98,6 +98,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		if(MasterServer.lobbies[data.gameId].connectedPlayers <= Constants.Game.MAX_PLAYERS)
 		{
 			console.log('Lobby joined (' + data.gameId + ') :' + data.username);
+
 			MasterServer.lobbies[data.gameId].connectedPlayers++;
 			MasterServer.lobbies[data.gameId].settings.addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
 			
@@ -105,6 +106,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 						
 			var returnData = {
 				gameId: data.gameId,
+				name: MasterServer.lobbies[data.gameId].name,
 				players: MasterServer.lobbies[data.gameId].settings.players
 			};
 			
@@ -135,6 +137,14 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		data.username = socket.userdata.username;
 		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.UPDATE_SLOT, data);
+	});
+	
+	//Update lobby informations.
+	socket.on(Constants.Message.UPDATE_LOBBY, function(data){
+		var lobby = MasterServer.lobbies[socket.userdata.gameId];
+		lobby.update(data);
+		
+		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.UPDATE_LOBBY, data);
 	});
 	
 	//Lobby to game.
