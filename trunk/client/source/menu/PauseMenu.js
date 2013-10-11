@@ -11,7 +11,7 @@ var PauseMenu = cc.LayerColor.extend({
 		this.home = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 255), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
-		this._zOrder = Constants.PauseMenu.Z_INDEX;
+		this._zOrder = Constants.Menu.PauseMenu.Z_INDEX;
 		
 		//Set options' screen.
 		this.optionsScreen = OptionsScreen.create(width, height, function(){ Client.game.pauseMenu.switchTo(Client.game.pauseMenu.home);});

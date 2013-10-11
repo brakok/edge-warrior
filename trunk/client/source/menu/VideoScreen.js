@@ -9,7 +9,7 @@ var VideoScreen = cc.LayerColor.extend({
 		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
-		this._zOrder = Constants.OptionsScreen.Z_INDEX;
+		this._zOrder = Constants.Menu.OptionsScreen.Z_INDEX;
 		
 		this.div = document.getElementById('video');
 		this.select = document.getElementById('resolution');

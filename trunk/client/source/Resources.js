@@ -20,6 +20,9 @@ var assets = [
 	{type:'image', src: assetsMenuDir + '4.png'},
 	{type:'image', src: assetsMenuDir + 'true.png'},
 	{type:'image', src: assetsMenuDir + 'false.png'},
+	
+	//Menu background
+	{type:'image', src: assetsMenuDir + 'login_background.png'},
 
 	//Sounds
 	{type:"sound", src: soundDir + 'block_land'},

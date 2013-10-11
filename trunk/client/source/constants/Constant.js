@@ -48,9 +48,6 @@ var Constants = {
 			Z_INDEX: 55
 		}
 	},
-	EndScreen: {
-		Z_INDEX: 1000
-	},
 	HUD: {
 		Z_INDEX: 1000,
 		Inventory: {
@@ -178,24 +175,30 @@ var Constants = {
 	},
 	Font: {
 		NAME: "Arial",
-		SIZE: 16
+		SIZE: 28
 	},
-	Login: {
-		Z_INDEX: 0
-	},
-	MainMenu: {
-		Z_INDEX: 0
-	},
-	LobbyScreen: {
-		Z_INDEX: 0
-	},
-	ServerList: {
-		Z_INDEX: 0
-	},
-	OptionsScreen: {
-		Z_INDEX: 5000
-	},
-	PauseMenu: {
-		Z_INDEX: 5000
+	Menu: {
+		BACKGROUND_Z_INDEX: -1,
+		EndScreen: {
+			Z_INDEX: 5000
+		},
+		Login: {
+			Z_INDEX: 0
+		},
+		MainMenu: {
+			Z_INDEX: 0
+		},
+		LobbyScreen: {
+			Z_INDEX: 0
+		},
+		ServerList: {
+			Z_INDEX: 0
+		},
+		OptionsScreen: {
+			Z_INDEX: 5000
+		},
+		PauseMenu: {
+			Z_INDEX: 5000
+		}
 	}
 };
