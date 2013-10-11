@@ -90,6 +90,11 @@ var Options = new function(){
 	};
 	
 	this.init = function(){
+		
+		cc._fontSize = Constants.Font.SIZE;
+		cc._fontName = Constants.Font.NAME;
+	
+		document.getElementsByTagName('body')[0].style.font = "normal " + Constants.Font.SIZE/1.5 + "px " + Constants.Font.NAME;
 	
 		//Get stored data.
 		chrome.storage.sync.get('keys', function(data){

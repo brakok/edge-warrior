@@ -8,7 +8,7 @@ var OptionsScreen = cc.LayerColor.extend({
 		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
-		this._zOrder = Constants.OptionsScreen.Z_INDEX;
+		this._zOrder = Constants.Menu.OptionsScreen.Z_INDEX;
 				
 		//Create main layer.
 		this.home = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 255), width, height);

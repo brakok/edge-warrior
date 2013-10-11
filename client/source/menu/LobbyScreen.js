@@ -8,7 +8,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
-		this._zOrder = Constants.LobbyScreen.Z_INDEX;
+		this._zOrder = Constants.Menu.LobbyScreen.Z_INDEX;
 		
 		this.slots = [];
 		this.isRenaming = false;

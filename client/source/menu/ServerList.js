@@ -8,7 +8,7 @@ var ServerList = cc.LayerColor.extend({
 		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
-		this._zOrder = Constants.ServerList.Z_INDEX;
+		this._zOrder = Constants.Menu.ServerList.Z_INDEX;
 		
 		//Get server list table.
 		this.list = new LobbyList('serverList');

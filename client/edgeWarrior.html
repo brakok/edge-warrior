@@ -4,6 +4,7 @@
 </head>
 	<body>
 		<style type="text/css">
+				
 			tr.unselected {
 				background-color: black;
 				color: black;
@@ -19,25 +20,36 @@
 				z-index: 10; 
 				display: none;
 			}
-			
-			label {
-				color: white;
+						
+			div.login input {
+				width: 200px;
 			}
 			
-			span {
-				color: white;
+			div.login > div {
+				width: 315px;
+			}
+						
+			div.login > div > div {
+				width: 210px;
+				text-align: right;
+				float: left;
 			}
 			
+			div.login > div > div:first-child {
+				width: 100px;
+				text-align: left;
+			}
+
 		</style>
 
-		<div id="login" class="form">
+		<div id="login" class="form login">
 			<div>
-				<label> Username : </label>
-				<input type="text" id="username" name="username" maxlength="150" style="width:200px" />
+				<div><label> Username : </label></div>
+				<div><input type="text" id="username" name="username" maxlength="150" /></div>
 			</div>
 			<div>
-				<label> Password : </label>
-				<input type="password" id="password" name="password" maxlength="150" style="width:200px" />
+				<div><label> Password : </label></div>
+				<div><input type="password" id="password" name="password" maxlength="150" /></div>
 			</div>
 		</div>
 		
