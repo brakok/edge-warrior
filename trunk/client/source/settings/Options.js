@@ -59,6 +59,8 @@ var Options = new function(){
 	
 	//Resize window.
 	this.resizeWindow = function(){
+
+		
 		
 		//Resize canvas to new resolution.
 		var xScale = this.resolution.width / cc.originalCanvasSize.width;
@@ -85,16 +87,18 @@ var Options = new function(){
         cc.Director.getInstance().setContentScaleFactor(xScale);
 		
 		//Resize menus.
-		MenuScreens.resize();
 		window.resizeTo(cc.canvas.width, cc.canvas.height + 50);
+		document.getElementsByTagName('body')[0].style.font = "normal " + Constants.Font.SIZE*xScale + "px " + Constants.Font.NAME;
+		
+		setTimeout(function(){
+			MenuScreens.resize();
+		}, 100);
 	};
 	
 	this.init = function(){
 		
 		cc._fontSize = Constants.Font.SIZE;
 		cc._fontName = Constants.Font.NAME;
-	
-		document.getElementsByTagName('body')[0].style.font = "normal " + Constants.Font.SIZE/1.5 + "px " + Constants.Font.NAME;
 	
 		//Get stored data.
 		chrome.storage.sync.get('keys', function(data){

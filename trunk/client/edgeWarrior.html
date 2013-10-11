@@ -15,97 +15,113 @@
 				color: red;
 			}
 			
-			div.form {
+			input {
+				font-size: 0.8em;
+			}
+			
+			div.forms > div {
 				position:absolute; 
 				z-index: 10; 
 				display: none;
 			}
-						
-			div.login input {
-				width: 200px;
+
+			div.login {
+				width: 25%;
 			}
 			
 			div.login > div {
-				width: 315px;
+				width: 100%;
+			}
+			
+			div.login input {
+				width: 100%;
 			}
 						
 			div.login > div > div {
-				width: 210px;
+				width: 60%;
 				text-align: right;
 				float: left;
 			}
 			
 			div.login > div > div:first-child {
-				width: 100px;
+				width: 35%;
 				text-align: left;
+				float: left;
 			}
 
 		</style>
 
-		<div id="login" class="form login">
-			<div>
-				<div><label> Username : </label></div>
-				<div><input type="text" id="username" name="username" maxlength="150" /></div>
+		<div class="forms">
+			<!-- Login -->
+			<div id="login" class="login">
+				<div>
+					<div><label> Username : </label></div>
+					<div><input type="text" id="username" name="username" maxlength="150" /></div>
+				</div>
+				<div>
+					<div><label> Password : </label></div>
+					<div><input type="password" id="password" name="password" maxlength="150" /></div>
+				</div>
 			</div>
-			<div>
-				<div><label> Password : </label></div>
-				<div><input type="password" id="password" name="password" maxlength="150" /></div>
+			
+			<!-- Lobby -->
+			<div id="lobby">
+				<div>
+					<input type="text" id="lobbyName" name="lobbyName" readonly="true" maxlength="150" style="width:200px" />
+				</div>
 			</div>
-		</div>
-		
-		<div id="lobby" class="form">
-			<div>
-				<input type="text" id="lobbyName" name="lobbyName" readonly="true" maxlength="150" style="width:200px" />
+			
+			<!-- Server list -->
+			<div id="serverList">
+				<table>
+					<tr>
+						<th><span> Name </span></th>
+						<th><span> Players </span></th>
+					</tr>
+				</table>
 			</div>
-		</div>
-		
-		<div id="serverList" class="form">
-			<table>
-				<tr>
-					<th><span> Name </span></th>
-					<th><span> Players </span></th>
-				</tr>
-			</table>
-		</div>
-		
-		<div id="keys" class="form">
-			<div>
-				<label> Right &nbsp; </label>
-				<input type="text" id="keyRight" name="keyRight" maxlength="1" style="width:75px" />
+			
+			<!-- Key form -->
+			<div id="keys">
+				<div>
+					<label> Right &nbsp; </label>
+					<input type="text" id="keyRight" name="keyRight" maxlength="1" style="width:75px" />
+				</div>
+				<div>
+					<label> Left &nbsp; </label>
+					<input type="text" id="keyLeft" name="keyLeft" maxlength="1" style="width:75px" />
+				</div>
+				<div>
+					<label> Jump &nbsp; </label>
+					<input type="text" id="keyJump" name="keyJump" maxlength="1" style="width:75px" />
+				</div>
+				<div>
+					<label> Kill command &nbsp; </label>
+					<input type="text" id="keyKC" name="keyKC" maxlength="1" style="width:75px" />
+				</div>
+				<div>
+					<label> Inventory 1 &nbsp; </label>
+					<input type="text" id="keyOpt1" name="keyOpt1" maxlength="1" style="width:75px" />
+				</div>
+				<div>
+					<label> Inventory 2 &nbsp; </label>
+					<input type="text" id="keyOpt2" name="keyOpt2" maxlength="1" style="width:75px" />
+				</div>
+				<div>
+					<label> Pause &nbsp; </label>
+					<input type="text" id="keyPause" name="keyPause" maxlength="1" style="width:75px" />
+				</div>
 			</div>
-			<div>
-				<label> Left &nbsp; </label>
-				<input type="text" id="keyLeft" name="keyLeft" maxlength="1" style="width:75px" />
+			
+			<!-- Resolution -->
+			<div id="video">
+				<select id="resolution" size="10">
+					<option value="640x480">640 x 480</option>
+					<option value="1024x768">1024 x 768</option>
+					<option value="1600x900">1600 x 900</option>
+					<option value="1920x1280">1920 x 1280</option>
+				</select>
 			</div>
-			<div>
-				<label> Jump &nbsp; </label>
-				<input type="text" id="keyJump" name="keyJump" maxlength="1" style="width:75px" />
-			</div>
-			<div>
-				<label> Kill command &nbsp; </label>
-				<input type="text" id="keyKC" name="keyKC" maxlength="1" style="width:75px" />
-			</div>
-			<div>
-				<label> Inventory 1 &nbsp; </label>
-				<input type="text" id="keyOpt1" name="keyOpt1" maxlength="1" style="width:75px" />
-			</div>
-			<div>
-				<label> Inventory 2 &nbsp; </label>
-				<input type="text" id="keyOpt2" name="keyOpt2" maxlength="1" style="width:75px" />
-			</div>
-			<div>
-				<label> Pause &nbsp; </label>
-				<input type="text" id="keyPause" name="keyPause" maxlength="1" style="width:75px" />
-			</div>
-		</div>
-		
-		<div id="video" class="form">
-			<select id="resolution" size="10">
-				<option value="640x480">640 x 480</option>
-				<option value="1024x768">1024 x 768</option>
-				<option value="1600x900">1600 x 900</option>
-				<option value="1920x1280">1920 x 1280</option>
-			</select>
 		</div>
 
 		<canvas id="gameCanvas">

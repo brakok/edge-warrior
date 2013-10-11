@@ -12,6 +12,7 @@
 		appFiles:['source/constants/Constant.js',
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
+				  'source/common/HtmlHelper.js',
 				  'source/settings/GameSettings.js',
 				  'source/settings/Options.js',
 				  'source/menu/elements/Slot.js',

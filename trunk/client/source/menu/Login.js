@@ -17,9 +17,7 @@ var Login = cc.LayerColor.extend({
 		this._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 		
 		this.addChild(this.background);
-		
-		
-		
+
 		//Seek login div (created in html file).
 		this.loginDiv = document.getElementById('login');
 		this.placeHTML();
@@ -64,10 +62,9 @@ var Login = cc.LayerColor.extend({
 		this.placeHTML();
 	},
 	placeHTML: function(){
-	
 		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
-		
-		this.loginDiv.style.left = (this.width*0.5-(315*0.5)) + 'px';
+
+		this.loginDiv.style.left = (this.width*0.5-(HtmlHelper.computeWidth(this.loginDiv)*0.5)) + 'px';
 		this.loginDiv.style.top = (this.height*0.75-(100*scaleFactor)) + 'px';
 	}
 });
