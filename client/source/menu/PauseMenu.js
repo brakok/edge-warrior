@@ -13,6 +13,11 @@ var PauseMenu = cc.LayerColor.extend({
 		
 		this._zOrder = Constants.Menu.PauseMenu.Z_INDEX;
 		
+		//Create background.
+		this.background = cc.Sprite.create(assetsMenuDir + 'pause_background.png');
+		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
+		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
+		
 		//Set options' screen.
 		this.optionsScreen = OptionsScreen.create(width, height, function(){ Client.game.pauseMenu.switchTo(Client.game.pauseMenu.home);});
 
@@ -21,14 +26,16 @@ var PauseMenu = cc.LayerColor.extend({
 		this.cmdDisconnect = new cc.MenuItemFont.create("Disconnect", this.disconnect, this);
 		this.cmdClose = new cc.MenuItemFont.create("Close", this.close, this);
 		
-		this.cmdOptions.setPosition(new cc.Point(width*0.5, (height*0.5)+50));
-		this.cmdDisconnect.setPosition(new cc.Point(width*0.5, height*0.5));
-		this.cmdClose.setPosition(new cc.Point(width*0.5, (height*0.5)-50));
+		this.cmdOptions.setPosition(new cc.Point(this.width*0.4, this.height*0.2));
+		this.cmdDisconnect.setPosition(new cc.Point(this.width*0.55, this.height*0.15));
+		this.cmdClose.setPosition(new cc.Point(this.width*0.67, this.height*0.17));
 		
 		this.menu = new cc.Menu.create(this.cmdOptions, this.cmdDisconnect, this.cmdClose);
 		this.menu.setPosition(new cc.Point(0,0));
+		this.menu.setColor(new cc.Color3B(0,0,0));
 
 		//Add elements.
+		this.home.addChild(this.background);
 		this.home.addChild(this.menu);
 		this.addChild(this.home);
 		
