@@ -10,38 +10,50 @@ var LobbyScreen = cc.LayerColor.extend({
 
 		this._zOrder = Constants.Menu.LobbyScreen.Z_INDEX;
 		
+		//Create background.
+		this.background = cc.Sprite.create(assetsMenuDir + 'lobby_background.png');
+		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
+		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
+		
 		this.slots = [];
 		this.isRenaming = false;
 		
 		//Add label indicating if lobby is online.
 		this.lblOnline = cc.LabelTTF.create("Offline", Constants.Font.NAME, Constants.Font.SIZE);
+		this.lblOnline.setColor(new cc.Color3B(0,0,0));
 		this.setOnline();
 			
 		this.lblOnline.setPosition(new cc.Point(this.width - 150, this.height - 100));
 		
+		//HTML.
 		this.div = document.getElementById('lobby');
-		this.div.style.left = '100px';
-		this.div.style.top = '50px';
+		this.placeHTML();
 		
 		//Lobby name.
 		this.txtName = document.getElementById('lobbyName');
 		
-		this.cmdRename = new cc.MenuItemFont.create("Rename", this.rename, this);
-		this.cmdRename.setPosition(new cc.Point(400, this.height - 50));
+		this.cmdRename = new cc.MenuItemFont.create("RENAME", this.rename, this);
+		this.cmdRename.setPosition(new cc.Point(this.width*0.52, this.height*0.892));
 		this.cmdRename.setEnabled(false);
 		
+		this.renameMenu = new cc.Menu.create(this.cmdRename);
+		this.renameMenu.setPosition(new cc.Point(0,0));
+		this.renameMenu.setColor(new cc.Color3B(0,0,0));
+		
 		//Menu creation.
-		this.cmdLaunch = new cc.MenuItemFont.create("Launch", this.launch, this);
-		this.cmdBack = new cc.MenuItemFont.create("Back", this.back, this);
+		this.cmdLaunch = new cc.MenuItemFont.create("LAUNCH", this.launch, this);
+		this.cmdBack = new cc.MenuItemFont.create("BACK", this.back, this);
 		
-		this.cmdLaunch.setPosition(new cc.Point(this.width - 100, 150));
-		this.cmdBack.setPosition(new cc.Point(this.width - 100, 100));
+		this.cmdLaunch.setPosition(new cc.Point(this.width*0.8, this.height*0.05));
+		this.cmdBack.setPosition(new cc.Point(this.width*0.9, this.height*0.05));
 		
-		this.menu = new cc.Menu.create(this.cmdLaunch, this.cmdBack, this.cmdRename);
+		this.menu = new cc.Menu.create(this.cmdLaunch, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
 
 		//Add elements.
+		this.addChild(this.background);
 		this.addChild(this.menu);
+		this.addChild(this.renameMenu);
 		this.addChild(this.lblOnline);
 	},
 	launch: function(){
@@ -69,7 +81,10 @@ var LobbyScreen = cc.LayerColor.extend({
 			this.lblOnline._string = "Online (" + Client.currentGameId + ")";
 			
 			if(Client.isHost)
+			{
 				this.cmdRename.setEnabled(true);
+				this.cmdRename.setColor(new cc.Color3B(0,0,0));
+			}
 		}
 		else
 			this.lblOnline._string = "Offline";
@@ -125,16 +140,18 @@ var LobbyScreen = cc.LayerColor.extend({
 		{
 			this.pushUpdates();
 			
-			this.cmdRename._label.setString("Rename");
+			this.cmdRename._label.setString("RENAME");
 			this.txtName.readOnly = true;			
 			this.isRenaming = false;
 		}
 		else
 		{
 			this.txtName.readOnly = false;
-			this.cmdRename._label.setString("Modify");
+			this.cmdRename._label.setString("MODIFY");
 			this.isRenaming = true;
 		}
+		
+		this.cmdRename.setColor(new cc.Color3B(0,0,0));
 	},
 	pushUpdates: function(){
 	
@@ -144,6 +161,16 @@ var LobbyScreen = cc.LayerColor.extend({
 	},
 	update: function(data){
 		this.txtName.value = data.name;
+	},
+	resize: function(){
+		this.width = Options.resolution.width;
+		this.height = Options.resolution.height;
+	
+		this.placeHTML();
+	},
+	placeHTML: function(){
+		this.div.style.left = this.width*0.1 + 'px';
+		this.div.style.top = this.height*0.1 + 'px';
 	}
 });
 

@@ -19,6 +19,11 @@
 				font-size: 0.8em;
 			}
 			
+			select {
+				font-size: 0.8em;
+				width: 100%;
+			}
+			
 			div.forms > div {
 				position:absolute; 
 				z-index: 10; 
@@ -56,14 +61,10 @@
 			div.video > div {
 				width: 100%;
 			}
-			
-			div.video select {
-				font-size: 0.8em;
-				width: 100%;
-			}
 
 			div.lobbyList {
 				width: 60%;
+				font-size: 0.8em;
 			}
 			
 			div.lobbyList > div, div.lobbyList table {
@@ -86,6 +87,46 @@
 				width: 20%;
 			}
 			
+			div.lobby {
+				width: 40%;
+			}
+			
+			div.lobby input {
+				width: 100%;
+			}
+			
+			div.lobby > div {
+				width: 100%;
+			}
+			
+			div.lobby > div > div {
+				width: 70%;
+				text-align: left;
+				float: left;
+			}
+			
+			div.lobby > div > div:first-child {
+				width: 25%;
+			}
+			
+			div.keys {
+				width: 33%;
+			}
+			
+			div.keys > div {
+				width: 100%;
+			}
+			
+			div.keys > div > div {
+				width: 50%;
+				text-align: left;
+				float: left;
+			}
+			
+			div.keys input {
+				width: 40%;
+			}
+			
 		</style>
 
 		<div class="forms">
@@ -102,9 +143,10 @@
 			</div>
 			
 			<!-- Lobby -->
-			<div id="lobby">
+			<div id="lobby" class="lobby">
 				<div>
-					<input type="text" id="lobbyName" name="lobbyName" readonly="true" maxlength="150" style="width:200px" />
+					<div><label> Server name </label></div>
+					<div><input type="text" id="lobbyName" name="lobbyName" readonly="true" maxlength="150" /></div>
 				</div>
 			</div>
 			
@@ -120,35 +162,63 @@
 			</div>
 			
 			<!-- Key form -->
-			<div id="keys">
+			<div id="keys" class="keys">
 				<h3>Keys configuration</h3>
 				<div>
-					<label> Right &nbsp; </label>
-					<input type="text" id="keyRight" name="keyRight" maxlength="1" style="width:75px" />
+					<div>
+						<label> Right &nbsp; </label>
+					</div>
+					<div>
+						<input type="text" id="keyRight" name="keyRight" maxlength="1" />
+					</div>
 				</div>
 				<div>
-					<label> Left &nbsp; </label>
-					<input type="text" id="keyLeft" name="keyLeft" maxlength="1" style="width:75px" />
+					<div>
+						<label> Left &nbsp; </label>
+					</div>
+					<div>
+						<input type="text" id="keyLeft" name="keyLeft" maxlength="1" />
+					</div>
 				</div>
 				<div>
-					<label> Jump &nbsp; </label>
-					<input type="text" id="keyJump" name="keyJump" maxlength="1" style="width:75px" />
+					<div>
+						<label> Jump &nbsp; </label>
+					</div>	
+					<div>
+						<input type="text" id="keyJump" name="keyJump" maxlength="1" />
+					</div>
 				</div>
 				<div>
-					<label> Kill command &nbsp; </label>
-					<input type="text" id="keyKC" name="keyKC" maxlength="1" style="width:75px" />
+					<div>
+						<label> Kill command &nbsp; </label>
+					</div>
+					<div>
+						<input type="text" id="keyKC" name="keyKC" maxlength="1" />
+					</div>
 				</div>
 				<div>
-					<label> Inventory 1 &nbsp; </label>
-					<input type="text" id="keyOpt1" name="keyOpt1" maxlength="1" style="width:75px" />
+					<div>
+						<label> Inventory 1 &nbsp; </label>
+					</div>
+					<div>
+						<input type="text" id="keyOpt1" name="keyOpt1" maxlength="1" />
+					</div>
 				</div>
 				<div>
-					<label> Inventory 2 &nbsp; </label>
-					<input type="text" id="keyOpt2" name="keyOpt2" maxlength="1" style="width:75px" />
+					<div>
+						<label> Inventory 2 &nbsp; </label>
+					</div>
+					<div>
+						<input type="text" id="keyOpt2" name="keyOpt2" maxlength="1" />
+					</div>
 				</div>
 				<div>
-					<label> Pause &nbsp; </label>
-					<input type="text" id="keyPause" name="keyPause" maxlength="1" style="width:75px" />
+					<div>
+						<label> Pause &nbsp; </label>
+					</div>
+					<div>
+						<input type="text" id="keyPause" name="keyPause" maxlength="1" />
+					</div>
 				</div>
 			</div>
 			
