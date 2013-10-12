@@ -8,22 +8,36 @@ var MainMenu = cc.LayerColor.extend({
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
 		this._zOrder = Constants.Menu.MainMenu.Z_INDEX;
+		
+		//Create background.
+		this.background = cc.Sprite.create(assetsMenuDir + 'main_background.png');
+		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
+		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 
 		//Menu creation.	
-		this.cmdCreate = new cc.MenuItemFont.create("Create lobby", this.create, this);
-		this.cmdJoin = new cc.MenuItemFont.create("Join lobby", this.join, this);
-		this.cmdOptions = new cc.MenuItemFont.create("Options", this.toOptions, this);
-		this.cmdLogout = new cc.MenuItemFont.create("Logout", this.logout, this);
+		this.cmdCreate = new cc.MenuItemFont.create("CREATE", this.create, this);
+		this.cmdJoin = new cc.MenuItemFont.create("JOIN", this.join, this);
+		this.cmdOptions = new cc.MenuItemFont.create("OPTIONS", this.toOptions, this);
 		
-		this.cmdCreate.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
-		this.cmdJoin.setPosition(new cc.Point(this.width*0.5, (this.height*0.5)-50));
-		this.cmdOptions.setPosition(new cc.Point(this.width*0.5, (this.height*0.5)-100));
-		this.cmdLogout.setPosition(new cc.Point(100, this.height-50));
+		this.cmdCreate.setPosition(new cc.Point(this.width*0.5, this.height*0.77));
+		this.cmdJoin.setPosition(new cc.Point(this.width*0.33, this.height*0.53));
+		this.cmdOptions.setPosition(new cc.Point(this.width*0.70, this.height*0.42));
 		
-		this.menu = new cc.Menu.create(this.cmdCreate, this.cmdJoin, this.cmdOptions, this.cmdLogout);
+		//Main menu.
+		this.menu = new cc.Menu.create(this.cmdCreate, this.cmdJoin, this.cmdOptions);
 		this.menu.setPosition(new cc.Point(0,0));
+		this.menu.setColor(new cc.Color3B(0,0,0));
+		
+		this.cmdLogout = new cc.MenuItemFont.create("LOGOUT", this.logout, this);
+		this.cmdLogout.setPosition(new cc.Point(90, this.height-45));
+		
+		//Common command.
+		this.commonMenu = new cc.Menu.create(this.cmdLogout);
+		this.commonMenu.setPosition(new cc.Point(0,0));
 
+		this.addChild(this.background);
 		this.addChild(this.menu);
+		this.addChild(this.commonMenu);
 	},
 	create: function(){
 		Client.createLobby();
