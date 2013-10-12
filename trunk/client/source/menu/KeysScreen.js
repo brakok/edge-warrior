@@ -52,13 +52,10 @@ var KeysScreen = cc.LayerColor.extend({
 		this.parent.switchTo(this.parent.home);
 	},
 	resize: function(){
-		this.width = Options.resolution.width;
-		this.height = Options.resolution.height;
-	
 		this.placeHTML();
 	},
 	placeHTML: function(){
-		this.keyForm.setPosition(this.width*0.3, this.height*0.25);
+		this.keyForm.setPosition(Options.resolution.width*0.3, Options.resolution.height*0.25);
 	}
 });
 

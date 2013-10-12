@@ -56,17 +56,12 @@ var VideoScreen = cc.LayerColor.extend({
 		this.parent.switchTo(this.parent.home);
 	},
 	resize: function(){
-		this.width = Options.resolution.width;
-		this.height = Options.resolution.height;
-	
 		this.placeHTML();
 	},
 	placeHTML: function(){
-	
-		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
 		
-		this.div.style.left = this.width*0.35 + 'px';
-		this.div.style.top = this.height*0.35 + 'px';
+		this.div.style.left = Options.resolution.width*0.35 + 'px';
+		this.div.style.top = Options.resolution.height*0.35 + 'px';
 	}
 });
 
