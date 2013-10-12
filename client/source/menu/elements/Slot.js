@@ -15,13 +15,22 @@ var Slot = function(layer, number, x, y, username, color, ready){
 };
 
 Slot.prototype.init = function(color, ready){
-	
+
 	this.lblUsername = cc.LabelTTF.create(this.username, Constants.Font.NAME, Constants.Font.SIZE);
-	this.lblUsername.setPosition(new cc.Point(this.x - 100, this.y));
+	this.lblUsername.setPosition(new cc.Point(this.x, this.y));
+	this.lblUsername.setColor(new cc.Color3B(0,0,0));
+	
+	this.lblColor = cc.LabelTTF.create("Color", Constants.Font.NAME, Constants.Font.SIZE);
+	this.lblColor.setPosition(new cc.Point(this.x + 560, this.y));
+	this.lblColor.setColor(new cc.Color3B(0,0,0));
+	
+	this.lblReady = cc.LabelTTF.create("Ready", Constants.Font.NAME, Constants.Font.SIZE);
+	this.lblReady.setPosition(new cc.Point(this.x + 725, this.y));
+	this.lblReady.setColor(new cc.Color3B(0,0,0));
 	
 	//Create color box and checkbox with their slot in scope.
-	this.colorBox = new ColorBox(this.layer, this.x, this.y, color);
-	this.chkReady = new CheckBox(this.layer, this.x + 100, this.y, ready);
+	this.colorBox = new ColorBox(this.layer, this.x + 650, this.y, color);
+	this.chkReady = new CheckBox(this.layer, this.x + 800, this.y, ready);
 	
 	//Set callbacks.
 	(function(slot){
@@ -34,6 +43,8 @@ Slot.prototype.init = function(color, ready){
 		this.setEnabled(false);
 	
 	this.layer.addChild(this.lblUsername);
+	this.layer.addChild(this.lblColor);
+	this.layer.addChild(this.lblReady);
 };
 
 //Update slot from server.
@@ -67,6 +78,8 @@ Slot.prototype.isReady = function(){
 
 Slot.prototype.close = function(){
 	this.layer.removeChild(this.lblUsername);
+	this.layer.removeChild(this.lblColor);
+	this.layer.removeChild(this.lblReady);
 	this.colorBox.removeChildren();
 	this.chkReady.removeChildren();
 };
