@@ -1,27 +1,43 @@
+var Keys = function(keys){
+
+	if(keys == null)
+	{
+		this.RIGHT = cc.KEY.d;
+		this.LEFT = cc.KEY.a;
+		this.JUMP = cc.KEY.space;
+		this.KILL = cc.KEY.q;
+		this.OPT1 = cc.KEY.z;
+		this.OPT2 = cc.KEY.x;
+		this.PAUSE = cc.KEY.p;
+	}
+	else
+	{
+		this.RIGHT = keys.RIGHT;
+		this.LEFT = keys.LEFT;
+		this.JUMP = keys.JUMP;
+		this.KILL = keys.KILL;
+		this.OPT1 = keys.OPT1;
+		this.OPT2 = keys.OPT2;
+		this.PAUSE = keys.PAUSE;
+	}
+};
+
+Keys.prototype.reset = function(){
+	this.RIGHT = cc.KEY.d;
+	this.LEFT = cc.KEY.a;
+	this.JUMP = cc.KEY.space;
+	this.KILL = cc.KEY.q;
+	this.OPT1 = cc.KEY.z;
+	this.OPT2 = cc.KEY.x;
+	this.PAUSE = cc.KEY.p;
+};
 
 var Options = new function(){
 		
 	this.loaded = false;
 	this.fullscreen = false;
 	
-	this.keys = {
-		RIGHT: cc.KEY.d,
-		LEFT: cc.KEY.a,
-		JUMP: cc.KEY.space,
-		KILL: cc.KEY.q,
-		OPT1: cc.KEY.z,
-		OPT2: cc.KEY.x,
-		PAUSE: cc.KEY.p,
-		reset: function(){
-			this.RIGHT = cc.KEY.d;
-			this.LEFT = cc.KEY.a;
-			this.JUMP = cc.KEY.space;
-			this.KILL = cc.KEY.q;
-			this.OPT1 = cc.KEY.z;
-			this.OPT2 = cc.KEY.x;
-			this.PAUSE = cc.KEY.p;
-		}
-	};
+	this.keys = new Keys();
 	
 	this.resolution = {
 		width: 1024,
@@ -40,7 +56,7 @@ var Options = new function(){
 	//Save new keys.
 	this.saveKeys = function(keys){
 		this.keys = keys;
-		
+			
 		chrome.storage.sync.set({'keys': keys});
 	};
 	
@@ -60,8 +76,6 @@ var Options = new function(){
 	//Resize window.
 	this.resizeWindow = function(){
 
-		
-		
 		//Resize canvas to new resolution.
 		var xScale = this.resolution.width / cc.originalCanvasSize.width;
         var yScale = this.resolution.height / cc.originalCanvasSize.height;
@@ -96,7 +110,7 @@ var Options = new function(){
 	};
 	
 	this.init = function(){
-		
+
 		cc._fontSize = Constants.Font.SIZE;
 		cc._fontName = Constants.Font.NAME;
 	
@@ -104,8 +118,8 @@ var Options = new function(){
 		chrome.storage.sync.get('keys', function(data){
 			that.callbackCounter++;
 			if(data.keys != null)
-				that.keys = data.keys;
-				
+				that.keys = new Keys(data.keys);
+
 			that.apply();
 		});
 		

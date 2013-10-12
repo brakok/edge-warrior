@@ -25,6 +25,7 @@ var MenuScreens = new function(){
 			this.login.resize();
 			this.serverList.resize();
 			this.optionsScreen.resize();
+			this.lobbyScreen.resize();
 		}
 	};
 	

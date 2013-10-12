@@ -33,7 +33,6 @@ var KeyForm = function(){
 	
 	//Set default keys.
 	this.reset = function(){
-
 		this.keys.reset();
 		
 		this.save();
