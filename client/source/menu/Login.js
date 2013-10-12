@@ -14,7 +14,7 @@ var Login = cc.LayerColor.extend({
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'login_background.png');
 		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
-		this._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
+		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 		
 		this.addChild(this.background);
 
@@ -26,8 +26,8 @@ var Login = cc.LayerColor.extend({
 		this.txtUsername = document.getElementById('username');
 		this.txtPassword = document.getElementById('password');
 		
-		this.cmdConnect = new cc.MenuItemFont.create("Connect", this.connect, this);
-		this.cmdCreate = new cc.MenuItemFont.create("Create new account", this.createAccount, this);
+		this.cmdConnect = new cc.MenuItemFont.create("CONNECT", this.connect, this);
+		this.cmdCreate = new cc.MenuItemFont.create("CREATE NEW ACCOUNT", this.createAccount, this);
 		
 		this.cmdConnect.setPosition(new cc.Point(this.width*0.5, this.height*0.25));
 		this.cmdCreate.setPosition(new cc.Point(this.width*0.5, (this.height*0.25)-50));

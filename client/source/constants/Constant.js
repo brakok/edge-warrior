@@ -178,7 +178,7 @@ var Constants = {
 		SIZE: 28
 	},
 	Menu: {
-		BACKGROUND_Z_INDEX: -1,
+		BACKGROUND_Z_INDEX: 0,
 		EndScreen: {
 			Z_INDEX: 5000
 		},
