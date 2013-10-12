@@ -9,6 +9,11 @@ var OptionsScreen = cc.LayerColor.extend({
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
 		this._zOrder = Constants.Menu.OptionsScreen.Z_INDEX;
+		
+		//Create background.
+		this.background = cc.Sprite.create(assetsMenuDir + 'options_background.png');
+		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
+		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 				
 		//Create main layer.
 		this.home = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 255), width, height);
@@ -21,18 +26,20 @@ var OptionsScreen = cc.LayerColor.extend({
 		};
 		
 		//Menu creation.
-		this.cmdKeys = new cc.MenuItemFont.create("Keys", this.toKeys, this);
-		this.cmdVideo = new cc.MenuItemFont.create("Video", this.toVideo, this);
-		this.cmdBack = new cc.MenuItemFont.create("Back", backAction);
+		this.cmdKeys = new cc.MenuItemFont.create("KEYS", this.toKeys, this);
+		this.cmdVideo = new cc.MenuItemFont.create("VIDEO", this.toVideo, this);
+		this.cmdBack = new cc.MenuItemFont.create("BACK", backAction);
 		
-		this.cmdKeys.setPosition(new cc.Point(width*0.5, (height*0.5)+50));
-		this.cmdVideo.setPosition(new cc.Point(width*0.5, height*0.5));
-		this.cmdBack.setPosition(new cc.Point(width*0.5, (height*0.5)-50));
+		this.cmdKeys.setPosition(new cc.Point(this.width*0.38, this.height*0.58));
+		this.cmdVideo.setPosition(new cc.Point(this.width*0.67, this.height*0.42));
+		this.cmdBack.setPosition(new cc.Point(this.width*0.89, this.height*0.26));
 		
 		this.menu = new cc.Menu.create(this.cmdKeys, this.cmdVideo, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
+		this.menu.setColor(new cc.Color3B(0,0,0));
 
 		//Add elements.
+		this.home.addChild(this.background);
 		this.home.addChild(this.menu);
 		this.addChild(this.home);
 		

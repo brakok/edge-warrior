@@ -24,6 +24,7 @@ var assets = [
 	//Menu background
 	{type:'image', src: assetsMenuDir + 'login_background.png'},
 	{type:'image', src: assetsMenuDir + 'main_background.png'},
+	{type:'image', src: assetsMenuDir + 'options_background.png'},
 
 	//Sounds
 	{type:"sound", src: soundDir + 'block_land'},
