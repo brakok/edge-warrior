@@ -27,6 +27,7 @@ var assets = [
 	{type:'image', src: assetsMenuDir + 'options_background.png'},
 	{type:'image', src: assetsMenuDir + 'options_submenu_background.png'},
 	{type:'image', src: assetsMenuDir + 'lobby_background.png'},
+	{type:'image', src: assetsMenuDir + 'pause_background.png'},
 
 	//Sounds
 	{type:"sound", src: soundDir + 'block_land'},
