@@ -5,7 +5,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.width = width;
 		this.height = height;
 	
-		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
+		this._super(new cc.Color4B(0, 0, 0, 255), this.width, this.height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
 		this._zOrder = Constants.Menu.LobbyScreen.Z_INDEX;
@@ -90,7 +90,13 @@ var LobbyScreen = cc.LayerColor.extend({
 			this.lblOnline._string = "Offline";
 	},
 	addSlot: function(username, color, ready){
-		this.slots.push(new Slot(this, this.slots.length, 200, this.height - 200*(this.slots.length+1), username, color, ready));
+		this.slots.push(new Slot(this, 
+								 this.slots.length, 
+								 this.width*0.15, 
+								 this.height*(0.85 - 0.1*(this.slots.length+1)), 
+								 username, 
+								 color, 
+								 ready));
 	},
 	removeSlot: function(username){
 		
@@ -163,14 +169,11 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.txtName.value = data.name;
 	},
 	resize: function(){
-		this.width = Options.resolution.width;
-		this.height = Options.resolution.height;
-	
 		this.placeHTML();
 	},
 	placeHTML: function(){
-		this.div.style.left = this.width*0.1 + 'px';
-		this.div.style.top = this.height*0.1 + 'px';
+		this.div.style.left = Options.resolution.width*0.1 + 'px';
+		this.div.style.top = Options.resolution.height*0.1 + 'px';
 	}
 });
 
