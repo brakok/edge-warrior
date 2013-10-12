@@ -11,23 +11,28 @@ var VideoScreen = cc.LayerColor.extend({
 		
 		this._zOrder = Constants.Menu.OptionsScreen.Z_INDEX;
 		
+		//Create background.
+		this.background = cc.Sprite.create(assetsMenuDir + 'options_submenu_background.png');
+		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
+		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
+		
 		this.div = document.getElementById('video');
 		this.select = document.getElementById('resolution');
 		
-		this.div.style.left = 100 + 'px';
-		this.div.style.top = 100 + 'px';
-
-		//Menu creation.
-		this.cmdSave = new cc.MenuItemFont.create("Save", this.save, this);
-		this.cmdBack = new cc.MenuItemFont.create("Back", this.back, this);
+		this.placeHTML();
 		
-		this.cmdSave.setPosition(new cc.Point(100, 100));
-		this.cmdBack.setPosition(new cc.Point(250, 100));
+		//Menu creation.
+		this.cmdSave = new cc.MenuItemFont.create("SAVE", this.save, this);
+		this.cmdBack = new cc.MenuItemFont.create("BACK", this.back, this);
+		
+		this.cmdSave.setPosition(new cc.Point(this.width*0.7, this.height*0.1));
+		this.cmdBack.setPosition(new cc.Point(this.width*0.8, this.height*0.1));
 		
 		this.menu = new cc.Menu.create(this.cmdSave, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
 
 		//Add elements.
+		this.addChild(this.background);
 		this.addChild(this.menu);
 	},
 	onEntering: function(){
@@ -54,8 +59,14 @@ var VideoScreen = cc.LayerColor.extend({
 		this.width = Options.resolution.width;
 		this.height = Options.resolution.height;
 	
-		this.div.style.left = 100 + 'px';
-		this.div.style.top = 100 + 'px';
+		this.placeHTML();
+	},
+	placeHTML: function(){
+	
+		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
+		
+		this.div.style.left = this.width*0.35 + 'px';
+		this.div.style.top = this.height*0.35 + 'px';
 	}
 });
 
