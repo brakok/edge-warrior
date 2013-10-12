@@ -10,25 +10,31 @@ var ServerList = cc.LayerColor.extend({
 
 		this._zOrder = Constants.Menu.ServerList.Z_INDEX;
 		
+		//Create background.
+		this.background = cc.Sprite.create(assetsMenuDir + 'lobby_background.png');
+		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
+		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
+		
 		//Get server list table.
 		this.list = new LobbyList('serverList');
-		this.list.setPosition(200, 100);
+		this.placeHTML();
 		
 		//Menu creation.	
-		this.cmdJoin = new cc.MenuItemFont.create("Join", this.join, this);
-		this.cmdRandom = new cc.MenuItemFont.create("Random", this.random, this);
-		this.cmdRefresh = new cc.MenuItemFont.create("Resfresh", this.refresh, this);
-		this.cmdBack = new cc.MenuItemFont.create("Back", this.back, this);
+		this.cmdJoin = new cc.MenuItemFont.create("JOIN", this.join, this);
+		this.cmdRandom = new cc.MenuItemFont.create("RANDOM", this.random, this);
+		this.cmdRefresh = new cc.MenuItemFont.create("REFRESH", this.refresh, this);
+		this.cmdBack = new cc.MenuItemFont.create("BACK", this.back, this);
 		
-		this.cmdJoin.setPosition(new cc.Point(100, 50));
-		this.cmdRandom.setPosition(new cc.Point(250, 50));
-		this.cmdRefresh.setPosition(new cc.Point(400, 50));
-		this.cmdBack.setPosition(new cc.Point(550, 50));
+		this.cmdJoin.setPosition(new cc.Point(this.width*0.6, this.height*0.05));
+		this.cmdRandom.setPosition(new cc.Point(this.width*0.7, this.height*0.05));
+		this.cmdRefresh.setPosition(new cc.Point(this.width*0.8, this.height*0.05));
+		this.cmdBack.setPosition(new cc.Point(this.width*0.9, this.height*0.05));
 		
 		this.menu = new cc.Menu.create(this.cmdJoin, this.cmdRandom, this.cmdRefresh, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
 
 		//Add elements.
+		this.addChild(this.background);
 		this.addChild(this.menu);
 	},
 	onEntering: function(){
@@ -59,7 +65,10 @@ var ServerList = cc.LayerColor.extend({
 		this.width = Options.resolution.width;
 		this.height = Options.resolution.height;
 	
-		this.list.setPosition(200, 100);
+		this.placeHTML();
+	},
+	placeHTML: function(){
+		this.list.setPosition(this.width*0.2, this.height*0.1);
 	}
 });
 

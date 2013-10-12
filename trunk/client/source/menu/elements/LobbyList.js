@@ -29,9 +29,11 @@ LobbyList.prototype.setVisible = function(isVisible){
 
 LobbyList.prototype.addLine = function(lobby){
 	var row = this.table.insertRow(this.table.rows.length);
-	var tdName = row.insertCell(0);
-	var tdPlayers = row.insertCell(1);
+	var tdId = row.insertCell(0)
+	var tdName = row.insertCell(1);
+	var tdPlayers = row.insertCell(2);
 	
+	tdId.innerHTML = '<span>' + lobby.id + '</span>';
 	tdName.innerHTML = '<span>' + lobby.name + '</span>';
 	tdPlayers.innerHTML = '<span>' + lobby.connectedPlayers + '/' + lobby.maxPlayers + '</span>';
 	
