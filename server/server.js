@@ -847,7 +847,8 @@ Player.prototype.update = function(){
 	}
 	
 	//Check timers related to player and trigger actions associated.
-	this.checkTimers();
+	if(!this.hasWon)
+		this.checkTimers();
 };
 
 Player.prototype.checkTimers = function(){
@@ -1550,7 +1551,7 @@ Game.prototype.electWinner = function(winner){
 };
 
 Game.prototype.end = function(){
-	var survivors = 0;
+	var survivors = [];
 			
 	//Count and kill survivors.
 	for(var i in this.players)
@@ -1558,13 +1559,14 @@ Game.prototype.end = function(){
 		if(this.players[i].isAlive && i != this.winner.id)
 		{
 			this.players[i].die();
-			survivors++;
+			survivors.push(this.players[i].toClient());
 		}
 	}
 	
 	var data = {
 		winner: this.winner.toClient(),
-		succeed: (survivors == 0)
+		succeed: (survivors.length == 0),
+		survivors: survivors
 	};
 	
 	io.sockets.in(this.id).emit(Constants.Message.WIN, data);

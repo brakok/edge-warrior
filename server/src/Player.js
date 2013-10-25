@@ -337,7 +337,8 @@ Player.prototype.update = function(){
 	}
 	
 	//Check timers related to player and trigger actions associated.
-	this.checkTimers();
+	if(!this.hasWon)
+		this.checkTimers();
 };
 
 Player.prototype.checkTimers = function(){
