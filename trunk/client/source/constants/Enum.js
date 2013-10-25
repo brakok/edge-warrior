@@ -1,7 +1,8 @@
 var Enum = {
 	Game: {
 		State: {
-			PLAYING: 0
+			PLAYING: 0,
+			ENDING: 1
 		},
 		Phase: {
 			PLAYING: 0,

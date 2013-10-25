@@ -175,7 +175,9 @@ var Constants = {
 	},
 	Font: {
 		NAME: "Arial",
-		SIZE: 28
+		SIZE: 28,
+		MIDSIZE: 40,
+		BIGSIZE: 60
 	},
 	Menu: {
 		BACKGROUND_Z_INDEX: 0,
