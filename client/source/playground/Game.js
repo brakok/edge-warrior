@@ -121,13 +121,14 @@ Game.prototype.createWorld = function(){
 								 new Block(0,0, Enum.Block.Type.COLORED, this.player.color));
 	
 	this.ready = true;
+	this.currentState = Enum.Game.State.PLAYING;
 };
 
 //Update elements contained in the container.
 Game.prototype.update = function (dt){
 		
 	//Update info from the server.
-	if(this.ready)
+	if(this.ready && this.currentState != Enum.Game.State.ENDING)
 	{
 		if(Client.keys[Options.keys.PAUSE] && this.mayPause)
 		{
@@ -281,13 +282,21 @@ Game.prototype.electWinner = function(winner){
 //End of the round. Show splash screen of victorious.
 Game.prototype.end = function(data){
 
+	this.currentState = Enum.Game.State.ENDING;
+
 	//Stop winning goal.
 	this.goal.end();
 
 	myApp.GameScene.layer.removeChild(this.hud);
 	myApp.GameScene.layer.addChild(this.endScreen);
 	
-	this.endScreen.addWinner(data.winner, data.succeed);
+	var winner = this.getPlayer(data.winner.color);
+	
+	//If everybody were already dead, hasWon may be false.
+	if(!winner.hasWon)
+		winner.win();
+		
+	this.endScreen.addWinner(winner, data.succeed, data.survivors);
 };
 
 //Used to know kill command current step.

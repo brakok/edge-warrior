@@ -28,7 +28,8 @@ var assets = [
 	{type:'image', src: assetsMenuDir + 'options_submenu_background.png'},
 	{type:'image', src: assetsMenuDir + 'lobby_background.png'},
 	{type:'image', src: assetsMenuDir + 'pause_background.png'},
-
+	{type:'image', src: assetsMenuDir + 'end_screen_background.png'},
+	
 	//Sounds
 	{type:"sound", src: soundDir + 'block_land'},
 	{type:"sound", src: soundDir + 'block_swapColor'},

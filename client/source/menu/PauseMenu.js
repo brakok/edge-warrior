@@ -22,13 +22,13 @@ var PauseMenu = cc.LayerColor.extend({
 		this.optionsScreen = OptionsScreen.create(width, height, function(){ Client.game.pauseMenu.switchTo(Client.game.pauseMenu.home);});
 
 		//Menu creation.
-		this.cmdOptions = new cc.MenuItemFont.create("Options", this.toOptions, this);
-		this.cmdDisconnect = new cc.MenuItemFont.create("Disconnect", this.disconnect, this);
-		this.cmdClose = new cc.MenuItemFont.create("Close", this.close, this);
+		this.cmdOptions = new cc.MenuItemFont.create("OPTIONS", this.toOptions, this);
+		this.cmdDisconnect = new cc.MenuItemFont.create("DISCONNECT", this.disconnect, this);
+		this.cmdClose = new cc.MenuItemFont.create("CLOSE", this.close, this);
 		
-		this.cmdOptions.setPosition(new cc.Point(this.width*0.4, this.height*0.2));
-		this.cmdDisconnect.setPosition(new cc.Point(this.width*0.55, this.height*0.15));
-		this.cmdClose.setPosition(new cc.Point(this.width*0.67, this.height*0.17));
+		this.cmdOptions.setPosition(new cc.Point(this.width*0.5, this.height*0.25));
+		this.cmdDisconnect.setPosition(new cc.Point(this.width*0.75, this.height*0.32));
+		this.cmdClose.setPosition(new cc.Point(this.width*0.9, this.height*0.15));
 		
 		this.menu = new cc.Menu.create(this.cmdOptions, this.cmdDisconnect, this.cmdClose);
 		this.menu.setPosition(new cc.Point(0,0));
