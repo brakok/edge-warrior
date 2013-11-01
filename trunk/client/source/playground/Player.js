@@ -99,9 +99,9 @@ Player.prototype.init = function(){
 	}
 	
 	this.voices = {
-		kill: new Voice(Enum.Voice.Type.KILL, 'yellow', 1),
-		jump: new Voice(Enum.Voice.Type.JUMP, 'yellow', 2),
-		idle: new Voice(Enum.Voice.Type.IDLE, 'yellow', 3)
+		kill: new Voice(Enum.Voice.Type.KILL, colorText, 1),
+		jump: new Voice(Enum.Voice.Type.JUMP, colorText, 2),
+		idle: new Voice(Enum.Voice.Type.IDLE, colorText, 3)
 	};
 	
 	this.resetVoiceTimer();
