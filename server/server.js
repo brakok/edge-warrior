@@ -155,6 +155,9 @@ var Constants = {
 			TURN_FRICTION_FACTOR: 0.95
 		}
 	},
+	Warmup: {
+		PHASE_TIME: 5
+	},
 	DeathZone: {
 		Rayball: {
 			SPEED: 50,
@@ -216,7 +219,8 @@ var Constants = {
 		JOIN_GAME: 'joinGame',
 		DISCONNECT_PLAYER: 'disconnectPlayer',
 		UPDATE_SLOT: 'updateSlot',
-		UPDATE_LOBBY: 'updateLobby'
+		UPDATE_LOBBY: 'updateLobby',
+		GO: 'go'
 	}
 };
 var Listeners = function(game){
@@ -2097,6 +2101,16 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 			
 			console.log('Game launched!');
 			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
+			
+			//Launch warmup!
+			console.log('WARMUP');
+			(function(gameId){
+				console.log('...');
+				setTimeout(function(){ 
+					console.log('GO!');
+					io.sockets.in(gameId).emit(Constants.Message.GO); 
+				}, Constants.Warmup.PHASE_TIME*1000);
+			})(gameId);
 			
 			Server.gameList[gameId].ready = true;
 		}

@@ -155,6 +155,9 @@ var Constants = {
 			TURN_FRICTION_FACTOR: 0.95
 		}
 	},
+	Warmup: {
+		PHASE_TIME: 5
+	},
 	DeathZone: {
 		Rayball: {
 			SPEED: 50,
@@ -216,6 +219,7 @@ var Constants = {
 		JOIN_GAME: 'joinGame',
 		DISCONNECT_PLAYER: 'disconnectPlayer',
 		UPDATE_SLOT: 'updateSlot',
-		UPDATE_LOBBY: 'updateLobby'
+		UPDATE_LOBBY: 'updateLobby',
+		GO: 'go'
 	}
 };

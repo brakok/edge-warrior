@@ -201,6 +201,16 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 			console.log('Game launched!');
 			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
 			
+			//Launch warmup!
+			console.log('WARMUP');
+			(function(gameId){
+				console.log('...');
+				setTimeout(function(){ 
+					console.log('GO!');
+					io.sockets.in(gameId).emit(Constants.Message.GO); 
+				}, Constants.Warmup.PHASE_TIME*1000);
+			})(gameId);
+			
 			Server.gameList[gameId].ready = true;
 		}
 	});
