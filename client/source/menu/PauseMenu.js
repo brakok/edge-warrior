@@ -45,7 +45,7 @@ var PauseMenu = cc.LayerColor.extend({
 
 	},
 	onLeaving: function(){
-
+		
 	},
 	switchTo: function(menu){
 	
@@ -62,12 +62,12 @@ var PauseMenu = cc.LayerColor.extend({
 		
 		if(this.currentScreen.onEntering != null && this.currentScreen.onEntering != 'undefined')
 				this.currentScreen.onEntering();
-		
 	},
 	toOptions: function(){
 		this.switchTo(this.optionsScreen);
 	},
 	disconnect: function(){
+		this.reset();
 		Client.disconnect();
 	},
 	close: function(){
