@@ -12,12 +12,7 @@ var Block = function (x, y, type, color) {
 	if(this.type == Enum.Block.Type.COLORED && this.color != null)
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + this.color + '.png');
 	else if(this.type == Enum.Block.Type.SPAWN)
-	{
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_spawn.png');
-		
-		//For a better quality, image is much bigger that the usual size.
-		this.scale = 0.1;
-	}
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
 		
