@@ -41,6 +41,7 @@
 				  'source/menu/OptionsScreen.js',
 				  'source/menu/KeysScreen.js',
 				  'source/menu/VideoScreen.js',
+				  'source/menu/LoadingScreen.js',
 				  'source/Resources.js',
 				  'source/playground/Game.js',
 				  'source/playground/hud/Inventory.js',

@@ -5,6 +5,7 @@ var MenuScreens = new function(){
 	this.mainMenu = null;
 	this.lobbyScreen = null;
 	this.serverList = null;
+	this.loadingScreen = null;
 		
 	this.init = function(width, height){
 

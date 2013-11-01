@@ -24,6 +24,7 @@ var Game = function(){
 	this.ready = false;
 	this.isPaused = false;
 	
+	this.hasPulledOnce = false;
 	this.mayPause = true;
 };
 
@@ -175,6 +176,10 @@ Game.prototype.update = function (dt){
 			
 			//Update all effects.
 			EffectManager.update();
+			
+			//Hide loading screen.
+			if(Client.isLoading && this.hasPulledOnce)
+				Client.stopLoading();
 		}
 	}
 };
@@ -336,6 +341,8 @@ Game.prototype.updateFromServer = function(remotePlayers, remoteBlocks, remoteGo
 		
 	//Update goal.
 	this.goal.fromServer(remoteGoal);
+	
+	this.hasPulledOnce = true;
 };
 
 //Spawn player.

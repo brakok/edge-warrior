@@ -34,7 +34,7 @@ var cocosApp = cc.Application.extend({
 		
 		this.MenuScene = new MenuScene();
 		this.GameScene = new GameScene();
-		
+				
 		//Load spritesheets and other graphical stuffs.
 		AnimationManager.init();
 		

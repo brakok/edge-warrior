@@ -5,19 +5,27 @@ var GameLayer = cc.Layer.extend({
 			
 		//Create color of the layer.
 		var s = cc.Director.getInstance().getWinSize();
-		var playGroundLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 0), s.width, s.height);
-		playGroundLayer.setAnchorPoint(new cc.Point(0.5,0.5));	
+		this.playGroundLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 0), s.width, s.height);
+		this.playGroundLayer.setAnchorPoint(new cc.Point(0.5,0.5));	
 		
-		var hud = HUD.create(s.width, s.height);
-		var endScreen = EndScreen.create(s.width, s.height);
-		var pauseMenu = PauseMenu.create(s.width, s.height);
+		this.hud = HUD.create(s.width, s.height);
+		this.endScreen = EndScreen.create(s.width, s.height);
+		this.pauseMenu = PauseMenu.create(s.width, s.height);
 		
-		//Create game.
-		Client.game.init(s.width, s.height, playGroundLayer, hud, endScreen, pauseMenu);
+		this.width = s.width;
+		this.height = s.height;
+				
+		//Needed when game init before GameLayer.
+		if(Client.game != null)
+			Client.game.init(this.width, this.height, this.playGroundLayer, this.hud, this.endScreen, this.pauseMenu);
+				
+		//Create loading screen for client if it doesn't exist yet.
+		if(Client.loadingScreen == null)
+			Client.loadingScreen = LoadingScreen.create(s.width, s.height);
 		
 		//Set the game layer (middle ground).
-		this.addChild(playGroundLayer);
-		this.addChild(hud);
+		this.addChild(this.playGroundLayer);
+		this.addChild(this.hud);
 		
 		this.setKeyboardEnabled(true);
 				
@@ -25,10 +33,7 @@ var GameLayer = cc.Layer.extend({
 		this.schedule(function(dt){
 			this.update(dt);
 		});
-		
-		//Launch game when initiation ends.
-		Client.game.launch();
-		
+
 		return this;
 	},
 	onKeyDown: function(e){
@@ -51,6 +56,9 @@ var GameScene = cc.Scene.extend({
 		this.layer.init();
 		
 		this.addChild(this.layer);
+		
+		//Show loading screen.
+		Client.startLoading();
 	},
 	onExit: function(){
 		this.removeChild(this.layer);
