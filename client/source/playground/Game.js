@@ -7,8 +7,7 @@ var Game = function(){
 	
 	//Dynamic objects.
 	this.player = null;
-	this.currentState = Enum.Game.State.PLAYING;
-	this.currentPhase = Enum.Game.Phase.PLAYING;
+	this.currentPhase = Enum.Game.Phase.WARMUP;
 	
 	this.goal = null;
 	
@@ -122,65 +121,101 @@ Game.prototype.createWorld = function(){
 								 new Block(0,0, Enum.Block.Type.COLORED, this.player.color));
 	
 	this.ready = true;
-	this.currentState = Enum.Game.State.PLAYING;
 };
 
 //Update elements contained in the container.
 Game.prototype.update = function (dt){
 		
 	//Update info from the server.
-	if(this.ready && this.currentState != Enum.Game.State.ENDING)
+	if(this.ready && this.currentPhase != Enum.Game.Phase.ENDING)
 	{
-		if(Client.keys[Options.keys.PAUSE] && this.mayPause)
-		{
-			if(!this.isPaused)
-				this.pause();
-			else
-				this.unpause();
+		switch(this.currentPhase){
+			case Enum.Game.Phase.PLAYING:
 			
-			this.mayPause = false;
-		}
-		else if(!Client.keys[Options.keys.PAUSE] && !this.mayPause)
-			this.mayPause = true;
-			
-		if(!this.isPaused)
-		{
-			//Send 
-			Client.push();
-		
-			this.hud.update(dt);
-			
-			//Position camera.
-			this.moveCamera();
-			this.camera.update();
-			
-			//Project static objects.
-			this.projectWorld();
-			
-			//Update dynamic objects.
-			this.player.update(dt);
-			
-			for(var i in this.enemies)
-				this.enemies[i].update(dt);
+				if(Client.keys[Options.keys.PAUSE] && this.mayPause)
+				{
+					if(!this.isPaused)
+						this.pause();
+					else
+						this.unpause();
+					
+					this.mayPause = false;
+				}
+				else if(!Client.keys[Options.keys.PAUSE] && !this.mayPause)
+					this.mayPause = true;
+					
+				if(!this.isPaused)
+				{
+					//Send 
+					Client.push();
+				
+					this.hud.update(dt);
+					
+					//Position camera.
+					this.moveCamera();
+					this.camera.update();
+					
+					//Project static objects.
+					this.projectWorld();
+					
+					//Update dynamic objects.
+					this.player.update(dt);
+					
+					for(var i in this.enemies)
+						this.enemies[i].update(dt);
 
-			for(var i in this.blocks)
-				this.blocks[i].update(dt);
+					for(var i in this.blocks)
+						this.blocks[i].update(dt);
+					
+					for(var i in this.deathZones)
+						this.deathZones[i].update(dt);
+						
+					for(var i in this.blackBoxes)
+						this.blackBoxes[i].update();
+						
+					this.goal.update();
+					
+					//Update all effects.
+					EffectManager.update();
+				}
 			
-			for(var i in this.deathZones)
-				this.deathZones[i].update(dt);
+				break;
+			case Enum.Game.Phase.WARMUP:
+			
+				this.hud.update(dt);
+					
+				//Position camera.
+				this.camera.update();
 				
-			for(var i in this.blackBoxes)
-				this.blackBoxes[i].update();
+				//Project static objects.
+				this.projectWorld();
 				
-			this.goal.update();
-			
-			//Update all effects.
-			EffectManager.update();
-			
-			//Hide loading screen.
-			if(Client.isLoading && this.hasPulledOnce)
-				Client.stopLoading();
-		}
+				//Update dynamic objects.
+				this.player.update(dt);
+				
+				for(var i in this.enemies)
+					this.enemies[i].update(dt);
+
+				for(var i in this.blocks)
+					this.blocks[i].update(dt);
+				
+				for(var i in this.deathZones)
+					this.deathZones[i].update(dt);
+					
+				for(var i in this.blackBoxes)
+					this.blackBoxes[i].update();
+					
+				this.goal.update();
+				
+				//Update all effects.
+				EffectManager.update();
+					
+				break;
+		};
+		
+		//Hide loading screen.
+		if(Client.isLoading && this.hasPulledOnce)
+			Client.stopLoading();
 	}
 };
 
@@ -287,7 +322,7 @@ Game.prototype.electWinner = function(winner){
 //End of the round. Show splash screen of victorious.
 Game.prototype.end = function(data){
 
-	this.currentState = Enum.Game.State.ENDING;
+	this.currentPhase = Enum.Game.Phase.ENDING;
 
 	//Stop winning goal.
 	this.goal.end();

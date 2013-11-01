@@ -1,12 +1,10 @@
 var Enum = {
 	Game: {
-		State: {
-			PLAYING: 0,
-			ENDING: 1
-		},
 		Phase: {
 			PLAYING: 0,
-			WINNER: 1
+			WINNER: 1,
+			WARMUP: 2,
+			ENDING: 3
 		}
 	},
 	Color: {

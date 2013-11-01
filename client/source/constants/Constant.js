@@ -118,7 +118,8 @@ var Constants = {
 		JOIN_GAME: 'joinGame',
 		DISCONNECT_PLAYER: 'disconnectPlayer',
 		UPDATE_SLOT: 'updateSlot',
-		UPDATE_LOBBY: 'updateLobby'
+		UPDATE_LOBBY: 'updateLobby',
+		GO: 'go'
 	},
 	Effect: {
 		Z_INDEX: 60,

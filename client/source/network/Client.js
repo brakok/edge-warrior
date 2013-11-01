@@ -278,6 +278,11 @@ var Client = new function(){
 			Client.game.launch();
 		});
 		
+		socket.on(Constants.Message.GO, function(){
+			console.log('GO!!!');
+			Client.game.currentPhase = Enum.Game.Phase.PLAYING;
+		});
+		
 		socket.on(Constants.Message.NEW_BLOCK, function(block){
 			//Add a new block.
 			Client.game.addBlock(block); 
