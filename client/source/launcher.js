@@ -5,7 +5,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
 		minWidth: 640,
 		minHeight: 480,
 		left: 100,
-		top: 100,
+		top: 0,
 		type: 'shell'
 	});
 });

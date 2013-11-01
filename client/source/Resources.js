@@ -20,6 +20,7 @@ var assets = [
 	{type:'image', src: assetsMenuDir + '4.png'},
 	{type:'image', src: assetsMenuDir + 'true.png'},
 	{type:'image', src: assetsMenuDir + 'false.png'},
+	{type:'image', src: assetsMenuDir + 'color_circle.png'},
 	
 	//Menu background
 	{type:'image', src: assetsMenuDir + 'login_background.png'},

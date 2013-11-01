@@ -1,8 +1,11 @@
 //Object containing network information.
 var Client = new function(){
 
+	this.isLoading = false;
 	this.username = null;
 	this.game = null;
+	
+	this.loadingScreen = null;
 	
 	//Members.
 	this.keys = {};
@@ -27,6 +30,26 @@ var Client = new function(){
 	
 		this.username = username;
 		return true;
+	};
+	
+	//Show loading screen.
+	this.startLoading = function(){
+	
+		if(!this.isLoading && this.loadingScreen != null)
+		{
+			this.isLoading = true;
+			myApp.GameScene.layer.addChild(this.loadingScreen);
+		}
+	};
+	
+	//Hide loading screen.
+	this.stopLoading = function(){
+	
+		if(this.isLoading && this.loadingScreen != null)
+		{
+			this.isLoading = false;
+			myApp.GameScene.layer.removeChild(this.loadingScreen);
+		}
 	};
 	
 	//Log off.
@@ -112,6 +135,10 @@ var Client = new function(){
 		//Join game when game is created.
 		masterSocket.on(Constants.Message.GAME_CREATED, function(ipAddress){
 			console.log('Game created');
+
+			//Change to game scene.
+			cc.Director.getInstance().replaceScene(myApp.GameScene);
+			
 			Client.connect(ipAddress);
 			
 			var data = {
@@ -190,7 +217,14 @@ var Client = new function(){
 		//Init.
 		socket.on(Constants.Message.INIT, function (data) {
 			console.log('Initialize');		
+
+			var gameLayer = myApp.GameScene.layer;
+			
+			//Init game.
 			Client.game = new Game();
+			
+			if(gameLayer != null)
+				Client.game.init(gameLayer.width, gameLayer.height, gameLayer.playGroundLayer, gameLayer.hud, gameLayer.endScreen, gameLayer.pauseMenu);
 			
 			//Server positioning and giving color to player.
 			Client.game.player = new Player(data.player.x, data.player.y, data.player.color, true, Client.username);	
@@ -240,7 +274,8 @@ var Client = new function(){
 				height: data.height
 			};
 			
-			cc.Director.getInstance().replaceScene(myApp.GameScene);
+			//Launch game when initiation ends.
+			Client.game.launch();
 		});
 		
 		socket.on(Constants.Message.NEW_BLOCK, function(block){

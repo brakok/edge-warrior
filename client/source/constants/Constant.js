@@ -201,6 +201,19 @@ var Constants = {
 		},
 		PauseMenu: {
 			Z_INDEX: 5000
+		},
+		LoadingScreen: {
+			Z_INDEX: 5000,
+			BigCircle: {
+				Z_INDEX: 0,
+				SCALE: 1,
+				DEGREE_BY_SECOND: -180
+			},
+			SmallCircle: {
+				Z_INDEX: 1,
+				SCALE: 0.5,
+				DEGREE_BY_SECOND: 180
+			}
 		}
 	}
 };
