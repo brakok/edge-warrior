@@ -48,6 +48,9 @@ var Enum = {
 			SPAWN: 2,
 			SKILLED: 3
 		},
+		Skill: {
+			FIRE_PULSE: 0
+		},
 		Destruction: {
 			COLOR_CONTACT: 0,
 			SPAWN: 1,
@@ -87,7 +90,7 @@ var Enum = {
 	},
 	DeathZone: {
 		Type: {
-			RAYBALL: 0,
+			FIREBALL: 0,
 			ENERGY_SPIKE: 1
 		}
 	},
