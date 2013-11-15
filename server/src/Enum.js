@@ -24,7 +24,7 @@ var Enum = {
 			PLAYER: 0,
 			BLOCK: 1,
 			WINNING_GOAL: 2,
-			RAYBALL: 3,
+			FIREBALL: 3,
 			ENERGY_SPIKE: 4
 		}
 	},
@@ -34,6 +34,9 @@ var Enum = {
 			COLORED: 1,
 			SPAWN: 2,
 			SKILLED: 3
+		},
+		Skill: {
+			FIRE_PULSE: 0
 		},
 		State: {
 			STATIC: 0,
@@ -53,7 +56,8 @@ var Enum = {
 			BLOCK: 3,
 			DROP_SENSOR: 4,
 			WINNING_GOAL: 5,
-			DEATH_ZONE: 6
+			DEATH_ZONE: 6,
+			SKILL: 7
 		}
 	},
 	Facing: {
@@ -86,7 +90,7 @@ var Enum = {
 	},
 	DeathZone: {
 		Type: {
-			RAYBALL: 0,
+			FIREBALL: 0,
 			ENERGY_SPIKE: 1
 		}
 	},
@@ -159,11 +163,13 @@ var Constants = {
 		PHASE_TIME: 3
 	},
 	DeathZone: {
-		Rayball: {
-			SPEED: 50,
+		Fireball: {
+			SPEED_MIN: 50,
+			SPEED_STEP: 10,
 			WIDTH: 45,
 			HEIGHT: 45,
-			COOLDOWN: 0.5
+			DISTANCE_MIN: 200,
+			DISTANCE_STEP: 50
 		},
 		EnergySpike: {
 			SPEED: 4,

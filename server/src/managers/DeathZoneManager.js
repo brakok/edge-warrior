@@ -10,13 +10,13 @@ DeathZoneManager.prototype.launch = function(deathZone){
 	
 	var data = {
 		id: deathZone.id,
-		type: deathZone.stats.type,
+		type: deathZone.type,
 		x: deathZone.x,
 		y: deathZone.y
 	};
 	
 	//Insert specific custom data.
-	switch(deathZone.stats.type){
+	switch(deathZone.type){
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
 			data.finalX = deathZone.finalX;
 			data.finalY = deathZone.finalY;

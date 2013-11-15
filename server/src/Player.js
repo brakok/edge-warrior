@@ -59,7 +59,11 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	if(this.currentBlock != Enum.Block.Type.SPAWN && blockType != Enum.Block.Type.SPAWN)
 	{
 		this.currentBlock = Enum.Block.Type.SPAWN;
-		io.sockets.sockets[this.id].emit(Constants.Message.SEND_BLOCK, Enum.Block.Type.SPAWN);
+		io.sockets.sockets[this.id].emit(Constants.Message.SEND_BLOCK, 
+										{
+											type: Enum.Block.Type.SPAWN,
+											skill: null
+										});
 		this.hasGivenBlock = true;
 	}
 		
@@ -416,12 +420,13 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 	
 		//Create a block and launch it.
 		this.currentGame.managers.BlockManager.launch(new Block(this.currentGame.blockSequence, 
-													  tmpX, 
-													  tmpY, 
-													  this.currentBlock, 
-													  this.color,
-													  this.id,
-													  this.currentGame));
+															  tmpX, 
+															  tmpY, 
+															  this.currentBlock.type, 
+															  this.color,
+															  this.id,
+															  this.currentGame,
+															  this.currentBlock.skill));
 		
 		this.hasGivenBlock = false;
 		
