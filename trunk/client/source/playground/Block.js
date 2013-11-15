@@ -1,4 +1,4 @@
-var Block = function (x, y, type, color) {
+var Block = function (x, y, type, color, skill) {
 	
 	this.x = x;
 	this.y = y;
@@ -6,6 +6,7 @@ var Block = function (x, y, type, color) {
 	this.scale = 1;
 	
 	this.type = type;
+	this.skill = (Enum.Block.Type.SKILLED ? skill : null);
 	this.color = color;
 	
 	//Create sprite associated.
@@ -13,6 +14,17 @@ var Block = function (x, y, type, color) {
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + this.color + '.png');
 	else if(this.type == Enum.Block.Type.SPAWN)
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block_spawn.png');
+	else if(this.type == Enum.Block.Type.NEUTRAL)
+		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
+	else if(this.type == Enum.Block.Type.SKILLED)
+	{
+		//All repertoried skills.
+		switch(this.skill.type){
+			case Enum.Block.Skill.FIRE_PULSE:
+				this.sprite = cc.Sprite.create(assetsBlockDir + 'block_5.png');
+				break;
+		}
+	}
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
 		
@@ -102,10 +114,18 @@ Block.prototype.explode = function(cause){
 	}
 };
 
+Block.prototype.toServer = function(){
+	return {
+		type: this.type,
+		skill: this.skill
+	};
+};
+
 //Update block information from server.
 Block.prototype.fromServer = function(data){
 
 	this.type = data.type;
+	this.skill = data.skill;
 	
 	//If color has changed, swap color.
 	if(this.color != data.color)

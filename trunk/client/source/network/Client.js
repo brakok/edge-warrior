@@ -294,7 +294,7 @@ var Client = new function(){
 		});
 		
 		//Pulling info from server.
-		socket.on(Constants.Message.PULL, function (data){	
+		socket.on(Constants.Message.PULL, function (data){
 			if(Client.game != null)
 				Client.game.updateFromServer(data.players, data.blocks, data.goal, data.deathZones);
 		});
@@ -310,8 +310,8 @@ var Client = new function(){
 		});
 		
 		//Received information to build spawn block.
-		socket.on(Constants.Message.SEND_BLOCK, function(blockType){
-			Client.game.player.addNextBlock(blockType);
+		socket.on(Constants.Message.SEND_BLOCK, function(block){
+			Client.game.player.addNextBlock(block);
 		});
 		
 		//Spawn player.

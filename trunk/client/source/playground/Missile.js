@@ -9,7 +9,7 @@ var Missile = function(x, y, type){
 Missile.prototype.init = function(){
 
 	switch(this.type){
-		case Enum.DeathZone.Type.RAYBALL:
+		case Enum.DeathZone.Type.FIREBALL:
 			this.sprite = cc.Sprite.create(assestsPlaceHolderDir + 'ray_ball.png');
 			break;
 	}

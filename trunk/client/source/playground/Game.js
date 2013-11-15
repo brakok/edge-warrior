@@ -134,6 +134,7 @@ Game.prototype.update = function (dt){
 	{
 		switch(this.currentPhase){
 			case Enum.Game.Phase.PLAYING:
+			case Enum.Game.Phase.WINNER:
 			
 				if(Client.keys[Options.keys.PAUSE] && this.mayPause)
 				{
@@ -171,7 +172,8 @@ Game.prototype.update = function (dt){
 						this.blocks[i].update(dt);
 					
 					for(var i in this.deathZones)
-						this.deathZones[i].update(dt);
+						if(this.deathZones[i] != null)
+							this.deathZones[i].update(dt);
 						
 					for(var i in this.blackBoxes)
 						this.blackBoxes[i].update();
@@ -256,7 +258,7 @@ Game.prototype.randomBlock = function(){
 		
 	//Ask player to create the next block and send the new one to the server.
 	this.player.pushNextBlock();
-	Client.socket.emit(Constants.Message.NEXT_BLOCK, this.hud.inventory.getCurrent().type);
+	Client.socket.emit(Constants.Message.NEXT_BLOCK, this.hud.inventory.getCurrent().toServer());
 };
 
 //Kill a player and remove it from the layer.
@@ -421,7 +423,7 @@ Game.prototype.spawnPlayer = function(remotePlayer){
 
 //Add a new block from the server.
 Game.prototype.addBlock = function(remoteBlock){
-	this.blocks[remoteBlock.id] = new Block(remoteBlock.x, remoteBlock.y, remoteBlock.type, remoteBlock.color);
+	this.blocks[remoteBlock.id] = new Block(remoteBlock.x, remoteBlock.y, remoteBlock.type, remoteBlock.color, remoteBlock.skill);
 	this.blocks[remoteBlock.id].init();
 };
 
@@ -432,15 +434,15 @@ Game.prototype.addDeathZone = function(remoteDeathZone){
 
 	switch(remoteDeathZone.type)
 	{
-		case Enum.DeathZone.Type.RAYBALL:
+		case Enum.DeathZone.Type.FIREBALL:
 			deathZone = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
 			break;
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
 			deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.finalX, remoteDeathZone.finalY);
+			this.goal.swapAnimation(Enum.Anim.Type.GOAL_ACTION);
 			break;
 	}
 	
-	this.goal.swapAnimation(Enum.Anim.Type.GOAL_ACTION);
 	this.deathZones[remoteDeathZone.id] = deathZone;
 };
 

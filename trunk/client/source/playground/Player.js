@@ -10,7 +10,9 @@ var Player = function (x, y, color, isControlled, username) {
 	this.isControlled = isControlled;
 	
 	this.blockTypeAvailable = [];
+	
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
+	//this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, 50, Enum.Block.Skill.FIRE_PULSE, 0));
 	
 	this.voices = null;
 	
@@ -36,7 +38,7 @@ Player.prototype.changePercent = function(blockType, percent){
 //Add a block as the current block from an extern source.
 Player.prototype.addNextBlock = function(blockType){
 	this.givenBlock = blockType;
-	Client.game.hud.inventory.setCurrent(new Block(0,0, this.givenBlock, this.color));
+	Client.game.hud.inventory.setCurrent(new Block(0,0, this.givenBlock.type, this.color, this.givenBlock.skill));
 };
 
 //Ask player to randomize next block in the list.
@@ -60,7 +62,11 @@ Player.prototype.pushNextBlock = function(){
 		{
 			if(rnd <= (this.blockTypeAvailable[i].percent + min))
 			{
-				nextBlock = this.blockTypeAvailable[i].type;
+				nextBlock = {
+					type: this.blockTypeAvailable[i].type,
+					skill: this.blockTypeAvailable[i].skill
+				};
+					
 				found = true;
 			}
 			
@@ -70,9 +76,12 @@ Player.prototype.pushNextBlock = function(){
 		
 		//Colored if not found.
 		if(!found)
-			nextBlock = Enum.Block.Type.COLORED;
+			nextBlock = {
+				type: Enum.Block.Type.COLORED,
+				skill: null
+			};
 			
-		Client.game.hud.inventory.addBlock(new Block(0,0, nextBlock, this.color));
+		Client.game.hud.inventory.addBlock(new Block(0,0, nextBlock.type, this.color, nextBlock.skill));
 	}
 	else
 		this.givenBlock = null;
