@@ -164,12 +164,12 @@ var Constants = {
 	},
 	DeathZone: {
 		Fireball: {
-			SPEED_MIN: 50,
+			SPEED_MIN: 7,
 			SPEED_STEP: 10,
 			WIDTH: 45,
 			HEIGHT: 45,
-			DISTANCE_MIN: 200,
-			DISTANCE_STEP: 50
+			DISTANCE_MIN: 150,
+			DISTANCE_STEP: 75
 		},
 		EnergySpike: {
 			SPEED: 4,
@@ -443,8 +443,8 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 		else
 			player.toBeDestroy = true;
 	}
-		
-	if(block != null)
+	
+	if(block != null && block.type != Enum.Block.Type.SPAWN && (deathZone == null || deathZone.blockId == null || deathZone.blockId != block.id))
 		block.markToDestroy(Enum.Block.Destruction.CRUSHED);
 };
 //Drop listener.
@@ -1191,6 +1191,9 @@ Block.prototype.update = function(){
 				this.active(!this.isStatic);
 				this.toggleState = false;
 			}	
+			
+			this.x = this.body.getPos().x;
+			this.y = this.body.getPos().y;
 		}
 	}
 };
@@ -1222,15 +1225,13 @@ Block.prototype.trigger = function(){
 			{
 				case Enum.Block.Skill.FIRE_PULSE:
 
-					console.log('FIRE!');
 					if(this.landed && this.skill.count > 0)
 					{
-						console.log('IN THE HOLE!');
-					
 						//Launch one fireball for both sides.
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.x, 
-																					  this.y + this.height*0.5, 
+																					  this.id,
+																					  this.x,
+																					  this.y, 
 																					  Enum.DeathZone.Type.FIREBALL,
 																					  {
 																						direction: Enum.Direction.LEFT,
@@ -1239,8 +1240,9 @@ Block.prototype.trigger = function(){
 																					  this.currentGame));
 						
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																					  this.id,
 																					  this.x, 
-																					  this.y + this.height*0.5, 
+																					  this.y, 
 																					  Enum.DeathZone.Type.FIREBALL,
 																					  {
 																						direction: Enum.Direction.RIGHT,
@@ -1522,7 +1524,7 @@ Game.prototype.createWorld = function(){
 									   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
 		
 		//Force bodies to sleep when idle after 0.2 second.
-		this.space.sleepTimeThreshold = 0.2;
+		this.space.sleepTimeThreshold = 0.075;
 		this.space.collisionBias = 0;
 		
 		//Create floor and walls.
@@ -2214,13 +2216,14 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 });
 
 console.log('Server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED,		direction: Enum.Direction.UP,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.currentGame.deathZoneSequence,													  this.x, 													  0, 													  Constants.DeathZone.EnergySpike.WIDTH, 													  this.y, 													  this.currentGame.winner.id,													  Enum.DeathZone.Type.ENERGY_SPIKE,													  this.spikeStats, 													  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
-var Missile = function(id, x, y, type, stats, game){
+var Missile = function(id, blockId, x, y, type, stats, game){
 	
 	this.currentGame = game;
 	
 	this.stillExists = true;
 	this.id = id;
 
+	this.blockId = blockId;
 	this.x = x;
 	this.y = y;
 	this.velocity = {x:0, y:0};
@@ -2279,28 +2282,28 @@ Missile.prototype.move = function(){
 	}
 	else
 	{
-		var degree = 0;
+		var rad = 0;
 		
 		switch(this.stats.direction)
 		{
 			case Enum.Direction.UP:
-				degree = 0;
+				rad = 0;
 				break;
 			case Enum.Direction.LEFT:
-				degree = 270;
+				rad = Math.PI*1.5;
 				break;
 			case Enum.Direction.DOWN:
-				degree = 180;
+				rad = Math.PI;
 				break;
 			case Enum.Direction.RIGHT:
-				degree = 90;
+				rad = Math.PI*0.5;
 				break;
 		}
 
-		this.x = this.originalX + this.stats.distance*Math.sin(degree);
-		this.y = this.originalY + this.stats.distance*Math.cos(degree);
+		this.x = this.originalX + (this.stats.distance + 1)*Math.sin(rad);
+		this.y = this.originalY + (this.stats.distance + 1)*Math.cos(rad);
 	}
-
+	
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 };
 
@@ -2343,21 +2346,21 @@ Missile.prototype.update = function(){
 	if(this.stillExists)
 	{
 		var push = {x:0, y:0};
-		var degree = 0;
+		var rad = 0;
 		
 		switch(this.stats.direction)
 		{
 			case Enum.Direction.UP:
-				degree = 0;
+				rad = 0;
 				break;
 			case Enum.Direction.LEFT:
-				degree = 270;
+				rad = Math.PI*1.5;
 				break;
 			case Enum.Direction.DOWN:
-				degree = 180;
+				rad = Math.PI;
 				break;
 			case Enum.Direction.RIGHT:
-				degree = 90;
+				rad = Math.PI*0.5;
 				break;
 		}
 		
@@ -2371,19 +2374,19 @@ Missile.prototype.update = function(){
 			
 			if((tmpVelX*tmpVelX)+(tmpVelY*tmpVelY) > (this.stats.maxspeed*this.stats.maxspeed))
 			{
-				this.velocity.x = this.stats.maxspeed*Math.sin(degree);
-				this.velocity.y = this.stats.maxspeed*Math.cos(degree);
+				this.velocity.x = this.stats.maxspeed*Math.sin(rad);
+				this.velocity.y = this.stats.maxspeed*Math.cos(rad);
 			}
 			else
 			{
-				this.velocity.x += this.stats.acceleration.x*Math.sin(degree);
-				this.velocity.y += this.stats.acceleration.y*Math.cos(degree);
+				this.velocity.x += this.stats.acceleration.x*Math.sin(rad);
+				this.velocity.y += this.stats.acceleration.y*Math.cos(rad);
 			}
 		}
 		else
-		{
-			this.velocity.x = this.stats.speed*Math.sin(degree);
-			this.velocity.y = this.stats.speed*Math.cos(degree);
+		{		
+			this.velocity.x = this.stats.speed*Math.sin(rad);
+			this.velocity.y = this.stats.speed*Math.cos(rad);
 		}
 			
 		this.move();

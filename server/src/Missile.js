@@ -1,11 +1,12 @@
 
-var Missile = function(id, x, y, type, stats, game){
+var Missile = function(id, blockId, x, y, type, stats, game){
 	
 	this.currentGame = game;
 	
 	this.stillExists = true;
 	this.id = id;
 
+	this.blockId = blockId;
 	this.x = x;
 	this.y = y;
 	this.velocity = {x:0, y:0};
@@ -64,28 +65,28 @@ Missile.prototype.move = function(){
 	}
 	else
 	{
-		var degree = 0;
+		var rad = 0;
 		
 		switch(this.stats.direction)
 		{
 			case Enum.Direction.UP:
-				degree = 0;
+				rad = 0;
 				break;
 			case Enum.Direction.LEFT:
-				degree = 270;
+				rad = Math.PI*1.5;
 				break;
 			case Enum.Direction.DOWN:
-				degree = 180;
+				rad = Math.PI;
 				break;
 			case Enum.Direction.RIGHT:
-				degree = 90;
+				rad = Math.PI*0.5;
 				break;
 		}
 
-		this.x = this.originalX + this.stats.distance*Math.sin(degree);
-		this.y = this.originalY + this.stats.distance*Math.cos(degree);
+		this.x = this.originalX + (this.stats.distance + 1)*Math.sin(rad);
+		this.y = this.originalY + (this.stats.distance + 1)*Math.cos(rad);
 	}
-
+	
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 };
 
@@ -128,21 +129,21 @@ Missile.prototype.update = function(){
 	if(this.stillExists)
 	{
 		var push = {x:0, y:0};
-		var degree = 0;
+		var rad = 0;
 		
 		switch(this.stats.direction)
 		{
 			case Enum.Direction.UP:
-				degree = 0;
+				rad = 0;
 				break;
 			case Enum.Direction.LEFT:
-				degree = 270;
+				rad = Math.PI*1.5;
 				break;
 			case Enum.Direction.DOWN:
-				degree = 180;
+				rad = Math.PI;
 				break;
 			case Enum.Direction.RIGHT:
-				degree = 90;
+				rad = Math.PI*0.5;
 				break;
 		}
 		
@@ -156,19 +157,19 @@ Missile.prototype.update = function(){
 			
 			if((tmpVelX*tmpVelX)+(tmpVelY*tmpVelY) > (this.stats.maxspeed*this.stats.maxspeed))
 			{
-				this.velocity.x = this.stats.maxspeed*Math.sin(degree);
-				this.velocity.y = this.stats.maxspeed*Math.cos(degree);
+				this.velocity.x = this.stats.maxspeed*Math.sin(rad);
+				this.velocity.y = this.stats.maxspeed*Math.cos(rad);
 			}
 			else
 			{
-				this.velocity.x += this.stats.acceleration.x*Math.sin(degree);
-				this.velocity.y += this.stats.acceleration.y*Math.cos(degree);
+				this.velocity.x += this.stats.acceleration.x*Math.sin(rad);
+				this.velocity.y += this.stats.acceleration.y*Math.cos(rad);
 			}
 		}
 		else
-		{
-			this.velocity.x = this.stats.speed*Math.sin(degree);
-			this.velocity.y = this.stats.speed*Math.cos(degree);
+		{		
+			this.velocity.x = this.stats.speed*Math.sin(rad);
+			this.velocity.y = this.stats.speed*Math.cos(rad);
 		}
 			
 		this.move();

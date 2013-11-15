@@ -164,12 +164,12 @@ var Constants = {
 	},
 	DeathZone: {
 		Fireball: {
-			SPEED_MIN: 50,
+			SPEED_MIN: 7,
 			SPEED_STEP: 10,
 			WIDTH: 45,
 			HEIGHT: 45,
-			DISTANCE_MIN: 200,
-			DISTANCE_STEP: 50
+			DISTANCE_MIN: 150,
+			DISTANCE_STEP: 75
 		},
 		EnergySpike: {
 			SPEED: 4,

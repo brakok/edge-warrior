@@ -51,7 +51,7 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 		else
 			player.toBeDestroy = true;
 	}
-		
-	if(block != null)
+	
+	if(block != null && block.type != Enum.Block.Type.SPAWN && (deathZone == null || deathZone.blockId == null || deathZone.blockId != block.id))
 		block.markToDestroy(Enum.Block.Destruction.CRUSHED);
 };
