@@ -72,6 +72,11 @@ Game.prototype.init = function(width, height, layer, hud, endScreen, pauseMenu){
 
 //Game start.
 Game.prototype.launch = function(){
+
+	//Init game with needed layers.
+	var gameLayer = myApp.GameScene.layer;
+	this.init(gameLayer.width, gameLayer.height, gameLayer.playGroundLayer, gameLayer.hud, gameLayer.endScreen, gameLayer.pauseMenu);
+
 	//Add received elements to the layer (render).
 	this.createWorld();
 	
