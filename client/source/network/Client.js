@@ -218,13 +218,8 @@ var Client = new function(){
 		socket.on(Constants.Message.INIT, function (data) {
 			console.log('Initialize');		
 
-			var gameLayer = myApp.GameScene.layer;
-			
 			//Init game.
 			Client.game = new Game();
-			
-			if(gameLayer != null)
-				Client.game.init(gameLayer.width, gameLayer.height, gameLayer.playGroundLayer, gameLayer.hud, gameLayer.endScreen, gameLayer.pauseMenu);
 			
 			//Server positioning and giving color to player.
 			Client.game.player = new Player(data.player.x, data.player.y, data.player.color, true, Client.username);	
@@ -273,6 +268,10 @@ var Client = new function(){
 				width: data.width,
 				height: data.height
 			};
+			
+			//Init game with needed layers.
+			var gameLayer = myApp.GameScene.layer;
+			Client.game.init(gameLayer.width, gameLayer.height, gameLayer.playGroundLayer, gameLayer.hud, gameLayer.endScreen, gameLayer.pauseMenu);
 			
 			//Launch game when initiation ends.
 			Client.game.launch();
