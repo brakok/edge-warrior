@@ -12,7 +12,7 @@ var Player = function (x, y, color, isControlled, username) {
 	this.blockTypeAvailable = [];
 	
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
-	//this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, 50, Enum.Block.Skill.FIRE_PULSE, 0));
+	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, 50, Enum.Block.Skill.FIRE_PULSE, 0));
 	
 	this.voices = null;
 	
@@ -178,8 +178,8 @@ Player.prototype.manageInput = function(){
 				Client.game.hud.inventory.setOption(true);
 			else
 				Client.game.hud.inventory.useOption(true);
-				
-			blockToSend = Client.game.hud.inventory.getCurrent().type;
+			
+			blockToSend = Client.game.hud.inventory.getCurrent().toServer();
 			this.option1Pressed = true;
 		}
 		else if(!Client.keys[Options.keys.OPT1] && this.option1Pressed)
@@ -193,7 +193,7 @@ Player.prototype.manageInput = function(){
 			else
 				Client.game.hud.inventory.useOption(false);
 				
-			blockToSend = Client.game.hud.inventory.getCurrent().type;
+			blockToSend = Client.game.hud.inventory.getCurrent().toServer();
 			this.option2Pressed = true;
 		}
 		else if(!Client.keys[Options.keys.OPT2] && this.option2Pressed)
