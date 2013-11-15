@@ -15,10 +15,6 @@ var GameLayer = cc.Layer.extend({
 		this.width = s.width;
 		this.height = s.height;
 				
-		//Needed when game init before GameLayer.
-		if(Client.game != null)
-			Client.game.init(this.width, this.height, this.playGroundLayer, this.hud, this.endScreen, this.pauseMenu);
-				
 		//Create loading screen for client if it doesn't exist yet.
 		if(Client.loadingScreen == null)
 			Client.loadingScreen = LoadingScreen.create(s.width, s.height);

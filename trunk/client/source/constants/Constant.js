@@ -10,7 +10,7 @@ var Constants = {
 				ON_GOAL: 1.5,
 				OFF_GOAL: 0.5,
 				Camera: {
-					ZOOM_FACTOR: 1.5,
+					ZOOM_FACTOR: 1.3,
 					SPEED_X: 0.0000001,
 					SPEED_Y: 0.0001,
 				}

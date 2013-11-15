@@ -192,7 +192,8 @@ Game.prototype.update = function (dt){
 					if(this.camera.y != this.player.y && this.camera.x != this.player.x)
 					{
 						//Slowdown camera for warmup.
-						this.camera.zoomFactor = Constants.Game.Phase.Warmup.Camera.ZOOM_FACTOR;
+						this.camera.zoom = Constants.Game.Phase.Warmup.Camera.ZOOM_FACTOR;
+						this.camera.targetedZoom = Constants.Game.Phase.Warmup.Camera.ZOOM_FACTOR;
 						this.camera.speed.x = Constants.Game.Phase.Warmup.Camera.SPEED_X;
 						this.camera.speed.y = Constants.Game.Phase.Warmup.Camera.SPEED_Y;
 					
@@ -207,7 +208,8 @@ Game.prototype.update = function (dt){
 					//Reset camera to its original state.
 					if(this.camera.zoomFactor != Constants.Camera.ZOOM_FACTOR)
 					{
-						this.camera.zoomFactor = Constants.Camera.ZOOM_FACTOR;
+						tthis.camera.zoom = 1;
+						this.camera.targetedZoom = 1;
 						this.camera.speed.x = Constants.Camera.SPEED_X;
 						this.camera.speed.y = Constants.Camera.SPEED_Y;
 					}
