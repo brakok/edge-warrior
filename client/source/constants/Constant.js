@@ -2,6 +2,21 @@ var Constants = {
 	Network: {
 		ADDRESS: 'http://localhost:1050'
 	},
+	Game: {
+		Phase: {
+			Warmup: {
+				PHASE_TIME: 3,
+				ON_PLAYER: 2.5,
+				ON_GOAL: 1.5,
+				OFF_GOAL: 0.5,
+				Camera: {
+					ZOOM_FACTOR: 1.5,
+					SPEED_X: 0.0000001,
+					SPEED_Y: 0.0001,
+				}
+			}
+		}
+	},
 	Block: {
 		Percent: {
 			STARTING_NEUTRAL: 25,
@@ -26,9 +41,8 @@ var Constants = {
 	Camera: {
 		HIGHER: 75,
 		SPEED_X: 0.0000003,
-		SPEED_Y: 0.000005,
+		SPEED_Y: 0.0005,
 		SPEED_ZOOM: 0.2,
-		UPWARD_FACTOR: 0.3,
 		CONTAINER_FACTOR_X: 1.65,
 		CONTAINER_FACTOR_Y: 2,
 		ZOOM_FACTOR: 1.3

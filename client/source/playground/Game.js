@@ -5,6 +5,9 @@ var Game = function(){
 	this.blocks = [];
 	this.deathZones = {};
 	
+	//Countdown of warmup.
+	this.warmupTimer = Constants.Game.Phase.Warmup.PHASE_TIME;
+	
 	//Dynamic objects.
 	this.player = null;
 	this.currentPhase = Enum.Game.Phase.WARMUP;
@@ -182,6 +185,34 @@ Game.prototype.update = function (dt){
 				break;
 			case Enum.Game.Phase.WARMUP:
 			
+				if(this.warmupTimer > Constants.Game.Phase.Warmup.ON_PLAYER)
+				{
+					if(this.camera.y != this.player.y && this.camera.x != this.player.x)
+					{
+						//Slowdown camera for warmup.
+						this.camera.zoomFactor = Constants.Game.Phase.Warmup.Camera.ZOOM_FACTOR;
+						this.camera.speed.x = Constants.Game.Phase.Warmup.Camera.SPEED_X;
+						this.camera.speed.y = Constants.Game.Phase.Warmup.Camera.SPEED_Y;
+					
+						this.camera.y = this.camera.focus.y = this.player.y;
+						this.camera.x = this.camera.focus.x = this.player.x;
+					}
+				}
+				else if(this.warmupTimer > Constants.Game.Phase.Warmup.ON_GOAL)
+					this.camera.lookAt(this.goal.x, this.goal.y);
+				else if(this.warmupTimer < Constants.Game.Phase.Warmup.OFF_GOAL)
+				{
+					//Reset camera to its original state.
+					if(this.camera.zoomFactor != Constants.Camera.ZOOM_FACTOR)
+					{
+						this.camera.zoomFactor = Constants.Camera.ZOOM_FACTOR;
+						this.camera.speed.x = Constants.Camera.SPEED_X;
+						this.camera.speed.y = Constants.Camera.SPEED_Y;
+					}
+						
+					this.moveCamera(true);
+				}
+			
 				this.hud.update(dt);
 					
 				//Position camera.
@@ -210,6 +241,7 @@ Game.prototype.update = function (dt){
 				//Update all effects.
 				EffectManager.update();
 					
+				this.warmupTimer -= dt;
 				break;
 		};
 		
@@ -255,12 +287,12 @@ Game.prototype.redirectAction = function(data){
 };
 
 //Set the new location and zoom of camera to catch all players.
-Game.prototype.moveCamera = function(){
+Game.prototype.moveCamera = function(test){
 	
-	var minX = this.player.x;
-	var maxX = this.player.x;
-	var minY = this.player.y;
-	var maxY = this.player.y;
+	var minX = null;
+	var maxX = null;
+	var minY = null;
+	var maxY = null;
 	
 	var containedObjects = [];
 	
@@ -281,13 +313,13 @@ Game.prototype.moveCamera = function(){
 	//Get extremities.
 	for(var i in containedObjects)
 	{		
-		if(containedObjects[i].x < minX)
+		if(minX == null || containedObjects[i].x < minX)
 			minX = containedObjects[i].x;
-		if(containedObjects[i].x > maxX)
+		if(maxX == null || containedObjects[i].x > maxX)
 			maxX = containedObjects[i].x;
-		if(containedObjects[i].y < minY)
+		if(minY == null || containedObjects[i].y < minY)
 			minY = containedObjects[i].y;
-		if(containedObjects[i].y > maxY)
+		if(maxY == null || containedObjects[i].y > maxY)
 			maxY = containedObjects[i].y;
 	}
 	
