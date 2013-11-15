@@ -268,11 +268,7 @@ var Client = new function(){
 				width: data.width,
 				height: data.height
 			};
-			
-			//Init game with needed layers.
-			var gameLayer = myApp.GameScene.layer;
-			Client.game.init(gameLayer.width, gameLayer.height, gameLayer.playGroundLayer, gameLayer.hud, gameLayer.endScreen, gameLayer.pauseMenu);
-			
+
 			//Launch game when initiation ends.
 			Client.game.launch();
 		});
