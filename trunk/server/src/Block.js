@@ -130,6 +130,9 @@ Block.prototype.update = function(){
 				this.active(!this.isStatic);
 				this.toggleState = false;
 			}	
+			
+			this.x = this.body.getPos().x;
+			this.y = this.body.getPos().y;
 		}
 	}
 };
@@ -161,15 +164,13 @@ Block.prototype.trigger = function(){
 			{
 				case Enum.Block.Skill.FIRE_PULSE:
 
-					console.log('FIRE!');
 					if(this.landed && this.skill.count > 0)
 					{
-						console.log('IN THE HOLE!');
-					
 						//Launch one fireball for both sides.
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.x, 
-																					  this.y + this.height*0.5, 
+																					  this.id,
+																					  this.x,
+																					  this.y, 
 																					  Enum.DeathZone.Type.FIREBALL,
 																					  {
 																						direction: Enum.Direction.LEFT,
@@ -178,8 +179,9 @@ Block.prototype.trigger = function(){
 																					  this.currentGame));
 						
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																					  this.id,
 																					  this.x, 
-																					  this.y + this.height*0.5, 
+																					  this.y, 
 																					  Enum.DeathZone.Type.FIREBALL,
 																					  {
 																						direction: Enum.Direction.RIGHT,

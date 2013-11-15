@@ -118,7 +118,7 @@ Game.prototype.createWorld = function(){
 									   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
 		
 		//Force bodies to sleep when idle after 0.2 second.
-		this.space.sleepTimeThreshold = 0.2;
+		this.space.sleepTimeThreshold = 0.075;
 		this.space.collisionBias = 0;
 		
 		//Create floor and walls.
