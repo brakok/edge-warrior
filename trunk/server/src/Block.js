@@ -1,5 +1,5 @@
 //Server version of the block.
-var Block = function(id, x, y, type, color, ownerId, game){
+var Block = function(id, x, y, type, color, ownerId, game, skill){
 	
 	this.currentGame = game;
 	
@@ -15,6 +15,18 @@ var Block = function(id, x, y, type, color, ownerId, game){
 	this.x = x;
 	this.y = y;
 	this.type = type;
+	this.skill = (type == Enum.Block.Type.SKILLED ? skill : null);
+	
+	//Set skill information.
+	if(this.skill != null)
+	{
+		switch(this.skill.type){
+			case Enum.Block.Skill.FIRE_PULSE:
+				this.skill.count = 1;
+				break;
+		}
+	}
+	
 	this.color = color;
 	
 	this.mustTrigger = false;
@@ -85,8 +97,6 @@ Block.prototype.active = function(flag){
 			this.currentGame.space.removeBody(this.body);
 			this.body.nodeIdleTime = Infinity;
 			this.body.setMass(Constants.Physic.MASS_BLOCK_STATIC);
-			
-			
 		}
 	}
 };
@@ -99,8 +109,6 @@ Block.prototype.update = function(){
 		//Trigger effect (can't during space step).
 		if(this.mustTrigger)
 			this.trigger();
-	
-		this.mustTrigger = false;
 		
 		if(this.stillExist)
 		{
@@ -132,6 +140,7 @@ Block.prototype.toClient = function(){
 		x: this.body.getPos().x,
 		y: this.body.getPos().y,
 		type: this.type,
+		skill: this.skill,
 		color: this.color
 	};
 };
@@ -141,7 +150,50 @@ Block.prototype.trigger = function(){
 	if(this.stillExist)
 	{
 		if(this.type == Enum.Block.Type.SPAWN)
+		{
 			this.spawn();
+			this.mustTrigger = false;
+		}
+		else if(this.type == Enum.Block.Type.SKILLED)
+		{
+			//All repertoried skills.
+			switch(this.skill.type)
+			{
+				case Enum.Block.Skill.FIRE_PULSE:
+
+					console.log('FIRE!');
+					if(this.landed && this.skill.count > 0)
+					{
+						console.log('IN THE HOLE!');
+					
+						//Launch one fireball for both sides.
+						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																					  this.x, 
+																					  this.y + this.height*0.5, 
+																					  Enum.DeathZone.Type.FIREBALL,
+																					  {
+																						direction: Enum.Direction.LEFT,
+																						power: this.skill.power
+																					  },
+																					  this.currentGame));
+						
+						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																					  this.x, 
+																					  this.y + this.height*0.5, 
+																					  Enum.DeathZone.Type.FIREBALL,
+																					  {
+																						direction: Enum.Direction.RIGHT,
+																						power: this.skill.power
+																					  },
+																					  this.currentGame));
+					
+						this.skill.count--;
+						this.mustTrigger = false;
+					}
+					
+					break;
+			}
+		}
 	}
 	
 };

@@ -8,12 +8,19 @@ BlockListener.prototype.begin = function(arbiter, space){
 	
 	var block1 = null;
 	var block2 = null;
-			
+	
 	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.BLOCK)
 		block1 = arbiter.body_a.userdata.object;
 
 	if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.BLOCK)
 		block2 = arbiter.body_b.userdata.object;
+		
+	//Resolve skill.
+	if(block1 != null && block1.type == Enum.Block.Type.SKILLED && block1.skill != null)
+		this.resolve(block1, arbiter.body_a.userdata);
+		
+	if(block2 != null && block2.type == Enum.Block.Type.SKILLED && block2.skill != null)
+		this.resolve(block2, arbiter.body_b.userdata);
 
 	//Special process for collision with two blocks.
 	if(block1 != null && block2 != null)
@@ -115,6 +122,20 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block2.toggleState = true;
 		block2.isStatic = true;
 		block2.justLanded = true;
+	}
+};
+	
+BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
+	
+	switch(skillBlock.skill.type){
+		case Enum.Block.Skill.FIRE_PULSE:
+			
+			if(otherUserdata != null && otherUserdata.type == Enum.UserData.Type.PLAYER)
+				return;
+				
+			skillBlock.mustTrigger = true;
+			
+			break;
 	}
 };
 	

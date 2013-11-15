@@ -1,5 +1,5 @@
 
-var Missile = function(id, x, y, width, height, stats, game){
+var Missile = function(id, x, y, type, stats, game){
 	
 	this.currentGame = game;
 	
@@ -10,16 +10,11 @@ var Missile = function(id, x, y, width, height, stats, game){
 	this.y = y;
 	this.velocity = {x:0, y:0};
 	
-	this.width = width;
-	this.height = height;
+	this.width = null;
+	this.height = null;
 	
+	this.type = type;
 	this.stats = stats;
-	
-	if(this.stats.distance != null)
-	{
-		this.originalX = this.x;
-		this.originalY = this.y;
-	}
 	
 	this.body = new chipmunk.Body(Infinity, Infinity);
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
@@ -27,10 +22,20 @@ var Missile = function(id, x, y, width, height, stats, game){
 	var userDataType = null;
 	
 	//Find good type for association.
-	switch(this.stats.type)
+	switch(this.type)
 	{
-		case Enum.DeathZone.Type.RAYBALL:
-			userDataType = Enum.UserData.Type.RAYBALL;
+		case Enum.DeathZone.Type.FIREBALL:
+			userDataType = Enum.UserData.Type.FIREBALL;
+			
+			this.stats.distance = Constants.DeathZone.Fireball.DISTANCE_MIN + (Constants.DeathZone.Fireball.DISTANCE_MIN*this.stats.power);
+			this.stats.speed = Constants.DeathZone.Fireball.SPEED_MIN + (Constants.DeathZone.Fireball.SPEED_STEP*this.stats.power);
+			
+			this.originalX = this.x;
+			this.originalY = this.y;
+			
+			this.width = Constants.DeathZone.Fireball.WIDTH;
+			this.height = Constants.DeathZone.Fireball.HEIGHT;
+			
 			break;
 	}
 	
@@ -48,9 +53,39 @@ var Missile = function(id, x, y, width, height, stats, game){
 
 Missile.prototype.move = function(){
 	
-	this.x += this.velocity.x;
-	this.y += this.velocity.y;
+	var distX = (this.x + this.velocity.x - this.originalX);
+	var distY = (this.y + this.velocity.y - this.originalY);
 	
+	//Travel maximum possible distance.
+	if((distX*distX)+(distY*distY) < this.stats.distance*this.stats.distance)
+	{
+		this.x += this.velocity.x;
+		this.y += this.velocity.y;
+	}
+	else
+	{
+		var degree = 0;
+		
+		switch(this.stats.direction)
+		{
+			case Enum.Direction.UP:
+				degree = 0;
+				break;
+			case Enum.Direction.LEFT:
+				degree = 270;
+				break;
+			case Enum.Direction.DOWN:
+				degree = 180;
+				break;
+			case Enum.Direction.RIGHT:
+				degree = 90;
+				break;
+		}
+
+		this.x = this.originalX + this.stats.distance*Math.sin(degree);
+		this.y = this.originalY + this.stats.distance*Math.cos(degree);
+	}
+
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 };
 
@@ -87,7 +122,7 @@ Missile.prototype.update = function(){
 	var distY = (this.y - this.originalY);
 				
 	//If distance has been reached or surpassed, missile is deleted.
-	if((distX*distX)+(distY*distY) > this.stats.distance*this.stats.distance)
+	if((distX*distX)+(distY*distY) >= this.stats.distance*this.stats.distance)
 		this.explode();
 	
 	if(this.stillExists)
