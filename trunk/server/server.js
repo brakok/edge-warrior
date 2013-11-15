@@ -156,7 +156,7 @@ var Constants = {
 		}
 	},
 	Warmup: {
-		PHASE_TIME: 5
+		PHASE_TIME: 3
 	},
 	DeathZone: {
 		Rayball: {
