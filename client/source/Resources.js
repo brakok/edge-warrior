@@ -111,6 +111,9 @@ var assets = [
 	{type:'image', src: assetsBlockDir + 'block_7.png'},
 	{type:'image', src: assetsBlockDir + 'block_spawn.png'},
 	
+	//Skill.
+	{type:'image', src: assetsBlockDir + 'block_firePulse.png'},
+	
 	//Player
 	{type:'image', src: assetsPlayerDir + 'yellow_idle.png'},
 	{type:'image', src: assetsPlayerDir + 'yellow_running.png'},
