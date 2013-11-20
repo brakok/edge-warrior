@@ -36,6 +36,9 @@ var Enum = {
 			SKILLED: 3
 		},
 		Skill: {
+			Trigger: {
+				ON_LANDING: 0
+			},
 			FIRE_PULSE: 0
 		},
 		State: {
@@ -265,9 +268,16 @@ BlockListener.prototype.begin = function(arbiter, space){
 	//Special process for collision with two blocks.
 	if(block1 != null && block2 != null)
 	{	
+	
 		if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED
 		&& block1.color == block2.color && block1.color < Enum.Color.GREEN)
 		{			
+			//Check if linked block has been destroyed first.
+			if(block1.linkedBlockId != null && this.currentGame.blocks[block1.linkedBlockId] == null)
+				block1.linkedBlockId = null;
+			if(block2.linkedBlockId != null && this.currentGame.blocks[block2.linkedBlockId] == null)
+				block2.linkedBlockId = null;
+		
 			//If blocks are touching a third one, destroy them all.
 			if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
 				|| (block2.linkedBlockId != null && block2.linkedBlockId != block1.id))
@@ -367,8 +377,8 @@ BlockListener.prototype.begin = function(arbiter, space){
 	
 BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 	
-	switch(skillBlock.skill.type){
-		case Enum.Block.Skill.FIRE_PULSE:
+	switch(skillBlock.skill.trigger){
+		case Enum.Block.Skill.Trigger.ON_LANDING:
 			
 			if(otherUserdata != null && otherUserdata.type == Enum.UserData.Type.PLAYER)
 				return;
@@ -1084,6 +1094,8 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 		switch(this.skill.type){
 			case Enum.Block.Skill.FIRE_PULSE:
 				this.skill.count = 1;
+				this.skill.trigger = Enum.Block.Skill.Trigger.ON_LANDING;
+				this.skill.selfDestroy = true;
 				break;
 		}
 	}
@@ -1174,7 +1186,7 @@ Block.prototype.update = function(){
 		if(this.stillExist)
 		{
 			//Check if it just landed to tell client to activate animation.
-			if(this.justLanded)
+			if(this.justLanded && (this.skill == null || !this.skill.selfDestroy))
 			{
 				var data = {
 					action: Enum.Action.Type.LANDING,
@@ -1229,7 +1241,7 @@ Block.prototype.trigger = function(){
 					{
 						//Launch one fireball for both sides.
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.id,
+																					  null,
 																					  this.x,
 																					  this.y, 
 																					  Enum.DeathZone.Type.FIREBALL,
@@ -1240,7 +1252,7 @@ Block.prototype.trigger = function(){
 																					  this.currentGame));
 						
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.id,
+																					  null,
 																					  this.x, 
 																					  this.y, 
 																					  Enum.DeathZone.Type.FIREBALL,

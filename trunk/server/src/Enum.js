@@ -36,6 +36,9 @@ var Enum = {
 			SKILLED: 3
 		},
 		Skill: {
+			Trigger: {
+				ON_LANDING: 0
+			},
 			FIRE_PULSE: 0
 		},
 		State: {
