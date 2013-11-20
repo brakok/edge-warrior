@@ -25,9 +25,16 @@ BlockListener.prototype.begin = function(arbiter, space){
 	//Special process for collision with two blocks.
 	if(block1 != null && block2 != null)
 	{	
+	
 		if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED
 		&& block1.color == block2.color && block1.color < Enum.Color.GREEN)
 		{			
+			//Check if linked block has been destroyed first.
+			if(block1.linkedBlockId != null && this.currentGame.blocks[block1.linkedBlockId] == null)
+				block1.linkedBlockId = null;
+			if(block2.linkedBlockId != null && this.currentGame.blocks[block2.linkedBlockId] == null)
+				block2.linkedBlockId = null;
+		
 			//If blocks are touching a third one, destroy them all.
 			if((block1.linkedBlockId != null && block1.linkedBlockId != block2.id) 
 				|| (block2.linkedBlockId != null && block2.linkedBlockId != block1.id))
@@ -127,8 +134,8 @@ BlockListener.prototype.begin = function(arbiter, space){
 	
 BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 	
-	switch(skillBlock.skill.type){
-		case Enum.Block.Skill.FIRE_PULSE:
+	switch(skillBlock.skill.trigger){
+		case Enum.Block.Skill.Trigger.ON_LANDING:
 			
 			if(otherUserdata != null && otherUserdata.type == Enum.UserData.Type.PLAYER)
 				return;

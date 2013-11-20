@@ -23,6 +23,8 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 		switch(this.skill.type){
 			case Enum.Block.Skill.FIRE_PULSE:
 				this.skill.count = 1;
+				this.skill.trigger = Enum.Block.Skill.Trigger.ON_LANDING;
+				this.skill.selfDestroy = true;
 				break;
 		}
 	}
@@ -113,7 +115,7 @@ Block.prototype.update = function(){
 		if(this.stillExist)
 		{
 			//Check if it just landed to tell client to activate animation.
-			if(this.justLanded)
+			if(this.justLanded && (this.skill == null || !this.skill.selfDestroy))
 			{
 				var data = {
 					action: Enum.Action.Type.LANDING,
@@ -168,7 +170,7 @@ Block.prototype.trigger = function(){
 					{
 						//Launch one fireball for both sides.
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.id,
+																					  null,
 																					  this.x,
 																					  this.y, 
 																					  Enum.DeathZone.Type.FIREBALL,
@@ -179,7 +181,7 @@ Block.prototype.trigger = function(){
 																					  this.currentGame));
 						
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.id,
+																					  null,
 																					  this.x, 
 																					  this.y, 
 																					  Enum.DeathZone.Type.FIREBALL,
