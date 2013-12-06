@@ -79,6 +79,7 @@ var assets = [
 	{type:'image', src: assetsEffectDir + 'SwapColor.png'},
 	{type:'image', src: assetsEffectDir + 'DoubleJump.png'},
 	{type:'image', src: assetsEffectDir + 'spawn_unleashed.png'},
+	{type:'image', src: assetsEffectDir + 'Fireball.png'},
 	
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_tentacle.plist'},
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_twisted.plist'},
@@ -90,6 +91,7 @@ var assets = [
 	{type:"plist", src: assetsEffectDir + 'DoubleJump.plist'},
 	{type:"plist", src: assetsEffectDir + 'Spark.plist'},
 	{type:"plist", src: assetsEffectDir + 'spawn_unleashed.plist'},
+	{type:"plist", src: assetsEffectDir + 'Fireball.plist'},
 
 	//Winning goal.
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},

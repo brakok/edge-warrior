@@ -19,6 +19,10 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'EnergySpike_transform.plist', 
 														  assetsEffectDir + 'EnergySpike_transform.png');
 															  
+		//Fireball.
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Fireball.plist', 
+														  assetsEffectDir + 'Fireball.png');
+		
 		//Effects.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 
 														  assetsEffectDir + 'PlayerDeath.png');

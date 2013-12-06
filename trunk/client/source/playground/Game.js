@@ -442,7 +442,7 @@ Game.prototype.addDeathZone = function(remoteDeathZone){
 	switch(remoteDeathZone.type)
 	{
 		case Enum.DeathZone.Type.FIREBALL:
-			deathZone = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type);
+			deathZone = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.direction);
 			break;
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
 			deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.finalX, remoteDeathZone.finalY);
