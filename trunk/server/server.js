@@ -2428,6 +2428,9 @@ DeathZoneManager.prototype.launch = function(deathZone){
 			data.finalX = deathZone.finalX;
 			data.finalY = deathZone.finalY;
 			break;
+		case Enum.DeathZone.Type.FIREBALL:
+			data.direction = deathZone.stats.direction;
+			break;
 	}
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_DEATHZONE, data);
