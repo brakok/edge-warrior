@@ -12,7 +12,7 @@ var Player = function (x, y, color, isControlled, username) {
 	this.blockTypeAvailable = [];
 	
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
-	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, 50, Enum.Block.Skill.FIRE_PULSE, 3));
+	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, 50, Enum.Block.Skill.FIRE_PULSE, 0));
 	
 	this.voices = null;
 	
