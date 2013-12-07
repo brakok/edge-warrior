@@ -122,6 +122,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block1.toggleState = true;
 		block1.isStatic = true;
 		block1.justLanded = true;
+		block1.landingTimer = Constants.Block.LANDING_TIMER;
 	}	
 	
 	if(block2 != null && !block2.isStatic)
@@ -129,6 +130,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block2.toggleState = true;
 		block2.isStatic = true;
 		block2.justLanded = true;
+		block2.landingTimer = Constants.Block.LANDING_TIMER;
 	}
 };
 	

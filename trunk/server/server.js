@@ -102,9 +102,7 @@ var Enum = {
 			FLOATING_BALL: 1
 		}
 	}
-};
-
-//Constants
+};//Constants
 var Constants = {
 	Game: {
 		MAX_PLAYERS: 4
@@ -140,6 +138,7 @@ var Constants = {
 	Block: {
 		WIDTH: 80,
 		HEIGHT: 30,
+		LANDING_TIMER: 0.01,
 		LAUNCHING_SPEED: -500,
 		SPAWN_MAXLAUNCHING_Y: 500,
 		SPAWN_MAXLAUNCHING_X: 500,
@@ -148,7 +147,7 @@ var Constants = {
 		}
 	},
 	WinningGoal: {
-		OFFSET_Y: 100,
+		OFFSET_Y: -100,
 		PHASE_TIME: 8,
 		FloatingBall: {
 			WIDTH: 90,
@@ -365,6 +364,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block1.toggleState = true;
 		block1.isStatic = true;
 		block1.justLanded = true;
+		block1.landingTimer = Constants.Block.LANDING_TIMER;
 	}	
 	
 	if(block2 != null && !block2.isStatic)
@@ -372,6 +372,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block2.toggleState = true;
 		block2.isStatic = true;
 		block2.justLanded = true;
+		block2.landingTimer = Constants.Block.LANDING_TIMER;
 	}
 };
 	
@@ -1080,7 +1081,14 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 	
 	this.width = Constants.Block.WIDTH;
 	this.height = Constants.Block.HEIGHT;
+	
+	//Flag is true when block's body is sleeping.
 	this.landed = false;
+	//Flag is true when block's body encounters another block.
+	this.justLanded = false;
+	//Precision timer to trigger action shortly after the block just landed. Prevents to trigger action when bodies are collapsing.
+	this.landingTimer = 0;
+	
 	this.stillExist = true;
 	
 	this.x = x;
@@ -1103,7 +1111,7 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 	this.color = color;
 	
 	this.mustTrigger = false;
-	this.justLanded = false;
+	
 	
 	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
 	this.toggleState = false;
@@ -1174,14 +1182,19 @@ Block.prototype.active = function(flag){
 	}
 };
 
-Block.prototype.update = function(){
+Block.prototype.update = function(dt){
 	
 	if(this.toBeDestroy)
 		this.explode(this.destroyCause);
 	else{	
+	
 		//Trigger effect (can't during space step).
 		if(this.mustTrigger)
 			this.trigger();
+		
+		//Reduce landing timer by delta.
+		if(this.landingTimer > 0)
+			this.landingTimer -= dt;
 		
 		if(this.stillExist)
 		{
@@ -1237,7 +1250,7 @@ Block.prototype.trigger = function(){
 			{
 				case Enum.Block.Skill.FIRE_PULSE:
 
-					if(this.landed && this.skill.count > 0)
+					if(this.landingTimer <= 0 && this.skill.count > 0)
 					{
 						//Launch one fireball for both sides.
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
@@ -1599,7 +1612,7 @@ Game.prototype.update = function(){
 		for(var i in this.blocks)
 		{
 			if(this.blocks[i] != null)
-				this.blocks[i].update();
+				this.blocks[i].update(this.dt);
 		}
 		
 		//Check if Overlord needs to use a spawn block.

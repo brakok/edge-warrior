@@ -181,7 +181,7 @@ Game.prototype.update = function(){
 		for(var i in this.blocks)
 		{
 			if(this.blocks[i] != null)
-				this.blocks[i].update();
+				this.blocks[i].update(this.dt);
 		}
 		
 		//Check if Overlord needs to use a spawn block.
