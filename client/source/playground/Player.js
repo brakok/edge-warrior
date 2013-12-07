@@ -209,7 +209,8 @@ Player.prototype.update = function(dt){
 	
 	Client.game.camera.project(this.currentAnimation, this.x, this.y, 0.5, 0.5);
 	
-	if(this.isControlled)
+	//Block inputs during warmup phase.
+	if(this.isControlled && Client.game.currentPhase != Enum.Game.Phase.WARMUP)
 	{
 		//Handle inputs.
 		this.manageInput();
