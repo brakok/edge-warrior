@@ -64,6 +64,14 @@ var Constants = {
 	},
 	HUD: {
 		Z_INDEX: 1000,
+		SkillStore: {
+			X: 235,
+			Y: 83,
+			Mode: {
+				OFFSET_X: 167,
+				OFFSET_Y: -27
+			}
+		},
 		Inventory: {
 			OFFSET: 250,
 			Y: 100,

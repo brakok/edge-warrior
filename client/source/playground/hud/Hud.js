@@ -8,6 +8,7 @@ var HUD = cc.LayerColor.extend({
 		
 		//Add the inventory.
 		this.inventory = new Inventory(Constants.HUD.Inventory.OFFSET, Constants.HUD.Inventory.Y, width, this);
+		this.skillStore = new SkillStore(Constants.HUD.SkillStore.X, Constants.HUD.SkillStore.Y, this);
 		this._zOrder = Constants.HUD.Z_INDEX;
 	},
 	update: function(dt){

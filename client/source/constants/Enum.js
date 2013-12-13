@@ -124,5 +124,11 @@ var Enum = {
 			JUMP: 1,
 			KILL: 2
 		}
+	},
+	SkillStore: {
+		Mode: {
+			POWER: 0,
+			QUANTITY: 1
+		}
 	}
 };

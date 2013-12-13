@@ -143,6 +143,9 @@ var assets = [
 	
 	//Hud.
 	{type:'image', src: assetsHudDir + 'fieldset.png'},
+	{type:'image', src: assetsHudDir + 'skill_fieldset.png'},
+	{type:'image', src: assetsHudDir + 'power.png'},
+	{type:'image', src: assetsHudDir + 'quantity.png'},
 	{type:'image', src: assetsHudDir + 'killCommand.png'},
 	{type:'plist', src: assetsHudDir + 'killCommand.plist'}
 ];
