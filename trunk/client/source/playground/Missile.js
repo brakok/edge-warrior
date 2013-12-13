@@ -86,5 +86,16 @@ Missile.prototype.explode = function(){
 	if(this.sprite != null)
 		Client.game.layer.removeChild(this.sprite);
 	else if(this.currentAnimation != null)
+	{
 		Client.game.layer.removeChild(this.currentAnimation);
+		
+		switch(this.type){
+			case Enum.DeathZone.Type.FIREBALL:
+			
+				//Create fireball explosion animation.
+				EffectManager.create(Enum.Effect.Type.FIREBALL_EXPLOSION, this.x, this.y);
+				break;
+		}
+	}
+		
 };

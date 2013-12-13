@@ -22,6 +22,8 @@ var AnimationManager = {
 		//Fireball.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Fireball.plist', 
 														  assetsEffectDir + 'Fireball.png');
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Fireball_explosion.plist', 
+														  assetsEffectDir + 'Fireball_explosion.png');
 		
 		//Effects.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 

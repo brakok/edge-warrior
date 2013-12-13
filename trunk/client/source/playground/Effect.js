@@ -58,6 +58,13 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('spawn_unleashed.0000.png');
 			this.animation = AnimationManager.create('spawn_unleashed', 0, 16, 24);
 			break;
+		case Enum.Effect.Type.FIREBALL_EXPLOSION:
+
+			//Effect created by dying fireball.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('Fireball_explosion.0000.png');
+			this.animation = AnimationManager.create('Fireball_explosion', 0, 12, 24);
+			break;
+		
 	}
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;
