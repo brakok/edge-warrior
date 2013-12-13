@@ -47,6 +47,9 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'spawn_unleashed.plist', 
 														  assetsEffectDir + 'spawn_unleashed.png');
 														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'FirePulse_explosion.plist', 
+														  assetsEffectDir + 'FirePulse_explosion.png');
+														  
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
 														  assetsPlayerDir + 'yellow_idle.png');	

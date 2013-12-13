@@ -81,6 +81,7 @@ var assets = [
 	{type:'image', src: assetsEffectDir + 'spawn_unleashed.png'},
 	{type:'image', src: assetsEffectDir + 'Fireball.png'},
 	{type:'image', src: assetsEffectDir + 'Fireball_explosion.png'},
+	{type:'image', src: assetsEffectDir + 'FirePulse_explosion.png'},
 	
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_tentacle.plist'},
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_twisted.plist'},
@@ -94,6 +95,7 @@ var assets = [
 	{type:"plist", src: assetsEffectDir + 'spawn_unleashed.plist'},
 	{type:"plist", src: assetsEffectDir + 'Fireball.plist'},
 	{type:"plist", src: assetsEffectDir + 'Fireball_explosion.plist'},
+	{type:"plist", src: assetsEffectDir + 'FirePulse_explosion.plist'},
 
 	//Winning goal.
 	{type:'image', src: assetsWinningGoalDir + 'floatingBall_idle.png'},
