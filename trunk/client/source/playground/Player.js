@@ -23,6 +23,8 @@ var Player = function (x, y, color, isControlled, username) {
 	//Options available in inventory.
 	this.option1Pressed = false;
 	this.option2Pressed = false;
+	
+	this.toggleBuyModePressed = false;
 }
 
 //Change percent on a specific option. Negative percent lowers actual one.
@@ -167,6 +169,18 @@ Player.prototype.resetVoiceTimer = function(){
 //Handle inputs.
 Player.prototype.manageInput = function(){
 
+	//Toggle buy mode for skills.
+	if(Client.keys[Options.keys.TOGGLE_BUY_MODE] && !this.toggleBuyModePressed)
+	{
+		this.toggleBuyModePressed = true;
+		
+		Client.game.hud.skillStore.changeBuyMode();
+	}
+	else if(!Client.keys[Options.keys.TOGGLE_BUY_MODE] && this.toggleBuyModePressed)
+		this.toggleBuyModePressed = false;
+
+		
+	//Store blocks in inventory.
 	if(this.givenBlock == null)
 	{
 		var blockToSend = null;
