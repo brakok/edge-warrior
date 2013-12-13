@@ -113,7 +113,8 @@ var Enum = {
 			SWAP_COLOR: 3,
 			DOUBLE_JUMP: 4,
 			SPARK: 5,
-			SPAWN_UNLEASHED: 6
+			SPAWN_UNLEASHED: 6,
+			FIREBALL_EXPLOSION: 7
 		}
 	},
 	Voice: {
