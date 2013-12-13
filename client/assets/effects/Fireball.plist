@@ -7,80 +7,41 @@
             <key>Fireball.0000.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{94,70},{56,32}}</string>
+                <string>{{72,2},{68,46}}</string>
                 <key>offset</key>
-                <string>{2,0}</string>
+                <string>{-1,0}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{4,9},{56,32}}</string>
+                <string>{{0,2},{68,46}}</string>
                 <key>sourceSize</key>
-                <string>{60,50}</string>
+                <string>{70,50}</string>
             </dict>
             <key>Fireball.0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{56,34}}</string>
+                <string>{{2,50},{68,44}}</string>
                 <key>offset</key>
-                <string>{-2,-2}</string>
+                <string>{-1,1}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,10},{56,34}}</string>
+                <string>{{0,2},{68,44}}</string>
                 <key>sourceSize</key>
-                <string>{60,50}</string>
+                <string>{70,50}</string>
             </dict>
             <key>Fireball.0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{60,70},{56,32}}</string>
+                <string>{{2,2},{68,46}}</string>
                 <key>offset</key>
-                <string>{2,8}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{4,1},{56,32}}</string>
-                <key>sourceSize</key>
-                <string>{60,50}</string>
-            </dict>
-            <key>Fireball.0003.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,38},{56,32}}</string>
-                <key>offset</key>
-                <string>{2,0}</string>
+                <string>{-1,1}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,9},{56,32}}</string>
+                <string>{{0,1},{68,46}}</string>
                 <key>sourceSize</key>
-                <string>{60,50}</string>
-            </dict>
-            <key>Fireball.0004.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{60,36},{56,32}}</string>
-                <key>offset</key>
-                <string>{-2,6}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,3},{56,32}}</string>
-                <key>sourceSize</key>
-                <string>{60,50}</string>
-            </dict>
-            <key>Fireball.0005.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{60,2},{56,32}}</string>
-                <key>offset</key>
-                <string>{2,-9}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{4,18},{56,32}}</string>
-                <key>sourceSize</key>
-                <string>{60,50}</string>
+                <string>{70,50}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -92,7 +53,7 @@
             <key>size</key>
             <string>{128,128}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:782e218c4d1ffd0175f3c8bfcf285182:33f449538654c0179ba13e5361e10562:023653f2b8b30a64bfd51cce0682c6c6$</string>
+            <string>$TexturePacker:SmartUpdate:f2e492f89dcee3b607d5a8a0bf74c108:0254ee3f8a79e3547fee67d997170915:023653f2b8b30a64bfd51cce0682c6c6$</string>
             <key>textureFileName</key>
             <string>Fireball.png</string>
         </dict>
