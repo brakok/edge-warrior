@@ -17,7 +17,7 @@ Missile.prototype.init = function(){
 		
 			//Set fireball animation.
 			this.currentAnimation = cc.Sprite.createWithSpriteFrameName('Fireball.0000.png');
-			var anim = AnimationManager.create('Fireball', 0, 6, 24);
+			var anim = AnimationManager.create('Fireball', 0, 3, 24);
 			this.currentAnimation.runAction(cc.RepeatForever.create(anim));
 			
 			break;
