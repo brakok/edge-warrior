@@ -96,6 +96,16 @@ Block.prototype.swapColor = function(color){
 Block.prototype.explode = function(cause){
 	Client.game.layer.removeChild(this.sprite);
 	
+	if(this.type == Enum.Block.Type.SKILLED)
+	{
+		//All repertoried skills.
+		switch(this.skill.type){
+			case Enum.Block.Skill.FIRE_PULSE:
+				EffectManager.create(Enum.Effect.Type.FIREPULSE_EXPLOSION, this.x, this.y);
+				return;
+		}
+	}
+	
 	//Trigger right animation depending of destruction cause.
 	switch(cause){
 		case Enum.Block.Destruction.COLOR_CONTACT:
