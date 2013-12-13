@@ -15,7 +15,7 @@ var Keys = function(keys){
 		this.SKILL2 = cc.KEY['2'];
 		this.SKILL3 = cc.KEY['3'];
 		this.SKILL4 = cc.KEY['4'];
-		this.TOGGLE_BUY_MODE = cc.KEY.shift;
+		this.TOGGLE_BUY_MODE = cc.KEY.c;
 		
 	}
 	else
@@ -50,7 +50,7 @@ Keys.prototype.reset = function(){
 	this.SKILL2 = cc.KEY['2'];
 	this.SKILL3 = cc.KEY['3'];
 	this.SKILL4 = cc.KEY['4'];
-	this.TOGGLE_BUY_MODE = cc.KEY.shift;
+	this.TOGGLE_BUY_MODE = cc.KEY.c;
 };
 
 var Options = new function(){
@@ -59,6 +59,7 @@ var Options = new function(){
 	this.fullscreen = false;
 	
 	this.keys = new Keys();
+	this.buyMode = Enum.SkillStore.Mode.POWER;
 	
 	this.resolution = {
 		width: 1024,
