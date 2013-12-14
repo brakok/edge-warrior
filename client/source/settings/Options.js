@@ -112,7 +112,7 @@ var Options = new function(){
 		chrome.storage.sync.get('skillSet', function(data){
 			that.callbackCounter++;
 			if(data.skillSet != null)
-				that.skillSet = data.skillSet;
+				that.skillSet = new SkillSet(data.skillSet);
 				
 			that.apply();
 		});
