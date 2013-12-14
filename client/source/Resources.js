@@ -21,6 +21,8 @@ var assets = [
 	{type:'image', src: assetsMenuDir + 'true.png'},
 	{type:'image', src: assetsMenuDir + 'false.png'},
 	{type:'image', src: assetsMenuDir + 'color_circle.png'},
+	{type:'image', src: assetsMenuDir + 'skill_selected.png'},
+	{type:'image', src: assetsMenuDir + 'skill_unselected.png'},
 	
 	//Menu background
 	{type:'image', src: assetsMenuDir + 'login_background.png'},
@@ -30,6 +32,7 @@ var assets = [
 	{type:'image', src: assetsMenuDir + 'lobby_background.png'},
 	{type:'image', src: assetsMenuDir + 'pause_background.png'},
 	{type:'image', src: assetsMenuDir + 'end_screen_background.png'},
+	{type:'image', src: assetsMenuDir + 'skill_background.png'},
 	
 	//Sounds
 	{type:"sound", src: soundDir + 'block_land'},

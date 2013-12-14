@@ -225,6 +225,12 @@ var Constants = {
 		PauseMenu: {
 			Z_INDEX: 5000
 		},
+		SkillScreen: {
+			Z_INDEX: 5000,
+			SkillSlot: {
+				STEP_Y: -0.2
+			}
+		},
 		LoadingScreen: {
 			Z_INDEX: 5000,
 			BigCircle: {
