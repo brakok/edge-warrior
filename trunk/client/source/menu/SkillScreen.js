@@ -46,11 +46,18 @@ var SkillScreen = cc.LayerColor.extend({
 		MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
 	reset: function(){
+		this.unselectSlots();
 		Options.skillSet.reset();
 	},
 	save: function(){
 		Options.saveSkillSet(Options.skillSet);
 		this.back();
+	},
+	unselectSlots: function(){
+		
+		for(var i = 0; i < 4; i++)
+			if(this.skillSlots[i].selected)
+				this.skillSlots[i].unselect();
 	}
 });
 
