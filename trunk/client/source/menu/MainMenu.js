@@ -18,13 +18,15 @@ var MainMenu = cc.LayerColor.extend({
 		this.cmdCreate = new cc.MenuItemFont.create("CREATE", this.create, this);
 		this.cmdJoin = new cc.MenuItemFont.create("JOIN", this.join, this);
 		this.cmdOptions = new cc.MenuItemFont.create("OPTIONS", this.toOptions, this);
+		this.cmdSkill = new cc.MenuItemFont.create("SKILLS", this.toSkills, this);
 		
 		this.cmdCreate.setPosition(new cc.Point(this.width*0.5, this.height*0.77));
 		this.cmdJoin.setPosition(new cc.Point(this.width*0.33, this.height*0.53));
-		this.cmdOptions.setPosition(new cc.Point(this.width*0.70, this.height*0.42));
+		this.cmdOptions.setPosition(new cc.Point(this.width*0.7, this.height*0.42));
+		this.cmdSkill.setPosition(new cc.Point(this.width*0.63, this.height*0.63));
 		
 		//Main menu.
-		this.menu = new cc.Menu.create(this.cmdCreate, this.cmdJoin, this.cmdOptions);
+		this.menu = new cc.Menu.create(this.cmdCreate, this.cmdJoin, this.cmdOptions, this.cmdSkill);
 		this.menu.setPosition(new cc.Point(0,0));
 		this.menu.setColor(new cc.Color3B(0,0,0));
 		
@@ -51,6 +53,9 @@ var MainMenu = cc.LayerColor.extend({
 	},
 	toOptions: function(){
 		MenuScreens.switchTo(MenuScreens.optionsScreen);
+	},
+	toSkills: function(){
+		MenuScreens.switchTo(MenuScreens.skillScreen);
 	}
 });
 

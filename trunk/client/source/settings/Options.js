@@ -1,57 +1,3 @@
-var Keys = function(keys){
-
-	if(keys == null)
-	{
-		this.RIGHT = cc.KEY.d;
-		this.LEFT = cc.KEY.a;
-		this.JUMP = cc.KEY.space;
-		this.KILL = cc.KEY.q;
-		this.OPT1 = cc.KEY.z;
-		this.OPT2 = cc.KEY.x;
-		this.PAUSE = cc.KEY.p;
-		
-		//To buy skills.
-		this.SKILL1 = cc.KEY['1'];
-		this.SKILL2 = cc.KEY['2'];
-		this.SKILL3 = cc.KEY['3'];
-		this.SKILL4 = cc.KEY['4'];
-		this.TOGGLE_BUY_MODE = cc.KEY.c;
-		
-	}
-	else
-	{
-		this.RIGHT = keys.RIGHT;
-		this.LEFT = keys.LEFT;
-		this.JUMP = keys.JUMP;
-		this.KILL = keys.KILL;
-		this.OPT1 = keys.OPT1;
-		this.OPT2 = keys.OPT2;
-		this.PAUSE = keys.PAUSE;
-		
-		//To buy skills.
-		this.SKILL1 = keys.SKILL1;
-		this.SKILL2 = keys.SKILL2;
-		this.SKILL3 = keys.SKILL3;
-		this.SKILL4 = keys.SKILL4;
-		this.TOGGLE_BUY_MODE = keys.TOGGLE_BUY_MODE;
-	}
-};
-
-Keys.prototype.reset = function(){
-	this.RIGHT = cc.KEY.d;
-	this.LEFT = cc.KEY.a;
-	this.JUMP = cc.KEY.space;
-	this.KILL = cc.KEY.q;
-	this.OPT1 = cc.KEY.z;
-	this.OPT2 = cc.KEY.x;
-	this.PAUSE = cc.KEY.p;
-	
-	this.SKILL1 = cc.KEY['1'];
-	this.SKILL2 = cc.KEY['2'];
-	this.SKILL3 = cc.KEY['3'];
-	this.SKILL4 = cc.KEY['4'];
-	this.TOGGLE_BUY_MODE = cc.KEY.c;
-};
 
 var Options = new function(){
 		
@@ -59,6 +5,8 @@ var Options = new function(){
 	this.fullscreen = false;
 	
 	this.keys = new Keys();
+	this.skillSet = new SkillSet();
+	
 	this.buyMode = Enum.SkillStore.Mode.POWER;
 	
 	this.resolution = {
@@ -80,6 +28,13 @@ var Options = new function(){
 		this.keys = keys;
 			
 		chrome.storage.sync.set({'keys': keys});
+	};
+	
+	//Save new skill set.
+	this.saveSkillSet = function(skillSet){
+		this.skillSet = skillSet;
+		
+		chrome.storage.sync.set({'skillSet': skillSet});
 	};
 	
 	//Save new resolution.
@@ -153,12 +108,20 @@ var Options = new function(){
 				
 			that.apply();
 		});
+		
+		chrome.storage.sync.get('skillSet', function(data){
+			that.callbackCounter++;
+			if(data.skillSet != null)
+				that.skillSet = data.skillSet;
+				
+			that.apply();
+		});
 	};
 	
-	//Apply when all callback has been called.
+	//Apply when all callbacks have been called.
 	this.apply = function(){
 
-		if(this.callbackCounter >= 2)
+		if(this.callbackCounter >= 3)
 		{
 			this.resizeWindow();
 			this.loaded = true;
