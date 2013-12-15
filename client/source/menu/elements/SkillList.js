@@ -49,6 +49,7 @@ SkillList.prototype.init = function(){
 						  this.layer, 
 						  function(){
 							that.layer.selectSkill(this);
+							this.select();
 						  });
 	}
 	

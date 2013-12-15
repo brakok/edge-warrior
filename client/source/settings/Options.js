@@ -33,8 +33,10 @@ var Options = new function(){
 	//Save new skill set.
 	this.saveSkillSet = function(skillSet){
 		this.skillSet = skillSet;
-		
-		chrome.storage.sync.set({'skillSet': skillSet});
+				
+		var skillTypes = this.skillSet.toSave();
+				
+		chrome.storage.sync.set({'skillSet': skillTypes});
 	};
 	
 	//Save new resolution.
@@ -111,6 +113,7 @@ var Options = new function(){
 		
 		chrome.storage.sync.get('skillSet', function(data){
 			that.callbackCounter++;
+			
 			if(data.skillSet != null)
 				that.skillSet = new SkillSet(data.skillSet);
 				
@@ -120,7 +123,7 @@ var Options = new function(){
 	
 	//Apply when all callbacks have been called.
 	this.apply = function(){
-
+	
 		if(this.callbackCounter >= 3)
 		{
 			this.resizeWindow();
