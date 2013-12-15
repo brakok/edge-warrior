@@ -32,6 +32,8 @@ var Game = function(settings){
 	this.state = false;
 	this.space = null;
 	
+	this.unitTimer = Constants.Game.UNIT_TIMER;
+	
 	//Create listeners.
 	this.listeners = new Listeners(this);
 	
@@ -204,7 +206,6 @@ Game.prototype.update = function(){
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
 		{
-		
 			var hasSurvivors = false;
 			for(var i in this.players)
 			{	
@@ -218,6 +219,17 @@ Game.prototype.update = function(){
 		
 			if(this.winningPhaseTimer > 0)
 				this.winningPhaseTimer -= this.dt;
+		}
+		else
+		{
+			//Process units.
+			if(this.unitTimer <= 0)
+			{
+				io.sockets.in(this.id).emit(Constants.Message.PROCESS_UNITS);
+				this.unitTimer = Constants.Game.UNIT_TIMER;
+			}
+			else
+				this.unitTimer -= this.dt
 		}
 		
 		//Winner!

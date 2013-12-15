@@ -31,7 +31,11 @@ var Player = function(id, username, x, y, color, game){
 	this.doubleJumpUsed = true;
 	this.jumpCooldown = Constants.Player.JUMP_COOLDOWN;
 	
-	this.currentBlock = Enum.Block.Type.NEUTRAL;
+	this.currentBlock = {
+		type: Enum.Block.Type.NEUTRAL,
+		skill: null
+	};
+	
 	this.hasGivenBlock = false;
 	
 	//Killer's id.
@@ -58,7 +62,11 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	//Assign spawn block.
 	if(this.currentBlock != Enum.Block.Type.SPAWN && blockType != Enum.Block.Type.SPAWN)
 	{
-		this.currentBlock = Enum.Block.Type.SPAWN;
+		this.currentBlock = {
+			type: Enum.Block.Type.SPAWN,
+			skill: null
+		};
+		
 		io.sockets.sockets[this.id].emit(Constants.Message.SEND_BLOCK, 
 										{
 											type: Enum.Block.Type.SPAWN,

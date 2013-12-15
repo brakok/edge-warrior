@@ -105,7 +105,8 @@ var Enum = {
 };//Constants
 var Constants = {
 	Game: {
-		MAX_PLAYERS: 4
+		MAX_PLAYERS: 4,
+		UNIT_TIMER: 1
 	},
 	Physic: {
 		GRAVITY: -150,
@@ -228,7 +229,8 @@ var Constants = {
 		DISCONNECT_PLAYER: 'disconnectPlayer',
 		UPDATE_SLOT: 'updateSlot',
 		UPDATE_LOBBY: 'updateLobby',
-		GO: 'go'
+		GO: 'go',
+		PROCESS_UNITS: 'processUnit'
 	}
 };
 var Listeners = function(game){
@@ -583,7 +585,11 @@ var Player = function(id, username, x, y, color, game){
 	this.doubleJumpUsed = true;
 	this.jumpCooldown = Constants.Player.JUMP_COOLDOWN;
 	
-	this.currentBlock = Enum.Block.Type.NEUTRAL;
+	this.currentBlock = {
+		type: Enum.Block.Type.NEUTRAL,
+		skill: null
+	};
+	
 	this.hasGivenBlock = false;
 	
 	//Killer's id.
@@ -610,7 +616,11 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	//Assign spawn block.
 	if(this.currentBlock != Enum.Block.Type.SPAWN && blockType != Enum.Block.Type.SPAWN)
 	{
-		this.currentBlock = Enum.Block.Type.SPAWN;
+		this.currentBlock = {
+			type: Enum.Block.Type.SPAWN,
+			skill: null
+		};
+		
 		io.sockets.sockets[this.id].emit(Constants.Message.SEND_BLOCK, 
 										{
 											type: Enum.Block.Type.SPAWN,
@@ -634,6 +644,8 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	//Swap killer colored blocks to killed complementary one.
 	for(var i in this.currentGame.blocks)
 	{
+		console.log(this.currentGame.blocks);
+	
 		if(this.currentGame.blocks[i] != null 
 		   && this.currentGame.blocks[i].type != Enum.Block.Type.NEUTRAL 
 		   && this.currentGame.blocks[i].color == this.color)
@@ -1464,6 +1476,8 @@ var Game = function(settings){
 	this.state = false;
 	this.space = null;
 	
+	this.unitTimer = Constants.Game.UNIT_TIMER;
+	
 	//Create listeners.
 	this.listeners = new Listeners(this);
 	
@@ -1636,7 +1650,6 @@ Game.prototype.update = function(){
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
 		{
-		
 			var hasSurvivors = false;
 			for(var i in this.players)
 			{	
@@ -1650,6 +1663,17 @@ Game.prototype.update = function(){
 		
 			if(this.winningPhaseTimer > 0)
 				this.winningPhaseTimer -= this.dt;
+		}
+		else
+		{
+			//Process units.
+			if(this.unitTimer <= 0)
+			{
+				io.sockets.in(this.id).emit(Constants.Message.PROCESS_UNITS);
+				this.unitTimer = Constants.Game.UNIT_TIMER;
+			}
+			else
+				this.unitTimer -= this.dt
 		}
 		
 		//Winner!
