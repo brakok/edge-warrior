@@ -44,6 +44,7 @@ SkillDescription.prototype.init = function(){
 			
 			//Buying infos.
 			this.cost = Constants.Block.Skill.FirePulse.COST;
+			this.costStep = Constants.Block.Skill.FirePulse.COST_STEP;
 			this.percent.start = Constants.Block.Skill.FirePulse.PERCENT_START;
 			this.percent.step = Constants.Block.Skill.FirePulse.PERCENT_STEP;
 			

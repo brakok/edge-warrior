@@ -2,12 +2,14 @@ var Block = function (x, y, type, color, skill) {
 	
 	this.x = x;
 	this.y = y;
-	
+
 	this.scale = 1;
 	
 	this.type = type;
 	this.skill = (Enum.Block.Type.SKILLED ? skill : null);
+	
 	this.color = color;
+	this.originalColor = color;
 	
 	//Create sprite associated.
 	if(this.type == Enum.Block.Type.COLORED && this.color != null)

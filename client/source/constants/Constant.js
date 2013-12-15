@@ -26,11 +26,17 @@ var Constants = {
 			LOST_FOREACH_ENEMY: 5
 		},
 		Skill: {
+			MAX_POWER: 5,
 			FirePulse: {
-				PERCENT_START: 50,
-				PERCENT_STEP: 25,
-				COST: 500
+				PERCENT_START: 4,
+				PERCENT_STEP: 2,
+				COST: 500,
+				COST_STEP: 150
 			}
+		},
+		Unit: {
+			TO_ADD: 10,
+			TO_MINUS: -5
 		}
 	},
 	World: {
@@ -171,7 +177,8 @@ var Constants = {
 		DISCONNECT_PLAYER: 'disconnectPlayer',
 		UPDATE_SLOT: 'updateSlot',
 		UPDATE_LOBBY: 'updateLobby',
-		GO: 'go'
+		GO: 'go',
+		PROCESS_UNITS: 'processUnit'
 	},
 	Effect: {
 		Z_INDEX: 60,

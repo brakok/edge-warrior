@@ -276,6 +276,11 @@ var Client = new function(){
 			Client.game.removeEnemy(username);
 		});
 		
+		//Process units for player.
+		socket.on(Constants.Message.PROCESS_UNITS, function(username){
+			Client.game.processUnits();
+		});
+		
 		socket.on(Constants.Message.LAUNCH, function(data){
 			console.log('Launching!');
 			
