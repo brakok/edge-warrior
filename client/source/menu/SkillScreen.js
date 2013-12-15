@@ -7,8 +7,6 @@ var SkillScreen = cc.LayerColor.extend({
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
 		this._zOrder = Constants.Menu.SkillScreen.Z_INDEX;
-		
-		this.skillSlots = [];
 
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'skill_background.png');
@@ -31,6 +29,21 @@ var SkillScreen = cc.LayerColor.extend({
 		//Add elements.
 		this.addChild(this.background);
 		this.addChild(this.menu);
+		
+		this.skillList = new SkillList(this.width*0.5, 
+									   this.height*0.8, 
+									   Constants.Menu.SkillScreen.SkillList.COLUMNS, 
+									   Constants.Menu.SkillScreen.SkillList.ROWS, 
+									   this);
+									   
+		this.selectedSkill = null;
+		this.summary = new SkillSummary(this.width*0.5, 
+										this.height*0.72,
+										Constants.Menu.SkillScreen.SkillSummary.WIDTH,
+										Constants.Menu.SkillScreen.SkillSummary.HEIGHT,
+										this);
+		
+		this.skillSlots = [];
 		
 		//Add four skill slots for skill set.
 		for(var i = 1; i <= 4; i++)
@@ -58,6 +71,10 @@ var SkillScreen = cc.LayerColor.extend({
 		for(var i = 0; i < 4; i++)
 			if(this.skillSlots[i].selected)
 				this.skillSlots[i].unselect();
+	},
+	selectSkill: function(skill){
+		this.selectedSkill = skill;
+		this.summary.load(this.selectedSkill);
 	}
 });
 
