@@ -6,7 +6,7 @@ var Player = function (x, y, color, isControlled, username) {
 	
 	this.isAlive = true;
 	this.hasWon = false;
-	this.units = 10000;
+	this.units = 0;
 	
 	this.isControlled = isControlled;
 	
@@ -56,7 +56,12 @@ Player.prototype.buySkill = function(number){
 			//Change power or apparition percent chance.
 			switch(Options.buyMode){
 				case Enum.SkillStore.Mode.POWER:
-					this.changePower(skill.type);
+				
+					if(blockOption.skill.power < Constants.Block.Skill.MAX_POWER)
+						this.changePower(skill.type);
+					else
+						return;
+						
 					break;
 				case Enum.SkillStore.Mode.QUANTITY:
 					this.changePercent(blockOption.type, skill.percent.step, skill.type);
@@ -65,6 +70,7 @@ Player.prototype.buySkill = function(number){
 		}
 
 		this.units -= skill.cost;
+		skill.cost += skill.costStep;
 	}
 };
 
@@ -370,7 +376,7 @@ Player.prototype.land = function(){
 
 Player.prototype.fromServer = function(data){
 	this.setPosition(data.x, data.y);
-			
+
 	if(data.facing != this.facing)
 	{
 		this.facing = data.facing;

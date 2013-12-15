@@ -131,6 +131,29 @@ Game.prototype.createWorld = function(){
 	this.ready = true;
 };
 
+Game.prototype.processUnits = function(){
+	
+	var newUnits = 0;
+	
+	for(var i in this.blocks)
+	{
+		var currentBlock = this.blocks[i];
+		
+		//Add unit for each owned block.
+		if(currentBlock.originalColor == this.player.color && currentBlock.type == Enum.Block.Type.COLORED)
+			newUnits += Constants.Block.Unit.TO_ADD;
+			
+		//Remove units for each complementary block.
+		if(currentBlock.color == this.player.color + 4)
+			newUnits += Constants.Block.Unit.TO_MINUS; 
+	}
+	
+	this.player.units += newUnits;
+	
+	if(this.player.units < 0)
+		this.player.units = 0;
+};
+
 //Update elements contained in the container.
 Game.prototype.update = function (dt){
 		
