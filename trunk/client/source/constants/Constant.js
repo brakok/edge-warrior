@@ -229,6 +229,20 @@ var Constants = {
 			Z_INDEX: 5000,
 			SkillSlot: {
 				STEP_Y: -0.2
+			},
+			SkillList: {
+				SCALE_X: 0.8,
+				SCALE_Y: 0.8,
+				ITEM_WIDTH: 80,
+				ITEM_HEIGHT: 80,
+				MARGIN_X: 10,
+				MARGIN_Y: 10,
+				COLUMNS: 6,
+				ROWS: 1
+			},
+			SkillSummary: {
+				WIDTH: 540,
+				HEIGHT: 300
 			}
 		},
 		LoadingScreen: {

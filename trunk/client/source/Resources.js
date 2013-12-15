@@ -7,6 +7,8 @@ var assetsPlayerDir = 'assets/players/';
 var assetsHudDir = 'assets/hud/';
 var assetsWinningGoalDir = 'assets/winningGoal/';
 var assetsEffectDir = 'assets/effects/';
+var assetsSkillDir = 'assets/skills/';
+
 var soundDir = 'sounds/';
 var soundVoiceDir = 'sounds/voices/';
 
@@ -120,8 +122,11 @@ var assets = [
 	{type:'image', src: assetsBlockDir + 'block_7.png'},
 	{type:'image', src: assetsBlockDir + 'block_spawn.png'},
 	
-	//Skill.
+	//Skill block.
 	{type:'image', src: assetsBlockDir + 'block_firePulse.png'},
+	
+	//Skill.
+	{type:'image', src: assetsSkillDir + 'firePulse.png'},
 	
 	//Player
 	{type:'image', src: assetsPlayerDir + 'yellow_idle.png'},
