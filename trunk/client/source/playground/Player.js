@@ -6,34 +6,65 @@ var Player = function (x, y, color, isControlled, username) {
 	
 	this.isAlive = true;
 	this.hasWon = false;
+	this.units = 10000;
 	
 	this.isControlled = isControlled;
 	
 	this.blockTypeAvailable = [];
 	
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
-	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, 50, Enum.Block.Skill.FIRE_PULSE, 0));
+	
 	
 	this.voices = null;
 	
 	this.maySpeak = false;
 	this.voiceTimer = 0;
 	this.lastVoice = null;
-	
-	//Options available in inventory.
-	this.option1Pressed = false;
-	this.option2Pressed = false;
-	
-	this.toggleBuyModePressed = false;
 }
 
 //Change percent on a specific option. Negative percent lowers actual one.
-Player.prototype.changePercent = function(blockType, percent){
+Player.prototype.changePercent = function(blockType, percent, skill){
 
-	for(var i in this.blockTypeAvailable)
+	var blockOption = this.getBlockOption(blockType, skill);
+
+	if(blockOption)
+		blockOption.percent += percent;
+};
+
+//Stronger a specific skilled block.
+Player.prototype.changePower = function(skill){
+
+	var blockOption = this.getBlockOption(Enum.Block.Type.SKILLED, skill);
+
+	if(blockOption && blockOption.skill != null)
+		blockOption.skill.power++;
+};
+
+//Buy a skill to obtain skill block.
+Player.prototype.buySkill = function(number){
+		
+	var skill = Options.getSkill(number);
+	
+	if(skill != null && skill.cost <= this.units)
 	{
-		if(this.blockTypeAvailable[i].type == blockType)
-			this.blockTypeAvailable[i].percent += percent;
+		var blockOption = this.getBlockOption(Enum.Block.Type.SKILLED, skill.type);
+		
+		if(blockOption == null)
+			this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, skill.percent.start, skill.type, 0));
+		else
+		{
+			//Change power or apparition percent chance.
+			switch(Options.buyMode){
+				case Enum.SkillStore.Mode.POWER:
+					this.changePower(skill.type);
+					break;
+				case Enum.SkillStore.Mode.QUANTITY:
+					this.changePercent(blockOption.type, skill.percent.step, skill.type);
+					break;
+			}
+		}
+
+		this.units -= skill.cost;
 	}
 };
 
@@ -161,6 +192,15 @@ Player.prototype.setPosition = function(x, y){
 	this.y = y;
 };
 
+Player.prototype.getBlockOption = function(blockType, skillType){
+
+	for(var i in this.blockTypeAvailable)
+		if(this.blockTypeAvailable[i].type == blockType && (skillType == null || this.blockTypeAvailable[i].skill.type == skillType))
+			return this.blockTypeAvailable[i];
+	
+	return null;
+};
+
 //Reset the voice timer to a random value between minimum value and specified range.
 Player.prototype.resetVoiceTimer = function(){
 	this.voiceTimer = Constants.Sound.VoiceTimer.MIN + (Math.random()*Constants.Sound.VoiceTimer.RANGE);
@@ -170,15 +210,19 @@ Player.prototype.resetVoiceTimer = function(){
 Player.prototype.manageInput = function(){
 
 	//Toggle buy mode for skills.
-	if(Client.keys[Options.keys.TOGGLE_BUY_MODE] && !this.toggleBuyModePressed)
-	{
-		this.toggleBuyModePressed = true;
-		
+	if(Client.keys[Options.keys.TOGGLE_BUY_MODE] && !Client.pressedKeys[Options.keys.TOGGLE_BUY_MODE])
 		Client.game.hud.skillStore.changeBuyMode();
-	}
-	else if(!Client.keys[Options.keys.TOGGLE_BUY_MODE] && this.toggleBuyModePressed)
-		this.toggleBuyModePressed = false;
 
+	//Buy skill.
+	if(Client.keys[Options.keys.SKILL1] && !Client.pressedKeys[Options.keys.SKILL1])
+		this.buySkill(1);
+	if(Client.keys[Options.keys.SKILL2] && !Client.pressedKeys[Options.keys.SKILL2])
+		this.buySkill(2);
+	if(Client.keys[Options.keys.SKILL3] && !Client.pressedKeys[Options.keys.SKILL3])
+		this.buySkill(3);
+	if(Client.keys[Options.keys.SKILL4] && !Client.pressedKeys[Options.keys.SKILL4])
+		this.buySkill(4);
+		
 		
 	//Store blocks in inventory.
 	if(this.givenBlock == null)
@@ -186,7 +230,7 @@ Player.prototype.manageInput = function(){
 		var blockToSend = null;
 		
 		//Store or use option 1.
-		if(Client.keys[Options.keys.OPT1] && !this.option1Pressed)
+		if(Client.keys[Options.keys.OPT1] && !Client.pressedKeys[Options.keys.OPT1])
 		{				
 			if(Client.game.hud.inventory.option1 == null)
 				Client.game.hud.inventory.setOption(true);
@@ -194,24 +238,18 @@ Player.prototype.manageInput = function(){
 				Client.game.hud.inventory.useOption(true);
 			
 			blockToSend = Client.game.hud.inventory.getCurrent().toServer();
-			this.option1Pressed = true;
 		}
-		else if(!Client.keys[Options.keys.OPT1] && this.option1Pressed)
-			this.option1Pressed = false;
 			
 		//Store or use option 2.
-		if(Client.keys[Options.keys.OPT2] && !this.option2Pressed)
+		if(Client.keys[Options.keys.OPT2] && !Client.pressedKeys[Options.keys.OPT2])
 		{
 			if(Client.game.hud.inventory.option2 == null)
 				Client.game.hud.inventory.setOption(false);
 			else
 				Client.game.hud.inventory.useOption(false);
-				
+			
 			blockToSend = Client.game.hud.inventory.getCurrent().toServer();
-			this.option2Pressed = true;
 		}
-		else if(!Client.keys[Options.keys.OPT2] && this.option2Pressed)
-			this.option2Pressed = false;
 		
 		if(blockToSend != null)
 			Client.socket.emit(Constants.Message.NEXT_BLOCK, blockToSend);

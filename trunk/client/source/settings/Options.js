@@ -23,6 +23,48 @@ var Options = new function(){
 	
 	var that = this;
 	
+	//Get skill.
+	this.getSkill = function(number){
+		
+		var skill = null;
+		
+		switch(number){
+			case 1:
+				skill = this.skillSet.one;
+				break;
+			case 2:
+				skill = this.skillSet.two;
+				break;
+			case 3:
+				skill = this.skillSet.three;
+				break;
+			case 4:
+				skill = this.skillSet.four;
+				break;
+		}
+		
+		return skill;
+	};
+	
+	//Set skill.
+	this.setSkill = function(number, skill){
+		
+		switch(number){
+			case 1:
+				this.skillSet.one = skill;
+				break;
+			case 2:
+				this.skillSet.two = skill;
+				break;
+			case 3:
+				this.skillSet.three = skill;
+				break;
+			case 4:
+				this.skillSet.four = skill;
+				break;
+		}
+	};
+	
 	//Save new keys.
 	this.saveKeys = function(keys){
 		this.keys = keys;

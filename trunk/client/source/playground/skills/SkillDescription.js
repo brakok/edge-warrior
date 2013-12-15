@@ -22,6 +22,12 @@ var SkillDescription = function(type){
 	this.sprite = null;
 	this.menu = null;
 	
+	this.cost = null;
+	this.percent = {
+		start: null,
+		step: null
+	};
+	
 	this.title = null;
 
 	this.init();
@@ -35,6 +41,11 @@ SkillDescription.prototype.init = function(){
 			this.sprite = cc.Sprite.create(assetsSkillDir + 'firePulse.png');
 			this.title = SkillText.FirePulse.TITLE;
 			this.description = SkillText.FirePulse.DESCRIPTION;
+			
+			//Buying infos.
+			this.cost = Constants.Block.Skill.FirePulse.COST;
+			this.percent.start = Constants.Block.Skill.FirePulse.PERCENT_START;
+			this.percent.step = Constants.Block.Skill.FirePulse.PERCENT_STEP;
 			
 			break;
 	}

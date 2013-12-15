@@ -9,6 +9,7 @@ var Client = new function(){
 	
 	//Members.
 	this.keys = {};
+	this.pressedKeys = {};
 	
 	//Connected game id.
 	this.currentGameId = null;
@@ -23,6 +24,28 @@ var Client = new function(){
 	//Option keys.
 	this.keys[Options.keys.OPT1] = false;
 	this.keys[Options.keys.OPT2] = false;
+	
+	this.keys[Options.keys.SKILL1] = false;
+	this.keys[Options.keys.SKILL2] = false;
+	this.keys[Options.keys.SKILL3] = false;
+	this.keys[Options.keys.SKILL4] = false;
+	this.keys[Options.keys.TOGGLE_BUY_MODE] = false;
+	
+	//Pressed keys.
+	this.pressedKeys[Options.keys.RIGHT] = false;
+	this.pressedKeys[Options.keys.LEFT] = false;
+	this.pressedKeys[Options.keys.JUMP] = false;
+	this.pressedKeys[Options.keys.KILL] = false;
+	
+	//Option keys.
+	this.pressedKeys[Options.keys.OPT1] = false;
+	this.pressedKeys[Options.keys.OPT2] = false;
+	
+	this.pressedKeys[Options.keys.SKILL1] = false;
+	this.pressedKeys[Options.keys.SKILL2] = false;
+	this.pressedKeys[Options.keys.SKILL3] = false;
+	this.pressedKeys[Options.keys.SKILL4] = false;
+	this.pressedKeys[Options.keys.TOGGLE_BUY_MODE] = false;
 	
 	//Authentification.
 	this.authenticate = function(username, password){
