@@ -1,7 +1,8 @@
 //Constants
 var Constants = {
 	Game: {
-		MAX_PLAYERS: 4
+		MAX_PLAYERS: 4,
+		UNIT_TIMER: 1
 	},
 	Physic: {
 		GRAVITY: -150,
@@ -124,6 +125,7 @@ var Constants = {
 		DISCONNECT_PLAYER: 'disconnectPlayer',
 		UPDATE_SLOT: 'updateSlot',
 		UPDATE_LOBBY: 'updateLobby',
-		GO: 'go'
+		GO: 'go',
+		PROCESS_UNITS: 'processUnit'
 	}
 };
