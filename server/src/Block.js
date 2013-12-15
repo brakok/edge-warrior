@@ -205,6 +205,7 @@ Block.prototype.trigger = function(){
 					
 						this.skill.count--;
 						this.mustTrigger = false;
+						this.explode(Enum.Block.Destruction.COLOR_CONTACT);
 					}
 					
 					break;
