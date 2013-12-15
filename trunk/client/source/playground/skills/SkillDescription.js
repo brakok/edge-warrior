@@ -9,6 +9,12 @@ var SkillDescription = function(type){
 		y: null
 	};
 	
+	//Used when selected.
+	this.background = cc.Sprite.create(assetsMenuDir + 'skill_selected.png');
+	this.background.setScale(Constants.Menu.SkillScreen.SkillList.SCALE_X, Constants.Menu.SkillScreen.SkillList.SCALE_Y);
+	
+	this.selected = false;
+	
 	this.layer = null;
 	this.callback = null;
 	
@@ -81,6 +87,26 @@ SkillDescription.prototype.load = function(x, y, scaleX, scaleY, layer, callback
 		
 		this.layer.addChild(this.menu);
 	}
+};
+
+SkillDescription.prototype.unselect = function(){
+	this.selected = false;
+	this.layer.removeChild(this.background);
+};
+
+SkillDescription.prototype.select = function(){
+	this.selected = true;
+	
+	if(this.x != null && this.y != null) 
+		this.background.setPosition(new cc.Point(this.x, this.y));
+		
+	this.remove();
+	this.layer.addChild(this.background);
+	
+	if(this.callback == null)
+		this.layer.addChild(this.sprite);
+	else
+		this.layer.addChild(this.menu);
 };
 
 SkillDescription.prototype.remove = function(){

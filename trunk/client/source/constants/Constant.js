@@ -17,6 +17,9 @@ var Constants = {
 			}
 		}
 	},
+	Mouse: {
+		DOUBLE_CLICK_THRESHOLD: 250 //In ms
+	},
 	Block: {
 		Percent: {
 			STARTING_NEUTRAL: 25,
@@ -231,8 +234,8 @@ var Constants = {
 				STEP_Y: -0.2
 			},
 			SkillList: {
-				SCALE_X: 0.8,
-				SCALE_Y: 0.8,
+				SCALE_X: 0.7,
+				SCALE_Y: 0.7,
 				ITEM_WIDTH: 80,
 				ITEM_HEIGHT: 80,
 				MARGIN_X: 10,
@@ -241,7 +244,7 @@ var Constants = {
 				ROWS: 1
 			},
 			SkillSummary: {
-				WIDTH: 540,
+				WIDTH: 1050,
 				HEIGHT: 300
 			}
 		},

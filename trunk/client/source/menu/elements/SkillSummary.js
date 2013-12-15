@@ -17,7 +17,7 @@ SkillSummary.prototype.load = function(skill){
 	if(this.label != null)
 		this.layer.removeChild(this.label);
 	
-	this.label = cc.LabelTTF.create(this.skill.description, Constants.Font.NAME, Constants.Font.SIZE, new cc.Size(this.width, this.height));
+	this.label = cc.LabelTTF.create(this.skill.description, Constants.Font.NAME, Constants.Font.SIZE, cc.size(this.width, this.height), cc.TEXT_ALIGNMENT_LEFT);
 	this.label.setColor(new cc.Color3B(0,0,0));
 	this.label.setPosition(new cc.Point(this.x, this.y));
 	

@@ -7,6 +7,8 @@ var SkillScreen = cc.LayerColor.extend({
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
 		this._zOrder = Constants.Menu.SkillScreen.Z_INDEX;
+		
+		this.firstClickTimespan = null;
 
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'skill_background.png');
@@ -37,8 +39,8 @@ var SkillScreen = cc.LayerColor.extend({
 									   this);
 									   
 		this.selectedSkill = null;
-		this.summary = new SkillSummary(this.width*0.5, 
-										this.height*0.72,
+		this.summary = new SkillSummary(this.width*0.65, 
+										this.height*0.64,
 										Constants.Menu.SkillScreen.SkillSummary.WIDTH,
 										Constants.Menu.SkillScreen.SkillSummary.HEIGHT,
 										this);
@@ -50,17 +52,29 @@ var SkillScreen = cc.LayerColor.extend({
 			this.skillSlots.push(new SkillSlot(this.width*0.1, this.height*(1+Constants.Menu.SkillScreen.SkillSlot.STEP_Y*i), i, this));
 	},
 	onEntering: function(){
-
+		for(var i = 0; i < 4; i++)
+			this.skillSlots[i].refresh();
 	},
 	onLeaving: function(){
 
 	},
 	back: function(){
+		this.unselectSlots();
+		this.summary.reset();
+		
+		if(this.selectedSkill != null)
+			this.selectedSkill.unselect();
+			
+		this.selectedSkill = null;
+	
 		MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
 	reset: function(){
 		this.unselectSlots();
 		Options.skillSet.reset();
+		
+		for(var i = 0; i < 4; i++)
+			this.skillSlots[i].refresh();
 	},
 	save: function(){
 		Options.saveSkillSet(Options.skillSet);
@@ -73,8 +87,28 @@ var SkillScreen = cc.LayerColor.extend({
 				this.skillSlots[i].unselect();
 	},
 	selectSkill: function(skill){
+	
+		//Check for double click assignation.
+		var selectedSlot = null;
+		
+		for(var i = 0; i < 4; i++)
+			if(this.skillSlots[i].selected)
+			{
+				selectedSlot = this.skillSlots[i];
+				break;
+			}
+			
+		if(selectedSlot != null && this.firstClickTimespan != null && (new Date() - this.firstClickTimespan) < Constants.Mouse.DOUBLE_CLICK_THRESHOLD)
+			selectedSlot.setSkill(new SkillDescription(skill.type));
+	
+		//Select skill in list and summary.
+		if(this.selectedSkill != null)
+			this.selectedSkill.unselect();
+	
 		this.selectedSkill = skill;
 		this.summary.load(this.selectedSkill);
+		
+		this.firstClickTimespan = new Date();
 	}
 });
 
