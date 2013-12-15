@@ -24,6 +24,13 @@ var Constants = {
 		Percent: {
 			STARTING_NEUTRAL: 25,
 			LOST_FOREACH_ENEMY: 5
+		},
+		Skill: {
+			FirePulse: {
+				PERCENT_START: 50,
+				PERCENT_STEP: 25,
+				COST: 500
+			}
 		}
 	},
 	World: {
@@ -73,6 +80,26 @@ var Constants = {
 			Mode: {
 				OFFSET_X: 167,
 				OFFSET_Y: -27
+			},
+			Skills: {
+				SCALE_X: 0.45,
+				SCALE_Y: 0.45,
+				One: {
+					OFFSET_X: -145,
+					OFFSET_Y: -15
+				},
+				Two: {
+					OFFSET_X: -65,
+					OFFSET_Y: -15
+				},
+				Three: {
+					OFFSET_X: 18,
+					OFFSET_Y: -15
+				},
+				Four: {
+					OFFSET_X: 100,
+					OFFSET_Y: -15
+				},
 			}
 		},
 		Inventory: {

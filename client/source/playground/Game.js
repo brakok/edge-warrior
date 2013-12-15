@@ -258,6 +258,21 @@ Game.prototype.update = function (dt){
 		if(Client.isLoading && this.hasPulledOnce)
 			Client.stopLoading();
 	}
+		
+	Client.pressedKeys[Options.keys.RIGHT] = Client.keys[Options.keys.RIGHT];
+	Client.pressedKeys[Options.keys.LEFT] = Client.keys[Options.keys.LEFT];
+	Client.pressedKeys[Options.keys.JUMP] = Client.keys[Options.keys.JUMP];
+	Client.pressedKeys[Options.keys.KILL] = Client.keys[Options.keys.KILL];
+	
+	//Option keys.
+	Client.pressedKeys[Options.keys.OPT1] = Client.keys[Options.keys.OPT1];
+	Client.pressedKeys[Options.keys.OPT2] = Client.keys[Options.keys.OPT2];
+	
+	Client.pressedKeys[Options.keys.SKILL1] = Client.keys[Options.keys.SKILL1];
+	Client.pressedKeys[Options.keys.SKILL2] = Client.keys[Options.keys.SKILL2];
+	Client.pressedKeys[Options.keys.SKILL3] = Client.keys[Options.keys.SKILL3];
+	Client.pressedKeys[Options.keys.SKILL4] = Client.keys[Options.keys.SKILL4];
+	Client.pressedKeys[Options.keys.TOGGLE_BUY_MODE] = Client.keys[Options.keys.TOGGLE_BUY_MODE];
 };
 
 //Randomize next block and emit the command related to the current block.

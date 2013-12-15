@@ -12,6 +12,7 @@ var SkillStore = function(x, y, layer){
 	this.layer.addChild(this.fieldset);
 	
 	this.setModeSprite();
+	this.setSkillSprites();
 };
 
 SkillStore.prototype.setModeSprite = function(){
@@ -30,6 +31,51 @@ SkillStore.prototype.setModeSprite = function(){
 		
 	this.modeSprite.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Mode.OFFSET_X, this.y + Constants.HUD.SkillStore.Mode.OFFSET_Y));
 	this.layer.addChild(this.modeSprite);
+};
+
+SkillStore.prototype.setSkillSprites = function(){
+	
+	if(Options.skillSet.one)
+	{
+		var newSkill = new SkillDescription(Options.skillSet.one.type);
+		newSkill.load(this.x + Constants.HUD.SkillStore.Skills.One.OFFSET_X, 
+					  this.y + Constants.HUD.SkillStore.Skills.One.OFFSET_Y,
+					  Constants.HUD.SkillStore.Skills.SCALE_X,
+					  Constants.HUD.SkillStore.Skills.SCALE_Y,
+					  this.layer);
+								  
+	}
+		
+	if(Options.skillSet.two)
+	{
+		var newSkill = new SkillDescription(Options.skillSet.two.type);
+		newSkill.load(this.x + Constants.HUD.SkillStore.Skills.Two.OFFSET_X, 
+					  this.y + Constants.HUD.SkillStore.Skills.Two.OFFSET_Y,
+					  Constants.HUD.SkillStore.Skills.SCALE_X,
+					  Constants.HUD.SkillStore.Skills.SCALE_Y,
+					  this.layer);
+	}
+		
+	if(Options.skillSet.three)
+	{
+		var newSkill = new SkillDescription(Options.skillSet.three.type);
+		newSkill.load(this.x + Constants.HUD.SkillStore.Skills.Three.OFFSET_X, 
+					  this.y + Constants.HUD.SkillStore.Skills.Three.OFFSET_Y,
+					  Constants.HUD.SkillStore.Skills.SCALE_X,
+					  Constants.HUD.SkillStore.Skills.SCALE_Y,
+					  this.layer);
+	}
+		
+	if(Options.skillSet.four)
+	{
+		var newSkill = new SkillDescription(Options.skillSet.four.type);
+		newSkill.load(this.x + Constants.HUD.SkillStore.Skills.Four.OFFSET_X, 
+					  this.y + Constants.HUD.SkillStore.Skills.Four.OFFSET_Y,
+					  Constants.HUD.SkillStore.Skills.SCALE_X,
+					  Constants.HUD.SkillStore.Skills.SCALE_Y,
+					  this.layer);
+	}
+	
 };
 
 SkillStore.prototype.changeBuyMode = function(){
