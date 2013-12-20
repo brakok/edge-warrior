@@ -91,7 +91,7 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	for(var i in this.currentGame.blocks)
 	{
 		if(this.currentGame.blocks[i] != null 
-		   && this.currentGame.blocks[i].type != Enum.Block.Type.NEUTRAL 
+		   && this.currentGame.blocks[i].type == Enum.Block.Type.COLORED 
 		   && this.currentGame.blocks[i].color == this.color)
 	    {
 			this.currentGame.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
