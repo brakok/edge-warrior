@@ -17,6 +17,18 @@ var SkillSet = function(skillSet){
 	}
 };
 
+SkillSet.prototype.init = function(){
+	
+	if(this.one != null)
+		this.one.init();
+	if(this.two != null)
+		this.two.init();
+	if(this.three != null)
+		this.three.init();
+	if(this.four != null)
+		this.four.init();
+};
+
 SkillSet.prototype.toSave = function(){
 
 	return {

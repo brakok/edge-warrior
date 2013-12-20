@@ -22,7 +22,7 @@ var Options = new function(){
 	this.callbackCounter = 0;
 	
 	var that = this;
-	
+		
 	//Get skill.
 	this.getSkill = function(number){
 		

@@ -11,9 +11,7 @@ var Player = function (x, y, color, isControlled, username) {
 	this.isControlled = isControlled;
 	
 	this.blockTypeAvailable = [];
-	
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
-	
 	
 	this.voices = null;
 	
