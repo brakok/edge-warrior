@@ -263,11 +263,12 @@ var Client = new function(){
 		socket.on(Constants.Message.NEW_PLAYER, function(data){
 			console.log('New player...');
 			
-			Client.game.enemies.push(new Player(data.x,
-											   data.y,
-											   data.color,
-											   false,
-											   data.username));
+			if(Client.game != null)
+				Client.game.enemies.push(new Player(data.x,
+												   data.y,
+												   data.color,
+												   false,
+												   data.username));
 		});
 		
 		//Disconnecting player.
