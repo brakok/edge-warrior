@@ -29,7 +29,6 @@ var SkillDescription = function(type){
 	};
 	
 	this.title = null;
-
 	this.init();
 };
 
