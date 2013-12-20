@@ -386,8 +386,6 @@ BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 			if(otherUserdata != null && otherUserdata.type == Enum.UserData.Type.PLAYER)
 				return;
 				
-			console.log(otherUserdata);
-				
 			skillBlock.mustTrigger = true;
 			
 			break;
