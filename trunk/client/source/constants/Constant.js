@@ -35,8 +35,8 @@ var Constants = {
 			}
 		},
 		Unit: {
-			TO_ADD: 10,
-			TO_MINUS: -5
+			TO_ADD: 4,
+			TO_MINUS: -2
 		}
 	},
 	World: {
