@@ -30,8 +30,8 @@ var Constants = {
 			FirePulse: {
 				PERCENT_START: 4,
 				PERCENT_STEP: 2,
-				COST: 500,
-				COST_STEP: 150
+				COST: 750,
+				COST_STEP: 750
 			}
 		},
 		Unit: {
