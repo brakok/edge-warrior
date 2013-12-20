@@ -1,12 +1,14 @@
 
-var Missile = function(id, blockId, x, y, type, stats, game){
+var Missile = function(id, ownerId, blockId, x, y, type, stats, game){
 	
 	this.currentGame = game;
 	
 	this.stillExists = true;
 	this.id = id;
 
+	this.ownerId = ownerId;
 	this.blockId = blockId;
+	
 	this.x = x;
 	this.y = y;
 	this.velocity = {x:0, y:0};

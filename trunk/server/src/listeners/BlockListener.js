@@ -17,10 +17,10 @@ BlockListener.prototype.begin = function(arbiter, space){
 		
 	//Resolve skill.
 	if(block1 != null && block1.type == Enum.Block.Type.SKILLED && block1.skill != null)
-		this.resolve(block1, arbiter.body_a.userdata);
+		this.resolve(block1, arbiter.body_b.userdata);
 		
 	if(block2 != null && block2.type == Enum.Block.Type.SKILLED && block2.skill != null)
-		this.resolve(block2, arbiter.body_b.userdata);
+		this.resolve(block2, arbiter.body_a.userdata);
 
 	//Special process for collision with two blocks.
 	if(block1 != null && block2 != null)
@@ -141,6 +141,8 @@ BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 			
 			if(otherUserdata != null && otherUserdata.type == Enum.UserData.Type.PLAYER)
 				return;
+				
+			console.log(otherUserdata);
 				
 			skillBlock.mustTrigger = true;
 			

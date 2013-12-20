@@ -182,6 +182,7 @@ Block.prototype.trigger = function(){
 					{
 						//Launch one fireball for both sides.
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																					  this.ownerId,
 																					  null,
 																					  this.x,
 																					  this.y, 
@@ -193,6 +194,7 @@ Block.prototype.trigger = function(){
 																					  this.currentGame));
 						
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																					  this.ownerId,
 																					  null,
 																					  this.x, 
 																					  this.y, 

@@ -261,10 +261,10 @@ BlockListener.prototype.begin = function(arbiter, space){
 		
 	//Resolve skill.
 	if(block1 != null && block1.type == Enum.Block.Type.SKILLED && block1.skill != null)
-		this.resolve(block1, arbiter.body_a.userdata);
+		this.resolve(block1, arbiter.body_b.userdata);
 		
 	if(block2 != null && block2.type == Enum.Block.Type.SKILLED && block2.skill != null)
-		this.resolve(block2, arbiter.body_b.userdata);
+		this.resolve(block2, arbiter.body_a.userdata);
 
 	//Special process for collision with two blocks.
 	if(block1 != null && block2 != null)
@@ -385,6 +385,8 @@ BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 			
 			if(otherUserdata != null && otherUserdata.type == Enum.UserData.Type.PLAYER)
 				return;
+				
+			console.log(otherUserdata);
 				
 			skillBlock.mustTrigger = true;
 			
@@ -644,10 +646,8 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	//Swap killer colored blocks to killed complementary one.
 	for(var i in this.currentGame.blocks)
 	{
-		console.log(this.currentGame.blocks);
-	
 		if(this.currentGame.blocks[i] != null 
-		   && this.currentGame.blocks[i].type != Enum.Block.Type.NEUTRAL 
+		   && this.currentGame.blocks[i].type == Enum.Block.Type.COLORED 
 		   && this.currentGame.blocks[i].color == this.color)
 	    {
 			this.currentGame.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
@@ -1266,6 +1266,7 @@ Block.prototype.trigger = function(){
 					{
 						//Launch one fireball for both sides.
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																					  this.ownerId,
 																					  null,
 																					  this.x,
 																					  this.y, 
@@ -1277,6 +1278,7 @@ Block.prototype.trigger = function(){
 																					  this.currentGame));
 						
 						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																					  this.ownerId,
 																					  null,
 																					  this.x, 
 																					  this.y, 
@@ -2266,14 +2268,16 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 });
 
 console.log('Server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED,		direction: Enum.Direction.UP,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.currentGame.deathZoneSequence,													  this.x, 													  0, 													  Constants.DeathZone.EnergySpike.WIDTH, 													  this.y, 													  this.currentGame.winner.id,													  Enum.DeathZone.Type.ENERGY_SPIKE,													  this.spikeStats, 													  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
-var Missile = function(id, blockId, x, y, type, stats, game){
+var Missile = function(id, ownerId, blockId, x, y, type, stats, game){
 	
 	this.currentGame = game;
 	
 	this.stillExists = true;
 	this.id = id;
 
+	this.ownerId = ownerId;
 	this.blockId = blockId;
+	
 	this.x = x;
 	this.y = y;
 	this.velocity = {x:0, y:0};
