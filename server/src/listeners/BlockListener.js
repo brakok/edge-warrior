@@ -92,7 +92,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 		{
 			if(killingBlock.ownerId == null)
 			{
-				Overlord.kill(player, killingBlock.type);
+				this.currentGame.overlord.kill(player, killingBlock.type);
 			}
 			else
 			{

@@ -336,7 +336,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 		{
 			if(killingBlock.ownerId == null)
 			{
-				Overlord.kill(player, killingBlock.type);
+				this.currentGame.overlord.kill(player, killingBlock.type);
 			}
 			else
 			{
@@ -614,7 +614,7 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	killed.toBeDestroy = true;
 	
 	//Assign spawn block.
-	if(this.currentBlock != Enum.Block.Type.SPAWN && blockType != Enum.Block.Type.SPAWN)
+	if(this.currentBlock.type != Enum.Block.Type.SPAWN && blockType != Enum.Block.Type.SPAWN)
 	{
 		this.currentBlock = {
 			type: Enum.Block.Type.SPAWN,
