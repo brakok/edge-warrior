@@ -12,7 +12,8 @@ var Constants = {
 		MASS_BLOCK_STATIC: 999999999999,
 		TIME_STEP: 1/60,
 		FRICTION_FACTOR_ONGROUND: 0.85,
-		TURN_FRICTION_FACTOR: 0.05
+		TURN_FRICTION_FACTOR: 0.05,
+		SLEEP_TIME_THRESHOLD: 0.075
 	},
 	Spawn: {
 		Limit: {
@@ -71,11 +72,11 @@ var Constants = {
 			DISTANCE_STEP: 75
 		},
 		EnergySpike: {
-			SPEED: 4,
+			SPEED: 7,
 			WIDTH: 30,
 			COOLDOWN: 1,
-			IMPULSE_X: 10000,
-			IMPULSE_Y: 300
+			IMPULSE_X: 2500,
+			IMPULSE_Y: 750
 		}
 	},
 	KillCommand: {
