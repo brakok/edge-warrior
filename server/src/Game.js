@@ -119,8 +119,8 @@ Game.prototype.createWorld = function(){
 									   null, 
 									   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
 		
-		//Force bodies to sleep when idle after 0.2 second.
-		this.space.sleepTimeThreshold = 0.075;
+		//Force bodies to sleep when idle after 0.075 second.
+		this.space.sleepTimeThreshold = Constants.Physic.SLEEP_TIME_THRESHOLD;
 		this.space.collisionBias = 0;
 		
 		//Create floor and walls.
@@ -130,14 +130,14 @@ Game.prototype.createWorld = function(){
 												10);
 		
 		var leftWall = new chipmunk.SegmentShape(this.space.staticBody,
-												new chipmunk.Vect(0, 0),
+												new chipmunk.Vect(-5, 0),
 												new chipmunk.Vect(0, this.height*3),
-												1);
+												10);
 												
 		var rightWall = new chipmunk.SegmentShape(this.space.staticBody,
-													new chipmunk.Vect(this.width, 0),
+													new chipmunk.Vect(this.width + 5, 0),
 													new chipmunk.Vect(this.width, this.height*3),
-													1);																
+													10);																
 		
 		//Set friction on ground.
 		ground.setFriction(Constants.Physic.FRICTION);

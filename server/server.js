@@ -116,7 +116,8 @@ var Constants = {
 		MASS_BLOCK_STATIC: 999999999999,
 		TIME_STEP: 1/60,
 		FRICTION_FACTOR_ONGROUND: 0.85,
-		TURN_FRICTION_FACTOR: 0.05
+		TURN_FRICTION_FACTOR: 0.05,
+		SLEEP_TIME_THRESHOLD: 0.075
 	},
 	Spawn: {
 		Limit: {
@@ -175,11 +176,11 @@ var Constants = {
 			DISTANCE_STEP: 75
 		},
 		EnergySpike: {
-			SPEED: 4,
+			SPEED: 7,
 			WIDTH: 30,
 			COOLDOWN: 1,
-			IMPULSE_X: 10000,
-			IMPULSE_Y: 300
+			IMPULSE_X: 2500,
+			IMPULSE_Y: 750
 		}
 	},
 	KillCommand: {
@@ -1563,8 +1564,8 @@ Game.prototype.createWorld = function(){
 									   null, 
 									   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
 		
-		//Force bodies to sleep when idle after 0.2 second.
-		this.space.sleepTimeThreshold = 0.075;
+		//Force bodies to sleep when idle after 0.075 second.
+		this.space.sleepTimeThreshold = Constants.Physic.SLEEP_TIME_THRESHOLD;
 		this.space.collisionBias = 0;
 		
 		//Create floor and walls.
@@ -1574,14 +1575,14 @@ Game.prototype.createWorld = function(){
 												10);
 		
 		var leftWall = new chipmunk.SegmentShape(this.space.staticBody,
-												new chipmunk.Vect(0, 0),
+												new chipmunk.Vect(-5, 0),
 												new chipmunk.Vect(0, this.height*3),
-												1);
+												10);
 												
 		var rightWall = new chipmunk.SegmentShape(this.space.staticBody,
-													new chipmunk.Vect(this.width, 0),
+													new chipmunk.Vect(this.width + 5, 0),
 													new chipmunk.Vect(this.width, this.height*3),
-													1);																
+													10);																
 		
 		//Set friction on ground.
 		ground.setFriction(Constants.Physic.FRICTION);
