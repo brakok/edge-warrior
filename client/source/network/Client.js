@@ -47,6 +47,24 @@ var Client = new function(){
 	this.pressedKeys[Options.keys.SKILL4] = false;
 	this.pressedKeys[Options.keys.TOGGLE_BUY_MODE] = false;
 	
+	this.init = function(data){
+	
+		//Init game.
+		this.game = new Game();
+		
+		//Server positioning and giving color to player.
+		this.game.player = new Player(data.player.x, data.player.y, data.player.color, true, this.username);	
+
+		for(var i in data.enemies)
+		{
+			this.game.enemies.push(new Player(data.enemies[i].x,
+								   data.enemies[i].y,
+								   data.enemies[i].color,
+								   false,
+								   data.enemies[i].username));
+		}
+	};
+	
 	//Authentification.
 	this.authenticate = function(username, password){
 		//TODO: Add DB.
@@ -120,6 +138,7 @@ var Client = new function(){
 	
 	//Join a game.
 	this.joinGame = function(data){
+		console.log('Joining game...');
 		this.socket.emit(Constants.Message.JOIN_GAME, data);
 	};
 	
@@ -241,21 +260,7 @@ var Client = new function(){
 		socket.on(Constants.Message.INIT, function (data) {
 			console.log('Initialize');		
 
-			//Init game.
-			Client.game = new Game();
-			
-			//Server positioning and giving color to player.
-			Client.game.player = new Player(data.player.x, data.player.y, data.player.color, true, Client.username);	
-
-			for(var i in data.enemies)
-			{
-				Client.game.enemies.push(new Player(data.enemies[i].x,
-											   data.enemies[i].y,
-											   data.enemies[i].color,
-											   false,
-											   data.enemies[i].username));
-			}
-
+			Client.init(data);
 			socket.emit(Constants.Message.PLAYER_READY);
 		});
 		
