@@ -1,7 +1,7 @@
 (function(){
 	var canvas = document.getElementById('gameCanvas');
-	canvas.width = 1920;
-	canvas.height = 1280;
+	canvas.width = Constants.Video.Canvas.ORIGINAL_WIDTH;
+	canvas.height = Constants.Video.Canvas.ORIGINAL_HEIGHT;
 })();
 
 //Cocos2d configuration and instanciation.

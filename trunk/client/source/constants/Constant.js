@@ -20,6 +20,14 @@ var Constants = {
 	Mouse: {
 		DOUBLE_CLICK_THRESHOLD: 250 //In ms
 	},
+	Video: {
+		Canvas: {
+			ORIGINAL_WIDTH: 1920,
+			ORIGINAL_HEIGHT: 1080
+		},
+		ORIGINAL_WIDTH: 1024,
+		ORIGINAL_HEIGHT: 768
+	},
 	Block: {
 		Percent: {
 			STARTING_NEUTRAL: 25,

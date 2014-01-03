@@ -6,7 +6,7 @@ var Login = cc.LayerColor.extend({
 		this.width = width;
 		this.height = height;
 	
-		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
+		this._super(new cc.Color4B(255, 255, 255, 0), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
 		this._zOrder = Constants.Menu.Login.Z_INDEX;
