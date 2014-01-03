@@ -39,8 +39,8 @@ var SkillScreen = cc.LayerColor.extend({
 									   this);
 									   
 		this.selectedSkill = null;
-		this.summary = new SkillSummary(this.width*0.65, 
-										this.height*0.64,
+		this.summary = new SkillSummary(this.width*0.66, 
+										this.height*0.6,
 										Constants.Menu.SkillScreen.SkillSummary.WIDTH,
 										Constants.Menu.SkillScreen.SkillSummary.HEIGHT,
 										this);
