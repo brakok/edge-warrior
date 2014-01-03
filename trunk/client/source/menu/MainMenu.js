@@ -20,10 +20,10 @@ var MainMenu = cc.LayerColor.extend({
 		this.cmdOptions = new cc.MenuItemFont.create("OPTIONS", this.toOptions, this);
 		this.cmdSkill = new cc.MenuItemFont.create("SKILLS", this.toSkills, this);
 		
-		this.cmdCreate.setPosition(new cc.Point(this.width*0.5, this.height*0.77));
-		this.cmdJoin.setPosition(new cc.Point(this.width*0.33, this.height*0.53));
-		this.cmdOptions.setPosition(new cc.Point(this.width*0.7, this.height*0.42));
-		this.cmdSkill.setPosition(new cc.Point(this.width*0.63, this.height*0.63));
+		this.cmdCreate.setPosition(new cc.Point(this.width*0.47, this.height*0.72));
+		this.cmdJoin.setPosition(new cc.Point(this.width*0.27, this.height*0.49));
+		this.cmdOptions.setPosition(new cc.Point(this.width*0.78, this.height*0.43));
+		this.cmdSkill.setPosition(new cc.Point(this.width*0.64, this.height*0.56));
 		
 		//Main menu.
 		this.menu = new cc.Menu.create(this.cmdCreate, this.cmdJoin, this.cmdOptions, this.cmdSkill);
@@ -31,7 +31,7 @@ var MainMenu = cc.LayerColor.extend({
 		this.menu.setColor(new cc.Color3B(0,0,0));
 		
 		this.cmdLogout = new cc.MenuItemFont.create("LOGOUT", this.logout, this);
-		this.cmdLogout.setPosition(new cc.Point(90, this.height-45));
+		this.cmdLogout.setPosition(new cc.Point(this.width*0.1, this.height*0.87));
 		
 		//Common command.
 		this.commonMenu = new cc.Menu.create(this.cmdLogout);
