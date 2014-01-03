@@ -10,13 +10,13 @@ var Options = new function(){
 	this.buyMode = Enum.SkillStore.Mode.POWER;
 	
 	this.resolution = {
-		width: 1024,
-		height: 768
+		width: Constants.Video.ORIGINAL_WIDTH,
+		height: Constants.Video.ORIGINAL_HEIGHT
 	};
 	
 	this.viewport = {
-		width: 1024,
-		height: 768
+		width: Constants.Video.ORIGINAL_WIDTH,
+		height: Constants.Video.ORIGINAL_HEIGHT
 	};
 	
 	this.callbackCounter = 0;
@@ -96,7 +96,9 @@ var Options = new function(){
 	
 	//Resize window.
 	this.resizeWindow = function(){
-
+	
+		console.log(cc.originalCanvasSize.width + ' ' + cc.originalCanvasSize.height);
+	
 		//Resize canvas to new resolution.
 		var xScale = this.resolution.width / cc.originalCanvasSize.width;
         var yScale = this.resolution.height / cc.originalCanvasSize.height;
