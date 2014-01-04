@@ -5,6 +5,14 @@
 	<body>
 		<style type="text/css">
 				
+			.left {
+				float: left;
+			}			
+			
+			.right {
+				float: right;
+			}
+			
 			tr.unselected {
 				background-color: none;
 				color: none;
@@ -110,14 +118,18 @@
 			}
 			
 			div.keys {
-				width: 33%;
+				width: 50%;
 			}
 			
 			div.keys > div {
-				width: 100%;
+				width: 50%;
 			}
 			
 			div.keys > div > div {
+				width: 100%;
+			}
+			
+			div.keys > div > div > div {
 				width: 50%;
 				text-align: left;
 				float: left;
@@ -164,100 +176,104 @@
 			<!-- Key form -->
 			<div id="keys" class="keys">
 				<h3>Keys configuration</h3>
-				<div>
+				<div class="left">
 					<div>
-						<label> Right &nbsp; </label>
+						<div>
+							<label> Right &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keyRight" name="keyRight" maxlength="1" />
+						</div>
 					</div>
 					<div>
-						<input type="text" id="keyRight" name="keyRight" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Left &nbsp; </label>
-					</div>
-					<div>
-						<input type="text" id="keyLeft" name="keyLeft" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Jump &nbsp; </label>
-					</div>	
-					<div>
-						<input type="text" id="keyJump" name="keyJump" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Kill command &nbsp; </label>
+						<div>
+							<label> Left &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keyLeft" name="keyLeft" maxlength="1" />
+						</div>
 					</div>
 					<div>
-						<input type="text" id="keyKC" name="keyKC" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Inventory 1 &nbsp; </label>
-					</div>
-					<div>
-						<input type="text" id="keyOpt1" name="keyOpt1" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Inventory 2 &nbsp; </label>
+						<div>
+							<label> Jump &nbsp; </label>
+						</div>	
+						<div>
+							<input type="text" id="keyJump" name="keyJump" maxlength="1" />
+						</div>
 					</div>
 					<div>
-						<input type="text" id="keyOpt2" name="keyOpt2" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Pause &nbsp; </label>
-					</div>
-					<div>
-						<input type="text" id="keyPause" name="keyPause" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Buy Skill 1 &nbsp; </label>
+						<div>
+							<label> Kill command &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keyKC" name="keyKC" maxlength="1" />
+						</div>
 					</div>
 					<div>
-						<input type="text" id="keySkill1" name="keySkill1" maxlength="1" />
+						<div>
+							<label> Inventory 1 &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keyOpt1" name="keyOpt1" maxlength="1" />
+						</div>
+					</div>
+					<div>
+						<div>
+							<label> Inventory 2 &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keyOpt2" name="keyOpt2" maxlength="1" />
+						</div>
+					</div>
+					<div>
+						<div>
+							<label> Pause &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keyPause" name="keyPause" maxlength="1" />
+						</div>
 					</div>
 				</div>
-				<div>
+				<div class="right">
 					<div>
-						<label> Buy Skill 2 &nbsp; </label>
+						<div>
+							<label> Buy Skill 1 &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keySkill1" name="keySkill1" maxlength="1" />
+						</div>
 					</div>
 					<div>
-						<input type="text" id="keySkill2" name="keySkill2" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Buy Skill 3 &nbsp; </label>
-					</div>
-					<div>
-						<input type="text" id="keySkill3" name="keySkill3" maxlength="1" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<label> Buy Skill 4 &nbsp; </label>
+						<div>
+							<label> Buy Skill 2 &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keySkill2" name="keySkill2" maxlength="1" />
+						</div>
 					</div>
 					<div>
-						<input type="text" id="keySkill4" name="keySkill4" maxlength="1" />
+						<div>
+							<label> Buy Skill 3 &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keySkill3" name="keySkill3" maxlength="1" />
+						</div>
 					</div>
-				</div>
-				<div>
 					<div>
-						<label> Toggle Buy Mode &nbsp; </label>
+						<div>
+							<label> Buy Skill 4 &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keySkill4" name="keySkill4" maxlength="1" />
+						</div>
 					</div>
 					<div>
-						<input type="text" id="keyBuyMode" name="keyBuyMode" maxlength="1" />
+						<div>
+							<label> Toggle Buy Mode &nbsp; </label>
+						</div>
+						<div>
+							<input type="text" id="keyBuyMode" name="keyBuyMode" maxlength="1" />
+						</div>
 					</div>
 				</div>
 			</div>
