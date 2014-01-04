@@ -186,7 +186,8 @@ var Constants = {
 		UPDATE_SLOT: 'updateSlot',
 		UPDATE_LOBBY: 'updateLobby',
 		GO: 'go',
-		PROCESS_UNITS: 'processUnit'
+		PROCESS_UNITS: 'processUnit',
+		ERROR: 'serverError'
 	},
 	Effect: {
 		Z_INDEX: 60,
