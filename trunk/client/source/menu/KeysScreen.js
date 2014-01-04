@@ -23,9 +23,9 @@ var KeysScreen = cc.LayerColor.extend({
 		this.cmdReset = new cc.MenuItemFont.create("RESET", this.reset, this);
 		this.cmdBack = new cc.MenuItemFont.create("BACK", this.back, this);
 		
-		this.cmdSave.setPosition(new cc.Point(this.width*0.6, this.height*0.1));
-		this.cmdReset.setPosition(new cc.Point(this.width*0.7, this.height*0.1));
-		this.cmdBack.setPosition(new cc.Point(this.width*0.8, this.height*0.1));
+		this.cmdSave.setPosition(new cc.Point(this.width*0.6, this.height*0.05));
+		this.cmdReset.setPosition(new cc.Point(this.width*0.7, this.height*0.05));
+		this.cmdBack.setPosition(new cc.Point(this.width*0.8, this.height*0.05));
 		
 		this.menu = new cc.Menu.create(this.cmdSave, this.cmdReset, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
@@ -55,7 +55,7 @@ var KeysScreen = cc.LayerColor.extend({
 		this.placeHTML();
 	},
 	placeHTML: function(){
-		this.keyForm.setPosition(Options.resolution.width*0.3, Options.resolution.height*0.25);
+		this.keyForm.setPosition(Options.resolution.width*0.27, Options.resolution.height*0.25);
 	}
 });
 
