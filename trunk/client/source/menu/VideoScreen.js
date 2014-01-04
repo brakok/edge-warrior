@@ -5,6 +5,8 @@ var VideoScreen = cc.LayerColor.extend({
 		this.height = height;
 		this.parent = parent;
 	
+		this.originalResolution = null;
+	
 		//Layer creation.
 		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
@@ -17,13 +19,25 @@ var VideoScreen = cc.LayerColor.extend({
 		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 		
 		this.div = document.getElementById('video');
-		this.select = document.getElementById('resolution');
+		var privateSelect = this.select = document.getElementById('resolution');
+		
+		//Bind onchange event to resize on resolution selection.
+		this.select.onchange = function(){
+			var values = privateSelect.value.split("x");
+			var res = {
+				width: values[0],
+				height: values[1]
+			};
+			
+			Options.setResolution(res);
+			Options.resizeWindow();
+		};
 		
 		this.placeHTML();
 		
 		//Menu creation.
 		this.cmdSave = new cc.MenuItemFont.create("SAVE", this.save, this);
-		this.cmdBack = new cc.MenuItemFont.create("BACK", this.back, this);
+		this.cmdBack = new cc.MenuItemFont.create("CANCEL", this.cancel, this);
 		
 		this.cmdSave.setPosition(new cc.Point(this.width*0.7, this.height*0.1));
 		this.cmdBack.setPosition(new cc.Point(this.width*0.8, this.height*0.1));
@@ -38,6 +52,12 @@ var VideoScreen = cc.LayerColor.extend({
 	onEntering: function(){
 		this.select.value = Options.resolution.width + 'x' + Options.resolution.height;
 		this.div.style.display = "block";
+		
+		//Set original resolution.
+		this.originalResolution = {
+			width: Options.resolution.width,
+			height: Options.resolution.height
+		};
 	},
 	onLeaving: function(){
 		this.div.style.display = "none";
@@ -49,8 +69,15 @@ var VideoScreen = cc.LayerColor.extend({
 			height: values[1]
 		};
 	
-		Options.saveResolution(res);
+		Options.saveResolution();
+		
+		this.back();
+	},
+	cancel: function(){
+		Options.setResolution(this.originalResolution);
 		Options.resizeWindow();
+		
+		this.back();
 	},
 	back: function(){
 		this.parent.switchTo(this.parent.home);

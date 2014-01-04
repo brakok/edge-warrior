@@ -81,8 +81,8 @@ var Options = new function(){
 		chrome.storage.sync.set({'skillSet': skillTypes});
 	};
 	
-	//Save new resolution.
-	this.saveResolution = function(resolution){
+	//Set resolution.
+	this.setResolution = function(resolution){
 		this.resolution = resolution;
 		
 		if(!this.fullscreen)
@@ -90,14 +90,16 @@ var Options = new function(){
 			this.viewport.width = resolution.width;
 			this.viewport.height = resolution.height;
 		}
-		
+	};
+	
+	//Save new resolution.
+	this.saveResolution = function(){
+		var resolution = this.resolution;		
 		chrome.storage.sync.set({'resolution' : resolution});
 	};
 	
 	//Resize window.
 	this.resizeWindow = function(){
-	
-		console.log(cc.originalCanvasSize.width + ' ' + cc.originalCanvasSize.height);
 	
 		//Resize canvas to new resolution.
 		var xScale = this.resolution.width / cc.originalCanvasSize.width;
