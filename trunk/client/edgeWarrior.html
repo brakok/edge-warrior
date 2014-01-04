@@ -13,6 +13,13 @@
 				float: right;
 			}
 			
+			.error {
+				color: #ffaaaa;
+				font-size: 0.8em;
+				position: absolute;
+				z-index: 1000;
+			}
+			
 			tr.unselected {
 				background-color: none;
 				color: none;
@@ -72,6 +79,8 @@
 
 			div.lobbyList {
 				width: 60%;
+				height: 50%;
+				overflow: auto;
 				font-size: 0.8em;
 			}
 			
@@ -142,6 +151,11 @@
 		</style>
 
 		<div class="forms">
+		
+			<!-- Error -->
+			<span id="error" class="error">
+			</span>
+		
 			<!-- Login -->
 			<div id="login" class="login">
 				<div>

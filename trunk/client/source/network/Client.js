@@ -169,6 +169,12 @@ var Client = new function(){
 			MenuScreens.lobbyScreen.setOnline();
 		});
 		
+		//Show error message sent by server.
+		masterSocket.on(Constants.Message.ERROR, function(msg){
+			HtmlHelper.showError(msg);
+			Client.currentGameId = null;
+		});
+		
 		masterSocket.on(Constants.Message.UPDATE_LOBBY, function(data){
 			MenuScreens.lobbyScreen.update(data);
 		});

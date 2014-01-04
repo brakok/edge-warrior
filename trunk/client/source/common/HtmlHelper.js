@@ -18,5 +18,16 @@ var HtmlHelper = {
 		}
 		
 		return width;
+	},
+	showError: function(msg){
+		
+		var span = document.getElementById('error');
+		
+		span.innerHTML = msg;
+
+		//Clean error message after specified time.
+		setTimeout(function(){
+			span.innerHTML = '';
+		}, 5000);
 	}
 };
