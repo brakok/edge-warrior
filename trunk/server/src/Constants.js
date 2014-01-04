@@ -127,6 +127,10 @@ var Constants = {
 		UPDATE_SLOT: 'updateSlot',
 		UPDATE_LOBBY: 'updateLobby',
 		GO: 'go',
-		PROCESS_UNITS: 'processUnit'
+		PROCESS_UNITS: 'processUnit',
+		ERROR: 'serverError'
+	},
+	ErrorMessage: {
+		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
 	}
 };

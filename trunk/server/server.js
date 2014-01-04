@@ -231,7 +231,11 @@ var Constants = {
 		UPDATE_SLOT: 'updateSlot',
 		UPDATE_LOBBY: 'updateLobby',
 		GO: 'go',
-		PROCESS_UNITS: 'processUnit'
+		PROCESS_UNITS: 'processUnit',
+		ERROR: 'serverError'
+	},
+	ErrorMessage: {
+		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
 	}
 };
 var Listeners = function(game){
@@ -1930,7 +1934,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Join a lobby.
 	socket.on(Constants.Message.JOIN_LOBBY, function(data){
 		
-		if(MasterServer.lobbies[data.gameId].connectedPlayers <= Constants.Game.MAX_PLAYERS)
+		if(MasterServer.lobbies[data.gameId].connectedPlayers < Constants.Game.MAX_PLAYERS)
 		{
 			console.log('Lobby joined (' + data.gameId + ') :' + data.username);
 
@@ -1954,6 +1958,8 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			
 			socket.emit(Constants.Message.CONNECTED_LOBBY, returnData);
 		}
+		else
+			socket.emit(Constants.Message.ERROR, Constants.ErrorMessage.INVALID_LOBBY);
 	});
 	
 	//Disconnect from lobby.
