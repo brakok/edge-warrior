@@ -26,9 +26,9 @@ var PauseMenu = cc.LayerColor.extend({
 		this.cmdDisconnect = new cc.MenuItemFont.create("DISCONNECT", this.disconnect, this);
 		this.cmdClose = new cc.MenuItemFont.create("CLOSE", this.close, this);
 		
-		this.cmdOptions.setPosition(new cc.Point(this.width*0.5, this.height*0.25));
-		this.cmdDisconnect.setPosition(new cc.Point(this.width*0.75, this.height*0.32));
-		this.cmdClose.setPosition(new cc.Point(this.width*0.9, this.height*0.15));
+		this.cmdOptions.setPosition(new cc.Point(this.width*0.6, this.height*0.11));
+		this.cmdDisconnect.setPosition(new cc.Point(this.width*0.78, this.height*0.17));
+		this.cmdClose.setPosition(new cc.Point(this.width*0.93, this.height*0.25));
 		
 		this.menu = new cc.Menu.create(this.cmdOptions, this.cmdDisconnect, this.cmdClose);
 		this.menu.setPosition(new cc.Point(0,0));

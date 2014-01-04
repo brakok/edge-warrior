@@ -22,7 +22,7 @@ var MainMenu = cc.LayerColor.extend({
 		
 		this.cmdCreate.setPosition(new cc.Point(this.width*0.47, this.height*0.72));
 		this.cmdJoin.setPosition(new cc.Point(this.width*0.27, this.height*0.49));
-		this.cmdOptions.setPosition(new cc.Point(this.width*0.78, this.height*0.43));
+		this.cmdOptions.setPosition(new cc.Point(this.width*0.78, this.height*0.45));
 		this.cmdSkill.setPosition(new cc.Point(this.width*0.64, this.height*0.56));
 		
 		//Main menu.
