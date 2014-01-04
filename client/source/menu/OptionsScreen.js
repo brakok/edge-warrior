@@ -16,7 +16,7 @@ var OptionsScreen = cc.LayerColor.extend({
 		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 				
 		//Create main layer.
-		this.home = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 255), width, height);
+		this.home = cc.LayerColor.create(new cc.Color4B(255, 255, 255, 0), width, height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 		
 		//Sub-menus.
@@ -31,8 +31,8 @@ var OptionsScreen = cc.LayerColor.extend({
 		this.cmdBack = new cc.MenuItemFont.create("BACK", backAction);
 		
 		this.cmdKeys.setPosition(new cc.Point(this.width*0.38, this.height*0.58));
-		this.cmdVideo.setPosition(new cc.Point(this.width*0.67, this.height*0.42));
-		this.cmdBack.setPosition(new cc.Point(this.width*0.89, this.height*0.26));
+		this.cmdVideo.setPosition(new cc.Point(this.width*0.6, this.height*0.41));
+		this.cmdBack.setPosition(new cc.Point(this.width*0.83, this.height*0.2));
 		
 		this.menu = new cc.Menu.create(this.cmdKeys, this.cmdVideo, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
