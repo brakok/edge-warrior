@@ -138,7 +138,6 @@ var Client = new function(){
 	
 	//Join a game.
 	this.joinGame = function(data){
-		console.log('Joining game...');
 		this.socket.emit(Constants.Message.JOIN_GAME, data);
 	};
 	
@@ -177,7 +176,7 @@ var Client = new function(){
 		//Join game when game is created.
 		masterSocket.on(Constants.Message.GAME_CREATED, function(ipAddress){
 			console.log('Game created');
-
+			
 			//Change to game scene.
 			cc.Director.getInstance().replaceScene(myApp.GameScene);
 			
