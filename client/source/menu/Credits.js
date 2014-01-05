@@ -23,13 +23,13 @@ var Credits = cc.LayerColor.extend({
 		this.lblCreator = cc.LabelTTF.create("Creator", Constants.Font.NAME, Constants.Font.MIDSIZE);
 		this.lblVoice = cc.LabelTTF.create("Voices", Constants.Font.NAME, Constants.Font.MIDSIZE);
 		this.lblMusic = cc.LabelTTF.create("Music", Constants.Font.NAME, Constants.Font.MIDSIZE);
-		this.lblArtist = cc.LabelTTF.create("Artist", Constants.Font.NAME, Constants.Font.MIDSIZE);
+		this.lblArts = cc.LabelTTF.create("Arts", Constants.Font.NAME, Constants.Font.MIDSIZE);
 		this.lblSpecial = cc.LabelTTF.create("Special thanks", Constants.Font.NAME, Constants.Font.MIDSIZE);
 		
 		this.lblCreator.setPosition(new cc.Point(this.width*0.2, this.height*0.88));
 		this.lblVoice.setPosition(new cc.Point(this.width*0.85, this.height*0.82));
-		this.lblMusic.setPosition(new cc.Point(this.width*0.25, this.height*0.44));
-		this.lblArtist.setPosition(new cc.Point(this.width*0.53, this.height*0.67));
+		this.lblMusic.setPosition(new cc.Point(this.width*0.22, this.height*0.41));
+		this.lblArts.setPosition(new cc.Point(this.width*0.46, this.height*0.65));
 		this.lblSpecial.setPosition(new cc.Point(this.width*0.66, this.height*0.4));
 		
 		//People names.
@@ -37,6 +37,7 @@ var Credits = cc.LayerColor.extend({
 		
 		//Artist.
 		this.lblSimonD01 = cc.LabelTTF.create("Simon Desrosiers", Constants.Font.NAME, Constants.Font.SIZE);
+		this.lblPascalTL03 = cc.LabelTTF.create("Pascal Thibault-Larouche", Constants.Font.NAME, Constants.Font.SIZE);
 		
 		//Voices.
 		this.lblPascalTL02 = cc.LabelTTF.create("Pascal Thibault-Larouche", Constants.Font.NAME, Constants.Font.SIZE);
@@ -55,6 +56,7 @@ var Credits = cc.LayerColor.extend({
 		
 		this.lblPascalTL01.setColor(color);
 		this.lblPascalTL02.setColor(color);
+		this.lblPascalTL03.setColor(color);
 		this.lblSimonD01.setColor(color);
 		this.lblSimonD02.setColor(color);
 		this.lblAchrafL.setColor(color);
@@ -64,14 +66,15 @@ var Credits = cc.LayerColor.extend({
 		this.lblCiao.setColor(color);
 		
 		this.lblPascalTL01.setPosition(new cc.Point(this.width*0.23,this.height*0.75));
-		this.lblPascalTL02.setPosition(new cc.Point(this.width*0.77,this.height*0.69));
-		this.lblSimonD01.setPosition(new cc.Point(this.width*0.5,this.height*0.56));
-		this.lblSimonD02.setPosition(new cc.Point(this.width*0.77,this.height*0.65));
-		this.lblAchrafL.setPosition(new cc.Point(this.width*0.77,this.height*0.61));
+		this.lblPascalTL02.setPosition(new cc.Point(this.width*0.79,this.height*0.7));
+		this.lblPascalTL03.setPosition(new cc.Point(this.width*0.49,this.height*0.58));
+		this.lblSimonD01.setPosition(new cc.Point(this.width*0.53,this.height*0.53));
+		this.lblSimonD02.setPosition(new cc.Point(this.width*0.74,this.height*0.65));
+		this.lblAchrafL.setPosition(new cc.Point(this.width*0.8,this.height*0.6));
 		this.lblGuillaumeC.setPosition(new cc.Point(this.width*0.26,this.height*0.3));
-		this.lblAudreyL.setPosition(new cc.Point(this.width*0.65,this.height*0.25));
-		this.lblSamuelB.setPosition(new cc.Point(this.width*0.65,this.height*0.21));
-		this.lblCiao.setPosition(new cc.Point(this.width*0.65,this.height*0.17));
+		this.lblAudreyL.setPosition(new cc.Point(this.width*0.63,this.height*0.27));
+		this.lblSamuelB.setPosition(new cc.Point(this.width*0.68,this.height*0.21));
+		this.lblCiao.setPosition(new cc.Point(this.width*0.62,this.height*0.15));
 		
 		//Menu creation.
 		this.cmdBack = new cc.MenuItemFont.create("BACK", this.back, this);
@@ -91,12 +94,13 @@ var Credits = cc.LayerColor.extend({
 		this.addChild(this.lblCreator);
 		this.addChild(this.lblVoice);
 		this.addChild(this.lblMusic);
-		this.addChild(this.lblArtist);
+		this.addChild(this.lblArts);
 		this.addChild(this.lblSpecial);
 		
 		//Names.
 		this.addChild(this.lblPascalTL01);
 		this.addChild(this.lblPascalTL02);
+		this.addChild(this.lblPascalTL03);
 		this.addChild(this.lblSimonD01);
 		this.addChild(this.lblSimonD02);
 		this.addChild(this.lblAchrafL);
