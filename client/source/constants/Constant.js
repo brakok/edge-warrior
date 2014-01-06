@@ -262,7 +262,10 @@ var Constants = {
 		LobbyScreen: {
 			Z_INDEX: 0
 		},
-		Credit: {
+		Credits: {
+			Z_INDEX: 0
+		},
+		RulesScreen: {
 			Z_INDEX: 0
 		},
 		ServerList: {

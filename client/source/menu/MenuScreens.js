@@ -8,6 +8,7 @@ var MenuScreens = new function(){
 	this.loadingScreen = null;
 	this.skillScreen = null;
 	this.credits = null;
+	this.rulesScreen = null;
 		
 	this.init = function(width, height){
 
@@ -19,6 +20,7 @@ var MenuScreens = new function(){
 			this.serverList = ServerList.create(width, height);
 			this.skillScreen = SkillScreen.create(width, height);
 			this.credits = Credits.create(width, height);
+			this.rulesScreen = RulesScreen.create(width, height);
 			this.optionsScreen = OptionsScreen.create(width, height, function() { myApp.MenuScene.menu.switchTo(MenuScreens.mainMenu); });
 		}
 	};
