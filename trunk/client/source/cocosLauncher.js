@@ -44,6 +44,7 @@
 				  'source/menu/MenuScreens.js',
 				  'source/menu/LobbyScreen.js',
 				  'source/menu/Credits.js',
+				  'source/menu/RulesScreen.js',
 				  'source/menu/Login.js',
 				  'source/menu/MainMenu.js',
 				  'source/menu/ServerList.js',

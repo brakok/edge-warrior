@@ -8,7 +8,7 @@ var Credits = cc.LayerColor.extend({
 		this._super(new cc.Color4B(0, 0, 0, 255), this.width, this.height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
-		this._zOrder = Constants.Menu.Credit.Z_INDEX;
+		this._zOrder = Constants.Menu.Credits.Z_INDEX;
 		
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'credit_background.png');
