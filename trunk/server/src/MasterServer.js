@@ -54,6 +54,16 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 	console.log('Connection to client established - Master');
 
+	//Create an account.
+	socket.on(Constants.Message.CREATE_ACCOUNT, function(profile){
+		
+		console.log('Creating account : ' + profile.username);
+			
+		Account.create(profile, function(result){
+			socket.emit(Constants.Message.CREATE_ACCOUNT_RESULT, result);
+		});
+	});
+	
 	//Socket disconnected.
 	socket.on(Constants.Message.DISCONNECT, function(){
 		if(socket.userdata != null && socket.userdata.gameId != null && MasterServer.lobbies[socket.userdata.gameId] != null)
