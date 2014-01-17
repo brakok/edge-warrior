@@ -27,7 +27,7 @@ var RulesScreen = cc.LayerColor.extend({
 		this.lblBuyMode = cc.LabelTTF.create("When buying skills during a match, one may boost the power of a bought skill when buying in Power Mode or boost his percent of apparition when buying in Quantity Mode.", Constants.Font.NAME, Constants.Font.SIZE, cc.size(400, 600), cc.TEXT_ALIGNMENT_LEFT);
 		this.lblSkillStore = cc.LabelTTF.create("The skill store, which is at the left bottom corner of the HUD, shows which skills are available for the current match. You may change them in the Skills menu. Use the buy keys to buy them.", Constants.Font.NAME, Constants.Font.SIZE, cc.size(400, 600), cc.TEXT_ALIGNMENT_LEFT);
 		
-		var color = new cc.Color3B(100,100,100);
+		var color = new cc.Color3B(155,155,155);
 		
 		//Color.
 		this.lblColorContact.setColor(color);

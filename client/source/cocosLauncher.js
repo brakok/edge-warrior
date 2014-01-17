@@ -46,6 +46,7 @@
 				  'source/menu/Credits.js',
 				  'source/menu/RulesScreen.js',
 				  'source/menu/Login.js',
+				  'source/menu/CreateAccount.js',
 				  'source/menu/MainMenu.js',
 				  'source/menu/ServerList.js',
 				  'source/menu/EndScreen.js',
@@ -55,6 +56,7 @@
 				  'source/menu/VideoScreen.js',
 				  'source/menu/SkillScreen.js',
 				  'source/menu/LoadingScreen.js',
+				  
 				  'source/Resources.js',
 				  'source/playground/Game.js',
 				  'source/playground/hud/Inventory.js',

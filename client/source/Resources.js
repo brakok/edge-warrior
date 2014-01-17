@@ -28,6 +28,7 @@ var assets = [
 	
 	//Menu background
 	{type:'image', src: assetsMenuDir + 'login_background.png'},
+	{type:'image', src: assetsMenuDir + 'account_background.png'},
 	{type:'image', src: assetsMenuDir + 'main_background.png'},
 	{type:'image', src: assetsMenuDir + 'options_background.png'},
 	{type:'image', src: assetsMenuDir + 'options_submenu_background.png'},
