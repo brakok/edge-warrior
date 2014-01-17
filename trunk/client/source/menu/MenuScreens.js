@@ -36,6 +36,7 @@ var MenuScreens = new function(){
 			this.serverList.resize();
 			this.optionsScreen.resize();
 			this.lobbyScreen.resize();
+			this.createAccount.resize();
 		}
 	};
 	

@@ -51,10 +51,28 @@ var CreateAccount = cc.LayerColor.extend({
 		this.reset();
 	},
 	create: function(){
-		console.log('create');
+		var profile = new Profile(this.txtUsername.value, this.txtEmail.value, this.txtPassword.value, this.txtConfirmation.value);
+		
+		//Create account.
+		var result = Client.createAccount(profile);
+		
+		if(!result)
+			this.result(false);
 	},
 	back: function(){
 		MenuScreens.switchTo(MenuScreens.login);
+	},
+	result: function(result){
+		
+		if(result)
+		{
+			MenuScreens.switchTo(MenuScreens.login);
+			HtmlHelper.showMessage('Account created.');
+		}
+		else
+			HtmlHelper.showError('Invalid account.');
+		
+		Client.isCreatingAccount = false;
 	},
 	reset: function(){
 		this.txtUsername.value = '';
@@ -71,8 +89,8 @@ var CreateAccount = cc.LayerColor.extend({
 	placeHTML: function(){
 		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
 
-		this.div.style.left = this.width*0.18 + 'px';
-		this.div.style.top = this.height*0.39 + 'px';
+		this.div.style.left = this.width*0.19 + 'px';
+		this.div.style.top = this.height*0.45 + 'px';
 	}
 });
 
