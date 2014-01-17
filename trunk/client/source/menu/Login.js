@@ -53,7 +53,7 @@ var Login = cc.LayerColor.extend({
 			MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
 	createAccount: function(){
-		console.log('create');
+		MenuScreens.switchTo(MenuScreens.createAccount);
 	},
 	resize: function(){
 		this.width = Options.resolution.width;

@@ -36,12 +36,12 @@ var Credits = cc.LayerColor.extend({
 		this.lblPascalTL01 = cc.LabelTTF.create("Pascal Thibault-Larouche", Constants.Font.NAME, Constants.Font.SIZE);
 		
 		//Artist.
-		this.lblSimonD01 = cc.LabelTTF.create("Simon Desrosiers", Constants.Font.NAME, Constants.Font.SIZE);
+		this.lblSimonD01 = cc.LabelTTF.create("Simon Des Rosiers", Constants.Font.NAME, Constants.Font.SIZE);
 		this.lblPascalTL03 = cc.LabelTTF.create("Pascal Thibault-Larouche", Constants.Font.NAME, Constants.Font.SIZE);
 		
 		//Voices.
 		this.lblPascalTL02 = cc.LabelTTF.create("Pascal Thibault-Larouche", Constants.Font.NAME, Constants.Font.SIZE);
-		this.lblSimonD02 = cc.LabelTTF.create("Simon Desrosiers", Constants.Font.NAME, Constants.Font.SIZE);
+		this.lblSimonD02 = cc.LabelTTF.create("Simon Des Rosiers", Constants.Font.NAME, Constants.Font.SIZE);
 		this.lblAchrafL = cc.LabelTTF.create("Achraf Loudiy", Constants.Font.NAME, Constants.Font.SIZE);
 		
 		//Music.

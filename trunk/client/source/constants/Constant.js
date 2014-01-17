@@ -256,6 +256,9 @@ var Constants = {
 		Login: {
 			Z_INDEX: 0
 		},
+		CreateAccount: {
+			Z_INDEX: 0
+		},
 		MainMenu: {
 			Z_INDEX: 0
 		},
