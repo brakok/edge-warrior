@@ -600,6 +600,7 @@ var Account = new function(){
 		//Erase confirmation (useless to stock).
 		profile.confirmation = null;
 	
+		//Hash password.
 		profile.password = sha1.update(profile.password).digest('hex');
 	
 		db.save(profile.username, profile, function(err, res){
