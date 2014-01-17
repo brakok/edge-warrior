@@ -1,5 +1,9 @@
 
 var HtmlHelper = {
+	errorTimeoutHandle: null,
+	messageTimeoutHandle: null,
+	errors: {},
+	messages: {},
 	computeWidth: function(el){
 		var isVisible = el.style.display != "none";
 		
@@ -21,13 +25,58 @@ var HtmlHelper = {
 	},
 	showError: function(msg){
 		
-		var span = document.getElementById('error');
+		if(this.errors[msg])
+			return;
 		
-		span.innerHTML = msg;
+		this.errors[msg] = true;
+		
+		var span = document.getElementById('error');
+		span.style.display = 'block';
+		
+		if(span.innerHTML == null || span.innerHTML == '')
+			span.innerHTML = msg;
+		else
+			span.innerHTML += '<br />' + msg;
 
+		if(this.errorTimeoutHandle)
+			window.clearTimeout(this.errorTimeoutHandle);
+		
+		var that = this;
+		
 		//Clean error message after specified time.
-		setTimeout(function(){
+		this.errorTimeoutHandle = setTimeout(function(){
 			span.innerHTML = '';
+			span.style.display = 'none';
+			
+			that.errors = {};
+		}, 5000);
+	},
+	showMessage: function(msg){
+	
+		if(this.messages[msg])
+			return;
+	
+		this.messages[msg] = true;
+	
+		var span = document.getElementById('message');
+		span.style.display = 'block';
+		
+		if(span.innerHTML == null || span.innerHTML == '')
+			span.innerHTML = msg;
+		else
+			span.innerHTML += '<br />' + msg;
+
+		if(this.messageTimeoutHandle)
+			window.clearTimeout(this.messageTimeoutHandle);
+		
+		var that = this;
+		
+		//Clean error message after specified time.
+		this.messageTimeoutHandle = setTimeout(function(){
+			span.innerHTML = '';
+			span.style.display = 'none';
+			
+			that.messages = {};
 		}, 5000);
 	}
 };

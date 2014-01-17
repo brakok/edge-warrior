@@ -6,6 +6,7 @@ var Client = new function(){
 	this.game = null;
 	
 	this.loadingScreen = null;
+	this.isCreatingAccount = false;
 	
 	//Members.
 	this.keys = {};
@@ -65,12 +66,29 @@ var Client = new function(){
 		}
 	};
 	
+	
+	
 	//Authentification.
 	this.authenticate = function(username, password){
 		//TODO: Add DB.
 	
 		this.username = username;
 		return true;
+	};
+	
+	//Create an account.
+	this.createAccount = function(profile){
+	
+		if(!this.isCreatingAccount)
+		{
+			this.isCreatingAccount = true;
+		
+			if(!validateProfile(profile))
+				return false;
+				
+			this.masterSocket.emit(Constants.Message.CREATE_ACCOUNT, profile);
+			return true;
+		}
 	};
 	
 	//Show loading screen.
@@ -155,6 +173,11 @@ var Client = new function(){
 	this.connectToNetwork = function(){
 		
 		var masterSocket = io.connect(Constants.Network.ADDRESS);
+		
+		//Result from account creation.
+		masterSocket.on(Constants.Message.CREATE_ACCOUNT_RESULT, function(result){
+			MenuScreens.createAccount.result(result);
+		});
 		
 		//Create lobby and receive game id.
 		masterSocket.on(Constants.Message.CREATE_LOBBY, function(gameId){
@@ -411,5 +434,66 @@ var Client = new function(){
 	
 		//Send key pressed to server.
 		this.socket.emit(Constants.Message.PUSH, inputs);
+	};
+	
+	//Validate profile fields before being inserted.
+	function validateProfile(profile){
+				
+		var valid = true;	
+			
+		//Required fields.
+		if(profile.username == null || profile.username == '')
+		{
+			HtmlHelper.showError('Username is required.');
+			valid = false;
+		}
+			
+		if(profile.password == null || profile.password == '')
+		{
+			HtmlHelper.showError('Password is required.');
+			valid = false;
+		}
+			
+		if(profile.confirmation == null || profile.confirmation == '')
+		{
+			HtmlHelper.showError('Password confirmation is required.');
+			valid = false;
+		}
+			
+		if(profile.email == null || profile.email == '')
+		{
+			HtmlHelper.showError('Email is required.');
+			valid = false;
+		}
+			
+		if(!valid)
+			return false;
+			
+		//Other validations.
+		if(profile.username.length < 6)
+		{
+			HtmlHelper.showError('Username must have at least 6 characters.');
+			valid = false;
+		}
+			
+		if(profile.password.length < 6)
+		{
+			HtmlHelper.showError('Password must have at least 6 characters.');
+			valid = false;
+		}
+			
+		if(profile.password != profile.confirmation)
+		{
+			HtmlHelper.showError('Password differs from his confirmation.');
+			valid = false;
+		}
+			
+		if(!/^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/.test(profile.email))
+		{
+			HtmlHelper.showError('Email is not in a good format.');
+			valid = false;
+		}
+		
+		return valid;
 	};
 };

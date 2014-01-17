@@ -187,7 +187,9 @@ var Constants = {
 		UPDATE_LOBBY: 'updateLobby',
 		GO: 'go',
 		PROCESS_UNITS: 'processUnit',
-		ERROR: 'serverError'
+		ERROR: 'serverError',
+		CREATE_ACCOUNT: 'createAccount',
+		CREATE_ACCOUNT_RESULT: 'createAccountResult'
 	},
 	Effect: {
 		Z_INDEX: 60,

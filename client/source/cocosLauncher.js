@@ -37,7 +37,9 @@
 				  'source/menu/elements/KeyInput.js',
 				  'source/playground/BlockOption.js',
 				  'source/playground/Camera.js',
+				  
 				  'source/network/client.js',
+				  'source/network/Profile.js',
 				  
 				  'source/scene/GameScene.js',
 				  'source/scene/MenuScene.js',

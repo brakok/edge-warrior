@@ -11,6 +11,9 @@ var Login = cc.LayerColor.extend({
 
 		this._zOrder = Constants.Menu.Login.Z_INDEX;
 		
+		this.isAuthenticating = false;
+		this.connectionAttempts = 0;
+		
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'login_background.png');
 		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
@@ -48,9 +51,29 @@ var Login = cc.LayerColor.extend({
 	},
 	connect: function(){
 
-		//Authentication.
-		if(Client.authenticate(this.txtUsername.value, this.txtPassword.value))
-			MenuScreens.switchTo(MenuScreens.mainMenu);
+		if(!this.isAuthenticating)
+		{
+			//Raise error if someone tried too many times to log in.
+			if(this.connectionAttempts > 3)
+			{
+				HtmlHelper.showError('Too many connection attempts.');
+				return;
+			}
+		
+			this.isAuthenticating = true;
+			this.connectionAttempts++;
+			
+			//Authentication.
+			if(Client.authenticate(this.txtUsername.value, this.txtPassword.value))
+			{
+				this.connectionAttempts = 0;
+				MenuScreens.switchTo(MenuScreens.mainMenu);
+			}
+			else
+				HtmlHelper.showError('Invalid username/password. Could not connect.');
+				
+			this.isAuthenticating = false;
+		}
 	},
 	createAccount: function(){
 		MenuScreens.switchTo(MenuScreens.createAccount);
