@@ -232,7 +232,9 @@ var Constants = {
 		UPDATE_LOBBY: 'updateLobby',
 		GO: 'go',
 		PROCESS_UNITS: 'processUnit',
-		ERROR: 'serverError'
+		ERROR: 'serverError',
+		CREATE_ACCOUNT: 'createAccount',
+		CREATE_ACCOUNT_RESULT: 'createAccountResult'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -557,6 +559,57 @@ var Managers = function(game){
 
 	this.BlockManager = new BlockManager(this.currentGame);
 	this.DeathZoneManager = new DeathZoneManager(this.currentGame);
+};
+var Account = new function(){
+	var cradle = require('cradle');
+	var db = new(cradle.Connection)('http://127.0.0.1', 5984, { cache: true, raw: false }).database('dream');
+	var crypto = require('crypto');
+	var sha1 = crypto.createHash('sha1');
+	
+	function validateProfile(profile){
+		
+		if(profile.username == null || profile.username == '')
+			return false;
+			
+		if(profile.password == null || profile.password == '')
+			return false;
+			
+		if(profile.confirmation == null || profile.confirmation == '')
+			return false;
+			
+		if(profile.email == null || profile.email == '')
+			return false;
+			
+		if(profile.password.length < 6)
+			return false;
+			
+		if(profile.password != profile.confirmation)
+			return false;
+			
+		if(!/^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/.test(profile.email))
+			return false;
+		
+		return true;
+	};
+	
+	this.create = function(profile, callback){
+	
+		if(!validateProfile(profile))
+			return false;
+	
+		//Erase confirmation (useless to stock).
+		profile.confirmation = null;
+	
+		profile.password = sha1.update(profile.password).digest('hex');
+	
+		db.save(profile.username, profile, function(err, res){
+
+			if(err)
+				console.log('Adding user failed (' + profile.username + ')');
+				
+			callback(err == null);
+		});
+	};
 };//Server version of the player.
 var Player = function(id, username, x, y, color, game){
 
@@ -1893,6 +1946,16 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 	console.log('Connection to client established - Master');
 
+	//Create an account.
+	socket.on(Constants.Message.CREATE_ACCOUNT, function(profile){
+		
+		console.log('Creating account : ' + profile.username);
+			
+		Account.create(profile, function(result){
+			socket.emit(Constants.Message.CREATE_ACCOUNT_RESULT, result);
+		});
+	});
+	
 	//Socket disconnected.
 	socket.on(Constants.Message.DISCONNECT, function(){
 		if(socket.userdata != null && socket.userdata.gameId != null && MasterServer.lobbies[socket.userdata.gameId] != null)
