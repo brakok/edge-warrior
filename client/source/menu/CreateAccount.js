@@ -11,6 +11,8 @@ var CreateAccount = cc.LayerColor.extend({
 
 		this._zOrder = Constants.Menu.CreateAccount.Z_INDEX;
 		
+		this.isCreatingAccount = false;
+		
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'account_background.png');
 		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
@@ -51,13 +53,19 @@ var CreateAccount = cc.LayerColor.extend({
 		this.reset();
 	},
 	create: function(){
-		var profile = new Profile(this.txtUsername.value, this.txtEmail.value, this.txtPassword.value, this.txtConfirmation.value);
 		
-		//Create account.
-		var errors = Client.createAccount(profile);
+		if(!this.isCreatingAccount)
+		{
+			this.isCreatingAccount = true;
 		
-		if(errors && errors.length > 0)
-			this.result(errors);
+			var profile = new Profile(this.txtUsername.value, this.txtEmail.value, this.txtPassword.value, this.txtConfirmation.value);
+			
+			//Create account.
+			var errors = Client.createAccount(profile);
+			
+			if(errors && errors.length > 0)
+				this.result(errors);
+		}
 	},
 	back: function(){
 		MenuScreens.switchTo(MenuScreens.login);
@@ -75,7 +83,7 @@ var CreateAccount = cc.LayerColor.extend({
 				HtmlHelper.showError(errorMsg[i]);
 		}
 			
-		Client.isCreatingAccount = false;
+		this.isCreatingAccount = false;
 	},
 	reset: function(){
 		this.txtUsername.value = '';
