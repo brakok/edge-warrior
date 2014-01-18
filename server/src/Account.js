@@ -75,10 +75,7 @@ var Account = new function(){
 			}
 			
 			var password = sha1(profile.password, doc.salt);
-			
-			console.log(password);
-			console.log(doc.password);
-			
+						
 			if(password != doc.password)
 			{
 				errorMsg.push('Invalid username/password.');
