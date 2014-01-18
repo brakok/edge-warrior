@@ -59,8 +59,8 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		console.log('Creating account : ' + profile.username);
 			
-		Account.create(profile, function(result){
-			socket.emit(Constants.Message.CREATE_ACCOUNT_RESULT, result);
+		Account.create(profile, function(errorMsg){
+			socket.emit(Constants.Message.CREATE_ACCOUNT_RESULT, errorMsg);
 		});
 	});
 	
