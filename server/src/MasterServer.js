@@ -54,13 +54,22 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 	console.log('Connection to client established - Master');
 
+	socket.on(Constants.Message.LOGIN, function(profile){
+		
+		console.log('Player connecting : ' + profile.username);
+		
+		Account.authenticate(profile, function(errors){
+			socket.emit(Constants.Message.LOGIN, errors);
+		});
+	});
+	
 	//Create an account.
 	socket.on(Constants.Message.CREATE_ACCOUNT, function(profile){
 		
 		console.log('Creating account : ' + profile.username);
 			
-		Account.create(profile, function(errorMsg){
-			socket.emit(Constants.Message.CREATE_ACCOUNT_RESULT, errorMsg);
+		Account.create(profile, function(errors){
+			socket.emit(Constants.Message.CREATE_ACCOUNT, errors);
 		});
 	});
 	
