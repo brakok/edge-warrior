@@ -583,6 +583,9 @@ var Account = new function(){
 		if(profile.password.length < 6)
 			return false;
 			
+		if(profile.username.length < 6)
+			return false;
+			
 		if(profile.password != profile.confirmation)
 			return false;
 			
@@ -594,21 +597,42 @@ var Account = new function(){
 	
 	this.create = function(profile, callback){
 	
+		var errorMsg = [];
+	
 		if(!validateProfile(profile))
-			return false;
+		{
+			errorMsg.push('Invalid account.');
+			callback(errorMsg);
+			return;
+		}
 	
-		//Erase confirmation (useless to stock).
-		profile.confirmation = null;
+		//Check unicity.
+		db.get(profile.username.toLowerCase(), function(err, doc){
+		
+			if(doc != null)
+			{
+				errorMsg.push('Username already taken.');
+				callback(errorMsg);
+				return;
+			}
+		
+			//Erase confirmation (useless to stock).
+			profile.confirmation = null;
+		
+			//Hash password.
+			profile.salt = crypto.randomBytes(256);
+			profile.password = sha1.update(profile.password + profile.salt).digest('hex');
 	
-		//Hash password.
-		profile.password = sha1.update(profile.password).digest('hex');
-	
-		db.save(profile.username, profile, function(err, res){
+			db.save(profile.username.toLowerCase(), profile, function(err, res){
 
-			if(err)
-				console.log('Adding user failed (' + profile.username + ')');
+				if(err)
+				{
+					console.log('Adding user failed (' + profile.username + ')');
+					errorMsg.push('Unexpected error when creating account.');
+				}
 				
-			callback(err == null);
+				callback(errorMsg);
+			});
 		});
 	};
 };//Server version of the player.
@@ -1952,8 +1976,8 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		console.log('Creating account : ' + profile.username);
 			
-		Account.create(profile, function(result){
-			socket.emit(Constants.Message.CREATE_ACCOUNT_RESULT, result);
+		Account.create(profile, function(errorMsg){
+			socket.emit(Constants.Message.CREATE_ACCOUNT_RESULT, errorMsg);
 		});
 	});
 	
