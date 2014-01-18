@@ -1,9 +1,31 @@
 
 var Account = new function(){
 	var cradle = require('cradle');
-	var db = new(cradle.Connection)('http://127.0.0.1', 5984, { cache: true, raw: false }).database('dream');
+	var db = new(cradle.Connection)('http://127.0.0.1', 5984, { cache: true, raw: false, auth: { username: 'ptlarouche', password: 'Silver75' } }).database('dream');
 	var crypto = require('crypto');
 
+	//Create views.
+	db.save('_design/players', {
+		views: {
+			all: {
+				map: function(doc){ 
+					if(doc.username) 
+						emit(doc.username, doc); 
+				}
+			},
+			byEmail: {
+				map: function(doc){ 
+					if(doc.email) 
+						emit(doc.email.toLowerCase(), doc);
+				}
+			}
+		}
+	}, function(err, res){
+	
+		if(err)
+			console.log('Error when creating couchdb views.');
+	});
+	
 	//Hash password with salt.
 	function sha1(pass, salt) {
 	  return crypto.createHmac('sha1', salt).update(pass).digest('hex');
@@ -98,33 +120,43 @@ var Account = new function(){
 			callback(errorMsg);
 			return;
 		}
-	
-		//Check unicity.
-		db.get(profile.username.toLowerCase(), function(err, doc){
 		
-			if(doc != null)
+		//Check unicity.
+		db.view('players/byEmail', { key: profile.email.toLowerCase() }, function(err, doc){
+				
+			if(doc && doc.length > 0)
 			{
-				errorMsg.push('Username already taken.');
+				errorMsg.push('Email already taken.');
 				callback(errorMsg);
 				return;
 			}
 		
-			//Erase confirmation (useless to stock).
-			profile.confirmation = null;
-		
-			//Hash password.
-			profile.salt = generateSalt(12);
-			profile.password = sha1(profile.password, profile.salt);
-	
-			db.save(profile.username.toLowerCase(), profile, function(err, res){
-
-				if(err)
+			db.get(profile.username.toLowerCase(), function(err, doc){
+			
+				if(doc != null)
 				{
-					console.log('Adding user failed (' + profile.username + ')');
-					errorMsg.push('Unexpected error when creating account.');
+					errorMsg.push('Username already taken.');
+					callback(errorMsg);
+					return;
 				}
-				
-				callback(errorMsg);
+			
+				//Erase confirmation (useless to stock).
+				profile.confirmation = null;
+			
+				//Hash password.
+				profile.salt = generateSalt(12);
+				profile.password = sha1(profile.password, profile.salt);
+		
+				db.save(profile.username.toLowerCase(), profile, function(err, res){
+
+					if(err)
+					{
+						console.log('Adding user failed (' + profile.username + ')');
+						errorMsg.push('Unexpected error when creating account.');
+					}
+					
+					callback(errorMsg);
+				});
 			});
 		});
 	};
