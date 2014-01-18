@@ -81,10 +81,14 @@ var Client = new function(){
 	
 		if(!this.isCreatingAccount)
 		{
+			var errors = [];
 			this.isCreatingAccount = true;
 		
 			if(!validateProfile(profile))
-				return false;
+			{
+				errors.push('Invalid account.');
+				return errors;
+			}
 				
 			this.masterSocket.emit(Constants.Message.CREATE_ACCOUNT, profile);
 			return true;
@@ -175,8 +179,8 @@ var Client = new function(){
 		var masterSocket = io.connect(Constants.Network.ADDRESS);
 		
 		//Result from account creation.
-		masterSocket.on(Constants.Message.CREATE_ACCOUNT_RESULT, function(result){
-			MenuScreens.createAccount.result(result);
+		masterSocket.on(Constants.Message.CREATE_ACCOUNT_RESULT, function(errorMsg){
+			MenuScreens.createAccount.result(errorMsg);
 		});
 		
 		//Create lobby and receive game id.

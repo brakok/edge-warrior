@@ -70,7 +70,7 @@ var Login = cc.LayerColor.extend({
 				MenuScreens.switchTo(MenuScreens.mainMenu);
 			}
 			else
-				HtmlHelper.showError('Invalid username/password. Could not connect.');
+				HtmlHelper.showError('Invalid username/password.');
 				
 			this.isAuthenticating = false;
 		}

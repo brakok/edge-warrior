@@ -34,8 +34,8 @@ var CreateAccount = cc.LayerColor.extend({
 		this.cmdCreate = new cc.MenuItemFont.create("CREATE", this.create, this);
 		this.cmdBack = new cc.MenuItemFont.create("BACK", this.back, this);
 		
-		this.cmdCreate.setPosition(new cc.Point(this.width*0.55, this.height*0.3));
-		this.cmdBack.setPosition(new cc.Point(this.width*0.62, this.height*0.3));
+		this.cmdCreate.setPosition(new cc.Point(this.width*0.53, this.height*0.32));
+		this.cmdBack.setPosition(new cc.Point(this.width*0.6, this.height*0.32));
 		
 		this.menu = new cc.Menu.create(this.cmdCreate, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
@@ -54,24 +54,27 @@ var CreateAccount = cc.LayerColor.extend({
 		var profile = new Profile(this.txtUsername.value, this.txtEmail.value, this.txtPassword.value, this.txtConfirmation.value);
 		
 		//Create account.
-		var result = Client.createAccount(profile);
+		var errors = Client.createAccount(profile);
 		
-		if(!result)
-			this.result(false);
+		if(errors && errors.length > 0)
+			this.result(errors);
 	},
 	back: function(){
 		MenuScreens.switchTo(MenuScreens.login);
 	},
-	result: function(result){
+	result: function(errorMsg){
 		
-		if(result)
+		if(!errorMsg || errorMsg.length == 0)
 		{
 			MenuScreens.switchTo(MenuScreens.login);
 			HtmlHelper.showMessage('Account created.');
 		}
 		else
-			HtmlHelper.showError('Invalid account.');
-		
+		{
+			for(var i = 0; i < errorMsg.length; ++i)
+				HtmlHelper.showError(errorMsg[i]);
+		}
+			
 		Client.isCreatingAccount = false;
 	},
 	reset: function(){
@@ -89,7 +92,7 @@ var CreateAccount = cc.LayerColor.extend({
 	placeHTML: function(){
 		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
 
-		this.div.style.left = this.width*0.19 + 'px';
+		this.div.style.left = this.width*0.21 + 'px';
 		this.div.style.top = this.height*0.45 + 'px';
 	}
 });
