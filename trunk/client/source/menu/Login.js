@@ -51,6 +51,12 @@ var Login = cc.LayerColor.extend({
 	},
 	connect: function(){
 
+		if(this.txtUsername.value == null || this.txtUsername.value == '' || this.txtPassword.value == null || this.txtPassword.value == '')
+		{
+			HtmlHelper.showError('Username/password are required.');
+			return;
+		}
+	
 		if(!this.isAuthenticating)
 		{
 			//Raise error if someone tried too many times to log in.
@@ -64,16 +70,25 @@ var Login = cc.LayerColor.extend({
 			this.connectionAttempts++;
 			
 			//Authentication.
-			if(Client.authenticate(this.txtUsername.value, this.txtPassword.value))
-			{
-				this.connectionAttempts = 0;
-				MenuScreens.switchTo(MenuScreens.mainMenu);
-			}
-			else
-				HtmlHelper.showError('Invalid username/password.');
-				
-			this.isAuthenticating = false;
+			Client.authenticate(new Profile(this.txtUsername.value, null, this.txtPassword.value, null));
 		}
+	},
+	result: function(errors){
+		
+		this.isAuthenticating = false;
+		
+		//Fail
+		if(errors && errors.length > 0)
+		{
+			for(var i = 0; i < errors.length; ++i)
+				HtmlHelper.showError(errors[i]);
+				
+			return;
+		}
+		
+		//Succeed
+		this.connectionAttempts = 0;
+		MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
 	createAccount: function(){
 		MenuScreens.switchTo(MenuScreens.createAccount);

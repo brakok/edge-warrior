@@ -69,30 +69,23 @@ var Client = new function(){
 	
 	
 	//Authentification.
-	this.authenticate = function(username, password){
-		//TODO: Add DB.
-	
-		this.username = username;
-		return true;
+	this.authenticate = function(profile){
+		this.masterSocket.emit(Constants.Message.LOGIN, profile);
 	};
 	
 	//Create an account.
 	this.createAccount = function(profile){
 	
-		if(!this.isCreatingAccount)
+		var errors = [];
+	
+		if(!validateProfile(profile))
 		{
-			var errors = [];
-			this.isCreatingAccount = true;
-		
-			if(!validateProfile(profile))
-			{
-				errors.push('Invalid account.');
-				return errors;
-			}
-				
-			this.masterSocket.emit(Constants.Message.CREATE_ACCOUNT, profile);
-			return true;
+			errors.push('Invalid account.');
+			return errors;
 		}
+			
+		this.masterSocket.emit(Constants.Message.CREATE_ACCOUNT, profile);
+		return errors;
 	};
 	
 	//Show loading screen.
@@ -179,8 +172,12 @@ var Client = new function(){
 		var masterSocket = io.connect(Constants.Network.ADDRESS);
 		
 		//Result from account creation.
-		masterSocket.on(Constants.Message.CREATE_ACCOUNT_RESULT, function(errorMsg){
-			MenuScreens.createAccount.result(errorMsg);
+		masterSocket.on(Constants.Message.CREATE_ACCOUNT, function(errors){
+			MenuScreens.createAccount.result(errors);
+		});
+		
+		masterSocket.on(Constants.Message.LOGIN, function(errors){
+			MenuScreens.login.result(errors);
 		});
 		
 		//Create lobby and receive game id.
