@@ -88,6 +88,8 @@ var Login = cc.LayerColor.extend({
 		
 		//Succeed
 		this.connectionAttempts = 0;
+		Client.username = this.txtUsername.value;
+		
 		MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
 	createAccount: function(){
