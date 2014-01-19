@@ -106,6 +106,34 @@
 				float: left;
 			}
 			
+			div.change-password {
+				width: 43%;
+			}
+			
+			div.change-password > div {
+				width: 100%;
+			}
+			
+			div.change-password input {
+				width: 100%;
+			}
+			
+			div.change-password label {
+				color: white;
+			}
+			
+			div.change-password > div > div {
+				width: 50%;
+				text-align: right;
+				float: left;
+			}
+			
+			div.change-password > div > div:first-child {
+				width: 45%;
+				text-align: left;
+				float: left;
+			}
+			
 			div.video {
 				width:25%;
 			}
@@ -207,6 +235,7 @@
 				</div>
 			</div>
 			
+			<!-- Create account -->
 			<div id="account" class="account">
 				<div>
 					<div><label> Username </label></div>
@@ -223,6 +252,22 @@
 				<div>
 					<div><label> Password confirmation </label></div>
 					<div><input type="password" id="accountConfirmation" name="accountConfirmation" maxlength="16" /></div>
+				</div>
+			</div>
+			
+			<!-- Change password -->
+			<div id="changepassword" class="change-password">
+				<div>
+					<div><label> Old password </label></div>
+					<div><input type="password" id="oldPassword" name="oldPassword" maxlength="16" /></div>
+				</div>
+				<div>
+					<div><label> New password </label></div>
+					<div><input type="password" id="newPassword" name="newPassword" maxlength="16" /></div>
+				</div>
+				<div>
+					<div><label> New password confirmation </label></div>
+					<div><input type="password" id="newPasswordConfirmation" name="newPasswordConfirmation" maxlength="16" /></div>
 				</div>
 			</div>
 			

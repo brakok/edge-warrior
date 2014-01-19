@@ -38,11 +38,14 @@ var MainMenu = cc.LayerColor.extend({
 		this.whiteMenu = new cc.Menu.create(this.cmdCredits, this.cmdRules);
 		this.whiteMenu.setPosition(new cc.Point(0,0));		
 		
-		this.cmdLogout = new cc.MenuItemFont.create("LOGOUT", this.logout, this);
-		this.cmdLogout.setPosition(new cc.Point(this.width*0.1, this.height*0.87));
-		
 		//Common command.
-		this.commonMenu = new cc.Menu.create(this.cmdLogout);
+		this.cmdLogout = new cc.MenuItemFont.create("LOGOUT", this.logout, this);
+		this.cmdChangePassword = new cc.MenuItemFont.create("CHANGE PASSWORD", this.toChangePassword, this);
+		
+		this.cmdLogout.setPosition(new cc.Point(this.width*0.1, this.height*0.87));
+		this.cmdChangePassword.setPosition(new cc.Point(this.width*0.18, this.height*0.1));
+		
+		this.commonMenu = new cc.Menu.create(this.cmdLogout, this.cmdChangePassword);
 		this.commonMenu.setPosition(new cc.Point(0,0));
 
 		this.addChild(this.background);
@@ -71,6 +74,9 @@ var MainMenu = cc.LayerColor.extend({
 	},
 	toSkills: function(){
 		MenuScreens.switchTo(MenuScreens.skillScreen);
+	},
+	toChangePassword: function(){
+		MenuScreens.switchTo(MenuScreens.changePassword);
 	}
 });
 

@@ -189,7 +189,8 @@ var Constants = {
 		PROCESS_UNITS: 'processUnit',
 		ERROR: 'serverError',
 		CREATE_ACCOUNT: 'createAccount',
-		LOGIN: 'login'
+		LOGIN: 'login',
+		CHANGE_PASSWORD: 'changePassword'
 	},
 	Effect: {
 		Z_INDEX: 60,
@@ -259,6 +260,9 @@ var Constants = {
 			Z_INDEX: 0
 		},
 		CreateAccount: {
+			Z_INDEX: 0
+		},
+		ChangePassword: {
 			Z_INDEX: 0
 		},
 		MainMenu: {

@@ -88,6 +88,18 @@ var Client = new function(){
 		return errors;
 	};
 	
+	//Change password.
+	this.changePassword = function(oldPassword, newPassword, confirmation){
+		
+		if(!validateNewPassword(oldPassword, newPassword, confirmation))
+			return false;
+		
+		var profile = new Profile(this.username, null, null, null);
+		
+		this.masterSocket.emit(Constants.Message.CHANGE_PASSWORD, { profile: profile, oldPassword: oldPassword, newPassword: newPassword, confirmation: confirmation});
+		return true;
+	};	
+	
 	//Show loading screen.
 	this.startLoading = function(){
 	
@@ -176,8 +188,14 @@ var Client = new function(){
 			MenuScreens.createAccount.result(errors);
 		});
 		
+		//Result from log in.
 		masterSocket.on(Constants.Message.LOGIN, function(errors){
 			MenuScreens.login.result(errors);
+		});
+		
+		//Result from change password.
+		masterSocket.on(Constants.Message.CHANGE_PASSWORD, function(errors){
+			MenuScreens.changePassword.result(errors);
 		});
 		
 		//Create lobby and receive game id.
@@ -497,4 +515,51 @@ var Client = new function(){
 		
 		return valid;
 	};
+	
+	//Validate new password.
+	function validateNewPassword(oldPassword, newPassword, confirmation){
+		
+		var valid = true;
+		
+		if(!oldPassword || oldPassword == '')
+		{
+			HtmlHelper.showError('Old password is required.');
+			valid = false;
+		}
+		
+		if(!newPassword || newPassword == '')
+		{
+			HtmlHelper.showError('New password is required.');
+			valid = false;
+		}
+		
+		if(!confirmation || confirmation == '')
+		{
+			HtmlHelper.showError('Password confirmation is required.');
+			valid = false;
+		}
+		
+		if(!valid)
+			return false;
+		
+		if(newPassword.length < 6)
+		{
+			HtmlHelper.showError('Password must have at least 6 characters.');
+			valid = false;
+		}
+		
+		if(oldPassword == newPassword)
+		{
+			HtmlHelper.showError('Old password and new password are the same.');
+			valid = false;
+		}
+			
+		if(newPassword != confirmation)
+		{
+			HtmlHelper.showError('Password differs from his confirmation.');
+			valid = false;
+		}
+			
+		return valid;
+	}
 };
