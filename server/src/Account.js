@@ -73,7 +73,21 @@ var Account = new function(){
 			return false;
 		
 		return true;
-	};
+	}
+	
+	function validateNewPassword(oldPassword, newPassword, confirmation){
+		
+		if(!oldPassword || !newPassword || !confirmation || oldPassword == '' || newPassword == '' || confirmation == '')
+			return false;
+			
+		if(oldPassword == newPassword)
+			return false;
+			
+		if(newPassword != confirmation)
+			return false;
+			
+		return true;
+	}
 	
 	//Authentication
 	this.authenticate = function(profile, callback){
@@ -122,9 +136,9 @@ var Account = new function(){
 		}
 		
 		//Check unicity.
-		db.view('players/byEmail', { key: profile.email.toLowerCase() }, function(err, doc){
+		db.view('players/byEmail', { key: profile.email.toLowerCase() }, function(err, players){
 				
-			if(doc && doc.length > 0)
+			if(players && players.length > 0)
 			{
 				errorMsg.push('Email already taken.');
 				callback(errorMsg);
@@ -157,6 +171,54 @@ var Account = new function(){
 					
 					callback(errorMsg);
 				});
+			});
+		});
+	};
+	
+	//Change password
+	this.changePassword = function(profile, oldPassword, newPassword, confirmation, callback){
+	
+		var errors = [];
+	
+		if(!validateNewPassword(oldPassword, newPassword, confirmation))
+		{
+			errors.push('Error when validating new password.');
+			callback(errors);
+			return;
+		}
+	
+		db.get(profile.username.toLowerCase(), function(err, doc){
+			
+			if(err || !doc)
+			{
+				errors.push('Error when changing password.');
+				callback(errors);
+				return;
+			}
+			
+			var password = sha1(oldPassword, doc.salt);
+						
+			//Check if old password has been correctly input.
+			if(password != doc.password)
+			{
+				errors.push('Old password mismatches current password.');
+				callback(errorMsg);
+				return;
+			}
+			
+			//Hash password.
+			doc.salt = generateSalt(12);
+			doc.password = sha1(newPassword, doc.salt);
+			
+			db.merge(profile.username.toLowerCase(), { salt: doc.salt, password: doc.password }, function(err, res){
+			
+				if(err)
+				{
+					console.log('Change password failed (' + profile.username + ')');
+					errors.push('Unexpected error when changing password.');
+				}
+				
+				callback(errors);
 			});
 		});
 	};

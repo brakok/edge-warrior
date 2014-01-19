@@ -73,6 +73,18 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		});
 	});
 	
+	//Change password.
+	socket.on(Constants.Message.CHANGE_PASSWORD, function(data){
+	
+		console.log(data);
+	
+		console.log('Change password : ' + data.profile.username);
+		
+		Account.changePassword(data.profile, data.oldPassword, data.newPassword, data.confirmation, function(errors){
+			socket.emit(Constants.Message.CHANGE_PASSWORD, errors);
+		});
+	});
+	
 	//Socket disconnected.
 	socket.on(Constants.Message.DISCONNECT, function(){
 		if(socket.userdata != null && socket.userdata.gameId != null && MasterServer.lobbies[socket.userdata.gameId] != null)
