@@ -130,7 +130,8 @@ var Constants = {
 		PROCESS_UNITS: 'processUnit',
 		ERROR: 'serverError',
 		CREATE_ACCOUNT: 'createAccount',
-		LOGIN: 'login'
+		LOGIN: 'login',
+		CHANGE_PASSWORD: 'changePassword'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
