@@ -31,11 +31,13 @@ var Login = cc.LayerColor.extend({
 		
 		this.cmdConnect = new cc.MenuItemFont.create("CONNECT", this.connect, this);
 		this.cmdCreate = new cc.MenuItemFont.create("CREATE NEW ACCOUNT", this.createAccount, this);
+		this.cmdResetPassword = new cc.MenuItemFont.create("FORGOTTEN PASSWORD", this.resetPassword, this); 
 		
 		this.cmdConnect.setPosition(new cc.Point(this.width*0.5, this.height*0.25));
 		this.cmdCreate.setPosition(new cc.Point(this.width*0.5, (this.height*0.25)-50));
+		this.cmdResetPassword.setPosition(new cc.Point(this.width*0.5, (this.height*0.25)-100));
 		
-		this.menu = new cc.Menu.create(this.cmdConnect, this.cmdCreate);
+		this.menu = new cc.Menu.create(this.cmdConnect, this.cmdCreate, this.cmdResetPassword);
 		this.menu.setColor(new cc.Color3B(0,0,0));
 		this.menu.setPosition(new cc.Point(0,0));
 
@@ -94,6 +96,9 @@ var Login = cc.LayerColor.extend({
 	},
 	createAccount: function(){
 		MenuScreens.switchTo(MenuScreens.createAccount);
+	},
+	resetPassword: function(){
+		MenuScreens.switchTo(MenuScreens.resetPassword);
 	},
 	resize: function(){
 		this.width = Options.resolution.width;

@@ -69,7 +69,7 @@ var ResetPassword = cc.LayerColor.extend({
 		if(!errorMsg || errorMsg.length == 0)
 		{
 			MenuScreens.switchTo(MenuScreens.login);
-			HtmlHelper.showMessage('Password changed.');
+			HtmlHelper.showMessage('Password has been reset. Check your email for new one.');
 		}
 		else
 		{
