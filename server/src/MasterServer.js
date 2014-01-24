@@ -76,12 +76,20 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Change password.
 	socket.on(Constants.Message.CHANGE_PASSWORD, function(data){
 	
-		console.log(data);
-	
 		console.log('Change password : ' + data.profile.username);
 		
 		Account.changePassword(data.profile, data.oldPassword, data.newPassword, data.confirmation, function(errors){
 			socket.emit(Constants.Message.CHANGE_PASSWORD, errors);
+		});
+	});
+	
+	//Reset password.
+	socket.on(Constants.Message.RESET_PASSWORD, function(data){
+	
+		console.log('Reset password : ' + data.profile.username);
+		
+		Account.resetPassword(data.profile, data.email, function(errors){
+			socket.emit(Constants.Message.RESET_PASSWORD, errors);
 		});
 	});
 	

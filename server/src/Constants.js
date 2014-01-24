@@ -131,9 +131,13 @@ var Constants = {
 		ERROR: 'serverError',
 		CREATE_ACCOUNT: 'createAccount',
 		LOGIN: 'login',
-		CHANGE_PASSWORD: 'changePassword'
+		CHANGE_PASSWORD: 'changePassword',
+		RESET_PASSWORD: 'resetPassword'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
+	},
+	Regex: {
+		EMAIL: /^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/
 	}
 };
