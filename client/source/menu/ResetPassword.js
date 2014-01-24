@@ -93,7 +93,7 @@ var ResetPassword = cc.LayerColor.extend({
 		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
 
 		this.div.style.left = this.width*0.19 + 'px';
-		this.div.style.top = this.height*0.47 + 'px';
+		this.div.style.top = this.height*0.48 + 'px';
 	}
 });
 
