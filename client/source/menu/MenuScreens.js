@@ -11,6 +11,7 @@ var MenuScreens = new function(){
 	this.rulesScreen = null;
 	this.createAccount = null;
 	this.changePassword = null;
+	this.resetPassword = null;
 		
 	this.init = function(width, height){
 
@@ -25,6 +26,7 @@ var MenuScreens = new function(){
 			this.rulesScreen = RulesScreen.create(width, height);
 			this.createAccount = CreateAccount.create(width, height);
 			this.changePassword = ChangePassword.create(width, height);
+			this.resetPassword = ResetPassword.create(width, height);
 			
 			this.optionsScreen = OptionsScreen.create(width, height, function() { myApp.MenuScene.menu.switchTo(MenuScreens.mainMenu); });
 		}
@@ -40,6 +42,7 @@ var MenuScreens = new function(){
 			this.lobbyScreen.resize();
 			this.createAccount.resize();
 			this.changePassword.resize();
+			this.resetPassword.resize();
 		}
 	};
 	

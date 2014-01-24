@@ -49,6 +49,7 @@
 				  'source/menu/RulesScreen.js',
 				  'source/menu/Login.js',
 				  'source/menu/ChangePassword.js',
+				  'source/menu/ResetPassword.js',
 				  'source/menu/CreateAccount.js',
 				  'source/menu/MainMenu.js',
 				  'source/menu/ServerList.js',

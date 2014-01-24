@@ -190,7 +190,8 @@ var Constants = {
 		ERROR: 'serverError',
 		CREATE_ACCOUNT: 'createAccount',
 		LOGIN: 'login',
-		CHANGE_PASSWORD: 'changePassword'
+		CHANGE_PASSWORD: 'changePassword',
+		RESET_PASSWORD: 'resetPassword'
 	},
 	Effect: {
 		Z_INDEX: 60,
@@ -265,6 +266,9 @@ var Constants = {
 		ChangePassword: {
 			Z_INDEX: 0
 		},
+		ResetPassword: {
+			Z_INDEX: 0
+		},
 		MainMenu: {
 			Z_INDEX: 0
 		},
@@ -319,5 +323,8 @@ var Constants = {
 				DEGREE_BY_SECOND: 180
 			}
 		}
+	},
+	Regex: {
+		EMAIL: /^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/
 	}
 };
