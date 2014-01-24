@@ -861,11 +861,11 @@ var Account = new function(){
 				{
 					//Send email to player to confirm.
 					var mailOptions = {
-						from: 'crushed.dream.the.game@gmail.com',
+						from: 'Crushed Dream <crushed.dream.the.game@gmail.com>',
 						to: player.email,
 						subject: 'Reset password',
 						html: '<h1>Password has been reset!</h1><p>This is your new password : ' + newPassword  
-							  + ' <br /> Please change this password in the Change Password screen after your next login. <br /> See you soon!</p>'
+							  + ' <br /> Please change this password in the Change Password screen after your next login. </p><p> See you soon!</p>'
 					};
 					
 					smtpTransport.sendMail(mailOptions, function(err, response){
