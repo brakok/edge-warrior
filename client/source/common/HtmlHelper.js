@@ -28,6 +28,9 @@ var HtmlHelper = {
 		if(this.errors[msg])
 			return;
 		
+		var span = document.getElementById('message');
+		span.style.display = 'none';
+		
 		this.errors[msg] = true;
 		
 		var span = document.getElementById('error');
@@ -55,6 +58,9 @@ var HtmlHelper = {
 	
 		if(this.messages[msg])
 			return;
+	
+		var span = document.getElementById('error');
+		span.style.display = 'none';
 	
 		this.messages[msg] = true;
 	
