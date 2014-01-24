@@ -248,7 +248,7 @@ var Constants = {
 		}
 	},
 	Font: {
-		NAME: "Arial",
+		NAME: "Quantico Bold",
 		SIZE: 28,
 		MIDSIZE: 40,
 		BIGSIZE: 60

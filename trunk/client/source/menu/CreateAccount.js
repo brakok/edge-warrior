@@ -101,7 +101,7 @@ var CreateAccount = cc.LayerColor.extend({
 		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
 
 		this.div.style.left = this.width*0.21 + 'px';
-		this.div.style.top = this.height*0.45 + 'px';
+		this.div.style.top = this.height*0.43 + 'px';
 	}
 });
 

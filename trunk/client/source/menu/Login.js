@@ -33,9 +33,9 @@ var Login = cc.LayerColor.extend({
 		this.cmdCreate = new cc.MenuItemFont.create("CREATE NEW ACCOUNT", this.createAccount, this);
 		this.cmdResetPassword = new cc.MenuItemFont.create("FORGOTTEN PASSWORD", this.resetPassword, this); 
 		
-		this.cmdConnect.setPosition(new cc.Point(this.width*0.5, this.height*0.25));
-		this.cmdCreate.setPosition(new cc.Point(this.width*0.5, (this.height*0.25)-50));
-		this.cmdResetPassword.setPosition(new cc.Point(this.width*0.5, (this.height*0.25)-100));
+		this.cmdConnect.setPosition(new cc.Point(this.width*0.5, this.height*0.32));
+		this.cmdCreate.setPosition(new cc.Point(this.width*0.5, this.height*0.27));
+		this.cmdResetPassword.setPosition(new cc.Point(this.width*0.5, this.height*0.22));
 		
 		this.menu = new cc.Menu.create(this.cmdConnect, this.cmdCreate, this.cmdResetPassword);
 		this.menu.setColor(new cc.Color3B(0,0,0));
@@ -110,7 +110,7 @@ var Login = cc.LayerColor.extend({
 		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
 
 		this.loginDiv.style.left = (this.width*0.5-(HtmlHelper.computeWidth(this.loginDiv)*0.5)) + 'px';
-		this.loginDiv.style.top = (this.height*0.75-(100*scaleFactor)) + 'px';
+		this.loginDiv.style.top = this.height*0.55 + 'px';
 	}
 });
 

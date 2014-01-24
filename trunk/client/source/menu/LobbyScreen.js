@@ -173,7 +173,7 @@ var LobbyScreen = cc.LayerColor.extend({
 	},
 	placeHTML: function(){
 		this.div.style.left = Options.resolution.width*0.1 + 'px';
-		this.div.style.top = Options.resolution.height*0.1 + 'px';
+		this.div.style.top = Options.resolution.height*0.09 + 'px';
 	}
 });
 

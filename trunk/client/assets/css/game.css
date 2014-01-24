@@ -1,0 +1,246 @@
+
+@font-face {
+	font-family: 'Quantico Bold';
+	src: url('fonts/Quantico-Bold.otf');
+}
+		
+.left {
+	float: left;
+}			
+
+.right {
+	float: right;
+}
+
+.error {
+	color: #ff8888;
+	font-size: 0.8em;
+	position: absolute;
+	z-index: 1000;
+	background-color: black;
+}
+
+.message {
+	color: #88ff88;
+	font-size: 0.8em;
+	position: absolute;
+	z-index: 1000;
+	background-color: black;
+}
+
+tr.unselected {
+	background-color: none;
+	color: none;
+}
+
+tr.selected {
+	background-color: black;
+	color: white;
+}
+
+input {
+	font-size: 0.8em;
+}
+
+select {
+	font-size: 0.8em;
+	width: 100%;
+}
+
+div.forms > div {
+	position: absolute; 
+	z-index: 10; 
+	display: none;
+}
+
+div.forms > div > div > div {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div.login {
+	width: 25%;
+}
+
+div.login > div {
+	width: 100%;
+}
+
+div.login input {
+	width: 100%;
+}
+			
+div.login > div > div {
+	width: 60%;
+	text-align: right;
+	float: left;
+}
+
+div.login > div > div:first-child {
+	width: 35%;
+	text-align: left;
+	float: left;
+}
+
+div.account {
+	width: 40%;
+}
+
+div.account > div {
+	width: 100%;
+}
+
+div.account input {
+	width: 100%;
+}
+
+div.account label {
+	color: white;
+}
+
+div.account > div > div {
+	width: 45%;
+	text-align: right;
+	float: left;
+}
+
+div.account > div > div:first-child {
+	width: 50%;
+	text-align: left;
+	float: left;
+}
+
+div.change-password {
+	width: 43%;
+}
+
+div.change-password > div {
+	width: 100%;
+}
+
+div.change-password input {
+	width: 100%;
+}
+
+div.change-password label {
+	color: white;
+}
+
+div.change-password > div > div {
+	width: 45%;
+	text-align: right;
+	float: left;
+}
+
+div.change-password > div > div:first-child {
+	width: 50%;
+	text-align: left;
+	float: left;
+}
+
+div.reset-password {
+	width: 43%;
+}
+
+div.reset-password > div {
+	width: 100%;
+}
+
+div.reset-password input {
+	width: 100%;
+}
+
+div.reset-password label {
+	color: white;
+}
+
+div.reset-password > div > div {
+	width: 45%;
+	text-align: right;
+	float: left;
+}
+
+div.reset-password > div > div:first-child {
+	width: 50%;
+	text-align: left;
+	float: left;
+}
+
+div.video {
+	width:25%;
+}
+
+div.video > div {
+	width: 100%;
+}
+
+div.lobbyList {
+	width: 60%;
+	height: 50%;
+	overflow: auto;
+	font-size: 0.8em;
+}
+
+div.lobbyList > div, div.lobbyList table {
+	width: 100%;
+}
+
+div.lobbyList th {
+	text-align: left;
+}
+
+div.lobbyList .th_id {
+	width: 15%;
+}
+
+div.lobbyList .th_name {
+	width: 65%;
+}
+
+div.lobbyList .th_num {
+	width: 20%;
+}
+
+div.lobby {
+	width: 40%;
+}
+
+div.lobby input {
+	width: 100%;
+}
+
+div.lobby > div {
+	width: 100%;
+}
+
+div.lobby > div > div {
+	width: 70%;
+	text-align: left;
+	float: left;
+}
+
+div.lobby > div > div:first-child {
+	width: 25%;
+}
+
+div.keys {
+	width: 50%;
+}
+
+div.keys > div {
+	width: 50%;
+}
+
+div.keys > div > div {
+	width: 100%;
+}
+
+div.keys > div > div > div {
+	width: 50%;
+	text-align: left;
+	float: left;
+}
+
+div.keys input {
+	width: 40%;
+}
