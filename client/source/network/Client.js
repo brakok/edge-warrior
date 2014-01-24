@@ -597,6 +597,9 @@ var Client = new function(){
 			valid = false;
 		}
 		
+		if(!valid)
+			return false;
+		
 		if(!Constants.Regex.EMAIL.test(email))
 		{
 			HtmlHelper.showError('Email is not in a good format.');
