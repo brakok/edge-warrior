@@ -134,7 +134,10 @@ var Client = new function(){
 	
 	//Log off.
 	this.logout = function(){
+	
+		this.masterSocket.emit(Constants.Message.LOGOUT, this.username);
 		this.username = null;
+
 		MenuScreens.switchTo(MenuScreens.login);
 	};
 		
