@@ -191,7 +191,8 @@ var Constants = {
 		CREATE_ACCOUNT: 'createAccount',
 		LOGIN: 'login',
 		CHANGE_PASSWORD: 'changePassword',
-		RESET_PASSWORD: 'resetPassword'
+		RESET_PASSWORD: 'resetPassword',
+		LOGOUT: 'logout'
 	},
 	Effect: {
 		Z_INDEX: 60,
