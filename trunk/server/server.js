@@ -235,10 +235,14 @@ var Constants = {
 		ERROR: 'serverError',
 		CREATE_ACCOUNT: 'createAccount',
 		LOGIN: 'login',
-		CHANGE_PASSWORD: 'changePassword'
+		CHANGE_PASSWORD: 'changePassword',
+		RESET_PASSWORD: 'resetPassword'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
+	},
+	Regex: {
+		EMAIL: /^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/
 	}
 };
 var Listeners = function(game){
@@ -565,6 +569,16 @@ var Account = new function(){
 	var cradle = require('cradle');
 	var db = new(cradle.Connection)('http://127.0.0.1', 5984, { cache: true, raw: false, auth: { username: 'ptlarouche', password: 'Silver75' } }).database('dream');
 	var crypto = require('crypto');
+	
+	//To send email.
+	var nodemailer = require('nodemailer');
+	var smtpTransport = nodemailer.createTransport('SMTP', {
+		service: 'Gmail',
+		auth: {
+			user: 'crushed.dream.the.game@gmail.com',
+			pass: 'goldrush975'
+		}
+	});
 
 	//Create views.
 	db.save('_design/players', {
@@ -651,6 +665,20 @@ var Account = new function(){
 		return true;
 	}
 	
+	function validateResetPassword(username, email){
+		
+		if(username == null || username == '')
+			return false;
+		
+		if(email == null || email == '')
+			return false;
+		
+		if(!Constants.Regex.EMAIL.test(email))
+			return false;
+		
+		return true;
+	}
+	
 	//Authentication
 	this.authenticate = function(profile, callback){
 		
@@ -717,7 +745,7 @@ var Account = new function(){
 				}
 			
 				//Erase confirmation (useless to stock).
-				profile.confirmation = null;
+				delete profile.confirmation;
 			
 				//Hash password.
 				profile.salt = generateSalt(12);
@@ -778,6 +806,79 @@ var Account = new function(){
 				{
 					console.log('Change password failed (' + profile.username + ')');
 					errors.push('Unexpected error when changing password.');
+				}
+				
+				callback(errors);
+			});
+		});
+	};
+	
+	//Reset password.
+	this.resetPassword = function(profile, email, callback){
+		
+		var errors = [];
+		
+		if(!validateResetPassword(profile.username, email))
+		{
+			errors.push('Error when validating informations to reset password.');
+			callback(errors);
+			return;
+		}
+		
+		db.view('players/byEmail', { key: email.toLowerCase() }, function(err, players){
+		
+			
+		
+			if(!players || players.length == 0)
+			{
+				errors.push('No user is bound to this email.');
+				callback(errors);
+				return;
+			}
+		
+			var player = players[0].value;
+		
+			console.log(player);
+		
+			if(player.username.toLowerCase() != profile.username.toLowerCase())
+			{
+				errors.push('Wrong user/email.');
+				callback(errors);
+				return;
+			}
+			
+			var newPassword = generateSalt(8);
+			var newSalt = generateSalt(12);
+			
+			player.salt = newSalt;
+			player.password = sha1(newPassword, newSalt);
+			
+			db.merge(player.username.toLowerCase(), { salt: player.salt, password: player.password }, function(err, res){
+			
+				if(err)
+				{
+					console.log('Reset password failed (' + profile.username + ')');
+					errors.push('Unexpected error when resetting password.');
+				}
+				else
+				{
+					//Send email to player to confirm.
+					var mailOptions = {
+						from: 'crushed.dream.the.game@gmail.com',
+						to: player.email,
+						subject: 'Reset password',
+						html: '<h1>Password has been reset!</h1><p>This is your new password : ' + newPassword  
+							  + ' <br /> Please change this password in the Change Password screen after your next login. <br /> See you soon!</p>'
+					};
+					
+					smtpTransport.sendMail(mailOptions, function(err, response){
+						if(err)
+						{
+							errors.push('Error when sending email. Try again or contact crushed.dream.the.game@gmail.com for help.');
+							callback(errors);
+							return;
+						}
+					});
 				}
 				
 				callback(errors);
@@ -2142,12 +2243,20 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Change password.
 	socket.on(Constants.Message.CHANGE_PASSWORD, function(data){
 	
-		console.log(data);
-	
 		console.log('Change password : ' + data.profile.username);
 		
 		Account.changePassword(data.profile, data.oldPassword, data.newPassword, data.confirmation, function(errors){
 			socket.emit(Constants.Message.CHANGE_PASSWORD, errors);
+		});
+	});
+	
+	//Reset password.
+	socket.on(Constants.Message.RESET_PASSWORD, function(data){
+	
+		console.log('Reset password : ' + data.profile.username);
+		
+		Account.resetPassword(data.profile, data.email, function(errors){
+			socket.emit(Constants.Message.RESET_PASSWORD, errors);
 		});
 	});
 	
