@@ -42,11 +42,14 @@ var ServerList = cc.LayerColor.extend({
 		this.list.setVisible(true);
 	},
 	onLeaving: function(){
+		this.list.selectedValue = null;
 		this.list.setVisible(false);
 	},
 	join: function(){
 		if(this.list.selectedValue != null)
 			Client.joinLobby(this.list.selectedValue);
+		else
+			HtmlHelper.showError('No lobby selected.');
 	},
 	random: function(){
 		
@@ -54,6 +57,8 @@ var ServerList = cc.LayerColor.extend({
 		
 		if(lobby != null)
 			Client.joinLobby(lobby.id);
+		else
+			HtmlHelper.showError('No lobby selected.');
 	},
 	back: function(){
 		MenuScreens.switchTo(MenuScreens.mainMenu);

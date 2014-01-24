@@ -60,7 +60,11 @@ var LobbyScreen = cc.LayerColor.extend({
 				
 		for(var i in this.slots)
 			if(!this.slots[i].isReady() || this.slots[i].getColor() == Enum.Slot.Color.UNASSIGNED)
+			{
+				HtmlHelper.showError('All players must have chosen a color and be marked has ready.');
 				return;
+			}
+				
 				
 		Client.startGame();
 	},
@@ -78,7 +82,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		
 		if(Client.currentGameId != null && Client.currentGameId > -1)
 		{
-			this.lblOnline._string = "Online (" + Client.currentGameId + ")";
+			this.lblOnline._string = "Online";
 			
 			if(Client.isHost)
 			{
@@ -145,6 +149,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		if(this.isRenaming)
 		{
 			this.pushUpdates();
+			HtmlHelper.showMessage('Lobby has been renamed.');
 			
 			this.cmdRename._label.setString("RENAME");
 			this.txtName.readOnly = true;			
@@ -161,9 +166,7 @@ var LobbyScreen = cc.LayerColor.extend({
 	},
 	pushUpdates: function(){
 	
-		Client.masterSocket.emit(Constants.Message.UPDATE_LOBBY, {
-									name: this.txtName.value
-								});
+		Client.masterSocket.emit(Constants.Message.UPDATE_LOBBY, { name: this.txtName.value });
 	},
 	update: function(data){
 		this.txtName.value = data.name;
