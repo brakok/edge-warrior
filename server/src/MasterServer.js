@@ -31,6 +31,20 @@ var MasterServer = new function(){
 		delete this.lobbies[socket.userdata.gameId];
 	};
 	
+	//Search socket bound to a player currently logged in.
+	this.searchPlayer = function(username){
+	
+		for(var i in ioMasterClient.sockets.sockets)
+		{
+			var currentSocket = ioMasterClient.sockets.sockets[i];
+			
+			if(currentSocket.userdata && currentSocket.userdata.username == username)
+				return currentSocket;
+		}
+			
+		return null;
+	};
+	
 	this.disconnectPlayer = function(socket){
 		if(socket.userdata.gameId != null)
 		{
@@ -54,13 +68,32 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 
 	console.log('Connection to client established - Master');
 
+	//Authenticate.
 	socket.on(Constants.Message.LOGIN, function(profile){
 		
 		console.log('Player connecting : ' + profile.username);
 		
 		Account.authenticate(profile, function(errors){
+			
+			var player = MasterServer.searchPlayer(profile.username);
+			
+			if(player != null)
+				errors.push('User already logged in.');
+			
+			//Set userdata.
+			if(!errors || errors.length == 0)
+				socket.userdata = {
+					username: profile.username,
+					gameId: null
+				};
+
 			socket.emit(Constants.Message.LOGIN, errors);
 		});
+	});
+	
+	//Logout.
+	socket.on(Constants.Message.LOGOUT, function(username){
+		delete socket.userdata;	
 	});
 	
 	//Create an account.
@@ -123,10 +156,9 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		socket.emit(Constants.Message.CREATE_LOBBY, MasterServer.gameSequenceId);
 		socket.join(MasterServer.gameSequenceId);
-		socket.userdata = { 
-			gameId: MasterServer.gameSequenceId,
-			username: username
-		};
+		
+		//Set game id into socket userdata.
+		socket.userdata.gameId = MasterServer.gameSequenceId;
 		
 		MasterServer.gameSequenceId++;
 	});
@@ -151,10 +183,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			
 			//Join the room.
 			socket.join(data.gameId);
-			socket.userdata = {
-				gameId: data.gameId,
-				username: data.username
-			};
+			socket.userdata.gameId = data.gameId;
 			
 			socket.emit(Constants.Message.CONNECTED_LOBBY, returnData);
 		}

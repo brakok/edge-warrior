@@ -132,7 +132,8 @@ var Constants = {
 		CREATE_ACCOUNT: 'createAccount',
 		LOGIN: 'login',
 		CHANGE_PASSWORD: 'changePassword',
-		RESET_PASSWORD: 'resetPassword'
+		RESET_PASSWORD: 'resetPassword',
+		LOGOUT: 'logout'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
