@@ -21,16 +21,16 @@ Slot.prototype.init = function(color, ready){
 	this.lblUsername.setColor(new cc.Color3B(0,0,0));
 	
 	this.lblColor = cc.LabelTTF.create("Color", Constants.Font.NAME, Constants.Font.SIZE);
-	this.lblColor.setPosition(new cc.Point(this.x + 560, this.y));
+	this.lblColor.setPosition(new cc.Point(this.x + 585, this.y));
 	this.lblColor.setColor(new cc.Color3B(0,0,0));
 	
 	this.lblReady = cc.LabelTTF.create("Ready", Constants.Font.NAME, Constants.Font.SIZE);
-	this.lblReady.setPosition(new cc.Point(this.x + 725, this.y));
+	this.lblReady.setPosition(new cc.Point(this.x + 775, this.y));
 	this.lblReady.setColor(new cc.Color3B(0,0,0));
 	
 	//Create color box and checkbox with their slot in scope.
-	this.colorBox = new ColorBox(this.layer, this.x + 650, this.y, color);
-	this.chkReady = new CheckBox(this.layer, this.x + 800, this.y, ready);
+	this.colorBox = new ColorBox(this.layer, this.x + 675, this.y + 4, color);
+	this.chkReady = new CheckBox(this.layer, this.x + 850, this.y + 3, ready);
 	
 	//Set callbacks.
 	(function(slot){
