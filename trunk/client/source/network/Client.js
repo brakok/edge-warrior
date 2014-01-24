@@ -100,6 +100,18 @@ var Client = new function(){
 		return true;
 	};	
 	
+	//Reset password.
+	this.resetPassword = function(username, email){
+		
+		if(!validateResetPassword(username, email))
+			return false;
+			
+		var profile = new Profile(username, null, null, null);
+		
+		this.masterSocket.emit(Constants.Message.RESET_PASSWORD, { profile: profile, email: email});
+		return true;
+	};
+	
 	//Show loading screen.
 	this.startLoading = function(){
 	
@@ -196,6 +208,11 @@ var Client = new function(){
 		//Result from change password.
 		masterSocket.on(Constants.Message.CHANGE_PASSWORD, function(errors){
 			MenuScreens.changePassword.result(errors);
+		});
+		
+		//Result from reset password.
+		masterSocket.on(Constants.Message.RESET_PASSWORD, function(errors){
+			MenuScreens.resetPassword.result(errors);
 		});
 		
 		//Create lobby and receive game id.
@@ -507,7 +524,7 @@ var Client = new function(){
 			valid = false;
 		}
 			
-		if(!/^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/.test(profile.email))
+		if(!Constants.Regex.EMAIL.test(profile.email))
 		{
 			HtmlHelper.showError('Email is not in a good format.');
 			valid = false;
@@ -560,6 +577,32 @@ var Client = new function(){
 			valid = false;
 		}
 			
+		return valid;
+	}
+	
+	//Validate username and email to reset password.
+	function validateResetPassword(username, email){
+		
+		var valid = true;
+		
+		if(username == null || username == '')
+		{
+			HtmlHelper.showError('Username is required.');
+			valid = false;
+		}
+		
+		if(email == null || email == '')
+		{
+			HtmlHelper.showError('Email is required.');
+			valid = false;
+		}
+		
+		if(!Constants.Regex.EMAIL.test(email))
+		{
+			HtmlHelper.showError('Email is not in a good format.');
+			valid = false;
+		}
+		
 		return valid;
 	}
 };
