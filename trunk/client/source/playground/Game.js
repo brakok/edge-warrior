@@ -213,8 +213,8 @@ Game.prototype.update = function (dt){
 					//Update all effects.
 					EffectManager.update();
 					
-					//Refresh units display.
-					this.hud.skillStore.refreshUnit(this.player.units);
+					//Update skillstore.
+					this.hud.skillStore.update(this.player.units);
 				}
 			
 				break;

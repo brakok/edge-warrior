@@ -89,63 +89,71 @@ var Constants = {
 	HUD: {
 		Z_INDEX: 1000,
 		SkillStore: {
-			X: 235,
-			Y: 83,
+			X: 325,
+			Y: 125,
 			Mode: {
-				OFFSET_X: 167,
-				OFFSET_Y: -27
+				OFFSET_X: -260,
+				OFFSET_Y: 15
+			},
+			Units: {
+				OFFSET_X: -190,
+				OFFSET_Y: 27,
+				Title: {
+					OFFSET_X: -60,
+					OFFSET_Y: 13,
+				}
 			},
 			Skills: {
-				SCALE_X: 0.45,
-				SCALE_Y: 0.45,
+				SCALE_X: 0.65,
+				SCALE_Y: 0.65,
 				One: {
-					OFFSET_X: -145,
-					OFFSET_Y: -15
+					OFFSET_X: -256,
+					OFFSET_Y: -66
 				},
 				Two: {
-					OFFSET_X: -65,
-					OFFSET_Y: -15
+					OFFSET_X: -158,
+					OFFSET_Y: -66
 				},
 				Three: {
-					OFFSET_X: 18,
-					OFFSET_Y: -15
+					OFFSET_X: -60,
+					OFFSET_Y: -66
 				},
 				Four: {
-					OFFSET_X: 100,
-					OFFSET_Y: -15
-				},
+					OFFSET_X: 37,
+					OFFSET_Y: -66
+				}
 			}
 		},
 		Inventory: {
-			OFFSET: 250,
-			Y: 100,
+			OFFSET: 325,
+			Y: 125,
 			Current: {
 				Z_INDEX: 1005,
 				SCALE: 1.6,
-				REL_X: -122,
-				REL_Y: -43
+				REL_X: -45,
+				REL_Y: -68
 			},
 			Next: {
 				STEP_Z_INDEX: -1,
 				STEP_SCALE: -0.4,
 				STEP_X: 35,
-				STEP_Y: 18
+				STEP_Y: 25
 			},
 			Option1: {
 				Z_INDEX: 1005,
 				SCALE: 1.2,
-				REL_X: 31,
-				REL_Y: -49
+				REL_X: 126,
+				REL_Y: -21
 			},
 			Option2: {
 				Z_INDEX: 1005,
 				SCALE: 1.2,
-				REL_X: 142,
-				REL_Y: -49
+				REL_X: 212,
+				REL_Y: -71
 			},
 			KillCommand: {
-				REL_X: 160,
-				REL_Y: 42,
+				REL_X: 245,
+				REL_Y: 12,
 				Time: {
 					APPARITION: 3,
 					FIRST_STEP: 5
@@ -249,6 +257,7 @@ var Constants = {
 	},
 	Font: {
 		NAME: "Quantico Bold",
+		SMALLSIZE: 18,
 		SIZE: 28,
 		MIDSIZE: 40,
 		BIGSIZE: 60
