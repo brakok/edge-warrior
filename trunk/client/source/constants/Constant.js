@@ -30,8 +30,8 @@ var Constants = {
 	},
 	Block: {
 		Percent: {
-			STARTING_NEUTRAL: 25,
-			LOST_FOREACH_ENEMY: 5
+			STARTING_NEUTRAL: 15,
+			LOST_FOREACH_ENEMY: 3
 		},
 		Skill: {
 			MAX_POWER: 5,
