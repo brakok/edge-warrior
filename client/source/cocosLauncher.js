@@ -66,8 +66,11 @@
 				  'source/playground/hud/Inventory.js',
 				  'source/playground/manager/AnimationManager.js',
 				  'source/playground/manager/AudioManager.js',
+				  
 				  'source/playground/hud/KillCommand.js',
 				  'source/playground/hud/SkillStore.js',
+				  'source/playground/hud/SkillItem.js',
+				  
 				  'source/playground/Missile.js',
 				  'source/playground/Spike.js',
 				  'source/playground/manager/EffectManager.js',

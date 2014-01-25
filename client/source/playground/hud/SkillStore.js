@@ -7,22 +7,10 @@ var SkillStore = function(x, y, layer){
 	this.y = y;
 
 	//Load locks.
-	this.lock1 = cc.Sprite.create(assetsHudDir + 'skill_locked.png');
-	this.lock1.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Skills.One.OFFSET_X,  this.y + Constants.HUD.SkillStore.Skills.One.OFFSET_Y));
-	
-	this.lock2 = cc.Sprite.create(assetsHudDir + 'skill_locked.png');
-	this.lock2.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Skills.Two.OFFSET_X,  this.y + Constants.HUD.SkillStore.Skills.Two.OFFSET_Y));
-	
-	this.lock3 = cc.Sprite.create(assetsHudDir + 'skill_locked.png');
-	this.lock3.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Skills.Three.OFFSET_X,  this.y + Constants.HUD.SkillStore.Skills.Three.OFFSET_Y));
-	
-	this.lock4 = cc.Sprite.create(assetsHudDir + 'skill_locked.png');
-	this.lock4.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Skills.Four.OFFSET_X,  this.y + Constants.HUD.SkillStore.Skills.Four.OFFSET_Y));
-	
-	this.isLocked1 = false;
-	this.isLocked2 = false;
-	this.isLocked3 = false;
-	this.isLocked4 = false;
+	this.skillItem1 = null;
+	this.skillItem2 = null;
+	this.skillItem3 = null;
+	this.skillItem4 = null;
 	
 	//Load fieldset.
 	this.fieldset = cc.Sprite.create(assetsHudDir + 'skill_fieldset.png');
@@ -62,87 +50,23 @@ SkillStore.prototype.update = function(units){
 SkillStore.prototype.lockSkills = function(){
 
 	if(Options.skillSet.one)
-	{
-		//Lock.
-		if(!this.isLocked1 && this.currentUnits < Options.skillSet.one.cost)
-		{
-			this.layer.addChild(this.lock1);
-			this.isLocked1 = true;
-		}
-		
-		//Unlock.
-		if(this.isLocked1 && this.currentUnits >= Options.skillSet.one.cost)
-		{
-			this.layer.removeChild(this.lock1);
-			this.isLocked1 = false;
-		}
-			
-	}
+		this.skillItem1.update();
 		
 	if(Options.skillSet.two)
-	{
-		//Lock.
-		if(!this.isLocked2 && this.currentUnits < Options.skillSet.two.cost)
-		{
-			this.layer.addChild(this.lock2);
-			this.isLocked2 = true;
-		}
-		
-		//Unlock.
-		if(this.isLocked2 && this.currentUnits >= Options.skillSet.two.cost)
-		{
-			this.layer.removeChild(this.lock2);
-			this.isLocked2 = false;
-		}
-	}
+		this.skillItem2.update();
 		
 	if(Options.skillSet.three)
-	{
-		//Lock.
-		if(!this.isLocked3 && this.currentUnits < Options.skillSet.three.cost)
-		{
-			this.layer.addChild(this.lock3);
-			this.isLocked3 = true;
-		}
-		
-		//Unlock.
-		if(this.isLocked3 && this.currentUnits >= Options.skillSet.three.cost)
-		{
-			this.layer.removeChild(this.lock3);
-			this.isLocked3 = false;
-		}
-	}
+		this.skillItem3.update();
 		
 	if(Options.skillSet.four)
-	{
-		//Lock.
-		if(!this.isLocked4 && this.currentUnits < Options.skillSet.four.cost)
-		{
-			this.layer.addChild(this.lock4);
-			this.isLocked4 = true;
-		}
-		
-		//Unlock.
-		if(this.isLocked4 && this.currentUnits >= Options.skillSet.four.cost)
-		{
-			this.layer.removeChild(this.lock4);
-			this.isLocked4 = false;
-		}
-	}
-
+		this.skillItem4.update();
 };
 
 SkillStore.prototype.refreshUnit = function(units){
 	
 	this.currentUnits = units;
 	
-	this.layer.removeChild(this.unitLabel);
-	
-	this.unitLabel = cc.LabelTTF.create(units, Constants.Font.NAME, Constants.Font.SIZE, cc.size(150, 20), cc.TEXT_ALIGNMENT_RIGHT);
-	this.unitLabel.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Units.OFFSET_X, this.y + Constants.HUD.SkillStore.Units.OFFSET_Y));
-	this.unitLabel.setColor(new cc.Color3B(50,50,50));
-	
-	this.layer.addChild(this.unitLabel);	
+	this.unitLabel.setString(units);		
 };
 
 SkillStore.prototype.setModeSprite = function(){
@@ -166,45 +90,28 @@ SkillStore.prototype.setModeSprite = function(){
 SkillStore.prototype.setSkillSprites = function(){
 	
 	if(Options.skillSet.one)
-	{
-		var newSkill = new SkillDescription(Options.skillSet.one.type);
-		newSkill.load(this.x + Constants.HUD.SkillStore.Skills.One.OFFSET_X, 
-					  this.y + Constants.HUD.SkillStore.Skills.One.OFFSET_Y,
-					  Constants.HUD.SkillStore.Skills.SCALE_X,
-					  Constants.HUD.SkillStore.Skills.SCALE_Y,
-					  this.layer);
-								  
-	}
+		this.skillItem1 = new SkillItem(this.x + Constants.HUD.SkillStore.Skills.One.OFFSET_X, 
+										this.y + Constants.HUD.SkillStore.Skills.One.OFFSET_Y,
+										Options.skillSet.one,
+										this);
 		
 	if(Options.skillSet.two)
-	{
-		var newSkill = new SkillDescription(Options.skillSet.two.type);
-		newSkill.load(this.x + Constants.HUD.SkillStore.Skills.Two.OFFSET_X, 
-					  this.y + Constants.HUD.SkillStore.Skills.Two.OFFSET_Y,
-					  Constants.HUD.SkillStore.Skills.SCALE_X,
-					  Constants.HUD.SkillStore.Skills.SCALE_Y,
-					  this.layer);
-	}
+		this.skillItem2 = new SkillItem(this.x + Constants.HUD.SkillStore.Skills.Two.OFFSET_X, 
+										this.y + Constants.HUD.SkillStore.Skills.Two.OFFSET_Y,
+										Options.skillSet.two,
+										this);
 		
 	if(Options.skillSet.three)
-	{
-		var newSkill = new SkillDescription(Options.skillSet.three.type);
-		newSkill.load(this.x + Constants.HUD.SkillStore.Skills.Three.OFFSET_X, 
-					  this.y + Constants.HUD.SkillStore.Skills.Three.OFFSET_Y,
-					  Constants.HUD.SkillStore.Skills.SCALE_X,
-					  Constants.HUD.SkillStore.Skills.SCALE_Y,
-					  this.layer);
-	}
+		this.skillItem3 = new SkillItem(this.x + Constants.HUD.SkillStore.Skills.Three.OFFSET_X, 
+										this.y + Constants.HUD.SkillStore.Skills.Three.OFFSET_Y,
+										Options.skillSet.three,
+										this);
 		
 	if(Options.skillSet.four)
-	{
-		var newSkill = new SkillDescription(Options.skillSet.four.type);
-		newSkill.load(this.x + Constants.HUD.SkillStore.Skills.Four.OFFSET_X, 
-					  this.y + Constants.HUD.SkillStore.Skills.Four.OFFSET_Y,
-					  Constants.HUD.SkillStore.Skills.SCALE_X,
-					  Constants.HUD.SkillStore.Skills.SCALE_Y,
-					  this.layer);
-	}
+		this.skillItem4 = new SkillItem(this.x + Constants.HUD.SkillStore.Skills.Four.OFFSET_X, 
+										this.y + Constants.HUD.SkillStore.Skills.Four.OFFSET_Y,
+										Options.skillSet.four,
+										this);
 	
 };
 

@@ -49,18 +49,30 @@ var Options = new function(){
 	//Set skill.
 	this.setSkill = function(number, skill){
 		
+		var existingSkill = null;
+		
+		//Check if skill already exist.
+		if(number != 1 && this.skillSet.one && this.skillSet.one.type == skill.type)
+			existingSkill = this.skillSet.one;
+		if(number != 2 && this.skillSet.two && this.skillSet.two.type == skill.type)
+			existingSkill = this.skillSet.two;
+		if(number != 3 && this.skillSet.three && this.skillSet.three.type == skill.type)
+			existingSkill = this.skillSet.three;
+		if(number != 4 && this.skillSet.four && this.skillSet.four.type == skill.type)
+			existingSkill = this.skillSet.four;
+		
 		switch(number){
 			case 1:
-				this.skillSet.one = skill;
+				this.skillSet.one = !existingSkill ? skill : existingSkill;
 				break;
 			case 2:
-				this.skillSet.two = skill;
+				this.skillSet.two = !existingSkill ? skill : existingSkill;
 				break;
 			case 3:
-				this.skillSet.three = skill;
+				this.skillSet.three = !existingSkill ? skill : existingSkill;
 				break;
 			case 4:
-				this.skillSet.four = skill;
+				this.skillSet.four = !existingSkill ? skill : existingSkill;
 				break;
 		}
 	};
