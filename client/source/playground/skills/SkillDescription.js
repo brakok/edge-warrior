@@ -9,6 +9,9 @@ var SkillDescription = function(type){
 		y: null
 	};
 	
+	//Used to display.
+	this.level = 0;
+	
 	//Used when selected.
 	this.background = cc.Sprite.create(assetsMenuDir + 'skill_selected.png');
 	this.background.setScale(Constants.Menu.SkillScreen.SkillList.SCALE_X, Constants.Menu.SkillScreen.SkillList.SCALE_Y);
@@ -40,6 +43,8 @@ SkillDescription.prototype.init = function(){
 			this.sprite = cc.Sprite.create(assetsSkillDir + 'firePulse.png');
 			this.title = SkillText.FirePulse.TITLE;
 			this.description = SkillText.FirePulse.DESCRIPTION;
+			
+			this.power = -1;
 			
 			//Buying infos.
 			this.cost = Constants.Block.Skill.FirePulse.COST;

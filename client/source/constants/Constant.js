@@ -106,6 +106,11 @@ var Constants = {
 			Skills: {
 				SCALE_X: 0.65,
 				SCALE_Y: 0.65,
+				Level: {
+					OFFSET_X: 22,
+					OFFSET_Y: 22,
+					Z_ORDER: 1005
+				},
 				One: {
 					OFFSET_X: -256,
 					OFFSET_Y: -66
@@ -257,6 +262,7 @@ var Constants = {
 	},
 	Font: {
 		NAME: "Quantico Bold",
+		VERY_SMALLSIZE: 14,
 		SMALLSIZE: 18,
 		SIZE: 28,
 		MIDSIZE: 40,

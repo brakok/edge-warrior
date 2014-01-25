@@ -48,15 +48,21 @@ Player.prototype.buySkill = function(number){
 		var blockOption = this.getBlockOption(Enum.Block.Type.SKILLED, skill.type);
 		
 		if(blockOption == null)
+		{
+			skill.level++;
 			this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, skill.percent.start, skill.type, 0));
+		}
 		else
 		{
 			//Change power or apparition percent chance.
 			switch(Options.buyMode){
 				case Enum.SkillStore.Mode.POWER:
-				
+					
 					if(blockOption.skill.power < Constants.Block.Skill.MAX_POWER)
+					{
 						this.changePower(skill.type);
+						skill.level++;
+					}
 					else
 						return;
 						
