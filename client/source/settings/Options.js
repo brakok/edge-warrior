@@ -48,31 +48,19 @@ var Options = new function(){
 	
 	//Set skill.
 	this.setSkill = function(number, skill){
-		
-		var existingSkill = null;
-		
-		//Check if skill already exist.
-		if(number != 1 && this.skillSet.one && this.skillSet.one.type == skill.type)
-			existingSkill = this.skillSet.one;
-		if(number != 2 && this.skillSet.two && this.skillSet.two.type == skill.type)
-			existingSkill = this.skillSet.two;
-		if(number != 3 && this.skillSet.three && this.skillSet.three.type == skill.type)
-			existingSkill = this.skillSet.three;
-		if(number != 4 && this.skillSet.four && this.skillSet.four.type == skill.type)
-			existingSkill = this.skillSet.four;
-		
+				
 		switch(number){
 			case 1:
-				this.skillSet.one = !existingSkill ? skill : existingSkill;
+				this.skillSet.one = skill;
 				break;
 			case 2:
-				this.skillSet.two = !existingSkill ? skill : existingSkill;
+				this.skillSet.two = skill;
 				break;
 			case 3:
-				this.skillSet.three = !existingSkill ? skill : existingSkill;
+				this.skillSet.three = skill;
 				break;
 			case 4:
-				this.skillSet.four = !existingSkill ? skill : existingSkill;
+				this.skillSet.four = skill;
 				break;
 		}
 	};
@@ -171,7 +159,7 @@ var Options = new function(){
 		
 		chrome.storage.sync.get('skillSet', function(data){
 			that.callbackCounter++;
-			
+						
 			if(data.skillSet != null)
 				that.skillSet = new SkillSet(data.skillSet);
 				
