@@ -33,7 +33,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.txtName = document.getElementById('lobbyName');
 		
 		this.cmdRename = new cc.MenuItemFont.create("RENAME", this.rename, this);
-		this.cmdRename.setPosition(new cc.Point(this.width*0.52, this.height*0.892));
+		this.cmdRename.setPosition(new cc.Point(this.width*0.52, this.height*0.887));
 		this.cmdRename.setEnabled(false);
 		
 		this.renameMenu = new cc.Menu.create(this.cmdRename);
@@ -148,6 +148,12 @@ var LobbyScreen = cc.LayerColor.extend({
 	rename: function(){
 		if(this.isRenaming)
 		{
+			if(!this.txtName.value || this.txtName.value.length < 6)
+			{
+				HtmlHelper.showError('Lobby name must have at least 6 characters.');
+				return;
+			}
+		
 			this.pushUpdates();
 			HtmlHelper.showMessage('Lobby has been renamed.');
 			

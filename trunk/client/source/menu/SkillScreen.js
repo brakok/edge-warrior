@@ -98,8 +98,23 @@ var SkillScreen = cc.LayerColor.extend({
 				break;
 			}
 			
+		//Set skill.
 		if(selectedSlot != null && this.firstClickTimespan != null && (new Date() - this.firstClickTimespan) < Constants.Mouse.DOUBLE_CLICK_THRESHOLD)
+		{
+			//Check for unicity.
+			for(var i = 0; i < 4; ++i)
+			{
+				var slotSkill = this.skillSlots[i].currentSkill;
+				
+				if(slotSkill && slotSkill.type == skill.type)
+				{
+					HtmlHelper.showError('Skill already set.');
+					return;
+				}			
+			}
+	
 			selectedSlot.setSkill(new SkillDescription(skill.type));
+		}
 	
 		//Select skill in list and summary.
 		if(this.selectedSkill != null)
