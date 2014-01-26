@@ -49,6 +49,9 @@ Player.prototype.buySkill = function(number){
 		
 		if(blockOption == null)
 		{
+			//Trigger buy sound.
+			AudioManager.playEffect('buy', false);
+			
 			skill.level++;
 			this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, skill.percent.start, skill.type, 0));
 		}
@@ -60,6 +63,9 @@ Player.prototype.buySkill = function(number){
 					
 					if(blockOption.skill.power < Constants.Block.Skill.MAX_POWER)
 					{
+						//Trigger buy sound.
+						AudioManager.playEffect('buy', false);
+						
 						this.changePower(skill.type);
 						skill.level++;
 					}
@@ -69,6 +75,10 @@ Player.prototype.buySkill = function(number){
 					break;
 				case Enum.SkillStore.Mode.QUANTITY:
 					this.changePercent(blockOption.type, skill.percent.step, skill.type);
+					
+					//Trigger buy sound.
+					AudioManager.playEffect('buy', false);
+					
 					break;
 			}
 		}

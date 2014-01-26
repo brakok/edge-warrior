@@ -50,6 +50,7 @@ var assets = [
 	{type:"sound", src: soundDir + 'double_jump'},
 	{type:"sound", src: soundDir + 'tentacle_transform'},
 	{type:"sound", src: soundDir + 'floatingBall_idle'},
+	{type:"sound", src: soundDir + 'buy'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill'},
