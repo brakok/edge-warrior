@@ -42,6 +42,7 @@ var KeysScreen = cc.LayerColor.extend({
 		this.keyForm.setVisible(false);
 	},
 	reset: function(){
+		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 		this.keyForm.reset();
 	},
 	save: function(){

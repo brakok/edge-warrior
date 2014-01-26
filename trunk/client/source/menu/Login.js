@@ -55,6 +55,8 @@ var Login = cc.LayerColor.extend({
 
 		if(this.txtUsername.value == null || this.txtUsername.value == '' || this.txtPassword.value == null || this.txtPassword.value == '')
 		{
+			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+			
 			HtmlHelper.showError('Username/password are required.');
 			return;
 		}
@@ -64,6 +66,7 @@ var Login = cc.LayerColor.extend({
 			//Raise error if someone tried too many times to log in.
 			if(this.connectionAttempts > 3)
 			{
+				AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 				HtmlHelper.showError('Too many connection attempts.');
 				return;
 			}
@@ -82,6 +85,8 @@ var Login = cc.LayerColor.extend({
 		//Fail
 		if(errors && errors.length > 0)
 		{
+			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+			
 			for(var i = 0; i < errors.length; ++i)
 				HtmlHelper.showError(errors[i]);
 				

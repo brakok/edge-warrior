@@ -28,7 +28,9 @@ var MenuScreens = new function(){
 			this.changePassword = ChangePassword.create(width, height);
 			this.resetPassword = ResetPassword.create(width, height);
 			
-			this.optionsScreen = OptionsScreen.create(width, height, function() { myApp.MenuScene.menu.switchTo(MenuScreens.mainMenu); });
+			this.optionsScreen = OptionsScreen.create(width, height, function() { 
+				myApp.MenuScene.menu.switchTo(MenuScreens.mainMenu); 
+			});
 		}
 	};
 	
@@ -47,6 +49,9 @@ var MenuScreens = new function(){
 	};
 	
 	this.switchTo = function(menu){
+		//Play sound.
+		AudioManager.playEffect('switch_menu');
+		
 		myApp.MenuScene.menu.switchTo(menu);
 	};
 };

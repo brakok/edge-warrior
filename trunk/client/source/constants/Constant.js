@@ -270,6 +270,7 @@ var Constants = {
 	},
 	Menu: {
 		BACKGROUND_Z_INDEX: 0,
+		ACTION_EFFECT: 'action_menu',
 		EndScreen: {
 			Z_INDEX: 5000
 		},

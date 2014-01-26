@@ -49,7 +49,10 @@ var ServerList = cc.LayerColor.extend({
 		if(this.list.selectedValue != null)
 			Client.joinLobby(this.list.selectedValue);
 		else
+		{
+			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 			HtmlHelper.showError('No lobby selected.');
+		}
 	},
 	random: function(){
 		
@@ -58,12 +61,17 @@ var ServerList = cc.LayerColor.extend({
 		if(lobby != null)
 			Client.joinLobby(lobby.id);
 		else
+		{
+			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 			HtmlHelper.showError('No lobby selected.');
+		}
 	},
 	back: function(){
 		MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
 	refresh: function(){
+		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+		
 		Client.search();
 	},
 	resize: function(){

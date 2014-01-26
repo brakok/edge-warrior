@@ -70,6 +70,9 @@ var SkillScreen = cc.LayerColor.extend({
 		MenuScreens.switchTo(MenuScreens.mainMenu);
 	},
 	reset: function(){
+	
+		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+	
 		this.unselectSlots();
 		Options.skillSet.reset();
 		

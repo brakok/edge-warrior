@@ -58,7 +58,10 @@ var ResetPassword = cc.LayerColor.extend({
 
 			//Create account.
 			if(!Client.resetPassword(this.txtUsername.value, this.txtEmail.value))
+			{
+				AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 				this.isResettingPassword = false;
+			}
 		}
 	},
 	back: function(){
@@ -73,6 +76,8 @@ var ResetPassword = cc.LayerColor.extend({
 		}
 		else
 		{
+			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+			
 			for(var i = 0; i < errorMsg.length; ++i)
 				HtmlHelper.showError(errorMsg[i]);
 		}

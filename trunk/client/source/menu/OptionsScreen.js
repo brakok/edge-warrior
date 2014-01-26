@@ -56,6 +56,8 @@ var OptionsScreen = cc.LayerColor.extend({
 	},
 	switchTo: function(menu){
 	
+		AudioManager.playEffect('switch_menu');
+	
 		if(this.currentScreen != null)
 		{
 			if(this.currentScreen.onLeaving != null && this.currentScreen.onLeaving != 'undefined')

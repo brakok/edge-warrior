@@ -51,6 +51,8 @@ var assets = [
 	{type:"sound", src: soundDir + 'tentacle_transform'},
 	{type:"sound", src: soundDir + 'floatingBall_idle'},
 	{type:"sound", src: soundDir + 'buy'},
+	{type:"sound", src: soundDir + 'switch_menu'},
+	{type:"sound", src: soundDir + 'action_menu'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill'},
@@ -65,6 +67,18 @@ var assets = [
 	{type:"sound", src: soundVoiceDir + 'yellow_idle01'},
 	{type:"sound", src: soundVoiceDir + 'yellow_idle02'},
 	{type:"sound", src: soundVoiceDir + 'yellow_idle03'},
+	{type:"sound", src: soundVoiceDir + 'blue_kill'},
+	{type:"sound", src: soundVoiceDir + 'blue_jump01'},
+	{type:"sound", src: soundVoiceDir + 'blue_jump02'},
+	{type:"sound", src: soundVoiceDir + 'blue_idle01'},
+	{type:"sound", src: soundVoiceDir + 'blue_idle02'},
+	{type:"sound", src: soundVoiceDir + 'blue_idle03'},
+	{type:"sound", src: soundVoiceDir + 'white_kill'},
+	{type:"sound", src: soundVoiceDir + 'white_jump01'},
+	{type:"sound", src: soundVoiceDir + 'white_jump02'},
+	{type:"sound", src: soundVoiceDir + 'white_idle01'},
+	{type:"sound", src: soundVoiceDir + 'white_idle02'},
+	{type:"sound", src: soundVoiceDir + 'white_idle03'},
 	
 	{type:"sound", src: soundVoiceDir + 'floatingBall_summon'},
 

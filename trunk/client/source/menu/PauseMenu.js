@@ -64,9 +64,13 @@ var PauseMenu = cc.LayerColor.extend({
 				this.currentScreen.onEntering();
 	},
 	toOptions: function(){
+	
+		AudioManager.playEffect('switch_menu');
 		this.switchTo(this.optionsScreen);
 	},
 	disconnect: function(){
+	
+		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 		this.reset();
 		Client.disconnect();
 	},
