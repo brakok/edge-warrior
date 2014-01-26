@@ -66,8 +66,6 @@ var Client = new function(){
 		}
 	};
 	
-	
-	
 	//Authentification.
 	this.authenticate = function(profile){
 		this.masterSocket.emit(Constants.Message.LOGIN, profile);
@@ -234,6 +232,8 @@ var Client = new function(){
 		//Show error message sent by server.
 		masterSocket.on(Constants.Message.ERROR, function(msg){
 			HtmlHelper.showError(msg);
+			
+			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 			Client.currentGameId = null;
 		});
 		

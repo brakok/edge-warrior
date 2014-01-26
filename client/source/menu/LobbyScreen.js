@@ -58,6 +58,8 @@ var LobbyScreen = cc.LayerColor.extend({
 	},
 	launch: function(){
 				
+		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+				
 		for(var i in this.slots)
 			if(!this.slots[i].isReady() || this.slots[i].getColor() == Enum.Slot.Color.UNASSIGNED)
 			{
@@ -146,6 +148,9 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.lblOnline._string = "Offline";
 	},
 	rename: function(){
+	
+		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+	
 		if(this.isRenaming)
 		{
 			if(!this.txtName.value || this.txtName.value.length < 6)
@@ -164,7 +169,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		else
 		{
 			this.txtName.readOnly = false;
-			this.cmdRename._label.setString("MODIFY");
+			this.cmdRename._label.setString("APPLY");
 			this.isRenaming = true;
 		}
 		

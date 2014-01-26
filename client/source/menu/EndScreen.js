@@ -98,6 +98,7 @@ var EndScreen = cc.LayerColor.extend({
 		}
 	},
 	disconnect: function(){
+		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 		Client.disconnect();
 	}
 });

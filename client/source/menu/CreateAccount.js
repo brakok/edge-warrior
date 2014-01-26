@@ -79,6 +79,8 @@ var CreateAccount = cc.LayerColor.extend({
 		}
 		else
 		{
+			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+			
 			for(var i = 0; i < errorMsg.length; ++i)
 				HtmlHelper.showError(errorMsg[i]);
 		}
