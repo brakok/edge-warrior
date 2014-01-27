@@ -54,15 +54,22 @@ var Client = new function(){
 		this.game = new Game();
 		
 		//Server positioning and giving color to player.
-		this.game.player = new Player(data.player.x, data.player.y, data.player.color, true, this.username);	
-
-		for(var i in data.enemies)
+		for(var i = 0; i < data.players.length; i++)
 		{
-			this.game.enemies.push(new Player(data.enemies[i].x,
-								   data.enemies[i].y,
-								   data.enemies[i].color,
-								   false,
-								   data.enemies[i].username));
+			console.log(this.username + ' ' + data.players[i].username);
+		
+			if(this.username == data.players[i].username)
+			{
+				this.game.player = new Player(data.players[i].x, data.players[i].y, data.players[i].color, true, this.username);
+			}
+			else
+			{
+				this.game.enemies.push(new Player(data.players[i].x,
+												  data.players[i].y,
+												  data.players[i].color,
+												  false,
+												  data.players[i].username));
+			}
 		}
 	};
 	
