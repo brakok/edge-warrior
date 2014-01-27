@@ -128,13 +128,13 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 			username: data.username
 		};
 		
-		var enemies = [];
+		var players = [];
 		
 		for(var i in Server.gameList[data.gameId].players)
 		{
 			var enemy = Server.gameList[data.gameId].players[i].toClient();
 			enemy.username = Server.gameList[data.gameId].players[i].username;
-			enemies.push(enemy);
+			players.push(enemy);
 		}
 		
 		var color = null;
@@ -150,17 +150,23 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 								color,
 								Server.gameList[data.gameId]);
 		
+		var playerToClient = player.toClient();
+		playerToClient.username = data.username;
+		
+		//Send last player connected.
+		players.push(playerToClient);
+		
 		//Value initiating a player.
 		var initData = {
-			player: player.toClient(),
-			enemies: enemies
+			players: players
 		};
 		
 		Server.gameList[data.gameId].players[socket.id] = player;
 		Server.gameList[data.gameId].connectingPlayers++;
 
 		//Start initiation.
-		socket.emit(Constants.Message.INIT, initData);
+		if(Server.gameList[data.gameId].connectingPlayers == Server.gameList[data.gameId].maxPlayers)
+			io.sockets.in(data.gameId).emit(Constants.Message.INIT, initData);
 	});
 	
 	//Disconnect player.
