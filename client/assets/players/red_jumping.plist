@@ -7,145 +7,145 @@
             <key>red_jumping.0049.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,84},{80,144}}</string>
+                <string>{{2,42},{38,69}}</string>
                 <key>offset</key>
-                <string>{13,14}</string>
+                <string>{6,4}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{133,4},{80,144}}</string>
+                <string>{{32,4},{38,69}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0050.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{80,144}}</string>
+                <string>{{2,2},{38,69}}</string>
                 <key>offset</key>
-                <string>{13,13}</string>
+                <string>{6,4}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{133,5},{80,144}}</string>
+                <string>{{32,4},{38,69}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0051.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,166},{80,140}}</string>
+                <string>{{2,82},{38,67}}</string>
                 <key>offset</key>
-                <string>{13,12}</string>
+                <string>{6,3}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{133,8},{80,140}}</string>
+                <string>{{32,6},{38,67}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0052.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,248},{82,138}}</string>
+                <string>{{2,164},{40,65}}</string>
                 <key>offset</key>
-                <string>{12,12}</string>
+                <string>{5,3}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{131,9},{82,138}}</string>
+                <string>{{30,7},{40,65}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0053.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,332},{84,136}}</string>
+                <string>{{2,122},{40,65}}</string>
                 <key>offset</key>
-                <string>{10,12}</string>
+                <string>{5,3}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{128,10},{84,136}}</string>
+                <string>{{30,7},{40,65}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0054.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{124,418},{88,128}}</string>
+                <string>{{69,190},{42,61}}</string>
                 <key>offset</key>
-                <string>{8,10}</string>
+                <string>{4,2}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{124,16},{88,128}}</string>
+                <string>{{28,10},{42,61}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0055.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,418},{92,120}}</string>
+                <string>{{69,144},{44,57}}</string>
                 <key>offset</key>
-                <string>{5,8}</string>
+                <string>{2,1}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{119,22},{92,120}}</string>
+                <string>{{25,13},{44,57}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0056.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{142,296},{96,112}}</string>
+                <string>{{73,2},{46,53}}</string>
                 <key>offset</key>
-                <string>{4,6}</string>
+                <string>{2,0}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{116,28},{96,112}}</string>
+                <string>{{24,16},{46,53}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0057.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{148,100},{102,104}}</string>
+                <string>{{2,206},{48,49}}</string>
                 <key>offset</key>
-                <string>{2,4}</string>
+                <string>{1,-1}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{111,34},{102,104}}</string>
+                <string>{{22,19},{48,49}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0058.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{148,2},{106,96}}</string>
+                <string>{{71,95},{50,47}}</string>
                 <key>offset</key>
-                <string>{1,2}</string>
+                <string>{1,-1}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{108,40},{106,96}}</string>
+                <string>{{21,20},{50,47}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
             <key>red_jumping.0059.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{144,204},{110,90}}</string>
+                <string>{{73,50},{52,43}}</string>
                 <key>offset</key>
-                <string>{0,1}</string>
+                <string>{0,-2}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{105,44},{110,90}}</string>
+                <string>{{19,23},{52,43}}</string>
                 <key>sourceSize</key>
-                <string>{320,180}</string>
+                <string>{90,85}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -155,9 +155,9 @@
             <key>realTextureFileName</key>
             <string>red_jumping.png</string>
             <key>size</key>
-            <string>{256,512}</string>
+            <string>{128,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:ea708304ed55ee831f738f71254c4443$</string>
+            <string>$TexturePacker:SmartUpdate:2f28135e1d5b78206c376cefa4a1a4af:6aadba7cf3e2764dd8e5ab110ae79831:4f2058549de29bc2debeed56684d802c$</string>
             <key>textureFileName</key>
             <string>red_jumping.png</string>
         </dict>
