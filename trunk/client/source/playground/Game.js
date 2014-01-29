@@ -239,9 +239,9 @@ Game.prototype.update = function (dt){
 				else if(this.warmupTimer < Constants.Game.Phase.Warmup.OFF_GOAL)
 				{
 					//Reset camera to its original state.
-					if(this.camera.zoomFactor != Constants.Camera.ZOOM_FACTOR)
+					if(this.camera.speed.x != Constants.Camera.SPEED_X)
 					{
-						tthis.camera.zoom = 1;
+						this.camera.zoom = 1;
 						this.camera.targetedZoom = 1;
 						this.camera.speed.x = Constants.Camera.SPEED_X;
 						this.camera.speed.y = Constants.Camera.SPEED_Y;

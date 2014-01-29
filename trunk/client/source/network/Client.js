@@ -56,8 +56,6 @@ var Client = new function(){
 		//Server positioning and giving color to player.
 		for(var i = 0; i < data.players.length; i++)
 		{
-			console.log(this.username + ' ' + data.players[i].username);
-		
 			if(this.username == data.players[i].username)
 			{
 				this.game.player = new Player(data.players[i].x, data.players[i].y, data.players[i].color, true, this.username);
