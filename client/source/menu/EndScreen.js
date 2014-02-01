@@ -68,14 +68,14 @@ var EndScreen = cc.LayerColor.extend({
 		if(!Client.game.player.hasWon)
 			players.push(Client.game.player);
 		
-		for(var i in Client.game.enemies)
+		for(var i = 0; i < Client.game.enemies.length; i++)
 			if(!Client.game.enemies[i].hasWon)
 				players.push(Client.game.enemies[i]);
 		
 		var fallensY = [this.height*0.06, this.height*0.1, this.height*0.04];
 		var fallenCount = 0;
 		
-		for(var i in players)
+		for(var i = 0; i < players.length; i++)
 		{
 			var isAlive = false;
 			
