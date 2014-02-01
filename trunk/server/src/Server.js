@@ -184,10 +184,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		var player = Server.gameList[gameId].players[socket.id].toClient();
 		player.username = Server.gameList[gameId].players[socket.id].username;
-		
-		//Send connected players to others.
-		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, player);
-		
+				
 		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
 		{
 			console.log('Game launching...');

@@ -250,9 +250,9 @@ Game.prototype.end = function(){
 	var survivors = [];
 			
 	//Count and kill survivors.
-	for(var i in this.players)
+	for(var i = 0; i < this.players.length; ++i)
 	{
-		if(this.players[i].isAlive && i != this.winner.id)
+		if(this.players[i].isAlive && this.players[i].id != this.winner.id)
 		{
 			this.players[i].die();
 			survivors.push(this.players[i].toClient());
