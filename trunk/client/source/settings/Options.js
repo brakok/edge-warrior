@@ -14,7 +14,8 @@ var Options = new function(){
 	
 	this.resolution = {
 		width: Constants.Video.ORIGINAL_WIDTH,
-		height: Constants.Video.ORIGINAL_HEIGHT
+		height: Constants.Video.ORIGINAL_HEIGHT,
+		isFullscreen: false
 	};
 	
 	this.viewport = {
@@ -86,13 +87,11 @@ var Options = new function(){
 	
 	//Set resolution.
 	this.setResolution = function(resolution){
-		this.resolution = resolution;
+		this.resolution.width = resolution.width;
+		this.resolution.height = resolution.height;
 		
-		if(!this.fullscreen)
-		{
-			this.viewport.width = resolution.width;
-			this.viewport.height = resolution.height;
-		}
+		this.viewport.width = resolution.width;
+		this.viewport.height = resolution.height;
 	};
 	
 	//Save new resolution.
@@ -101,11 +100,61 @@ var Options = new function(){
 		chrome.storage.sync.set({'resolution' : resolution});
 	};
 	
+	//Enter fullscreen.
+	this.enterFullscreen = function(){
+	
+		var element = document.getElementsByTagName('body')[0];
+		
+		if(element.requestFullscreen) {
+			element.requestFullscreen();
+		} else if(element.mozRequestFullScreen) {
+			element.mozRequestFullScreen();
+		} else if(element.webkitRequestFullscreen) {
+			element.webkitRequestFullscreen();
+		} else if(element.msRequestFullscreen) {
+			element.msRequestFullscreen();
+		}
+		
+		this.resolution.isFullscreen = true;
+		
+		if(!Client.game)
+		{
+			//Show exit button.
+			var exit = document.getElementById('exit');
+			exit.style.display = 'block';
+		}
+	};
+	
+	//Exit fullscreen.
+	this.exitFullscreen = function(){
+	
+		if(document.exitFullscreen) {
+			document.exitFullscreen();
+		} else if(document.mozCancelFullScreen) {
+			document.mozCancelFullScreen();
+		} else if(document.webkitExitFullscreen) {
+			document.webkitExitFullscreen();
+		}
+		
+		this.resolution.isFullscreen = false;
+		
+		//Show exit button.
+		var exit = document.getElementById('exit');
+		exit.style.display = 'none';
+	};
+	
 	//Resize window.
 	this.resizeWindow = function(){
-	
+		
+		if(this.resolution.width > screen.availWidth)
+			this.resolution.width = screen.availWidth;
+			
+		if(this.resolution.height > screen.availHeight)
+			this.resolution.height = screen.availHeight;
+		
 		//Resize menus.
-		window.resizeTo(this.resolution.width, this.resolution.height);
+		if(!this.resolution.isFullscreen)
+			window.resizeTo(this.resolution.width, this.resolution.height);
 	};
 	
 	function resize(){
@@ -123,7 +172,6 @@ var Options = new function(){
             xScale = yScale;
 				
 		document.getElementsByTagName('body')[0].style.font = "normal " + Constants.Font.SIZE*xScale + "px " + Constants.Font.NAME;
-		
 		MenuScreens.resize();
 	}
 	
@@ -146,7 +194,7 @@ var Options = new function(){
 			that.callbackCounter++;
 			if(data.resolution != null)
 				that.resolution = data.resolution;
-				
+							
 			that.apply();
 		});
 		

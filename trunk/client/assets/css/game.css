@@ -3,7 +3,17 @@
 	font-family: 'Quantico Bold';
 	src: url('fonts/Quantico-Bold.otf');
 }
-		
+
+.exit {
+	text-align: right;
+	width: 100%;
+}
+
+.exit button {
+	border: 0; 
+	background: transparent;
+}
+
 .left {
 	float: left;
 }			

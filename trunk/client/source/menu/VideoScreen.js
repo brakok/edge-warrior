@@ -6,6 +6,7 @@ var VideoScreen = cc.LayerColor.extend({
 		this.parent = parent;
 	
 		this.originalResolution = null;
+		this.originalFullscreen = false;
 	
 		//Layer creation.
 		this._super(new cc.Color4B(0, 0, 0, 255), width, height);
@@ -29,6 +30,12 @@ var VideoScreen = cc.LayerColor.extend({
 				height: values[1]
 			};
 			
+			//Enter fullscreen if specified.
+			if(res.width == 1920 && res.height == 1080)
+				Options.enterFullscreen();
+			else
+				Options.exitFullscreen();
+
 			Options.setResolution(res);
 			Options.resizeWindow();
 		};
@@ -50,6 +57,9 @@ var VideoScreen = cc.LayerColor.extend({
 		this.addChild(this.menu);
 	},
 	onEntering: function(){
+	
+		this.originalFullscreen = Options.isFullscreen;
+	
 		this.select.value = Options.resolution.width + 'x' + Options.resolution.height;
 		this.div.style.display = "block";
 		
@@ -74,6 +84,12 @@ var VideoScreen = cc.LayerColor.extend({
 		this.back();
 	},
 	cancel: function(){
+	
+		if(!this.originalFullscreen && Options.resolution.isFullscreen)
+			Options.exitFullscreen();
+		else if(this.originalFullscreen && !Options.isFullscreen)
+			Options.enterFullscreen();
+	
 		Options.setResolution(this.originalResolution);
 		Options.resizeWindow();
 		

@@ -2,6 +2,11 @@
 	var canvas = document.getElementById('gameCanvas');
 	canvas.width = Constants.Video.Canvas.ORIGINAL_WIDTH;
 	canvas.height = Constants.Video.Canvas.ORIGINAL_HEIGHT;
+	
+	var cmdExit = document.getElementById('cmdExit');
+	cmdExit.onclick = function(){
+		window.close();
+	};
 })();
 
 //Cocos2d configuration and instanciation.
