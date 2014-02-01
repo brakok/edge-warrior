@@ -2024,9 +2024,9 @@ Game.prototype.end = function(){
 	var survivors = [];
 			
 	//Count and kill survivors.
-	for(var i in this.players)
+	for(var i = 0; i < this.players.length; ++i)
 	{
-		if(this.players[i].isAlive && i != this.winner.id)
+		if(this.players[i].isAlive && this.players[i].id != this.winner.id)
 		{
 			this.players[i].die();
 			survivors.push(this.players[i].toClient());
@@ -2621,10 +2621,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		var player = Server.gameList[gameId].players[socket.id].toClient();
 		player.username = Server.gameList[gameId].players[socket.id].username;
-		
-		//Send connected players to others.
-		socket.broadcast.to(gameId).emit(Constants.Message.NEW_PLAYER, player);
-		
+				
 		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
 		{
 			console.log('Game launching...');
