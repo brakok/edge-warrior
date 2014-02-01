@@ -32,7 +32,7 @@ Missile.prototype.init = function(){
 			switch(this.direction)
 			{
 				case Enum.Direction.LEFT:
-					this.sprite.setFlipX(true);
+					this.sprite.setFlippedX(true);
 					break;
 				case Enum.Direction.RIGHT:
 					//Nothing to do.
@@ -50,7 +50,7 @@ Missile.prototype.init = function(){
 			switch(this.direction)
 			{
 				case Enum.Direction.LEFT:
-					this.currentAnimation.setFlipX(true);
+					this.currentAnimation.setFlippedX(true);
 					break;
 				case Enum.Direction.RIGHT:
 					//Nothing to do.

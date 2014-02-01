@@ -25,7 +25,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		var mustFlip = this.facing == Enum.Direction.LEFT;
 		var firstSegment = cc.Sprite.create(assetsWorldDir + imgName);
 		
-		var textHeight = firstSegment.getTexture().height;
+		var textHeight = firstSegment.getTextureRect().height;
 		var numOfFragment = height/textHeight;
 		
 		var stepY = textHeight;
@@ -37,7 +37,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		{
 			var corner = cc.Sprite.create(assetsWorldDir + cornerImgName);
 			corner.setPosition(new cc.Point(this.x, tmpY - stepY));
-			corner.setFlipX(mustFlip);
+			corner.setFlippedX(mustFlip);
 			corner._zOrder = zOrder;
 			
 			this.fragments.push({
@@ -47,7 +47,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		}
 		
 		//Add the first segment.
-		firstSegment.setFlipX(mustFlip);
+		firstSegment.setFlippedX(mustFlip);
 		firstSegment.setPosition(new cc.Point(this.x, tmpY));
 		firstSegment._zOrder = zOrder;
 		
@@ -63,7 +63,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 			
 			var segment = cc.Sprite.create(assetsWorldDir + imgName);
 			segment.setPosition(new cc.Point(this.x, tmpY));
-			segment.setFlipX(mustFlip);
+			segment.setFlippedX(mustFlip);
 			segment._zOrder = zOrder;
 			
 			this.fragments.push({

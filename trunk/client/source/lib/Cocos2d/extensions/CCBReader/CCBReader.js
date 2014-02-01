@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-var CCB_VERSION = 4;
+var CCB_VERSION = 5;
 
 var CCB_PROPTYPE_POSITION = 0;
 var CCB_PROPTYPE_SIZE = 1;
@@ -53,6 +53,7 @@ var CCB_PROPTYPE_CCBFILE = 23;
 var CCB_PROPTYPE_STRING = 24;
 var CCB_PROPTYPE_BLOCKCCCONTROL = 25;
 var CCB_PROPTYPE_FLOATSCALE = 26;
+var CCB_PROPTYPE_FLOATXY = 27;
 
 var CCB_FLOAT0 = 0;
 var CCB_FLOAT1 = 1;
@@ -134,7 +135,7 @@ cc.BuilderReader = cc.Class.extend({
     _loadedSpriteSheets:null,
 
     _owner:null,
-    _actionManager:null,
+    _animationManager:null,
     _animationManagers:null,
     _animatedProps:null,
 
@@ -150,8 +151,9 @@ cc.BuilderReader = cc.Class.extend({
 
     _ownerCallbackNames:null,
     _ownerCallbackNodes:null,
+    _ownerCallbackEvents:null,
 
-    hasScriptingOwner:false,
+    _readNodeGraphFromData:false,
 
     ctor:function (ccNodeLoaderLibrary, ccbMemberVariableAssigner, ccbSelectorResolver, ccNodeLoaderListener) {
         this._stringCache = [];
@@ -173,6 +175,7 @@ cc.BuilderReader = cc.Class.extend({
 
                 this._ownerCallbackNames = ccbReader._ownerCallbackNames;
                 this._ownerCallbackNodes = ccbReader._ownerCallbackNodes;
+                this._ownerCallbackEvents = ccbReader._ownerCallbackEvents;
                 this._ownerOutletNames = ccbReader._ownerOutletNames;
                 this._ownerOutletNodes = ccbReader._ownerOutletNodes;
                 this._ccbRootPath = ccbReader._ccbRootPath;
@@ -195,7 +198,7 @@ cc.BuilderReader = cc.Class.extend({
 
     initWithData:function (data, owner) {
         //setup action manager
-        this._actionManager = new cc.BuilderAnimationManager();
+        this._animationManager = new cc.BuilderAnimationManager();
 
         //setup byte array
         //Array replace to CCData in Javascript
@@ -207,7 +210,7 @@ cc.BuilderReader = cc.Class.extend({
         this._owner = owner;
 
         //setup resolution scale and container size
-        this._actionManager.setRootContainerSize(cc.Director.getInstance().getWinSize());
+        this._animationManager.setRootContainerSize(cc.Director.getInstance().getWinSize());
 
         return true;
     },
@@ -219,46 +222,47 @@ cc.BuilderReader = cc.Class.extend({
             animationManager = parentSize;
             parentSize = cc.Director.getInstance().getWinSize();
         }
-
-        var path = cc.FileUtils.getInstance().fullPathFromRelativePath(ccbFileName);
-        var data = cc.FileUtils.getInstance().getFileData(path);
+        var fileUtils = cc.FileUtils.getInstance();
+        var path = fileUtils.fullPathFromRelativePath(ccbFileName);
+        var data = fileUtils.getByteArrayFromFile(path);
 
         return this.readNodeGraphFromData(data, owner, parentSize, animationManager);
     },
 
-    readNodeGraphFromData:function (data, owner, parentSize, animationManager) {
+    readNodeGraphFromData:function (data, owner, parentSize) {
         this.initWithData(data, owner);
-        this._actionManager.setRootContainerSize(parentSize);
+        var locAnimationManager = this._animationManager;
+        locAnimationManager.setRootContainerSize(parentSize);
+        locAnimationManager.setOwner(owner);
 
         this._ownerOutletNames = [];
         this._ownerOutletNodes = [];
         this._ownerCallbackNames = [];
         this._ownerCallbackNodes = [];
+        this._ownerCallbackEvents = [];
         this._animationManagers = new cc._Dictionary();
 
         var nodeGraph = this.readFileWithCleanUp(true);
 
-        if (nodeGraph && this._actionManager.getAutoPlaySequenceId() != -1) {
+        if (nodeGraph && locAnimationManager.getAutoPlaySequenceId() != -1) {
             //auto play animations
-            this._actionManager.runAnimations(this._actionManager.getAutoPlaySequenceId(), 0);
+            locAnimationManager.runAnimations(locAnimationManager.getAutoPlaySequenceId(), 0);
         }
 
         if (this._jsControlled) {
-            this._nodesWithAnimationManagers = [];
-            this._animationManagerForNodes = [];
+            var locNodes = [];
+            var locAnimations = [];
 
-            var getAllKeys = this._animationManagers.allKeys();
+            var locAnimationManagers = this._animationManagers;
+            var getAllKeys = locAnimationManagers.allKeys();
             for (var i = 0; i < getAllKeys.length; i++) {
-                this._nodesWithAnimationManagers.push(getAllKeys[i]);
-                this._animationManagerForNodes.push(this._animationManagers.objectForKey(getAllKeys[i]));
+                locNodes.push(getAllKeys[i]);
+                locAnimations.push(locAnimationManagers.objectForKey(getAllKeys[i]));
             }
-        }
 
-        // Return action manager by reference
-        //if (ppAnimationManager)
-        //{
-        //    *ppAnimationManager = mActionManager;
-        //}
+            this._nodesWithAnimationManagers = locNodes;
+            this._animationManagerForNodes = locAnimations;
+        }
 
         return nodeGraph;
     },
@@ -279,11 +283,11 @@ cc.BuilderReader = cc.Class.extend({
     },
 
     getAnimationManager:function () {
-        return this._actionManager;
+        return this._animationManager;
     },
 
     setAnimationManager:function (animationManager) {
-        this._actionManager = animationManager;
+        this._animationManager = animationManager;
     },
 
     getAnimatedProperties:function () {
@@ -444,6 +448,10 @@ cc.BuilderReader = cc.Class.extend({
         return this._ownerCallbackNodes;
     },
 
+    getOwnerCallbackControlEvents:function(){
+        return this._ownerCallbackEvents;
+    },
+
     getOwnerOutletNames:function () {
         return this._ownerOutletNames;
     },
@@ -476,12 +484,20 @@ cc.BuilderReader = cc.Class.extend({
         this._ownerCallbackNodes.push(node);
     },
 
+    addOwnerCallbackControlEvents:function(event){
+        this._ownerCallbackEvents.push(event);
+    },
+
     addDocumentCallbackName:function (name) {
-        this._actionManager.addDocumentCallbackName(name);
+        this._animationManager.addDocumentCallbackName(name);
     },
 
     addDocumentCallbackNode:function (node) {
-        this._actionManager.addDocumentCallbackNode(node);
+        this._animationManager.addDocumentCallbackNode(node);
+    },
+
+    addDocumentCallbackControlEvents:function(controlEvents){
+        this._animationManager.addDocumentCallbackControlEvents(controlEvents);
     },
 
     readFileWithCleanUp:function (cleanUp) {
@@ -493,23 +509,92 @@ cc.BuilderReader = cc.Class.extend({
             return null;
 
         var node = this._readNodeGraph();
-        this._animationManagers.setObject(this._actionManager, node);
+        this._animationManagers.setObject(this._animationManager, node);
 
         if (cleanUp)
             this._cleanUpNodeGraph(node);
         return node;
     },
 
+    addOwnerOutletName: function(name){
+         this._ownerOutletNames.push(name);
+    },
+
+    addOwnerOutletNode: function(node){
+         if(node == null)
+            return;
+
+        this._ownerOutletNodes.push(node);
+    },
+
     _cleanUpNodeGraph:function (node) {
         node.setUserObject(null);
         var getChildren = node.getChildren();
-        for (var i = 0; i < getChildren.length; i++) {
+        for (var i = 0, len = getChildren.length; i < len; i++) {
             this._cleanUpNodeGraph(getChildren[i]);
         }
     },
 
+    _readCallbackKeyframesForSeq:function(seq) {
+        var numKeyframes = this.readInt(false);
+
+        if (!numKeyframes)
+            return true;
+
+        var channel = new cc.BuilderSequenceProperty();
+        var locJsControlled = this._jsControlled, locAnimationManager = this._animationManager, locKeyframes = channel.getKeyframes();
+        for (var i = 0; i < numKeyframes; i++) {
+            var time = this.readFloat();
+            var callbackName = this.readCachedString();
+            var callbackType = this.readInt(false);
+
+            var value = [ callbackName, callbackType];
+
+            var keyframe = new cc.BuilderKeyframe();
+            keyframe.setTime(time);
+            keyframe.setValue(value);
+
+            if(locJsControlled)
+                locAnimationManager.getKeyframeCallbacks().push(callbackType+":"+callbackName);
+
+            locKeyframes.push(keyframe);
+        }
+
+        // Assign to sequence
+        seq.setCallbackChannel(channel);
+
+        return true;
+    },
+
+    _readSoundKeyframesForSeq:function(seq) {
+        var numKeyframes = this.readInt(false);
+
+        if (!numKeyframes)
+            return true;
+
+        var channel = new cc.BuilderSequenceProperty();
+        var locKeyframes = channel.getKeyframes();
+        for (var i = 0; i < numKeyframes; i++) {
+            var time = this.readFloat();
+            var soundFile = this.readCachedString();
+            var pitch = this.readFloat();
+            var pan = this.readFloat();
+            var gain = this.readFloat();
+
+            var value  = [soundFile, pitch, pan, gain];
+            var keyframe = new cc.BuilderKeyframe();
+            keyframe.setTime(time);
+            keyframe.setValue(value);
+
+            locKeyframes.push(keyframe);
+        }
+
+        // Assign to sequence
+        seq.setSoundChannel(channel);
+        return true;
+    },
     _readSequences:function () {
-        var sequences = this._actionManager.getSequences();
+        var sequences = this._animationManager.getSequences();
         var numSeqs = this.readInt(false);
         for (var i = 0; i < numSeqs; i++) {
             var seq = new cc.BuilderSequence();
@@ -517,9 +602,15 @@ cc.BuilderReader = cc.Class.extend({
             seq.setName(this.readCachedString());
             seq.setSequenceId(this.readInt(false));
             seq.setChainedSequenceId(this.readInt(true));
+
+            if (!this._readCallbackKeyframesForSeq(seq))
+                return false;
+            if (!this._readSoundKeyframesForSeq(seq))
+                return false;
+
             sequences.push(seq);
         }
-        this._actionManager.setAutoPlaySequenceId(this.readInt(true));
+        this._animationManager.setAutoPlaySequenceId(this.readInt(true));
         return true;
     },
 
@@ -549,9 +640,11 @@ cc.BuilderReader = cc.Class.extend({
         } else if (type == CCB_PROPTYPE_COLOR3) {
             var c = cc.c3(this.readByte(), this.readByte(), this.readByte());
             value = cc.Color3BWapper.create(c);
+        } else if (type == CCB_PROPTYPE_FLOATXY) {
+            value = [this.readFloat(), this.readFloat()];
         } else if (type == CCB_PROPTYPE_DEGREES) {
             value = this.readFloat();
-        } else if (type == CCB_PROPTYPE_SCALELOCK || type == CCB_PROPTYPE_POSITION) {
+        } else if (type == CCB_PROPTYPE_SCALELOCK || type == CCB_PROPTYPE_POSITION || type == CCB_PROPTYPE_FLOATXY) {
             value = [this.readFloat(), this.readFloat()];
         } else if (type == CCB_PROPTYPE_SPRITEFRAME) {
             var spriteSheet = this.readCachedString();
@@ -560,11 +653,8 @@ cc.BuilderReader = cc.Class.extend({
             if (spriteSheet == "") {
                 spriteFile = this._ccbRootPath + spriteFile;
                 var texture = cc.TextureCache.getInstance().addImage(spriteFile);
-                var bounds;
-                if (cc.renderContextType == cc.CANVAS)
-                    bounds = cc.RectMake(0, 0, texture.width, texture.height);
-                else
-                    bounds = cc.RectMake(0, 0, texture.getContentSize().width, texture.getContentSize().height);
+                var locContentSize = texture.getContentSize();
+                var bounds = cc.rect(0, 0, locContentSize.width, locContentSize.height);
                 value = cc.SpriteFrame.createWithTexture(texture, bounds);
             } else {
                 spriteSheet = this._ccbRootPath + spriteSheet;
@@ -603,31 +693,29 @@ cc.BuilderReader = cc.Class.extend({
         }
 
         this._jsControlled = this.readBool();
-
+        this._animationManager._jsControlled = this._jsControlled;
+        // no need to set if it is "jscontrolled". It is obvious.
         return true;
     },
 
     _readStringFromBytes:function (startIndex, strLen, reverse) {
         reverse = reverse || false;
         var strValue = "";
-        var i;
+        var i, locData = this._data, locCurrentByte = this._currentByte;
         if (reverse) {
-            for (i = strLen - 1; i >= 0; i--) {
-                strValue += String.fromCharCode(this._data[this._currentByte + i]);
-            }
+            for (i = strLen - 1; i >= 0; i--)
+                strValue += String.fromCharCode(locData[locCurrentByte + i]);
         } else {
-            for (i = 0; i < strLen; i++) {
-                strValue += String.fromCharCode(this._data[this._currentByte + i]);
-            }
+            for (i = 0; i < strLen; i++)
+                strValue += String.fromCharCode(locData[locCurrentByte + i]);
         }
         return strValue;
     },
 
     _readStringCache:function () {
         var numStrings = this.readInt(false);
-        for (var i = 0; i < numStrings; i++) {
+        for (var i = 0; i < numStrings; i++)
             this._readStringCacheEntry();
-        }
         return true;
     },
 
@@ -637,9 +725,9 @@ cc.BuilderReader = cc.Class.extend({
 
         var numBytes = b0 << 8 | b1;
 
-        var str = "";
+        var str = "", locData = this._data, locCurrentByte = this._currentByte;
         for (var i = 0; i < numBytes; i++) {
-            var hexChar = this._data[this._currentByte + i].toString("16").toUpperCase();
+            var hexChar = locData[locCurrentByte + i].toString("16").toUpperCase();
             hexChar = hexChar.length > 1 ? hexChar : "0" + hexChar;
             str += "%" + hexChar;
         }
@@ -653,8 +741,8 @@ cc.BuilderReader = cc.Class.extend({
         /* Read class name. */
         var className = this.readCachedString();
 
-        var jsControlledName;
-        if (this._jsControlled)
+        var jsControlledName, locJsControlled = this._jsControlled, locActionManager = this._animationManager;
+        if (locJsControlled)
             jsControlledName = this.readCachedString();
 
         var memberVarAssignmentType = this.readInt(false);
@@ -672,19 +760,18 @@ cc.BuilderReader = cc.Class.extend({
         var node = ccNodeLoader.loadCCNode(parent, this);
 
         //set root node
-        if (!this._actionManager.getRootNode())
-            this._actionManager.setRootNode(node);
+        if (!locActionManager.getRootNode())
+            locActionManager.setRootNode(node);
 
-        if (this._jsControlled && node == this._actionManager.getRootNode()) {
-            this._actionManager.setDocumentControllerName(jsControlledName);
+        if (locJsControlled && node == locActionManager.getRootNode()) {
+            locActionManager.setDocumentControllerName(jsControlledName);
         }
-
 
         //read animated properties
         var seqs = new cc._Dictionary();
         this._animatedProps = [];
 
-        var i;
+        var i, locAnimatedProps = this._animatedProps;
         var numSequence = this.readInt(false);
         for (i = 0; i < numSequence; ++i) {
             var seqId = this.readInt(false);
@@ -697,12 +784,12 @@ cc.BuilderReader = cc.Class.extend({
                 seqProp.setName(this.readCachedString());
                 seqProp.setType(this.readInt(false));
 
-                this._animatedProps.push(seqProp.getName());
+                locAnimatedProps.push(seqProp.getName());
                 var numKeyframes = this.readInt(false);
-
+                var locKeyframes = seqProp.getKeyframes();
                 for (var k = 0; k < numKeyframes; ++k) {
                     var keyFrame = this.readKeyframe(seqProp.getType());
-                    seqProp.getKeyframes().push(keyFrame);
+                    locKeyframes.push(keyFrame);
                 }
                 seqNodeProps.setObject(seqProp, seqProp.getName());
             }
@@ -710,31 +797,33 @@ cc.BuilderReader = cc.Class.extend({
         }
 
         if (seqs.count() > 0)
-            this._actionManager.addNode(node, seqs);
+            locActionManager.addNode(node, seqs);
 
         //read properties
         ccNodeLoader.parseProperties(node, parent, this);
 
         //handle sub ccb files(remove middle node)
-        if (node instanceof cc.BuilderFile) {
+        var isCCBFileNode = node instanceof cc.BuilderFile;
+        if (isCCBFileNode) {
             var embeddedNode = node.getCCBFileNode();
             embeddedNode.setPosition(node.getPosition());
             embeddedNode.setRotation(node.getRotation());
-            embeddedNode.setScale(node.getScale());
+            embeddedNode.setScaleX(node.getScaleX());
+            embeddedNode.setScaleY(node.getScaleY());
             embeddedNode.setTag(node.getTag());
             embeddedNode.setVisible(true);
-            embeddedNode.ignoreAnchorPointForPosition(node.isIgnoreAnchorPointForPosition());
+            //embeddedNode.ignoreAnchorPointForPosition(node.isIgnoreAnchorPointForPosition());
 
+            locActionManager.moveAnimationsFromNode(node, embeddedNode);
             node.setCCBFileNode(null);
             node = embeddedNode;
         }
-
+        var target = null, locMemberAssigner = null;
         if (memberVarAssignmentType != CCB_TARGETTYPE_NONE) {
-            if (!this._jsControlled) {
-                var target = null;
-                if (memberVarAssignmentType == CCB_TARGETTYPE_DOCUMENTROOT) {
-                    target = this._actionManager.getRootNode();
-                } else if (memberVarAssignmentType == CCB_TARGETTYPE_OWNER) {
+            if (!locJsControlled) {
+                if (memberVarAssignmentType === CCB_TARGETTYPE_DOCUMENTROOT) {
+                    target = locActionManager.getRootNode();
+                } else if (memberVarAssignmentType === CCB_TARGETTYPE_OWNER) {
                     target = this._owner;
                 }
 
@@ -744,18 +833,37 @@ cc.BuilderReader = cc.Class.extend({
                     if (target != null && (target.onAssignCCBMemberVariable)) {
                         assigned = target.onAssignCCBMemberVariable(target, memberVarAssignmentName, node);
                     }
-
-                    if (!assigned && this._ccbMemberVariableAssigner != null && this._ccbMemberVariableAssigner.onAssignCCBMemberVariable) {
-                        this._ccbMemberVariableAssigner.onAssignCCBMemberVariable(target, memberVarAssignmentName, node);
+                    locMemberAssigner = this._ccbMemberVariableAssigner;
+                    if (!assigned && locMemberAssigner != null && locMemberAssigner.onAssignCCBMemberVariable) {
+                        locMemberAssigner.onAssignCCBMemberVariable(target, memberVarAssignmentName, node);
                     }
                 }
             } else {
                 if (memberVarAssignmentType == CCB_TARGETTYPE_DOCUMENTROOT) {
-                    this._actionManager.addDocumentOutletName(memberVarAssignmentName);
-                    this._actionManager.addDocumentOutletNode(node);
+                    locActionManager.addDocumentOutletName(memberVarAssignmentName);
+                    locActionManager.addDocumentOutletNode(node);
                 } else {
                     this._ownerOutletNames.push(memberVarAssignmentName);
                     this._ownerOutletNodes.push(node);
+                }
+            }
+        }
+
+        // Assign custom properties.
+        if (ccNodeLoader.getCustomProperties().length > 0) {
+            var customAssigned = false;
+            if(!locJsControlled) {
+                target = node;
+                if(target != null && target.onAssignCCBCustomProperty != null) {
+                    var customProperties = ccNodeLoader.getCustomProperties();
+                    var customPropKeys = customProperties.allKeys();
+                    for(i = 0;i < customPropKeys.length;i++){
+                        var customPropValue = customProperties.objectForKey(customPropKeys[i]);
+                        customAssigned = target.onAssignCCBCustomProperty(target, customPropKeys[i], customPropValue);
+                        locMemberAssigner = this._ccbMemberVariableAssigner;
+                        if(!customAssigned && (locMemberAssigner != null) && (locMemberAssigner.onAssignCCBCustomProperty != null))
+                            customAssigned = locMemberAssigner.onAssignCCBCustomProperty(target, customPropKeys[i], customPropValue);
+                    }
                 }
             }
         }
@@ -769,11 +877,15 @@ cc.BuilderReader = cc.Class.extend({
             node.addChild(child);
         }
 
-        // Call onNodeLoaded
-        if (node != null && node.onNodeLoaded) {
-            node.onNodeLoaded(node, ccNodeLoader);
-        } else if (this._ccNodeLoaderListener != null) {
-            this._ccNodeLoaderListener.onNodeLoaded(node, ccNodeLoader);
+        // FIX ISSUE #1860: "onNodeLoaded will be called twice if ccb was added as a CCBFile".
+        // If it's a sub-ccb node, skip notification to CCNodeLoaderListener since it will be
+        // notified at LINE #734: CCNode * child = this->readNodeGraph(node);
+        if (!isCCBFileNode) {
+            // Call onNodeLoaded
+            if (node != null && node.onNodeLoaded)
+                node.onNodeLoaded(node, ccNodeLoader);
+            else if (this._ccNodeLoaderListener != null)
+                this._ccNodeLoaderListener.onNodeLoaded(node, ccNodeLoader);
         }
 
         return node;
@@ -826,21 +938,26 @@ cc.BuilderReader.load = function (ccbFilePath, owner, parentSize, ccbRootPath) {
     ccbRootPath = ccbRootPath || cc.BuilderReader.getResourcePath();
     var reader = new cc.BuilderReader(cc.NodeLoaderLibrary.newDefaultCCNodeLoaderLibrary());
     reader.setCCBRootPath(ccbRootPath);
-    if(ccbFilePath.toLowerCase().lastIndexOf(".ccbi") != ccbFilePath.length - 5)
+    if((ccbFilePath.length < 5)||(ccbFilePath.toLowerCase().lastIndexOf(".ccbi") != ccbFilePath.length - 5))
         ccbFilePath = ccbFilePath + ".ccbi";
 
     var node = reader.readNodeGraphFromFile(ccbFilePath, owner, parentSize);
     var i;
-    var callbackName, callbackNode, outletName, outletNode;
+    var callbackName, callbackNode, callbackControlEvents, outletName, outletNode;
     // Assign owner callbacks & member variables
     if (owner) {
         // Callbacks
         var ownerCallbackNames = reader.getOwnerCallbackNames();
         var ownerCallbackNodes = reader.getOwnerCallbackNodes();
+        var ownerCallbackControlEvents = reader.getOwnerCallbackControlEvents();
         for (i = 0; i < ownerCallbackNames.length; i++) {
             callbackName = ownerCallbackNames[i];
             callbackNode = ownerCallbackNodes[i];
-            callbackNode.setCallback(owner[callbackName], owner);
+            callbackControlEvents = ownerCallbackControlEvents[i];
+            if(callbackNode instanceof cc.ControlButton)
+                callbackNode.addTargetWithActionForControlEvents(owner, owner[callbackName], callbackControlEvents);        //register all type of events
+            else
+                callbackNode.setCallback(owner[callbackName], owner);
         }
 
         // Variables
@@ -855,20 +972,29 @@ cc.BuilderReader.load = function (ccbFilePath, owner, parentSize, ccbRootPath) {
 
     var nodesWithAnimationManagers = reader.getNodesWithAnimationManagers();
     var animationManagersForNodes = reader.getAnimationManagersForNodes();
+    if(!nodesWithAnimationManagers || !animationManagersForNodes)
+        return node;
     // Attach animation managers to nodes and assign root node callbacks and member variables
     for (i = 0; i < nodesWithAnimationManagers.length; i++) {
         var innerNode = nodesWithAnimationManagers[i];
         var animationManager = animationManagersForNodes[i];
 
         var j;
-
         innerNode.animationManager = animationManager;
 
         var documentControllerName = animationManager.getDocumentControllerName();
         if (!documentControllerName) continue;
 
         // Create a document controller
-        var controller = new _ccbGlobalContext[documentControllerName]();
+        var controller;
+        if(documentControllerName.indexOf(".") > -1){
+            var controllerNameArr = documentControllerName.split(".");
+            controller = _ccbGlobalContext[controllerNameArr[0]];
+            for(var ni = 1, niLen = controllerNameArr.length - 1; ni < niLen; ni++)
+                controller = controller[controllerNameArr[ni]];
+            controller = new controller[controllerNameArr[controllerNameArr.length - 1]]();
+        }else
+            controller = new _ccbGlobalContext[documentControllerName]();
         controller.controllerName = documentControllerName;
 
         innerNode.controller = controller;
@@ -877,11 +1003,15 @@ cc.BuilderReader.load = function (ccbFilePath, owner, parentSize, ccbRootPath) {
         // Callbacks
         var documentCallbackNames = animationManager.getDocumentCallbackNames();
         var documentCallbackNodes = animationManager.getDocumentCallbackNodes();
+        var documentCallbackControlEvents = animationManager.getDocumentCallbackControlEvents();
         for (j = 0; j < documentCallbackNames.length; j++) {
             callbackName = documentCallbackNames[j];
             callbackNode = documentCallbackNodes[j];
-
-            callbackNode.setCallback(controller[callbackName], controller);
+            callbackControlEvents = documentCallbackControlEvents[j];
+            if(callbackNode instanceof cc.ControlButton)
+                callbackNode.addTargetWithActionForControlEvents(controller, controller[callbackName], callbackControlEvents);        //register all type of events
+            else
+                callbackNode.setCallback(controller[callbackName], controller);
         }
 
         // Variables
@@ -894,8 +1024,21 @@ cc.BuilderReader.load = function (ccbFilePath, owner, parentSize, ccbRootPath) {
             controller[outletName] = outletNode;
         }
 
-        if (controller.onDidLoadFromCCB && typeof(controller.onDidLoadFromCCB) == "function") {
+        if (controller.onDidLoadFromCCB && typeof(controller.onDidLoadFromCCB) == "function")
             controller.onDidLoadFromCCB();
+
+        // Setup timeline callbacks
+        var keyframeCallbacks = animationManager.getKeyframeCallbacks();
+        for (j = 0; j < keyframeCallbacks.length; j++) {
+            var callbackSplit = keyframeCallbacks[j].split(":");
+            var callbackType = callbackSplit[0];
+            var kfCallbackName = callbackSplit[1];
+
+            if (callbackType == 1){ // Document callback
+                animationManager.setCallFunc(cc.CallFunc.create(controller[kfCallbackName], controller), keyframeCallbacks[j]);
+            } else if (callbackType == 2 && owner) {// Owner callback
+                animationManager.setCallFunc(cc.CallFunc.create(owner[kfCallbackName], owner), keyframeCallbacks[j]);
+            }
         }
     }
 

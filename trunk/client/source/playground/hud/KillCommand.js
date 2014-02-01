@@ -16,8 +16,8 @@ var KillCommand = function(x, y, screenWidth, layer){
 		//Animation creation.
 		this.animToDie = AnimationManager.create('killCommand', 0, 120, 24);
 		
-		this.animToDie._animation._loops = 0;
-		this.currentAnimation._opacity = 0;
+		this.animToDie._animation.setLoops(0);
+		this.currentAnimation.setOpacity(0);
 		
 		this.currentAnimation.runAction(this.animToDie);
 				
@@ -31,13 +31,11 @@ KillCommand.prototype.start = function(stepReached){
 	switch(stepReached)
 	{
 		case Enum.StepReached.STANDING:
-			this.animToDie._animation._loops = 0;
-			
+			this.animToDie._animation.setLoops(0);
 			this.mustAppear = true;
-			this.currentAnimation.runAction(this.animToDie);
 			break;
 		case Enum.StepReached.PLAYER:
-			this.animToDie._animation._loops = 1;
+			this.animToDie._animation.setLoops(1);
 			this.currentAnimation.runAction(this.animToDie);
 			break;
 	}
@@ -47,8 +45,7 @@ KillCommand.prototype.start = function(stepReached){
 
 KillCommand.prototype.update = function(dt){
 
-	
-	if(!this.mustAppear || this.currentAnimation._opacity == 255)
+	if(!this.mustAppear || this.currentAnimation.getOpacity() == 255)
 		return;
 		
 	this.firstStepTimer += dt;
@@ -56,14 +53,15 @@ KillCommand.prototype.update = function(dt){
 	//Appear only if in apparition phase.
 	if(this.firstStepTimer >= Constants.HUD.Inventory.KillCommand.Time.APPARITION)
 	{
-		var tmpAlpha = this.currentAnimation._opacity;
+		var tmpAlpha = this.currentAnimation.getOpacity();
 		tmpAlpha += this.alphaStep*dt;
 		
 		if(tmpAlpha > 255)
-			this.currentAnimation._opacity = 255;
+			this.currentAnimation.setOpacity(255);
 		else
-			this.currentAnimation._opacity += this.alphaStep*dt;
+			this.currentAnimation.setOpacity(this.currentAnimation.getOpacity() + this.alphaStep*dt);
 	}
+
 };
 
 //Reset anim.
@@ -71,10 +69,10 @@ KillCommand.prototype.reset = function(){
 			
 	this.layer.removeChild(this.currentAnimation);
 	
-	this.animToDie._animation._loops = 0;
+	this.animToDie._animation.setLoops(0);
 	
 	//Reset opcaity to 0.
-	this.currentAnimation._opacity = 0;
+	this.currentAnimation.setOpacity(0);
 	this.firstStepTimer = 0;
 	this.mustAppear = false;
 	

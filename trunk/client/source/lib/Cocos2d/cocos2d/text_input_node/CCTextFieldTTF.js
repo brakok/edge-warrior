@@ -60,7 +60,7 @@ cc.TextFieldDelegate = cc.Class.extend(/** @lends cc.TextFieldDelegate# */{
     },
 
     /**
-     * f the sender doesn't want to delete the delText, return true;
+     * If the sender doesn't want to delete the delText, return true;
      * @param {cc.TextFieldTTF} sender
      * @param {String} delText
      * @param {Number} len
@@ -98,7 +98,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     ctor:function () {
         this._ColorSpaceHolder = new cc.Color3B(127, 127, 127);
         cc.IMEDispatcher.getInstance().addDelegate(this);
-        this._super();
+        cc.LabelTTF.prototype.ctor.call(this);
     },
 
     /**
@@ -157,7 +157,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
                 if (placeholder) {
                     this._placeHolder = placeholder;
                 }
-                return this.initWithString(this._placeHolder, dimensions, alignment, fontName, fontSize);
+                return this.initWithString(this._placeHolder,fontName, fontSize, dimensions, alignment);
                 break;
             case 3:
                 if (placeholder) {
@@ -176,21 +176,16 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     /**
      * Input text property
      * @param {String} text
-     * @param {Boolean} isCallParent
      */
-    setString:function (text, isCallParent) {
-        if (isCallParent && isCallParent == true) {
-            this._super(text);
-            return;
-        }
-
+    setString:function (text) {
+        text = String(text);
         this._inputText = text || "";
 
         // if there is no input text, display placeholder instead
         if (!this._inputText.length)
-            this._super(this._placeHolder);
+            cc.LabelTTF.prototype.setString.call(this, this._placeHolder);
         else
-            this._super(this._inputText);
+            cc.LabelTTF.prototype.setString.call(this,this._inputText);
         this._charCount = this._inputText.length;
     },
 
@@ -207,7 +202,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     setPlaceHolder:function (text) {
         this._placeHolder = text || "";
         if (!this._inputText.length) {
-            this.setString(this._placeHolder, true);
+            cc.LabelTTF.prototype.setString.call(this,this._placeHolder);
         }
     },
 
@@ -222,19 +217,22 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
      * @param {CanvasContext} ctx
      */
     draw:function (ctx) {
+        //console.log("size",this._contentSize);
         var context = ctx || cc.renderContext;
         if (this._delegate && this._delegate.onDraw(this))
             return;
 
         if (this._inputText && this._inputText.length > 0) {
-            this._super(context);
+            cc.LabelTTF.prototype.draw.call(this, context);
             return;
         }
 
         // draw placeholder
         var color = this.getColor();
         this.setColor(this._ColorSpaceHolder);
-        this._super(context);
+        if(cc.renderContextType === cc.CANVAS)
+            this._updateTexture();
+        cc.LabelTTF.prototype.draw.call(this, context);
         this.setColor(color);
     },
 
@@ -303,13 +301,13 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         if (strLen <= deleteLen) {
             this._inputText = "";
             this._charCount = 0;
-            this.setString(this._placeHolder, true);
+            cc.LabelTTF.prototype.setString.call(this,this._placeHolder);
             return;
         }
 
         // set new input text
         var sText = this._inputText.substring(0, strLen - deleteLen);
-        this.setString(sText, false);
+        this.setString(sText);
     },
 
     /**
@@ -404,7 +402,7 @@ cc.TextFieldTTF.create = function (placeholder, dimensions, alignment, fontName,
             ret = new cc.TextFieldTTF();
             fontName = arguments[1];
             fontSize = arguments[2];
-            if (ret && ret.initWithString(["", fontName, fontSize])) {
+            if (ret && ret.initWithString("", fontName, fontSize)) {
                 if (placeholder)
                     ret.setPlaceHolder(placeholder);
                 return ret;

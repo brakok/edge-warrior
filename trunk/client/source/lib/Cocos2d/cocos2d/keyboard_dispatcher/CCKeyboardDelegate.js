@@ -35,14 +35,22 @@
 cc.KeyboardDelegate = cc.Class.extend(/** @lends cc.KeyboardDelegate# */{
     /**
      * Call back when a key is pressed down
+     * @param {Integer} keyCode
+     * @example
+     * // example
+     * if(keyCode == cc.KEY.w){}
      */
-    onKeyDown:function () {
+    onKeyDown:function (keyCode) {
     },
 
     /**
      * Call back when a key is released
+     * @param {Integer} keyCode
+     * @example
+     * // example
+     * if(keyCode == cc.KEY.w){}
      */
-    onKeyUp:function () {
+    onKeyUp:function (keyCode) {
     }
 });
 
@@ -73,10 +81,10 @@ cc.KeyboardHandler = cc.Class.extend(/** @lends cc.KeyboardHandler# */{
      * @return {Boolean}
      */
     initWithDelegate:function (delegate) {
-        cc.Assert(delegate != null, "It's a wrong delegate!");
+        if(!delegate)
+            throw "cc.KeyboardHandler.initWithDelegate(): delegate must be non-null";
 
         this._delegate = delegate;
-
         return true;
     },
     _delegate:null

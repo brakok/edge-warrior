@@ -63,13 +63,13 @@ var Constants = {
 		}
 	},
 	Camera: {
-		HIGHER: 75,
+		HIGHER: 15,
 		SPEED_X: 0.0000005,
 		SPEED_Y: 0.0005,
 		SPEED_ZOOM: 0.2,
 		CONTAINER_FACTOR_X: 1.65,
 		CONTAINER_FACTOR_Y: 2,
-		ZOOM_FACTOR: 1.3
+		ZOOM_FACTOR: 1.2
 	},
 	DeathZone: {
 		EnergySpike: {
@@ -97,7 +97,7 @@ var Constants = {
 			},
 			Units: {
 				OFFSET_X: -190,
-				OFFSET_Y: 27,
+				OFFSET_Y: 16,
 				Title: {
 					OFFSET_X: -60,
 					OFFSET_Y: 13,

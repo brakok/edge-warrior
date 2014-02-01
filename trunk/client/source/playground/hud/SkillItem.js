@@ -66,7 +66,6 @@ SkillItem.prototype.update = function(){
 	
 	if(!this.levelAdded && this.skill.level > 0)
 	{
-		console.log(this.skill);
 		this.levelAdded = true;
 		this.parent.layer.addChild(this.lvlLabel);
 	}

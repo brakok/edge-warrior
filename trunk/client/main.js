@@ -9,7 +9,7 @@ var cocosApp = cc.Application.extend({
 	config:document.ccConfig,
 	ctor:function(){
 		this._super();
-				
+						
 		//Open socket toward server.
 		Client.connectToNetwork();
 		
@@ -21,29 +21,24 @@ var cocosApp = cc.Application.extend({
 		cc.AudioEngine.getInstance().setEffectsVolume(Constants.Sound.Effect.VOLUME);
 		cc.AudioEngine.getInstance().setMusicVolume(Constants.Sound.Music.VOLUME);
 				
-		cc.Loader.getInstance().onloading = function () {
-			cc.LoaderScene.getInstance().draw();
-		};
-		
-		cc.Loader.getInstance().onload = function (){
-			cc.AppController.shareAppController().didFinishLaunchingWithOptions();
-		};
-		cc.Loader.getInstance().preload(assets);
+		cc.AppController.shareAppController().didFinishLaunchingWithOptions();
 	},
 	applicationDidFinishLaunching: function (){
 		
 		this.MenuScene = new MenuScene();
 		this.GameScene = new GameScene();
-				
-		//Load spritesheets and other graphical stuffs.
-		AnimationManager.init();
-		
+
 		var director = cc.Director.getInstance();
 		director.setDisplayStats(this.config['showFPS']);
 		director.setAnimationInterval(1.0/this.config['frameRate']);
-		director.runWithScene(this.MenuScene);
-
-		Options.init();
+		
+		cc.Loader.preload(assets, function(){
+		
+			//Load spritesheets and other graphical stuffs.
+			AnimationManager.init();
+			director.runWithScene(this.MenuScene);
+			Options.init();
+		}, this);
 		
 		return true;
 	}

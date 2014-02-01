@@ -35,6 +35,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
     _autoPlaySequenceId:0,
 
     _rootNode:null,
+    _owner:null,
     _rootContainerSize:null,
 
     _delegate:null,
@@ -44,11 +45,15 @@ cc.BuilderAnimationManager = cc.Class.extend({
     _documentOutletNodes:null,
     _documentCallbackNames:null,
     _documentCallbackNodes:null,
+    _documentCallbackControlEvents:null,
     _documentControllerName:"",
     _lastCompletedSequenceName:"",
+    _keyframeCallbacks:null,
+    _keyframeCallFuncs:null,
 
     _animationCompleteCallbackFunc:null,
     _target:null,
+    _jsControlled:false,
 
     ctor:function () {
         this._rootContainerSize = cc.size(0, 0);
@@ -64,12 +69,20 @@ cc.BuilderAnimationManager = cc.Class.extend({
         this._documentOutletNodes = [];
         this._documentCallbackNames = [];
         this._documentCallbackNodes = [];
+        this._documentCallbackControlEvents = [];
+
+        this._keyframeCallbacks = [];
+        this._keyframeCallFuncs = {};
 
         return true;
     },
 
     getSequences:function () {
         return this._sequences;
+    },
+
+    setSequences:function(seqs){
+        this._sequences = seqs;
     },
 
     getAutoPlaySequenceId:function () {
@@ -86,12 +99,23 @@ cc.BuilderAnimationManager = cc.Class.extend({
         this._rootNode = rootNode;
     },
 
+    getOwner:function () {
+        return this._owner;
+    },
+    setOwner:function (owner) {
+        this._owner = owner;
+    },
+
     addDocumentCallbackNode:function(node){
         this._documentCallbackNodes.push(node);
     },
 
     addDocumentCallbackName:function(name){
         this._documentCallbackNames.push(name);
+    },
+
+    addDocumentCallbackControlEvents:function(controlEvents){
+        this._documentCallbackControlEvents.push(controlEvents);
     },
 
     addDocumentOutletNode:function(node){
@@ -118,6 +142,10 @@ cc.BuilderAnimationManager = cc.Class.extend({
         return this._documentCallbackNodes;
     },
 
+    getDocumentCallbackControlEvents:function(){
+        return this._documentCallbackControlEvents;
+    },
+
     getDocumentOutletNames:function(){
         return this._documentOutletNames;
     },
@@ -128,6 +156,10 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
     getLastCompletedSequenceName:function(){
         return this._lastCompletedSequenceName;
+    },
+
+    getKeyframeCallbacks:function(){
+        return this._keyframeCallbacks;
     },
 
     getRootContainerSize:function () {
@@ -145,7 +177,9 @@ cc.BuilderAnimationManager = cc.Class.extend({
     },
 
     getRunningSequenceName:function () {
-        return this._runningSequence.getName();
+        if(this._runningSequence)
+            return this._runningSequence.getName();
+        return null;
     },
 
     getContainerSize:function (node) {
@@ -169,38 +203,121 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
     moveAnimationsFromNode:function(fromNode,toNode){
         // Move base values
-        var baseValue = this._baseValues.objectForKey(fromNode);
+        var locBaseValues = this._baseValues;
+        var baseValue = locBaseValues.objectForKey(fromNode);
         if(baseValue != null) {
-            this._baseValues.setObject(baseValue, toNode);
-            this._baseValues.removeObjectForKey(fromNode);
+            locBaseValues.setObject(baseValue, toNode);
+            locBaseValues.removeObjectForKey(fromNode);
         }
 
         // Move seqs
-        var seqs = this._nodeSequences.objectForKey(fromNode);
+        var locNodeSequences = this._nodeSequences;
+        var seqs = locNodeSequences.objectForKey(fromNode);
         if(seqs != null) {
-            this._nodeSequences.setObject(seqs, toNode);
-            this._nodeSequences.removeObjectForKey(fromNode);
+            locNodeSequences.setObject(seqs, toNode);
+            locNodeSequences.removeObjectForKey(fromNode);
         }
     },
 
-    runAnimationsForSequenceNamed:function(name){
-        this.runAnimations(name);
+    getActionForCallbackChannel:function(channel) {
+        var lastKeyframeTime = 0;
+
+        var actions = [];
+        var keyframes = channel.getKeyframes();
+        var numKeyframes = keyframes.length;
+
+        for (var i = 0; i < numKeyframes; ++i) {
+            var keyframe = keyframes[i];
+            var timeSinceLastKeyframe = keyframe.getTime() - lastKeyframeTime;
+            lastKeyframeTime = keyframe.getTime();
+            if(timeSinceLastKeyframe > 0) {
+                actions.push(cc.DelayTime.create(timeSinceLastKeyframe));
+            }
+
+            var keyVal = keyframe.getValue();
+            var selectorName = keyVal[0];
+            var selectorTarget = keyVal[1];
+
+            if(this._jsControlled) {
+                var callbackName = selectorTarget + ":" + selectorName;    //add number to the stream
+                var callback = this._keyframeCallFuncs[callbackName];
+
+                if(callback != null)
+                    actions.push(callback);
+            } else {
+                var target;
+                if(selectorTarget == CCB_TARGETTYPE_DOCUMENTROOT)
+                    target = this._rootNode;
+                else if (selectorTarget == CCB_TARGETTYPE_OWNER)
+                    target = this._owner;
+
+                if(target != null) {
+                    if(selectorName.length > 0) {
+                        var selCallFunc = 0;
+
+                        var targetAsCCBSelectorResolver = target;
+
+                        if(target.onResolveCCBCCCallFuncSelector != null)
+                            selCallFunc = targetAsCCBSelectorResolver.onResolveCCBCCCallFuncSelector(target, selectorName);
+                        if(selCallFunc == 0)
+                            cc.log("Skipping selector '" + selectorName + "' since no CCBSelectorResolver is present.");
+                        else
+                            actions.push(cc.CallFunc.create(selCallFunc,target));
+                    } else {
+                        cc.log("Unexpected empty selector.");
+                    }
+                }
+            }
+        }
+        if(actions.length < 1)
+            return null;
+
+        return cc.Sequence.create(actions);
+    },
+    getActionForSoundChannel:function(channel) {
+        var lastKeyframeTime = 0;
+
+        var actions = [];
+        var keyframes = channel.getKeyframes();
+        var numKeyframes = keyframes.length;
+
+        for (var i = 0; i < numKeyframes; ++i) {
+            var keyframe = keyframes[i];
+            var timeSinceLastKeyframe = keyframe.getTime() - lastKeyframeTime;
+            lastKeyframeTime = keyframe.getTime();
+            if(timeSinceLastKeyframe > 0) {
+                actions.push(cc.DelayTime.create(timeSinceLastKeyframe));
+            }
+
+            var keyVal = keyframe.getValue();
+            var soundFile = cc.BuilderReader.getResourcePath() + keyVal[0];
+            var pitch = parseFloat(keyVal[1]), pan = parseFloat(keyVal[2]), gain = parseFloat(keyVal[3]);
+            actions.push(cc.BuilderSoundEffect.create(soundFile, pitch, pan, gain));
+        }
+
+        if(actions.length < 1)
+            return null;
+
+        return cc.Sequence.create(actions);
     },
 
-    runAnimations:function (name, tweenDuration) {
-        tweenDuration = tweenDuration || 0;
-        var nSeqId;
-        if(typeof(name) === "string")
-            nSeqId = this._getSequenceId(name);
-        else
-            nSeqId = name;
+    runAnimationsForSequenceNamed:function(name){
+        this.runAnimationsForSequenceIdTweenDuration(this._getSequenceId(name), 0);
+    },
 
-        cc.Assert(nSeqId != -1, "Sequence id couldn't be found");
+    runAnimationsForSequenceNamedTweenDuration:function(name, tweenDuration){
+         this.runAnimationsForSequenceIdTweenDuration(this._getSequenceId(name), tweenDuration);
+    },
+
+    runAnimationsForSequenceIdTweenDuration:function(nSeqId, tweenDuration){
+        if(nSeqId === -1)
+            throw "cc.BuilderAnimationManager.runAnimationsForSequenceIdTweenDuration(): Sequence id should not be -1";
+        tweenDuration = tweenDuration || 0;
 
         this._rootNode.stopAllActions();
 
         var allKeys = this._nodeSequences.allKeys();
-        for(var i  = 0 ; i< allKeys.length;i++){
+        for(var i  = 0,len = allKeys.length  ; i< len;i++){
             var node = allKeys[i];
             node.stopAllActions();
 
@@ -239,8 +356,37 @@ cc.BuilderAnimationManager = cc.Class.extend({
         var completeAction = cc.Sequence.create(cc.DelayTime.create(seq.getDuration() + tweenDuration),
             cc.CallFunc.create(this._sequenceCompleted,this));
         this._rootNode.runAction(completeAction);
+
+        // Playback callbacks and sounds
+        var action;
+        if (seq.getCallbackChannel()) {
+            // Build sound actions for channel
+            action = this.getActionForCallbackChannel(seq.getCallbackChannel());
+            if (action) {
+                this._rootNode.runAction(action);
+            }
+        }
+
+        if (seq.getSoundChannel()) {
+            // Build sound actions for channel
+            action = this.getActionForSoundChannel(seq.getSoundChannel());
+            if (action) {
+                this._rootNode.runAction(action);
+            }
+        }
         // Set the running scene
         this._runningSequence = this._getSequence(nSeqId);
+    },
+
+    runAnimations:function (name, tweenDuration) {
+        tweenDuration = tweenDuration || 0;
+        var nSeqId;
+        if(typeof(name) === "string")
+            nSeqId = this._getSequenceId(name);
+        else
+            nSeqId = name;
+
+        this.runAnimationsForSequenceIdTweenDuration(nSeqId, tweenDuration);
     },
 
     setAnimationCompletedCallback:function(target,callbackFunc){
@@ -250,6 +396,9 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
     setCompletedAnimationCallback:function(target,callbackFunc){
         this.setAnimationCompletedCallback(target,callbackFunc);
+    },
+    setCallFunc:function(callFunc, callbackNamed) {
+        this._keyframeCallFuncs[callbackNamed] = callFunc;
     },
 
     debug:function () {
@@ -264,9 +413,10 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
     _getSequenceId:function (sequenceName) {
         var element = null;
-        for (var i = 0; i < this._sequences.length; i++) {
-            element = this._sequences[i];
-            if (element && element.getName() == sequenceName)
+        var locSequences = this._sequences;
+        for (var i = 0, len = locSequences.length; i < len; i++) {
+            element = locSequences[i];
+            if (element && element.getName() === sequenceName)
                 return element.getSequenceId();
         }
         return -1;
@@ -274,8 +424,9 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
     _getSequence:function (sequenceId) {
         var element = null;
-        for (var i = 0; i < this._sequences.length; i++) {
-            element = this._sequences[i];
+        var locSequences = this._sequences;
+        for (var i = 0, len = locSequences.length; i < len; i++) {
+            element = locSequences[i];
             if (element && element.getSequenceId() === sequenceId)
                 return element;
         }
@@ -288,6 +439,10 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
         if (propName === "rotation") {
             return cc.BuilderRotateTo.create(duration, keyframe1.getValue());
+        } else if (propName === "rotationX") {
+            return cc.BuilderRotateXTo.create(duration, keyframe1.getValue());
+        } else if (propName === "rotationY") {
+            return cc.BuilderRotateYTo.create(duration, keyframe1.getValue());
         } else if (propName === "opacity") {
             return cc.FadeTo.create(duration, keyframe1.getValue());
         } else if (propName === "color") {
@@ -313,7 +468,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
             var containerSize = this.getContainerSize(node.getParent());
 
-            var absPos = cc.getAbsolutePosition(cc.p(x,y), type,containerSize,propName);
+            var absPos = cc._getAbsolutePosition(x,y, type,containerSize,propName);
 
             return cc.MoveTo.create(duration,absPos);
         } else if( propName === "scale"){
@@ -325,9 +480,20 @@ cc.BuilderAnimationManager = cc.Class.extend({
             x = getValueArr[0];
             y = getValueArr[1];
 
-            if(type == CCB_SCALETYPE_MULTIPLY_RESOLUTION)
-                 var resolutionScale = cc.BuilderReader.getResolutionScale();
+            if(type === CCB_SCALETYPE_MULTIPLY_RESOLUTION){
+                //TODO need to test
+                var resolutionScale = cc.BuilderReader.getResolutionScale();
+                x *= resolutionScale;
+                y *= resolutionScale;
+            }
+
             return cc.ScaleTo.create(duration,x,y);
+        } else if( propName === "skew") {
+            //get relative position
+            getValueArr = keyframe1.getValue();
+            x = getValueArr[0];
+            y = getValueArr[1];
+            return cc.SkewTo.create(duration,x,y);
         } else {
             cc.log("BuilderReader: Failed to create animation for property: " + propName);
         }
@@ -354,7 +520,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
                 x = value[0];
                 y = value[1];
-                node.setPosition(cc.getAbsolutePosition(cc.p(x,y),nType, this.getContainerSize(node.getParent()),propName));
+                node.setPosition(cc._getAbsolutePosition(x,y,nType, this.getContainerSize(node.getParent()),propName));
             }else if(propName === "scale"){
                 getArr = this._getBaseValue(node,propName);
                 nType = getArr[2];
@@ -363,6 +529,11 @@ cc.BuilderAnimationManager = cc.Class.extend({
                 y = value[1];
 
                 cc.setRelativeScale(node,x,y,nType,propName);
+            } else if( propName === "skew") {
+                x = value[0];
+                y = value[1];
+                node.setSkewX(x);
+                node.setSkewY(y);
             }else {
                 // [node setValue:value forKey:name];
                 // TODO only handle rotation, opacity, displayFrame, color
@@ -373,13 +544,15 @@ cc.BuilderAnimationManager = cc.Class.extend({
                 } else if(propName === "displayFrame"){
                     node.setDisplayFrame(value);
                 } else if(propName === "color"){
-                    node.setColor(value.getColor());
+                    var ccColor3B = value.getColor();
+                    if(ccColor3B.r !== 255 || ccColor3B.g !== 255 || ccColor3B.b !== 255){
+                        node.setColor(ccColor3B);
+                    }
                 } else if( propName === "visible"){
                     value = value || false;
                     node.setVisible(value);
                 } else {
                     cc.log("unsupported property name is "+ propName);
-                    cc.Assert(false, "unsupported property now");
                 }
             }
         }
@@ -388,10 +561,11 @@ cc.BuilderAnimationManager = cc.Class.extend({
     _setFirstFrame:function (node, seqProp, tweenDuration) {
         var keyframes = seqProp.getKeyframes();
 
-        if (keyframes.length == 0) {
+        if (keyframes.length === 0) {
             // Use base value (no animation)
             var baseValue = this._getBaseValue(node, seqProp.getName());
-            cc.Assert(baseValue, "No baseValue found for property");
+            if(!baseValue)
+                cc.log("cc.BuilderAnimationManager._setFirstFrame(): No baseValue found for property");
             this._setAnimatedProperty(seqProp.getName(), node, baseValue, tweenDuration);
         } else {
             // Use first keyframe
@@ -466,106 +640,29 @@ cc.BuilderAnimationManager = cc.Class.extend({
     },
 
     _sequenceCompleted:function () {
-        if(this._lastCompletedSequenceName != this._runningSequence.getName()){
-            this._lastCompletedSequenceName = this._runningSequence.getName();
+        var locRunningSequence = this._runningSequence;
+
+        var locRunningName = locRunningSequence.getName();
+
+        if(this._lastCompletedSequenceName != locRunningSequence.getName()){
+            this._lastCompletedSequenceName = locRunningSequence.getName();
         }
 
-        if (this._delegate)
-            this._delegate.completedAnimationSequenceNamed(this._runningSequence.getName());
-
-        if(this._target && this._animationCompleteCallbackFunc){
-            this._animationCompleteCallbackFunc.call(this._target);
-        }
-
-        var nextSeqId = this._runningSequence.getChainedSequenceId();
+        var nextSeqId = locRunningSequence.getChainedSequenceId();
         this._runningSequence = null;
 
         if (nextSeqId != -1)
             this.runAnimations(nextSeqId, 0);
+
+        if (this._delegate)
+            this._delegate.completedAnimationSequenceNamed(locRunningName);
+
+        if(this._target && this._animationCompleteCallbackFunc){
+            this._animationCompleteCallbackFunc.call(this._target);
+        }
     }
 });
 
-cc._Dictionary = cc.Class.extend({
-    _keyMapTb:null,
-    _valueMapTb:null,
-    __currId:0,
-
-    ctor:function () {
-        this._keyMapTb = {};
-        this._valueMapTb = {};
-        this.__currId = 2 << (0 | (Math.random() * 10));
-    },
-
-    __getKey:function () {
-        this.__currId++;
-        return "key_" + this.__currId;
-    },
-
-    setObject:function (value, key) {
-        if (key == null) {
-            return;
-        }
-
-        var keyId = this.__getKey();
-        this._keyMapTb[keyId] = key;
-        this._valueMapTb[keyId] = value;
-    },
-
-    objectForKey:function (key) {
-        if (key == null)
-            return null;
-
-        for (var keyId in this._keyMapTb) {
-            if (this._keyMapTb[keyId] === key) {
-                return this._valueMapTb[keyId];
-            }
-        }
-        return null;
-    },
-
-    valueForKey:function (key) {
-        return this.objectForKey(key);
-    },
-
-    removeObjectForKey:function (key) {
-        if (key == null)
-            return;
-
-        for (var keyId in this._keyMapTb) {
-            if (this._keyMapTb[keyId] === key) {
-                delete this._valueMapTb[keyId];
-                delete this._keyMapTb[keyId];
-                return;
-            }
-        }
-    },
-
-    removeObjectsForKeys:function (keys) {
-        if (keys == null)
-            return;
-
-        for (var i = 0; i < keys.length; i++) {
-            this.removeObjectForKey(keys[i]);
-        }
-    },
-
-    allKeys:function () {
-        var keyArr = [];
-        for (var key in this._keyMapTb) {
-            keyArr.push(this._keyMapTb[key]);
-        }
-        return keyArr;
-    },
-
-    removeAllObjects:function () {
-        this._keyMapTb = {};
-        this._valueMapTb = {};
-    },
-
-    count:function(){
-        return this.allKeys().length;
-    }
-});
 
 cc.BuilderSetSpriteFrame = cc.ActionInstant.extend({
     _spriteFrame:null,
@@ -588,13 +685,16 @@ cc.BuilderSetSpriteFrame.create = function (spriteFrame) {
     return null;
 };
 
+//
+// cc.BuilderRotateTo
+//
 cc.BuilderRotateTo = cc.ActionInterval.extend({
     _startAngle:0,
     _dstAngle:0,
     _diffAngle:0,
 
     initWithDuration:function (duration, angle) {
-        if (this._super(duration)) {
+        if (cc.ActionInterval.prototype.initWithDuration.call(this, duration)) {
             this._dstAngle = angle;
             return true;
         } else {
@@ -606,7 +706,7 @@ cc.BuilderRotateTo = cc.ActionInterval.extend({
     },
 
     startWithTarget:function (node) {
-        this._super(node);
+        cc.ActionInterval.prototype.startWithTarget.call(this, node);
         this._startAngle = this._target.getRotation();
         this._diffAngle = this._dstAngle - this._startAngle;
     }
@@ -620,3 +720,46 @@ cc.BuilderRotateTo.create = function (duration, angle) {
     }
     return null;
 };
+
+//
+// cc.BuilderRotateXTo
+//
+cc.BuilderRotateXTo = cc.ActionInterval.extend({
+    // TODO: rotationX is not implemented in HTML5
+});
+
+cc.BuilderRotateXTo.create = function (duration, angle) {
+    throw "rotationX has not been implemented in cocos2d-html5";
+};
+
+//
+// cc.BuilderRotateYTo
+//
+cc.BuilderRotateYTo = cc.ActionInterval.extend({
+    // TODO: rotationX is not implemented in HTML5
+});
+
+cc.BuilderRotateYTo.create = function (duration, angle) {
+    throw "rotationY has not been implemented in cocos2d-html5";
+};
+
+//
+// cc.BuilderSoundEffect
+//
+cc.BuilderSoundEffect = cc.ActionInstant.extend({
+    init:function(file) {
+        this._file = file;
+        return true;
+    },
+    update:function(dt) {
+        cc.AudioEngine.getInstance().playEffect(this._file);
+    }
+});
+cc.BuilderSoundEffect.create = function (file, pitch, pan, gain) {
+    var ret = new cc.BuilderSoundEffect();
+    if (ret && ret.init(file)) {
+            return ret;
+    }
+    return null;
+};
+

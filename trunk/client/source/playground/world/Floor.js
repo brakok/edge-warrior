@@ -21,9 +21,9 @@ var Floor = function(x, y, width, hasCorner, type){
 	}
 	
 	var firstSegment = cc.Sprite.create(assetsWorldDir + imgName);
-	var numOfFragment = (width/firstSegment.getTexture().width)-1; //Remove last corner.
+	var numOfFragment = (width/firstSegment.getTextureRect().width)-1; //Remove last corner.
 	
-	var stepX = firstSegment.getTexture().width;
+	var stepX = firstSegment.getTextureRect().width;
 	var tmpX = this.x - this.width*0.5 + stepX*0.5;
 	var zOrder = Constants.World.Floor.Z_INDEX;
 	
@@ -42,7 +42,7 @@ var Floor = function(x, y, width, hasCorner, type){
 		
 		corner = cc.Sprite.create(assetsWorldDir + cornerImgName);
 		corner.setPosition(new cc.Point(this.x, tmpX + stepX*numOfFragment));
-		corner.setFlipX(true);
+		corner.setFlippedX(true);
 		
 		//Right corner.
 		this.fragments.push({
@@ -52,7 +52,7 @@ var Floor = function(x, y, width, hasCorner, type){
 	}
 	
 	//Add first segment.
-	firstSegment.setPosition(new cc.Point(this.x, tmpX));
+	firstSegment.setPosition(new cc.Point(tmpX, this.y));
 	firstSegment._zOrder = zOrder;
 	
 	this.fragments.push({
@@ -60,13 +60,13 @@ var Floor = function(x, y, width, hasCorner, type){
 		x: tmpX
 	});
 	
-	//Add other fragments to the wall.
+	//Add other fragments to the floor.
 	for(var i = 0; i < numOfFragment; i++)
 	{
 		tmpX += stepX;
 		
 		var segment = cc.Sprite.create(assetsWorldDir + imgName);
-		segment.setPosition(new cc.Point(this.x, tmpX));
+		segment.setPosition(new cc.Point(tmpX, this.y));
 		segment._zOrder = zOrder;
 		
 		this.fragments.push({
