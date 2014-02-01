@@ -1983,9 +1983,11 @@ Game.prototype.update = function(){
 			var hasSurvivors = false;
 			for(var i in this.players)
 			{	
-				if(this.players[i].id != this.winner.id && this.players[i].isAlive)
+				if(i != this.winner.id && this.players[i].isAlive)
 					hasSurvivors = true;
 			}
+			
+			console.log(this.players);
 			
 			//Stop countdown if there's no more survivor.
 			if(!hasSurvivors)
@@ -2024,9 +2026,9 @@ Game.prototype.end = function(){
 	var survivors = [];
 			
 	//Count and kill survivors.
-	for(var i = 0; i < this.players.length; ++i)
+	for(var i in this.players)
 	{
-		if(this.players[i].isAlive && this.players[i].id != this.winner.id)
+		if(this.players[i].isAlive && i != this.winner.id)
 		{
 			this.players[i].die();
 			survivors.push(this.players[i].toClient());
@@ -2038,7 +2040,7 @@ Game.prototype.end = function(){
 		succeed: (survivors.length == 0),
 		survivors: survivors
 	};
-	
+
 	io.sockets.in(this.id).emit(Constants.Message.WIN, data);
 	clearInterval(this.intervalId);
 };
