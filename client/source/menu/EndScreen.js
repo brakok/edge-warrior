@@ -26,7 +26,7 @@ var EndScreen = cc.LayerColor.extend({
 		this.addChild(this.menu);
 	},
 	addWinner: function(winner, succeed, survivors){
-	
+		
 		//Create winner label.
 		var label = cc.LabelTTF.create(winner.username + ' wins', Constants.Font.NAME, Constants.Font.BIGSIZE);
 		label.setPosition(new cc.Point(this.width*0.5,this.height*0.8));
