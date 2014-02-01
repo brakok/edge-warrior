@@ -326,7 +326,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:e48c231e10bd0b36313d271154a64180$</string>
+            <string>$TexturePacker:SmartUpdate:c3833deda50a91338012b1822ac2b835:92208f67707ea347625fbbd9b8007097:d18c9af87fd19e8271343ff09f59f880$</string>
             <key>textureFileName</key>
             <string>floatingBall_idle.png</string>
         </dict>
