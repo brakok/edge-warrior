@@ -13,5 +13,5 @@
 		}
 	},	
 	"offline_enabled": false,
-	"permissions": ["storage","unlimitedStorage"]
+	"permissions": ["storage","unlimitedStorage", "fullscreen"]
 }

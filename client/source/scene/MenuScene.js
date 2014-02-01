@@ -59,9 +59,20 @@ var MenuScene = cc.Scene.extend({
 		this.menu.init();
 		
 		this.addChild(this.menu);
+		
+		if(Options.resolution.isFullscreen)
+		{
+			//Show exit button.
+			var exit = document.getElementById('exit');
+			exit.style.display = 'block';
+		}
 	},
 	onExit: function(){
 		this.menu.unload();
 		this.removeChild(this.menu);
+		
+		//Hide exit button.
+		var exit = document.getElementById('exit');
+		exit.style.display = 'none';
 	}
 });
