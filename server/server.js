@@ -1164,7 +1164,7 @@ Player.prototype.update = function(){
 				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING)
 					this.execute(Enum.Action.Type.STANDING);					
 				
-				//Calculate standing time to a limit of 1 min.
+				//Calculate standing time for kill command.
 				if(this.isAlive)
 				{
 					var addTime = false;
