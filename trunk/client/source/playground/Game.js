@@ -195,7 +195,7 @@ Game.prototype.update = function (dt){
 					//Update dynamic objects.
 					this.player.update(dt);
 					
-					for(var i in this.enemies)
+					for(var i = 0; i < this.enemies.length; ++i)
 						this.enemies[i].update(dt);
 
 					for(var i in this.blocks)
@@ -205,7 +205,7 @@ Game.prototype.update = function (dt){
 						if(this.deathZones[i] != null)
 							this.deathZones[i].update(dt);
 						
-					for(var i in this.blackBoxes)
+					for(var i = 0; i < this.blackBoxes.length; ++i)
 						this.blackBoxes[i].update();
 						
 					this.goal.update();
@@ -241,7 +241,6 @@ Game.prototype.update = function (dt){
 					//Reset camera to its original state.
 					if(this.camera.speed.x != Constants.Camera.SPEED_X)
 					{
-						this.camera.zoom = 1;
 						this.camera.targetedZoom = 1;
 						this.camera.speed.x = Constants.Camera.SPEED_X;
 						this.camera.speed.y = Constants.Camera.SPEED_Y;
@@ -261,7 +260,7 @@ Game.prototype.update = function (dt){
 				//Update dynamic objects.
 				this.player.update(dt);
 				
-				for(var i in this.enemies)
+				for(var i = 0; i < this.enemies.length; ++i)
 					this.enemies[i].update(dt);
 
 				for(var i in this.blocks)
@@ -270,7 +269,7 @@ Game.prototype.update = function (dt){
 				for(var i in this.deathZones)
 					this.deathZones[i].update(dt);
 					
-				for(var i in this.blackBoxes)
+				for(var i = 0; i < this.blackBoxes.length; ++i)
 					this.blackBoxes[i].update();
 					
 				this.goal.update();

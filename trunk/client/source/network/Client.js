@@ -350,7 +350,10 @@ var Client = new function(){
 		
 		//Disconnecting player.
 		socket.on(Constants.Message.DISCONNECT_PLAYER, function(username){
-			console.log('Player left : ' + username);
+		
+			if(Client.game.currentPhase != Enum.Game.Phase.ENDING)
+				HtmlHelper.showMessage(username + ' has disconnected');
+				
 			Client.game.removeEnemy(username);
 		});
 		
