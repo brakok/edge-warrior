@@ -48,13 +48,25 @@ cc.DEFAULT_PADDING = 5;
 /**
  * <p> Features and Limitation:<br/>
  *  - You can add MenuItem objects in runtime using addChild:<br/>
- *  - But the only accecpted children are MenuItem objects</p>
+ *  - But the only accepted children are MenuItem objects</p>
  * @class
- * @extends cc.Layer
+ * @extends cc.LayerRGBA
  */
-cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
-    RGBAProtocol:true,
-    _color:new cc.Color3B(),
+cc.Menu = cc.LayerRGBA.extend(/** @lends cc.Menu# */{
+    _color:null,
+    _enabled:false,
+    _opacity:0,
+    _selectedItem:null,
+    _state:-1,
+
+    ctor:function(){
+        cc.LayerRGBA.prototype.ctor.call(this);
+        this._color = cc.white();
+        this._enabled = false;
+        this._opacity = 255;
+        this._selectedItem = null;
+        this._state = -1;
+    },
 
     /**
      * @return {cc.Color3B}
@@ -68,15 +80,12 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      */
     setColor:function (color) {
         this._color = color;
-
-        if (this._children && this._children.length > 0) {
-            for (var i = 0; i < this._children.length; i++) {
-                this._children[i].setColor(this._color);
-            }
+        var locChildren = this._children;
+        if (locChildren && locChildren.length > 0) {
+            for (var i = 0; i < locChildren.length; i++)
+                locChildren[i].setColor(color);
         }
     },
-
-    _opacity:0,
 
     /**
      * @return {Number}
@@ -90,14 +99,12 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      */
     setOpacity:function (opa) {
         this._opacity = opa;
-        if (this._children && this._children.length > 0) {
-            for (var i = 0; i < this._children.length; i++) {
-                this._children[i].setOpacity(this._opacity);
-            }
+        var locChildren = this._children;
+        if (locChildren && locChildren.length > 0) {
+            for (var i = 0; i < locChildren.length; i++)
+                locChildren[i].setOpacity(opa);
         }
     },
-
-    _enabled:false,
 
     /**
      * return whether or not the menu will receive events
@@ -115,8 +122,6 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
         this._enabled = enabled;
     },
 
-    _selectedItem:null,
-
     /**
      * initializes a cc.Menu with it's items
      * @param {Array} args
@@ -126,9 +131,8 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
         var pArray = [];
         if (args) {
             for (var i = 0; i < args.length; i++) {
-                if (args[i]) {
+                if (args[i])
                     pArray.push(args[i]);
-                }
             }
         }
 
@@ -139,26 +143,30 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * initializes a cc.Menu with a Array of cc.MenuItem objects
      */
     initWithArray:function (arrayOfItems) {
-        if(this.init()){
+        if (this.init()) {
+            this.setTouchPriority(cc.MENU_HANDLER_PRIORITY);
+            this.setTouchMode(cc.TOUCH_ONE_BY_ONE);
             this.setTouchEnabled(true);
             this._enabled = true;
 
             // menu in the center of the screen
             var winSize = cc.Director.getInstance().getWinSize();
             this.ignoreAnchorPointForPosition(true);
-            this.setAnchorPoint(cc.p(0.5, 0.5));
+            this.setAnchorPoint(0.5, 0.5);
             this.setContentSize(winSize);
+            this.setPosition(winSize.width / 2, winSize.height / 2);
 
-            this.setPosition(cc.p(winSize.width / 2, winSize.height / 2));
-
-            if(arrayOfItems){
-                for(var i = 0; i< arrayOfItems.length; i++){
+            if (arrayOfItems) {
+                for (var i = 0; i < arrayOfItems.length; i++)
                     this.addChild(arrayOfItems[i],i);
-                }
             }
 
             this._selectedItem = null;
             this._state = cc.MENU_STATE_WAITING;
+
+            // enable cascade color and opacity on menus
+            this.setCascadeColorEnabled(true);
+            this.setCascadeOpacityEnabled(true);
             return true;
         }
         return false;
@@ -166,12 +174,13 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
 
     /**
      * @param {cc.Node} child
-     * @param {Number|Null} zOrder
-     * @param {Number|Null} tag
+     * @param {Number|Null} [zOrder=]
+     * @param {Number|Null} [tag=]
      */
     addChild:function (child, zOrder, tag) {
-        cc.Assert((child instanceof cc.MenuItem), "Menu only supports MenuItem objects as children");
-        this._super(child, zOrder, tag);
+        if(!(child instanceof cc.MenuItem))
+            throw "cc.Menu.addChild() : Menu only supports MenuItem objects as children";
+        cc.Layer.prototype.addChild.call(this, child, zOrder, tag);
     },
 
     /**
@@ -186,18 +195,19 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * @param {Number} padding
      */
     alignItemsVerticallyWithPadding:function (padding) {
-        var height = -padding;
-        if (this._children && this._children.length > 0) {
-            for (var i = 0; i < this._children.length; i++) {
-                height += this._children[i].getContentSize().height * this._children[i].getScaleY() + padding;
-            }
-        }
+        var height = -padding, locChildren = this._children, len, i, locScaleY, locHeight, locChild;
+        if (locChildren && locChildren.length > 0) {
+            for (i = 0, len = locChildren.length; i < len; i++)
+                height += locChildren[i].getContentSize().height * locChildren[i].getScaleY() + padding;
 
-        var y = height / 2.0;
-        if (this._children && this._children.length > 0) {
-            for (i = 0; i < this._children.length; i++) {
-                this._children[i].setPosition(cc.p(0, y - this._children[i].getContentSize().height * this._children[i].getScaleY() / 2));
-                y -= this._children[i].getContentSize().height * this._children[i].getScaleY() + padding;
+            var y = height / 2.0;
+
+            for (i = 0, len = locChildren.length; i < len; i++) {
+                locChild = locChildren[i];
+                locHeight = locChild.getContentSize().height;
+                locScaleY = locChild.getScaleY();
+                locChild.setPosition(0, y - locHeight * locScaleY / 2);
+                y -= locHeight * locScaleY + padding;
             }
         }
     },
@@ -214,18 +224,19 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * @param {Number} padding
      */
     alignItemsHorizontallyWithPadding:function (padding) {
-        var width = -padding;
-        if (this._children && this._children.length > 0) {
-            for (var i = 0; i < this._children.length; i++) {
-                width += this._children[i].getContentSize().width * this._children[i].getScaleX() + padding;
-            }
-        }
+        var width = -padding, locChildren = this._children, i, len, locScaleX, locWidth, locChild;
+        if (locChildren && locChildren.length > 0) {
+            for (i = 0, len = locChildren.length; i < len; i++)
+                width += locChildren[i].getContentSize().width * locChildren[i].getScaleX() + padding;
 
-        var x = -width / 2.0;
-        if (this._children && this._children.length > 0) {
-            for (i = 0; i < this._children.length; i++) {
-                this._children[i].setPosition(cc.p(x + this._children[i].getContentSize().width * this._children[i].getScaleX() / 2, 0));
-                x += this._children[i].getContentSize().width * this._children[i].getScaleX() + padding;
+            var x = -width / 2.0;
+
+            for (i = 0, len = locChildren.length; i < len; i++) {
+                locChild = locChildren[i];
+                locScaleX = locChild.getScaleX();
+                locWidth =  locChildren[i].getContentSize().width;
+                locChild.setPosition(x + locWidth * locScaleX / 2, 0);
+                x += locWidth * locScaleX + padding;
             }
         }
     },
@@ -239,6 +250,9 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * menu.alignItemsInColumns(3,3)//this creates 2 columns, each have 3 items
      */
     alignItemsInColumns:function (/*Multiple Arguments*/) {
+        if((arguments.length > 0) && (arguments[arguments.length-1] == null))
+            cc.log("parameters should not be ending with null in Javascript");
+
         var rows = [];
         for (var i = 0; i < arguments.length; i++) {
             rows.push(arguments[i]);
@@ -247,16 +261,19 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
         var row = 0;
         var rowHeight = 0;
         var columnsOccupied = 0;
-        var rowColumns;
-        if (this._children && this._children.length > 0) {
-            for (i = 0; i < this._children.length; i++) {
-                cc.Assert(row < rows.length, "");
+        var rowColumns, tmp, len;
+        var locChildren = this._children;
+        if (locChildren && locChildren.length > 0) {
+            for (i = 0, len = locChildren.length; i < len; i++) {
+                if(row >= rows.length)
+                    continue;
 
                 rowColumns = rows[row];
                 // can not have zero columns on a row
-                cc.Assert(rowColumns, "");
+                if(!rowColumns)
+                    continue;
 
-                var tmp = this._children[i].getContentSize().height;
+                tmp = locChildren[i].getContentSize().height;
                 rowHeight = ((rowHeight >= tmp || isNaN(tmp)) ? rowHeight : tmp);
 
                 ++columnsOccupied;
@@ -270,7 +287,7 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
             }
         }
         // check if too many rows/columns for available menu items
-        cc.Assert(!columnsOccupied, "");
+        //cc.Assert(!columnsOccupied, "");    //?
         var winSize = cc.Director.getInstance().getWinSize();
 
         row = 0;
@@ -280,27 +297,24 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
         var x = 0.0;
         var y = (height / 2);
 
-        if (this._children && this._children.length > 0) {
-            for (i = 0; i < this._children.length; i++) {
-                var child = this._children[i];
+        if (locChildren && locChildren.length > 0) {
+            for (i = 0, len = locChildren.length; i < len; i++) {
+                var child = locChildren[i];
                 if (rowColumns == 0) {
                     rowColumns = rows[row];
                     w = winSize.width / (1 + rowColumns);
                     x = w;
                 }
 
-                var tmp = child.getContentSize().height;
+                tmp = child.getContentSize().height;
                 rowHeight = ((rowHeight >= tmp || isNaN(tmp)) ? rowHeight : tmp);
-
-                child.setPosition(cc.p(x - winSize.width / 2,
-                    y - child.getContentSize().height / 2));
+                child.setPosition(x - winSize.width / 2, y - tmp / 2);
 
                 x += w;
                 ++columnsOccupied;
 
                 if (columnsOccupied >= rowColumns) {
                     y -= rowHeight + 5;
-
                     columnsOccupied = 0;
                     rowColumns = 0;
                     rowHeight = 0;
@@ -318,8 +332,10 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * menu.alignItemsInRows(4,4,4,4)//this creates 4 rows each have 4 items
      */
     alignItemsInRows:function (/*Multiple arguments*/) {
-        var columns = [];
-        for (var i = 0; i < arguments.length; i++) {
+        if((arguments.length > 0) && (arguments[arguments.length-1] == null))
+            cc.log("parameters should not be ending with null in Javascript");
+        var columns = [], i;
+        for (i = 0; i < arguments.length; i++) {
             columns.push(arguments[i]);
         }
         var columnWidths = [];
@@ -330,23 +346,27 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
         var column = 0;
         var columnWidth = 0;
         var rowsOccupied = 0;
-        var columnRows;
+        var columnRows, child, len, tmp, locContentSize;
 
-        if (this._children && this._children.length > 0) {
-            for (var i = 0; i < this._children.length; i++) {
-                var child = this._children[i];
+        var locChildren = this._children;
+        if (locChildren && locChildren.length > 0) {
+            for (i = 0, len = locChildren.length; i < len; i++) {
+                child = locChildren[i];
                 // check if too many menu items for the amount of rows/columns
-                cc.Assert(column < columns.length, "");
+                if(column >= columns.length)
+                    continue;
 
                 columnRows = columns[column];
                 // can't have zero rows on a column
-                cc.Assert(columnRows, "");
+                if(!columnRows)
+                    continue;
 
                 // columnWidth = fmaxf(columnWidth, [item contentSize].width);
-                var tmp = child.getContentSize().width;
+                locContentSize = child.getContentSize();
+                tmp = locContentSize.width;
                 columnWidth = ((columnWidth >= tmp || isNaN(tmp)) ? columnWidth : tmp);
 
-                columnHeight += (child.getContentSize().height + 5);
+                columnHeight += (locContentSize.height + 5);
                 ++rowsOccupied;
 
                 if (rowsOccupied >= columnRows) {
@@ -362,8 +382,7 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
             }
         }
         // check if too many rows/columns for available menu items.
-        cc.Assert(!rowsOccupied, "");
-
+        //cc.Assert(!rowsOccupied, "");
         var winSize = cc.Director.getInstance().getWinSize();
 
         column = 0;
@@ -372,22 +391,22 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
         var x = -width / 2;
         var y = 0.0;
 
-        if (this._children && this._children.length > 0) {
-            for (var i = 0; i < this._children.length; i++) {
-                var child = this._children[i];
+        if (locChildren && locChildren.length > 0) {
+            for (i = 0, len = locChildren.length; i < len; i++) {
+                child = locChildren[i];
                 if (columnRows == 0) {
                     columnRows = columns[column];
                     y = columnHeights[column];
                 }
 
                 // columnWidth = fmaxf(columnWidth, [item contentSize].width);
-                var tmp = child.getContentSize().width;
+                locContentSize = child.getContentSize();
+                tmp = locContentSize.width;
                 columnWidth = ((columnWidth >= tmp || isNaN(tmp)) ? columnWidth : tmp);
 
-                child.setPosition(cc.p(x + columnWidths[column] / 2,
-                    y - winSize.height / 2));
+                child.setPosition(x + columnWidths[column] / 2, y - winSize.height / 2);
 
-                y -= child.getContentSize().height + 10;
+                y -= locContentSize.height + 10;
                 ++rowsOccupied;
 
                 if (rowsOccupied >= columnRows) {
@@ -405,22 +424,38 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * make the menu clickable
      */
     registerWithTouchDispatcher:function () {
-        cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, cc.MENU_HANDLER_PRIORITY, true);
+        cc.registerTargetedDelegate(this.getTouchPriority(), true, this);
+    },
+
+    /**
+     * @param {cc.Node} child
+     * @param {boolean} cleanup
+     */
+    removeChild:function(child, cleanup){
+        if(child == null)
+            return;
+        if(!(child instanceof cc.MenuItem)){
+            cc.log("cc.Menu.removeChild():Menu only supports MenuItem objects as children");
+            return;
+        }
+
+        if (this._selectedItem == child)
+            this._selectedItem = null;
+        cc.Node.prototype.removeChild.call(this, child, cleanup);
     },
 
     /**
      * @param {cc.Touch} touch
+     * @param {Object} e
      * @return {Boolean}
      */
     onTouchBegan:function (touch, e) {
-        if (this._state != cc.MENU_STATE_WAITING || !this._visible || !this._enabled) {
+        if (this._state != cc.MENU_STATE_WAITING || !this._visible || !this._enabled)
             return false;
-        }
 
         for (var c = this._parent; c != null; c = c.getParent()) {
-            if (!c.isVisible()) {
+            if (!c.isVisible())
                 return false;
-            }
         }
 
         this._selectedItem = this._itemForTouch(touch);
@@ -436,7 +471,10 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * when a touch ended
      */
     onTouchEnded:function (touch, e) {
-        cc.Assert(this._state == cc.MENU_STATE_TRACKING_TOUCH, "[Menu onTouchEnded] -- invalid state");
+        if(this._state !== cc.MENU_STATE_TRACKING_TOUCH){
+            cc.log("cc.Menu.onTouchEnded(): invalid state");
+            return;
+        }
         if (this._selectedItem) {
             this._selectedItem.unselected();
             this._selectedItem.activate();
@@ -448,28 +486,32 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * touch cancelled
      */
     onTouchCancelled:function (touch, e) {
-        cc.Assert(this._state == cc.MENU_STATE_TRACKING_TOUCH, "[Menu onTouchCancelled] -- invalid state");
-        if (this._selectedItem) {
-            this._selectedItem.unselected();
+        if(this._state !== cc.MENU_STATE_TRACKING_TOUCH){
+            cc.log("cc.Menu.onTouchCancelled(): invalid state");
+            return;
         }
+        if (this._selectedItem)
+            this._selectedItem.unselected();
         this._state = cc.MENU_STATE_WAITING;
     },
 
     /**
      * touch moved
      * @param {cc.Touch} touch
+     * @param {Object} e
      */
     onTouchMoved:function (touch, e) {
-        cc.Assert(this._state == cc.MENU_STATE_TRACKING_TOUCH, "[Menu onTouchMoved] -- invalid state");
+        if(this._state !== cc.MENU_STATE_TRACKING_TOUCH){
+            cc.log("cc.Menu.onTouchMoved(): invalid state");
+            return;
+        }
         var currentItem = this._itemForTouch(touch);
         if (currentItem != this._selectedItem) {
-            if (this._selectedItem) {
+            if (this._selectedItem)
                 this._selectedItem.unselected();
-            }
             this._selectedItem = currentItem;
-            if (this._selectedItem) {
+            if (this._selectedItem)
                 this._selectedItem.selected();
-            }
         }
     },
 
@@ -478,12 +520,13 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      */
     onExit:function () {
         if (this._state == cc.MENU_STATE_TRACKING_TOUCH) {
-            this._selectedItem.unselected();
+            if(this._selectedItem){
+                this._selectedItem.unselected();
+                this._selectedItem = null;
+            }
             this._state = cc.MENU_STATE_WAITING;
-            this._selectedItem = null;
         }
-
-        this._super();
+        cc.Layer.prototype.onExit.call(this);
     },
 
     setOpacityModifyRGB:function (value) {
@@ -495,23 +538,22 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
 
     _itemForTouch:function (touch) {
         var touchLocation = touch.getLocation();
-
-        if (this._children && this._children.length > 0) {
-            for (var i = 0; i < this._children.length; i++) {
-                if (this._children[i].isVisible() && this._children[i].isEnabled()) {
-                    var local = this._children[i].convertToNodeSpace(touchLocation);
-                    var r = this._children[i].rect();
-                    r.origin = cc.p(0,0);
-                    if (cc.Rect.CCRectContainsPoint(r, local)) {
-                        return this._children[i];
-                    }
+        var itemChildren = this._children, locItemChild;
+        if (itemChildren && itemChildren.length > 0) {
+            for (var i = 0; i < itemChildren.length; i++) {
+                locItemChild = itemChildren[i];
+                if (locItemChild.isVisible() && locItemChild.isEnabled()) {
+                    var local = locItemChild.convertToNodeSpace(touchLocation);
+                    var r = locItemChild.rect();
+                    r.x = 0;
+                    r.y = 0;
+                    if (cc.rectContainsPoint(r, local))
+                        return locItemChild;
                 }
             }
         }
-
         return null;
     },
-    _state:-1,
 
     /**
      * set event handler priority. By default it is: kCCMenuTouchPriority
@@ -524,13 +566,17 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
 
 /**
  * create a new menu
+ * @param {...cc.MenuItem|null} menuItems
  * @return {cc.Menu}
  * @example
  * // Example
  * //there is no limit on how many menu item you can pass in
  * var myMenu = cc.Menu.create(menuitem1, menuitem2, menuitem3);
  */
-cc.Menu.create = function (/*Multiple Arguments*/) {
+cc.Menu.create = function (menuItems) {
+    if((arguments.length > 0) && (arguments[arguments.length-1] == null))
+        cc.log("parameters should not be ending with null in Javascript");
+
     var ret = new cc.Menu();
 
     if (arguments.length == 0) {

@@ -16,7 +16,7 @@ var SkillStore = function(x, y, layer){
 	this.fieldset = cc.Sprite.create(assetsHudDir + 'skill_fieldset.png');
 	this.modeSprite = null;
 	
-	this.unitLabel = cc.LabelTTF.create("0", Constants.Font.NAME, Constants.Font.SIZE, cc.size(150, 20), cc.TEXT_ALIGNMENT_RIGHT);
+	this.unitLabel = cc.LabelTTF.create("0", Constants.Font.NAME, Constants.Font.SIZE, cc.size(150, 40), cc.TEXT_ALIGNMENT_RIGHT);
 	this.unitLabel.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Units.OFFSET_X, this.y + Constants.HUD.SkillStore.Units.OFFSET_Y));
 	this.unitLabel.setColor(new cc.Color3B(50,50,50));
 	

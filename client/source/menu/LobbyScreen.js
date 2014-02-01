@@ -5,7 +5,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.width = width;
 		this.height = height;
 	
-		this._super(new cc.Color4B(0, 0, 0, 255), this.width, this.height);
+		this._super(new cc.Color4B(255, 255, 255, 255), this.width, this.height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
 		this._zOrder = Constants.Menu.LobbyScreen.Z_INDEX;
@@ -33,7 +33,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.txtName = document.getElementById('lobbyName');
 		
 		this.cmdRename = new cc.MenuItemFont.create("RENAME", this.rename, this);
-		this.cmdRename.setPosition(new cc.Point(this.width*0.52, this.height*0.887));
+		this.cmdRename.setPosition(new cc.Point(this.width*0.52, this.height*0.88));
 		this.cmdRename.setEnabled(false);
 		
 		this.renameMenu = new cc.Menu.create(this.cmdRename);
@@ -84,7 +84,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		
 		if(Client.currentGameId != null && Client.currentGameId > -1)
 		{
-			this.lblOnline._string = "Online";
+			this.lblOnline.setString("Online");
 			
 			if(Client.isHost)
 			{
@@ -93,7 +93,7 @@ var LobbyScreen = cc.LayerColor.extend({
 			}
 		}
 		else
-			this.lblOnline._string = "Offline";
+			this.lblOnline.setString("Offline");
 	},
 	addSlot: function(username, color, ready){
 		this.slots.push(new Slot(this, 

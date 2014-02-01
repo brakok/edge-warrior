@@ -425,7 +425,7 @@ Player.prototype.turn = function(){
 
 	//Flip the sprite to current direction.
 	if(this.currentAnimation != null)
-		this.currentAnimation.setFlipX(this.facing == Enum.Facing.RIGHT);
+		this.currentAnimation.setFlippedX(this.facing == Enum.Facing.RIGHT);
 	
 	//Reset anim when turning.
 	if(this.currentAction == Enum.Anim.Type.RUNNING)

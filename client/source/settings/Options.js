@@ -7,6 +7,9 @@ var Options = new function(){
 	this.keys = new Keys();
 	this.skillSet = new SkillSet();
 	
+	//Resolution policy.
+	this.policy = new cc.ResolutionPolicy(cc.ContainerStrategy.PROPORTION_TO_FRAME, cc.ContentStrategy.NO_BORDER);
+	
 	this.buyMode = Enum.SkillStore.Mode.POWER;
 	
 	this.resolution = {
@@ -101,43 +104,33 @@ var Options = new function(){
 	//Resize window.
 	this.resizeWindow = function(){
 	
+		//Resize menus.
+		window.resizeTo(this.resolution.width, this.resolution.height);
+	};
+	
+	function resize(){
+		cc.EGLView.getInstance().setDesignResolutionSize(that.resolution.width, that.resolution.height, that.policy);
+			
+		var frameSize = cc.EGLView.getInstance().getFrameSize();
+		that.viewport.width = that.resolution.width = frameSize.width;
+		that.viewport.height = that.resolution.height = frameSize.height;
+								
 		//Resize canvas to new resolution.
-		var xScale = this.resolution.width / cc.originalCanvasSize.width;
-        var yScale = this.resolution.height / cc.originalCanvasSize.height;
+		var xScale = that.resolution.width / cc.originalCanvasSize.width;
+        var yScale = that.resolution.height / cc.originalCanvasSize.height;
 		
 		if (xScale > yScale)
             xScale = yScale;
-		
-        cc.canvas.width = cc.originalCanvasSize.width * xScale;
-        cc.canvas.height = cc.originalCanvasSize.height * xScale;
-		
-		this.viewport.width = this.resolution.width = cc.canvas.width;
-		this.viewport.height = this.resolution.height = cc.canvas.height;
-		
-		var parentDiv = document.getElementById("Cocos2dGameContainer");
-        if (parentDiv) {
-            parentDiv.style.width = cc.canvas.width + "px";
-            parentDiv.style.height = cc.canvas.height + "px";
-        }
-		
-		cc.renderContext.translate(0, cc.canvas.height);
-		cc.renderContext.scale(xScale, xScale);
-		
-        cc.Director.getInstance().setContentScaleFactor(xScale);
-		
-		//Resize menus.
-		window.resizeTo(cc.canvas.width, cc.canvas.height + 50);
+				
 		document.getElementsByTagName('body')[0].style.font = "normal " + Constants.Font.SIZE*xScale + "px " + Constants.Font.NAME;
 		
-		setTimeout(function(){
-			MenuScreens.resize();
-		}, 100);
-	};
+		MenuScreens.resize();
+	}
 	
 	this.init = function(){
 
-		cc._fontSize = Constants.Font.SIZE;
-		cc._fontName = Constants.Font.NAME;
+		cc._globalFontSize = Constants.Font.SIZE;
+		cc._globalFontName = Constants.Font.NAME;
 	
 		//Get stored data.
 		chrome.storage.sync.get('keys', function(data){
@@ -165,6 +158,11 @@ var Options = new function(){
 				
 			that.apply();
 		});
+		
+		//Set options for EGLView.
+		cc.EGLView.getInstance().adjustViewPort(true);
+		cc.EGLView.getInstance().resizeWithBrowserSize(true);
+		cc.EGLView.getInstance().setResizeCallback(resize);
 	};
 	
 	//Apply when all callbacks have been called.

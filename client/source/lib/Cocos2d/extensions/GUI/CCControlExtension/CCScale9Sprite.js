@@ -35,96 +35,171 @@ cc.POSITIONS_TOPLEFT = 6;
 cc.POSITIONS_BOTTOMRIGHT = 7;
 cc.POSITIONS_BOTTOMLEFT = 8;
 
-cc.Scale9Sprite = cc.Node.extend({
-    RGBAProtocol:true,
+/**
+ * A 9-slice sprite for cocos2d.
+ *
+ * 9-slice scaling allows you to specify how scaling is applied
+ * to specific areas of a sprite. With 9-slice scaling (3x3 grid),
+ * you can ensure that the sprite does not become distorted when
+ * scaled.
+ *
+ * @see http://yannickloriot.com/library/ios/cccontrolextension/Classes/CCScale9Sprite.html
+ * @class
+ * @extends cc.Sprite
+ */
+cc.Scale9Sprite = cc.NodeRGBA.extend(/** @lends cc.Scale9Sprite# */{
+    RGBAProtocol: true,
 
-    _spriteRect:null,
-    _capInsetsInternal:null,
-    _positionsAreDirty:false,
+    _spriteRect: null,
+    _capInsetsInternal: null,
+    _positionsAreDirty: false,
 
-    _scale9Image:null,
-    _topLeft:null,
-    _top:null,
-    _topRight:null,
-    _left:null,
-    _centre:null,
-    _right:null,
-    _bottomLeft:null,
-    _bottom:null,
-    _bottomRight:null,
+    _scale9Image: null,
+    _topLeft: null,
+    _top: null,
+    _topRight: null,
+    _left: null,
+    _centre: null,
+    _right: null,
+    _bottomLeft: null,
+    _bottom: null,
+    _bottomRight: null,
 
-    _colorUnmodified:null,
-    _isOpacityModifyRGB:false,
+    _colorUnmodified: null,
+    _opacityModifyRGB: false,
 
-    _originalSize:null,
-    _preferredSize:null,
-    _opacity:0,
-    _color:null,
-    _capInsets:null,
-    _insetLeft:0,
-    _insetTop:0,
-    _insetRight:0,
-    _insetBottom:0,
+    _originalSize: null,
+    _preferredSize: null,
+    _opacity: 0,
+    _color: null,
+    _capInsets: null,
+    _insetLeft: 0,
+    _insetTop: 0,
+    _insetRight: 0,
+    _insetBottom: 0,
 
-    _updateCapInset:function () {
-        var insets;
-        if (this._insetLeft == 0 && this._insetTop == 0 && this._insetRight == 0 && this._insetBottom == 0) {
+    _spritesGenerated: false,
+    _spriteFrameRotated: false,
+    _textureLoaded:false,
+    _loadedEventListeners: null,
+
+    /**
+     * return  texture is loaded
+     * @returns {boolean}
+     */
+    textureLoaded:function(){
+        return this._textureLoaded;
+    },
+
+    /**
+     * add texture loaded event listener
+     * @param {Function} callback
+     * @param {Object} target
+     */
+    addLoadedEventListener:function(callback, target){
+        this._loadedEventListeners.push({eventCallback:callback, eventTarget:target});
+    },
+
+    _callLoadedEventCallbacks:function(){
+        this._textureLoaded = true;
+        var locListeners = this._loadedEventListeners;
+        for(var i = 0, len = locListeners.length;  i < len; i++){
+            var selCallback = locListeners[i];
+            selCallback.eventCallback.call(selCallback.eventTarget, this);
+        }
+        locListeners.length = 0;
+    },
+
+    _updateCapInset: function () {
+        var insets, locInsetLeft = this._insetLeft, locInsetTop = this._insetTop, locInsetRight = this._insetRight;
+        var locSpriteRect = this._spriteRect, locInsetBottom = this._insetBottom;
+        if (locInsetLeft === 0 && locInsetTop === 0 && locInsetRight === 0 && locInsetBottom === 0) {
             insets = cc.RectZero();
         } else {
-            insets = cc.RectMake(this._insetLeft,
-                this._insetTop,
-                this._spriteRect.size.width - this._insetLeft - this._insetRight,
-                this._spriteRect.size.height - this._insetTop - this._insetBottom);
+            insets = this._spriteFrameRotated ? cc.rect(locInsetBottom, locInsetLeft,
+                locSpriteRect.width - locInsetRight - locInsetLeft,
+                locSpriteRect.height - locInsetTop - locInsetBottom) :
+                cc.rect(locInsetLeft, locInsetTop,
+                    locSpriteRect.width - locInsetLeft - locInsetRight,
+                    locSpriteRect.height - locInsetTop - locInsetBottom);
         }
         this.setCapInsets(insets);
     },
 
-    _updatePositions:function () {
+    _updatePositions: function () {
+        // Check that instances are non-NULL
+        if (!((this._topLeft) && (this._topRight) && (this._bottomRight) &&
+            (this._bottomLeft) && (this._centre))) {
+            // if any of the above sprites are NULL, return
+            return;
+        }
+
         var size = this._contentSize;
+        var locTopLeft = this._topLeft, locTopRight = this._topRight, locBottomRight = this._bottomRight, locBottomLeft = this._bottomLeft;
+        var locCenter = this._centre, locCenterContentSize = this._centre.getContentSize();
+        var locTopLeftContentSize = locTopLeft.getContentSize();
+        var locBottomLeftContentSize = locBottomLeft.getContentSize();
 
-        var sizableWidth = size.width - this._topLeft.getContentSize().width - this._topRight.getContentSize().width;
-        var sizableHeight = size.height - this._topLeft.getContentSize().height - this._bottomRight.getContentSize().height;
-        var horizontalScale = sizableWidth / this._centre.getContentSize().width;
-        var verticalScale = sizableHeight / this._centre.getContentSize().height;
-        this._centre.setScaleX(horizontalScale);
-        this._centre.setScaleY(verticalScale);
-        var rescaledWidth = this._centre.getContentSize().width * horizontalScale;
-        var rescaledHeight = this._centre.getContentSize().height * verticalScale;
+        var sizableWidth = size._width - locTopLeftContentSize.width - locTopRight.getContentSize().width;
+        var sizableHeight = size._height - locTopLeftContentSize.height - locBottomRight.getContentSize().height;
+        var horizontalScale = sizableWidth / locCenterContentSize.width;
+        var verticalScale = sizableHeight / locCenterContentSize.height;
+        var rescaledWidth = locCenterContentSize.width * horizontalScale;
+        var rescaledHeight = locCenterContentSize.height * verticalScale;
 
-        var leftWidth = this._bottomLeft.getContentSize().width;
-        var bottomHeight = this._bottomLeft.getContentSize().height;
+        var leftWidth = locBottomLeftContentSize.width;
+        var bottomHeight = locBottomLeftContentSize.height;
 
-        this._bottomLeft.setAnchorPoint(cc.p(0, 0));
-        this._bottomRight.setAnchorPoint(cc.p(0, 0));
-        this._topLeft.setAnchorPoint(cc.p(0, 0));
-        this._topRight.setAnchorPoint(cc.p(0, 0));
-        this._left.setAnchorPoint(cc.p(0, 0));
-        this._right.setAnchorPoint(cc.p(0, 0));
-        this._top.setAnchorPoint(cc.p(0, 0));
-        this._bottom.setAnchorPoint(cc.p(0, 0));
-        this._centre.setAnchorPoint(cc.p(0, 0));
+        if(!cc.Browser.supportWebGL) {
+            //browser is in canvas mode, need to manually control rounding to prevent overlapping pixels
+            var roundedRescaledWidth = Math.round(rescaledWidth);
+            if(rescaledWidth != roundedRescaledWidth) {
+                rescaledWidth = roundedRescaledWidth;
+                horizontalScale = rescaledWidth/locCenterContentSize.width;
+            }
+            var roundedRescaledHeight = Math.round(rescaledHeight);
+            if(rescaledHeight != roundedRescaledHeight) {
+                rescaledHeight = roundedRescaledHeight;
+                verticalScale = rescaledHeight/locCenterContentSize.height;
+            }
+        }
+        locCenter.setScaleX(horizontalScale);
+        locCenter.setScaleY(verticalScale);
+
+        var locLeft = this._left, locRight = this._right, locTop = this._top, locBottom = this._bottom;
+        var tempAP = cc.p(0, 0);
+        locBottomLeft.setAnchorPoint(tempAP);
+        locBottomRight.setAnchorPoint(tempAP);
+        locTopLeft.setAnchorPoint(tempAP);
+        locTopRight.setAnchorPoint(tempAP);
+        locLeft.setAnchorPoint(tempAP);
+        locRight.setAnchorPoint(tempAP);
+        locTop.setAnchorPoint(tempAP);
+        locBottom.setAnchorPoint(tempAP);
+        locCenter.setAnchorPoint(tempAP);
 
         // Position corners
-        this._bottomLeft.setPosition(cc.p(0, 0));
-        this._bottomRight.setPosition(cc.p(leftWidth + rescaledWidth, 0));
-        this._topLeft.setPosition(cc.p(0, bottomHeight + rescaledHeight));
-        this._topRight.setPosition(cc.p(leftWidth + rescaledWidth, bottomHeight + rescaledHeight));
+        locBottomLeft.setPosition(0, 0);
+        locBottomRight.setPosition(leftWidth + rescaledWidth, 0);
+        locTopLeft.setPosition(0, bottomHeight + rescaledHeight);
+        locTopRight.setPosition(leftWidth + rescaledWidth, bottomHeight + rescaledHeight);
 
         // Scale and position borders
-        this._left.setPosition(cc.p(0, bottomHeight));
-        this._left.setScaleY(verticalScale);
-        this._right.setPosition(cc.p(leftWidth + rescaledWidth, bottomHeight));
-        this._right.setScaleY(verticalScale);
-        this._bottom.setPosition(cc.p(leftWidth, 0));
-        this._bottom.setScaleX(horizontalScale);
-        this._top.setPosition(cc.p(leftWidth, bottomHeight + rescaledHeight));
-        this._top.setScaleX(horizontalScale);
+        locLeft.setPosition(0, bottomHeight);
+        locLeft.setScaleY(verticalScale);
+        locRight.setPosition(leftWidth + rescaledWidth, bottomHeight);
+        locRight.setScaleY(verticalScale);
+        locBottom.setPosition(leftWidth, 0);
+        locBottom.setScaleX(horizontalScale);
+        locTop.setPosition(leftWidth, bottomHeight + rescaledHeight);
+        locTop.setScaleX(horizontalScale);
 
         // Position centre
-        this._centre.setPosition(cc.p(leftWidth, bottomHeight));
+        locCenter.setPosition(leftWidth, bottomHeight);
     },
 
-    ctor:function () {
+    ctor: function () {
+        cc.NodeRGBA.prototype.ctor.call(this);
         this._spriteRect = cc.RectZero();
         this._capInsetsInternal = cc.RectZero();
 
@@ -132,113 +207,179 @@ cc.Scale9Sprite = cc.Node.extend({
         this._originalSize = new cc.Size(0, 0);
         this._preferredSize = new cc.Size(0, 0);
         this._color = cc.white();
+        this._opacity = 255;
         this._capInsets = cc.RectZero();
+        this._loadedEventListeners = [];
     },
 
     /** Original sprite's size. */
-    getOriginalSize:function () {
+    getOriginalSize: function () {
         return this._originalSize;
-    },
-    setOriginalSize:function (originalSize) {
-        this._originalSize = originalSize;
     },
 
     //if the preferredSize component is given as -1, it is ignored
-    getPreferredSize:function () {
+    getPreferredSize: function () {
         return this._preferredSize;
     },
-    setPreferredSize:function (preferredSize) {
+    setPreferredSize: function (preferredSize) {
         this.setContentSize(preferredSize);
         this._preferredSize = preferredSize;
     },
 
     /** Opacity: conforms to CCRGBAProtocol protocol */
-    getOpacity:function () {
+    getOpacity: function () {
         return this._opacity;
     },
-    setOpacity:function (opacity) {
+    setOpacity: function (opacity) {
+        if(!this._scale9Image){
+            return;
+        }
         this._opacity = opacity;
-    },
-
-    /** Color: conforms to CCRGBAProtocol protocol */
-    getColor:function () {
-        return this._color;
-    },
-    setColor:function (color) {
-        this._color = color;
         var scaleChildren = this._scale9Image.getChildren();
-        if (scaleChildren && scaleChildren.length != 0) {
-            for (var i = 0; i < scaleChildren.length; i++) {
-                if (scaleChildren[i] && scaleChildren.RGBAProtocol) {
-                    scaleChildren[i].setColor(this._color);
-                }
-            }
+        for (var i = 0; i < scaleChildren.length; i++) {
+            var selChild = scaleChildren[i];
+            if (selChild && selChild.RGBAProtocol)
+                selChild.setOpacity(opacity);
         }
     },
 
-    getCapInsets:function () {
-        return this._capInsets;
+    /** Color: conforms to CCRGBAProtocol protocol */
+    getColor: function () {
+        return this._color;
     },
-    setCapInsets:function (capInsets) {
-        var contentSize = this._contentSize;
-        this.updateWithBatchNode(this._scale9Image, this._spriteRect, false, capInsets);
-        this.setContentSize(contentSize);
+    setColor: function (color) {
+        if(!this._scale9Image){
+            return;
+        }
+        this._color = color;
+        var scaleChildren = this._scale9Image.getChildren();
+        for (var i = 0; i < scaleChildren.length; i++) {
+            var selChild = scaleChildren[i];
+            if (selChild && selChild.RGBAProtocol)
+                selChild.setColor(color);
+        }
     },
 
-    getInsetLeft:function () {
+    getCapInsets: function () {
+        return this._capInsets;
+    },
+
+    setCapInsets: function (capInsets) {
+        if(!this._scale9Image){
+            return;
+        }
+        //backup the contentSize
+        var contentSize = this._contentSize;
+        var tempWidth = contentSize._width, tempHeight = contentSize._height;
+
+        this.updateWithBatchNode(this._scale9Image, this._spriteRect, this._spriteFrameRotated, capInsets);
+        //restore the contentSize
+        this.setContentSize(tempWidth, tempHeight);
+    },
+
+    /**
+     * Gets the left side inset
+     * @returns {number}
+     */
+    getInsetLeft: function () {
         return this._insetLeft;
     },
-    setInsetLeft:function (insetLeft) {
+
+    /**
+     * Sets the left side inset
+     * @param {Number} insetLeft
+     */
+    setInsetLeft: function (insetLeft) {
         this._insetLeft = insetLeft;
         this._updateCapInset();
     },
 
-    getInsetTop:function () {
+    /**
+     * Gets the top side inset
+     * @returns {number}
+     */
+    getInsetTop: function () {
         return this._insetTop;
     },
-    setInsetTop:function (insetTop) {
+
+    /**
+     * Sets the top side inset
+     * @param {Number} insetTop
+     */
+    setInsetTop: function (insetTop) {
         this._insetTop = insetTop;
         this._updateCapInset();
     },
 
-    getInsetRight:function () {
+    /**
+     * Gets the right side inset
+     * @returns {number}
+     */
+    getInsetRight: function () {
         return this._insetRight;
     },
-    setInsetRight:function (insetRight) {
+    /**
+     * Sets the right side inset
+     * @param {Number} insetRight
+     */
+    setInsetRight: function (insetRight) {
         this._insetRight = insetRight;
         this._updateCapInset();
     },
 
-    getInsetBottom:function () {
+    /**
+     * Gets the bottom side inset
+     * @returns {number}
+     */
+    getInsetBottom: function () {
         return this._insetBottom;
     },
-    setInsetBottom:function (insetBottom) {
+    /**
+     * Sets the bottom side inset
+     * @param {number} insetBottom
+     */
+    setInsetBottom: function (insetBottom) {
         this._insetBottom = insetBottom;
         this._updateCapInset();
     },
 
-    setContentSize:function (size) {
-        this._super(size);
-        this.m_positionsAreDirty = true;
+    /**
+     * Sets the untransformed size of the Scale9Sprite.
+     * @override
+     * @param {cc.Size|Number} size The untransformed size of the Scale9Sprite or The untransformed size's width of the Scale9Sprite.
+     * @param {Number} [height] The untransformed size's height of the Scale9Sprite.
+     */
+    setContentSize: function (size, height) {
+        if(arguments.length === 2)
+            cc.Node.prototype.setContentSize.call(this, size, height);
+        else
+            cc.Node.prototype.setContentSize.call(this, size);
+        this._positionsAreDirty = true;
     },
 
-    visit:function () {
-        if (this.m_positionsAreDirty) {
+    visit: function (ctx) {
+        if (this._positionsAreDirty) {
             this._updatePositions();
-            this.m_positionsAreDirty = false;
+            this._positionsAreDirty = false;
         }
-        this._super();
+        cc.NodeRGBA.prototype.visit.call(this, ctx);
     },
 
-    init:function () {
+    init: function () {
         return this.initWithBatchNode(null, cc.RectZero(), false, cc.RectZero());
     },
 
-    initWithBatchNode:function (batchNode, rect, unused, capInsets) {
-        if (batchNode) {
-            this.updateWithBatchNode(batchNode, rect, unused, capInsets);
+    initWithBatchNode: function (batchNode, rect, rotated, capInsets) {
+        if (arguments.length === 3) {
+            capInsets = rotated;
+            rotated = false;
         }
-        this.m_positionsAreDirty = true;
+
+        if (batchNode) {
+            this.updateWithBatchNode(batchNode, rect, rotated, capInsets);
+        }
+        this.setAnchorPoint(0.5, 0.5);
+        this._positionsAreDirty = true;
         return true;
     },
 
@@ -246,7 +387,7 @@ cc.Scale9Sprite = cc.Node.extend({
      * Initializes a 9-slice sprite with a texture file, a delimitation zone and
      * with the specified cap insets.
      * Once the sprite is created, you can then call its "setContentSize:" method
-     * to resize the sprite will all it's 9-slice goodness intract.
+     * to resize the sprite will all it's 9-slice goodness intact.
      * It respects the anchorPoint too.
      *
      * @param file The name of the texture file.
@@ -255,7 +396,7 @@ cc.Scale9Sprite = cc.Node.extend({
      * texture's full rect.
      * @param capInsets The values to use for the cap insets.
      */
-    initWithFile:function (file, rect, capInsets) {
+    initWithFile: function (file, rect, capInsets) {
         if (file instanceof cc.Rect) {
             file = arguments[1];
             capInsets = arguments[0];
@@ -265,7 +406,27 @@ cc.Scale9Sprite = cc.Node.extend({
             capInsets = capInsets || cc.RectZero();
         }
 
-        cc.Assert(file != null, "Invalid file for sprite");
+        if(!file)
+            throw "cc.Scale9Sprite.initWithFile(): file should be non-null";
+
+        var texture = cc.TextureCache.getInstance().textureForKey(file);
+        if (!texture) {
+            texture = cc.TextureCache.getInstance().addImage(file);
+            var locLoaded = texture.isLoaded();
+            this._textureLoaded = locLoaded;
+            if(!locLoaded){
+                texture.addLoadedEventListener(function(sender){
+                    // the texture is rotated on Canvas render mode, so isRotated always is false.
+                    var preferredSize = this._preferredSize;
+                    preferredSize = cc.size(preferredSize.width, preferredSize.height);
+                    var size  = sender.getContentSize();
+                    this.updateWithBatchNode(this._scale9Image, cc.rect(0,0,size.width,size.height), false, this._capInsets);
+                    this.setPreferredSize(preferredSize);
+                    this._positionsAreDirty = true;
+                    this._callLoadedEventCallbacks();
+                }, this);
+            }
+        }
         var batchnode = cc.SpriteBatchNode.create(file, 9);
         return this.initWithBatchNode(batchnode, rect, false, capInsets);
     },
@@ -280,13 +441,27 @@ cc.Scale9Sprite = cc.Node.extend({
      * @param spriteFrame The sprite frame object.
      * @param capInsets The values to use for the cap insets.
      */
-    initWithSpriteFrame:function (spriteFrame, capInsets) {
+    initWithSpriteFrame: function (spriteFrame, capInsets) {
+        if(!spriteFrame || !spriteFrame.getTexture())
+            throw "cc.Scale9Sprite.initWithSpriteFrame(): spriteFrame should be non-null and its texture should be non-null";
+
         capInsets = capInsets || cc.RectZero();
-
-        cc.Assert(spriteFrame != null, "Sprite frame must not be nil");
-
+        var locLoaded = spriteFrame.textureLoaded();
+        this._textureLoaded = locLoaded;
+        if(!locLoaded){
+            spriteFrame.addLoadedEventListener(function(sender){
+                // the texture is rotated on Canvas render mode, so isRotated always is false.
+                var preferredSize = this._preferredSize;
+                preferredSize = cc.size(preferredSize.width, preferredSize.height);
+                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc.Browser.supportWebGL ? sender.isRotated() : false, this._capInsets);
+                this.setPreferredSize(preferredSize);
+                this._positionsAreDirty = true;
+                this._callLoadedEventCallbacks();
+            },this);
+        }
         var batchNode = cc.SpriteBatchNode.createWithTexture(spriteFrame.getTexture(), 9);
-        return this.initWithBatchNode(batchNode, spriteFrame.getRect(), false, capInsets);
+        // the texture is rotated on Canvas render mode, so isRotated always is false.
+        return this.initWithBatchNode(batchNode, spriteFrame.getRect(), cc.Browser.supportWebGL ? spriteFrame.isRotated() : false, capInsets);
     },
 
     /**
@@ -299,11 +474,17 @@ cc.Scale9Sprite = cc.Node.extend({
      * @param spriteFrameName The sprite frame name.
      * @param capInsets The values to use for the cap insets.
      */
-    initWithSpriteFrameName:function (spriteFrameName, capInsets) {
+    initWithSpriteFrameName: function (spriteFrameName, capInsets) {
+        if(!spriteFrameName)
+            throw "cc.Scale9Sprite.initWithSpriteFrameName(): spriteFrameName should be non-null";
         capInsets = capInsets || cc.RectZero();
 
-        cc.Assert(spriteFrameName != null, "Invalid spriteFrameName for sprite");
         var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
+        if (frame == null) {
+            cc.log("cc.Scale9Sprite.initWithSpriteFrameName(): can't find the sprite frame by spriteFrameName");
+            return false;
+        }
+
         return this.initWithSpriteFrame(frame, capInsets);
     },
 
@@ -315,7 +496,7 @@ cc.Scale9Sprite = cc.Node.extend({
      *
      * @param capInsets The values to use for the cap insets.
      */
-    resizableSpriteWithCapInsets:function (capInsets) {
+    resizableSpriteWithCapInsets: function (capInsets) {
         var pReturn = new cc.Scale9Sprite();
         if (pReturn && pReturn.initWithBatchNode(this._scale9Image, this._spriteRect, false, capInsets)) {
             return pReturn;
@@ -329,150 +510,351 @@ cc.Scale9Sprite = cc.Node.extend({
      Textures with premultiplied alpha will have this property by default on YES. Otherwise the default value is NO
      @since v0.8
      */
-    setOpacityModifyRGB:function (value) {
-        this._isOpacityModifyRGB = value;
+    setOpacityModifyRGB: function (value) {
+        if(!this._scale9Image){
+            return;
+        }
+        this._opacityModifyRGB = value;
         var scaleChildren = this._scale9Image.getChildren();
-        if (scaleChildren && scaleChildren.length != 0) {
-            for (var i = 0; i < scaleChildren.length; i++) {
-                if (scaleChildren[i] && scaleChildren.RGBAProtocol) {
-                    scaleChildren[i].setOpacityModifyRGB(this._isOpacityModifyRGB);
-                }
-            }
+        if (scaleChildren) {
+            for (var i = 0, len = scaleChildren.length; i < len; i++)
+                scaleChildren[i].setOpacityModifyRGB(value);
         }
     },
 
     /** returns whether or not the opacity will be applied using glColor(R,G,B,opacity) or glColor(opacity, opacity, opacity, opacity);
      @since v0.8
      */
-    isOpacityModifyRGB:function () {
-        return this._isOpacityModifyRGB;
+    isOpacityModifyRGB: function () {
+        return this._opacityModifyRGB;
     },
 
-    updateWithBatchNode:function (batchNode, rect, unused, capInsets) {
+    updateWithBatchNode: function (batchNode, originalRect, rotated, capInsets) {
+        var opacity = this.getOpacity();
+        var color = this.getColor();
+        var rect = cc.rect(originalRect.x, originalRect.y, originalRect.width, originalRect.height);
+
         // Release old sprites
         this.removeAllChildren(true);
 
-        if (this._scale9Image != batchNode) {
+        if (this._scale9Image != batchNode){
             this._scale9Image = batchNode;
         }
+        var tmpTexture = batchNode.getTexture();
+        var locLoaded = tmpTexture.isLoaded();
+        this._textureLoaded = locLoaded;
+        if(!locLoaded){
+            tmpTexture.addLoadedEventListener(function(sender){
+                this._positionsAreDirty = true;
+                this._callLoadedEventCallbacks();
+            },this);
+            return;
+        }
+        var locScale9Image = this._scale9Image;
+        locScale9Image.removeAllChildren(true);
 
-        this._scale9Image.removeAllChildren(true);
+        //this._capInsets = capInsets;
+        var locCapInsets = this._capInsets;
+        locCapInsets.x = capInsets.x;
+        locCapInsets.y = capInsets.y;
+        locCapInsets.width = capInsets.width;
+        locCapInsets.height = capInsets.height;
+        this._spriteFrameRotated = rotated;
 
-        this._capInsets = capInsets;
+        var selTexture = locScale9Image.getTexture();
 
         // If there is no given rect
-        if (cc.Rect.CCRectEqualToRect(rect, cc.RectZero())) {
+        if (cc._rectEqualToZero(rect)) {
             // Get the texture size as original
-            var selTexture  = this._scale9Image.getTextureAtlas().getTexture();
-            if(selTexture instanceof  cc.Texture2D){
-                var textureSize = selTexture.getContentSize();
-                rect = cc.RectMake(0, 0, textureSize.width, textureSize.height);
-            }else{
-                rect = cc.RectMake(0, 0, selTexture.width, selTexture.height);
-            }
+            var textureSize = selTexture.getContentSize();
+            rect = cc.rect(0, 0, textureSize.width, textureSize.height);
         }
 
         // Set the given rect's size as original size
         this._spriteRect = rect;
-        this._originalSize = new cc.Size(rect.size.width, rect.size.height);
-        this._preferredSize = this._originalSize;
-        this._capInsetsInternal = capInsets || cc.RectZero();
+        var locSpriteRect = this._spriteRect;
+        locSpriteRect.x = rect.x;
+        locSpriteRect.y = rect.y;
+        locSpriteRect.width = rect.width;
+        locSpriteRect.height = rect.height;
+
+        var rectSize = rect._size;
+        this._originalSize.width = rectSize.width;
+        this._originalSize.height = rectSize.height;
+
+        var locPreferredSize = this._preferredSize;
+        if(locPreferredSize.width === 0 && locPreferredSize.height === 0){
+            locPreferredSize.width = rectSize.width;
+            locPreferredSize.height = rectSize.height;
+        }
+
+        var locCapInsetsInternal = this._capInsetsInternal;
+        if(capInsets){
+            locCapInsetsInternal.x = capInsets.x;
+            locCapInsetsInternal.y = capInsets.y;
+            locCapInsetsInternal.width = capInsets.width;
+            locCapInsetsInternal.height = capInsets.height;
+        }
+        var w = rectSize.width;
+        var h = rectSize.height;
 
         // If there is no specified center region
-        if (cc.Rect.CCRectEqualToRect(this._capInsetsInternal, cc.RectZero()) ||
-            cc.Rect.CCRectEqualToRect(this._capInsetsInternal, this._spriteRect)) {
-            // Apply the 3x3 grid format
-            this._capInsetsInternal = cc.RectMake(
-                rect.origin.x + this._originalSize.width / 3,
-                rect.origin.y + this._originalSize.height / 3,
-                this._originalSize.width / 3,
-                this._originalSize.height / 3);
-            this._capInsets = null;
-        }
-        else
-        {
-            this._capInsetsInternal = cc.RectMake(
-                rect.origin.x + this._capInsetsInternal.origin.x,
-                rect.origin.y + this._capInsetsInternal.origin.y,
-                this._capInsetsInternal.size.width,
-                this._capInsetsInternal.size.height
-            );
+        if (cc._rectEqualToZero(locCapInsetsInternal)) {
+            // CCLog("... cap insets not specified : using default cap insets ...");
+            locCapInsetsInternal.x = w / 3;
+            locCapInsetsInternal.y = h / 3;
+            locCapInsetsInternal.width = w / 3;
+            locCapInsetsInternal.height = h / 3;
         }
 
-        // Get the image edges
-        var l = rect.origin.x;
-        var t = rect.origin.y;
-        var h = rect.size.height;
-        var w = rect.size.width;
+        var left_w = locCapInsetsInternal.x;
+        var center_w = locCapInsetsInternal.width;
+        var right_w = w - (left_w + center_w);
 
-        //
-        // Set up the image
-        //
+        var top_h = locCapInsetsInternal.y;
+        var center_h = locCapInsetsInternal.height;
+        var bottom_h = h - (top_h + center_h);
 
-        // Centre
-        this._centre = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), this._capInsetsInternal);
-        this._scale9Image.addChild(this._centre, 0, cc.POSITIONS_CENTRE);
+        // calculate rects
+        // ... top row
+        var x = 0.0;
+        var y = 0.0;
 
-        // Top
-        this._top = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), cc.RectMake(this._capInsetsInternal.origin.x, t, this._capInsetsInternal.size.width,
-            this._capInsetsInternal.origin.y - t));
-        this._scale9Image.addChild(this._top, 1, cc.POSITIONS_TOP);
+        // top left
+        var lefttopbounds = cc.rect(x, y, left_w, top_h);
 
-        // Bottom
-        this._bottom = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), cc.RectMake(this._capInsetsInternal.origin.x,
-            this._capInsetsInternal.origin.y + this._capInsetsInternal.size.height, this._capInsetsInternal.size.width,
-            h - (this._capInsetsInternal.origin.y - t + this._capInsetsInternal.size.height)));
-        this._scale9Image.addChild(this._bottom, 1, cc.POSITIONS_BOTTOM);
+        // top center
+        x += left_w;
+        var centertopbounds = cc.rect(x, y, center_w, top_h);
 
-        // Left
-        this._left = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), cc.RectMake(
-            l, this._capInsetsInternal.origin.y, this._capInsetsInternal.origin.x - l,
-            this._capInsetsInternal.size.height));
-        this._scale9Image.addChild(this._left, 1, cc.POSITIONS_LEFT);
+        // top right
+        x += center_w;
+        var righttopbounds = cc.rect(x, y, right_w, top_h);
 
-        // Right
-        this._right = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), cc.RectMake(
-            this._capInsetsInternal.origin.x + this._capInsetsInternal.size.width,
-            this._capInsetsInternal.origin.y,
-            w - (this._capInsetsInternal.origin.x - l + this._capInsetsInternal.size.width),
-            this._capInsetsInternal.size.height));
-        this._scale9Image.addChild(this._right, 1, cc.POSITIONS_RIGHT);
+        // ... center row
+        x = 0.0;
+        y = 0.0;
 
-        // Top left
-        this._topLeft = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), cc.RectMake(
-            l, t, this._capInsetsInternal.origin.x - l, this._capInsetsInternal.origin.y - t));
-        this._scale9Image.addChild(this._topLeft, 2, cc.POSITIONS_TOPLEFT);
+        y += top_h;
+        // center left
+        var leftcenterbounds = cc.rect(x, y, left_w, center_h);
 
-        // Top right
-        this._topRight = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), cc.RectMake(
-            this._capInsetsInternal.origin.x + this._capInsetsInternal.size.width, t,
-            w - (this._capInsetsInternal.origin.x - l + this._capInsetsInternal.size.width),
-            this._capInsetsInternal.origin.y - t));
-        this._scale9Image.addChild(this._topRight, 2, cc.POSITIONS_TOPRIGHT);
+        // center center
+        x += left_w;
+        var centerbounds = cc.rect(x, y, center_w, center_h);
 
-        // Bottom left
-        this._bottomLeft = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), cc.RectMake(
-            l, this._capInsetsInternal.origin.y + this._capInsetsInternal.size.height,
-            this._capInsetsInternal.origin.x - l, h - (this._capInsetsInternal.origin.y - t + this._capInsetsInternal.size.height)));
-        this._scale9Image.addChild(this._bottomLeft, 2, cc.POSITIONS_BOTTOMLEFT);
+        // center right
+        x += center_w;
+        var rightcenterbounds = cc.rect(x, y, right_w, center_h);
 
-        // Bottom right
-        this._bottomRight = cc.Sprite.createWithTexture(this._scale9Image.getTexture(), cc.RectMake(
-            this._capInsetsInternal.origin.x + this._capInsetsInternal.size.width,
-            this._capInsetsInternal.origin.y + this._capInsetsInternal.size.height,
-            w - (this._capInsetsInternal.origin.x - l + this._capInsetsInternal.size.width),
-            h - (this._capInsetsInternal.origin.y - t + this._capInsetsInternal.size.height)));
-        this._scale9Image.addChild(this._bottomRight, 2, cc.POSITIONS_BOTTOMRIGHT);
+        // ... bottom row
+        x = 0.0;
+        y = 0.0;
+        y += top_h;
+        y += center_h;
 
-        this.setContentSize(rect.size);
-        this.addChild(this._scale9Image);
-        this.setAnchorPoint(cc.p(0.5, 0.5));
+        // bottom left
+        var leftbottombounds = cc.rect(x, y, left_w, bottom_h);
+
+        // bottom center
+        x += left_w;
+        var centerbottombounds = cc.rect(x, y, center_w, bottom_h);
+
+        // bottom right
+        x += center_w;
+        var rightbottombounds = cc.rect(x, y, right_w, bottom_h);
+
+        var t = cc.AffineTransformMakeIdentity();
+        if (!rotated) {
+            // CCLog("!rotated");
+            t = cc.AffineTransformTranslate(t, rect.x, rect.y);
+
+            cc._RectApplyAffineTransformIn(centerbounds, t);
+            cc._RectApplyAffineTransformIn(rightbottombounds, t);
+            cc._RectApplyAffineTransformIn(leftbottombounds, t);
+            cc._RectApplyAffineTransformIn(righttopbounds, t);
+            cc._RectApplyAffineTransformIn(lefttopbounds, t);
+            cc._RectApplyAffineTransformIn(rightcenterbounds, t);
+            cc._RectApplyAffineTransformIn(leftcenterbounds, t);
+            cc._RectApplyAffineTransformIn(centerbottombounds, t);
+            cc._RectApplyAffineTransformIn(centertopbounds, t);
+
+            // Centre
+            this._centre = new cc.Sprite();
+            this._centre.initWithTexture(selTexture, centerbounds);
+            locScale9Image.addChild(this._centre, 0, cc.POSITIONS_CENTRE);
+
+            // Top
+            this._top = new cc.Sprite();
+            this._top.initWithTexture(selTexture, centertopbounds);
+            locScale9Image.addChild(this._top, 1, cc.POSITIONS_TOP);
+
+            // Bottom
+            this._bottom = new cc.Sprite();
+            this._bottom.initWithTexture(selTexture, centerbottombounds);
+            locScale9Image.addChild(this._bottom, 1, cc.POSITIONS_BOTTOM);
+
+            // Left
+            this._left = new cc.Sprite();
+            this._left.initWithTexture(selTexture, leftcenterbounds);
+            locScale9Image.addChild(this._left, 1, cc.POSITIONS_LEFT);
+
+            // Right
+            this._right = new cc.Sprite();
+            this._right.initWithTexture(selTexture, rightcenterbounds);
+            locScale9Image.addChild(this._right, 1, cc.POSITIONS_RIGHT);
+
+            // Top left
+            this._topLeft = new cc.Sprite();
+            this._topLeft.initWithTexture(selTexture, lefttopbounds);
+            locScale9Image.addChild(this._topLeft, 2, cc.POSITIONS_TOPLEFT);
+
+            // Top right
+            this._topRight = new cc.Sprite();
+            this._topRight.initWithTexture(selTexture, righttopbounds);
+            locScale9Image.addChild(this._topRight, 2, cc.POSITIONS_TOPRIGHT);
+
+            // Bottom left
+            this._bottomLeft = new cc.Sprite();
+            this._bottomLeft.initWithTexture(selTexture, leftbottombounds);
+            locScale9Image.addChild(this._bottomLeft, 2, cc.POSITIONS_BOTTOMLEFT);
+
+            // Bottom right
+            this._bottomRight = new cc.Sprite();
+            this._bottomRight.initWithTexture(selTexture, rightbottombounds);
+            locScale9Image.addChild(this._bottomRight, 2, cc.POSITIONS_BOTTOMRIGHT);
+        } else {
+            // set up transformation of coordinates
+            // to handle the case where the sprite is stored rotated
+            // in the spritesheet
+            // CCLog("rotated");
+            var rotatedcenterbounds = centerbounds;
+            var rotatedrightbottombounds = rightbottombounds;
+            var rotatedleftbottombounds = leftbottombounds;
+            var rotatedrighttopbounds = righttopbounds;
+            var rotatedlefttopbounds = lefttopbounds;
+            var rotatedrightcenterbounds = rightcenterbounds;
+            var rotatedleftcenterbounds = leftcenterbounds;
+            var rotatedcenterbottombounds = centerbottombounds;
+            var rotatedcentertopbounds = centertopbounds;
+
+            t = cc.AffineTransformTranslate(t, rect.height + rect.x, rect.y);
+            t = cc.AffineTransformRotate(t, 1.57079633);
+
+            centerbounds = cc.RectApplyAffineTransform(centerbounds, t);
+            rightbottombounds = cc.RectApplyAffineTransform(rightbottombounds, t);
+            leftbottombounds = cc.RectApplyAffineTransform(leftbottombounds, t);
+            righttopbounds = cc.RectApplyAffineTransform(righttopbounds, t);
+            lefttopbounds = cc.RectApplyAffineTransform(lefttopbounds, t);
+            rightcenterbounds = cc.RectApplyAffineTransform(rightcenterbounds, t);
+            leftcenterbounds = cc.RectApplyAffineTransform(leftcenterbounds, t);
+            centerbottombounds = cc.RectApplyAffineTransform(centerbottombounds, t);
+            centertopbounds = cc.RectApplyAffineTransform(centertopbounds, t);
+
+            rotatedcenterbounds.x = centerbounds.x;
+            rotatedcenterbounds.y = centerbounds.y;
+
+            rotatedrightbottombounds.x = rightbottombounds.x;
+            rotatedrightbottombounds.y = rightbottombounds.y;
+
+            rotatedleftbottombounds.x = leftbottombounds.x;
+            rotatedleftbottombounds.y = leftbottombounds.y;
+
+            rotatedrighttopbounds.x = righttopbounds.x;
+            rotatedrighttopbounds.y = righttopbounds.y;
+
+            rotatedlefttopbounds.x = lefttopbounds.x;
+            rotatedlefttopbounds.y = lefttopbounds.y;
+
+            rotatedrightcenterbounds.x = rightcenterbounds.x;
+            rotatedrightcenterbounds.y = rightcenterbounds.y;
+
+            rotatedleftcenterbounds.x = leftcenterbounds.x;
+            rotatedleftcenterbounds.y = leftcenterbounds.y;
+
+            rotatedcenterbottombounds.x = centerbottombounds.x;
+            rotatedcenterbottombounds.y = centerbottombounds.y;
+
+            rotatedcentertopbounds.x = centertopbounds.x;
+            rotatedcentertopbounds.y = centertopbounds.y;
+
+            // Centre
+            this._centre = new cc.Sprite();
+            this._centre.initWithTexture(selTexture, rotatedcenterbounds, true);
+            locScale9Image.addChild(this._centre, 0, cc.POSITIONS_CENTRE);
+
+            // Top
+            this._top = new cc.Sprite();
+            this._top.initWithTexture(selTexture, rotatedcentertopbounds, true);
+            locScale9Image.addChild(this._top, 1, cc.POSITIONS_TOP);
+
+            // Bottom
+            this._bottom = new cc.Sprite();
+            this._bottom.initWithTexture(selTexture, rotatedcenterbottombounds, true);
+            locScale9Image.addChild(this._bottom, 1, cc.POSITIONS_BOTTOM);
+
+            // Left
+            this._left = new cc.Sprite();
+            this._left.initWithTexture(selTexture, rotatedleftcenterbounds, true);
+            locScale9Image.addChild(this._left, 1, cc.POSITIONS_LEFT);
+
+            // Right
+            this._right = new cc.Sprite();
+            this._right.initWithTexture(selTexture, rotatedrightcenterbounds, true);
+            locScale9Image.addChild(this._right, 1, cc.POSITIONS_RIGHT);
+
+            // Top left
+            this._topLeft = new cc.Sprite();
+            this._topLeft.initWithTexture(selTexture, rotatedlefttopbounds, true);
+            locScale9Image.addChild(this._topLeft, 2, cc.POSITIONS_TOPLEFT);
+
+            // Top right
+            this._topRight = new cc.Sprite();
+            this._topRight.initWithTexture(selTexture, rotatedrighttopbounds, true);
+            locScale9Image.addChild(this._topRight, 2, cc.POSITIONS_TOPRIGHT);
+
+            // Bottom left
+            this._bottomLeft = new cc.Sprite();
+            this._bottomLeft.initWithTexture(selTexture, rotatedleftbottombounds, true);
+            locScale9Image.addChild(this._bottomLeft, 2, cc.POSITIONS_BOTTOMLEFT);
+
+            // Bottom right
+            this._bottomRight = new cc.Sprite();
+            this._bottomRight.initWithTexture(selTexture, rotatedrightbottombounds, true);
+            locScale9Image.addChild(this._bottomRight, 2, cc.POSITIONS_BOTTOMRIGHT);
+        }
+
+        this.setContentSize(rect._size);
+        this.addChild(locScale9Image);
+
+        if (this._spritesGenerated) {
+            // Restore color and opacity
+            this.setOpacity(opacity);
+            if(color.r !== 255 || color.g !== 255 || color.b !== 255){
+                this.setColor(color);
+            }
+        }
+        this._spritesGenerated = true;
         return true;
     },
 
-    setSpriteFrame:function (spriteFrame) {
+    setSpriteFrame: function (spriteFrame) {
         var batchNode = cc.SpriteBatchNode.createWithTexture(spriteFrame.getTexture(), 9);
-        this.updateWithBatchNode(batchNode, spriteFrame.getRect(), false, cc.RectZero());
+        // the texture is rotated on Canvas render mode, so isRotated always is false.
+        var locLoaded = spriteFrame.textureLoaded();
+        this._textureLoaded = locLoaded;
+        if(!locLoaded){
+            spriteFrame.addLoadedEventListener(function(sender){
+                // the texture is rotated on Canvas render mode, so isRotated always is false.
+                var preferredSize = this._preferredSize;
+                preferredSize = cc.size(preferredSize.width, preferredSize.height);
+                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc.Browser.supportWebGL ? sender.isRotated() : false, this._capInsets);
+                this.setPreferredSize(preferredSize);
+                this._positionsAreDirty = true;
+                this._callLoadedEventCallbacks();
+            },this);
+        }
+        this.updateWithBatchNode(batchNode, spriteFrame.getRect(), cc.Browser.supportWebGL ? spriteFrame.isRotated() : false, cc.RectZero());
 
         // Reset insets
         this._insetLeft = 0;
@@ -490,39 +872,35 @@ cc.Scale9Sprite = cc.Node.extend({
  */
 cc.Scale9Sprite.create = function (file, rect, capInsets) {
     var pReturn;
-    if (arguments.length == 2) {
+    if (arguments.length === 2) {
         if (typeof(file) == "string") {
             pReturn = new cc.Scale9Sprite();
             if (pReturn && pReturn.initWithFile(file, rect)) {
                 return pReturn;
             }
-            return null;
         } else if (file instanceof cc.Rect) {
             pReturn = new cc.Scale9Sprite();
             if (pReturn && pReturn.initWithFile(file, capInsets)) {
                 return pReturn;
             }
-            return null;
         }
-    } else if (arguments.length == 3) {
+    } else if (arguments.length === 3) {
         pReturn = new cc.Scale9Sprite();
         if (pReturn && pReturn.initWithFile(file, rect, capInsets)) {
             return pReturn;
         }
-        return null;
-    } else if (arguments.length == 1) {
+    } else if (arguments.length === 1) {
         pReturn = new cc.Scale9Sprite();
         if (pReturn && pReturn.initWithFile(file)) {
             return pReturn;
         }
-        return null;
-    } else if (arguments.length == 0) {
+    } else if (arguments.length === 0) {
         pReturn = new cc.Scale9Sprite();
-        if (pReturn) {
+        if (pReturn && pReturn.init()) {
             return pReturn;
         }
-        return null;
     }
+    return null;
 };
 
 cc.Scale9Sprite.createWithSpriteFrame = function (spriteFrame, capInsets) {
@@ -534,9 +912,10 @@ cc.Scale9Sprite.createWithSpriteFrame = function (spriteFrame, capInsets) {
 };
 
 cc.Scale9Sprite.createWithSpriteFrameName = function (spriteFrameName, capInsets) {
+    if(!spriteFrameName)
+        throw "cc.Scale9Sprite.createWithSpriteFrameName(): spriteFrameName should be non-null";
     var pReturn = new cc.Scale9Sprite();
-    if (pReturn && pReturn.initWithSpriteFrameName(spriteFrameName, capInsets)) {
+    if (pReturn && pReturn.initWithSpriteFrameName(spriteFrameName, capInsets))
         return pReturn;
-    }
     return null;
 };

@@ -29,8 +29,8 @@ Slot.prototype.init = function(color, ready){
 	this.lblReady.setColor(new cc.Color3B(0,0,0));
 	
 	//Create color box and checkbox with their slot in scope.
-	this.colorBox = new ColorBox(this.layer, this.x + 675, this.y + 4, color);
-	this.chkReady = new CheckBox(this.layer, this.x + 850, this.y + 3, ready);
+	this.colorBox = new ColorBox(this.layer, this.x + 675, this.y, color);
+	this.chkReady = new CheckBox(this.layer, this.x + 850, this.y, ready);
 	
 	//Set callbacks.
 	(function(slot){

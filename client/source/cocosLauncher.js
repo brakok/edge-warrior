@@ -85,7 +85,7 @@
 	//Add event that load everything needed by Cocos2d.
 	window.addEventListener('DOMContentLoaded', function (){
 		var script = doc.createElement('script');
-		script.src = config.engineDir + 'platform/jsloader.js';
+		script.src = config.engineDir + 'jsloader.js';
 		doc.body.appendChild(script);
 		script.id = 'cocos2d-html5';	
 

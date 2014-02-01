@@ -75,7 +75,7 @@ Block.prototype.update = function(dt){
 			this.hasDoneLandingAnimation = true;
 			
 			//Create effect.
-			EffectManager.create(Enum.Effect.Type.BLOCK_LANDING, this.x, this.y - (this.sprite.getTexture().height*0.5 - Constants.Effect.BlockLanding.OFFSET));
+			EffectManager.create(Enum.Effect.Type.BLOCK_LANDING, this.x, this.y - (this.sprite.getTextureRect().height*0.5 - Constants.Effect.BlockLanding.OFFSET));
 		}
 		else
 			this.landingCountdown -= dt;
