@@ -75,8 +75,8 @@ var ServerList = cc.LayerColor.extend({
 		Client.search();
 	},
 	resize: function(){
-		this.width = Options.resolution.width;
-		this.height = Options.resolution.height;
+		this.width = Options.viewport.width;
+		this.height = Options.viewport.height;
 	
 		this.placeHTML();
 	},

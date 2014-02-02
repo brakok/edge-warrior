@@ -105,8 +105,8 @@ var Login = cc.LayerColor.extend({
 		MenuScreens.switchTo(MenuScreens.resetPassword);
 	},
 	resize: function(){
-		this.width = Options.resolution.width;
-		this.height = Options.resolution.height;
+		this.width = Options.viewport.width;
+		this.height = Options.viewport.height;
 	
 		this.placeHTML();
 	},

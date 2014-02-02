@@ -56,7 +56,7 @@ var KeysScreen = cc.LayerColor.extend({
 		this.placeHTML();
 	},
 	placeHTML: function(){
-		this.keyForm.setPosition(Options.resolution.width*0.27, Options.resolution.height*0.25);
+		this.keyForm.setPosition(Options.viewport.width*0.27, Options.viewport.height*0.25);
 	}
 });
 

@@ -186,8 +186,8 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.placeHTML();
 	},
 	placeHTML: function(){
-		this.div.style.left = Options.resolution.width*0.1 + 'px';
-		this.div.style.top = Options.resolution.height*0.09 + 'px';
+		this.div.style.left = Options.viewport.width*0.1 + 'px';
+		this.div.style.top = Options.viewport.height*0.09 + 'px';
 	}
 });
 
