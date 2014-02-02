@@ -92,13 +92,12 @@ var ChangePassword = cc.LayerColor.extend({
 		this.txtConfirmation.value = '';
 	},
 	resize: function(){
-		this.width = Options.resolution.width;
-		this.height = Options.resolution.height;
+		this.width = Options.viewport.width;
+		this.height = Options.viewport.height;
 	
 		this.placeHTML();
 	},
 	placeHTML: function(){
-		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
 
 		this.div.style.left = this.width*0.19 + 'px';
 		this.div.style.top = this.height*0.45 + 'px';

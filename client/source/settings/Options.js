@@ -87,12 +87,10 @@ var Options = new function(){
 	
 	//Set resolution.
 	this.setResolution = function(resolution){
+
 		this.resolution.width = resolution.width;
 		this.resolution.height = resolution.height;
 		this.resolution.isFullscreen = resolution.isFullscreen;
-		
-		this.viewport.width = resolution.width;
-		this.viewport.height = resolution.height;
 	};
 	
 	//Save new resolution.
@@ -127,32 +125,38 @@ var Options = new function(){
 	//Resize window.
 	this.resizeWindow = function(){
 		
-		if(this.resolution.width > screen.availWidth)
-			this.resolution.width = screen.availWidth;
+		this.viewport.width = this.resolution.width;
+		this.viewport.height = this.resolution.height;
+		
+		if(this.viewport.width > screen.availWidth)
+			this.viewport.width = screen.availWidth;
 			
-		if(this.resolution.height > screen.availHeight)
-			this.resolution.height = screen.availHeight;
+		if(this.viewport.height > screen.availHeight)
+			this.viewport.height = screen.availHeight;
 		
 		//Resize menus.
-		window.resizeTo(this.resolution.width, this.resolution.height);
+		window.resizeTo(this.viewport.width, this.viewport.height);
 	};
 	
 	function resize(){
-		cc.EGLView.getInstance().setDesignResolutionSize(that.resolution.width, that.resolution.height, that.policy);
+		cc.EGLView.getInstance().setDesignResolutionSize(that.viewport.width, that.viewport.height, that.policy);
 			
-		var frameSize = cc.EGLView.getInstance().getFrameSize();
-		that.viewport.width = that.resolution.width = frameSize.width;
-		that.viewport.height = that.resolution.height = frameSize.height;
-								
-		//Resize canvas to new resolution.
-		var xScale = that.resolution.width / cc.originalCanvasSize.width;
-        var yScale = that.resolution.height / cc.originalCanvasSize.height;
-		
-		if (xScale > yScale)
-            xScale = yScale;
-				
-		document.getElementsByTagName('body')[0].style.font = "normal " + Constants.Font.SIZE*xScale + "px " + Constants.Font.NAME;
-		MenuScreens.resize();
+		setTimeout(function(){
+			var canvas = document.getElementById('gameCanvas');
+			
+			that.viewport.width = canvas.width;
+			that.viewport.height = canvas.height/(that.resolution.isFullscreen ? 1.08 : 1);
+			
+			//Resize canvas to new resolution.
+			var xScale = that.viewport.width / cc.originalCanvasSize.width;
+			var yScale = that.viewport.height / cc.originalCanvasSize.height;
+			
+			if (xScale > yScale)
+				xScale = yScale;
+					
+			document.getElementsByTagName('body')[0].style.font = "normal " + Constants.Font.SIZE*xScale + "px " + Constants.Font.NAME;
+			MenuScreens.resize();
+		}, 100);
 	}
 	
 	this.init = function(){

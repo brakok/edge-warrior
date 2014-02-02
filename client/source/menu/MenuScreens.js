@@ -1,6 +1,8 @@
 
 var MenuScreens = new function(){
 
+	this.mainDiv = document.getElementById('main');
+
 	this.login = null;
 	this.mainMenu = null;
 	this.lobbyScreen = null;
@@ -36,6 +38,16 @@ var MenuScreens = new function(){
 	
 	this.resize = function(){
 	
+		//Resize main frame to fit canvas.
+		var gameContainer = document.getElementById('Cocos2dGameContainer');
+
+		if(gameContainer && gameContainer.style)
+		{
+			this.mainDiv.style.width = gameContainer.style.width;
+			this.mainDiv.style.height = gameContainer.style.height;
+			this.mainDiv.style.margin = gameContainer.style.margin;
+		}
+		
 		if(this.login != null)
 		{
 			this.login.resize();

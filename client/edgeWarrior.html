@@ -5,7 +5,7 @@
 	<body>
 		<link rel="stylesheet" type="text/css" href="assets/css/game.css">
 
-		<div class="forms">
+		<div class="forms" id="main">
 		
 			<div class="exit" id="exit">
 				<button id="cmdExit">
@@ -205,14 +205,17 @@
 			
 			<!-- Resolution -->
 			<div id="video" class="video">
-				<h3>Screen size</h3>
+				<h3>Screen resolution</h3>
 				<select id="resolution" size="10">
-					<option value="640x480x0">X-Small</option>
-					<option value="1024x768x0">Small</option>
-					<option value="1600x900x0">Medium</option>
-					<option value="1920x1080x0">Large</option>
-					<option value="1920x1080x1">Fullscreen</option>
+					<option value="640x480">640x480</option>
+					<option value="1024x768">1024x768</option>
+					<option value="1600x900">1600x900</option>
+					<option value="1920x1080">1920x1080</option>
 				</select>
+				<div>
+					<label for="fullscreen">Fullscreen</label>
+					<input type="checkbox" class="checkbox" id="fullscreen" />
+				</div>
 			</div>
 		</div>
 

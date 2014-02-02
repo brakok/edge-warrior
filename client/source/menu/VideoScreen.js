@@ -21,16 +21,21 @@ var VideoScreen = cc.LayerColor.extend({
 		
 		this.div = document.getElementById('video');
 		var privateSelect = this.select = document.getElementById('resolution');
+		var privateCheckbox = this.chkFullscreen = document.getElementById('fullscreen');		
 		
-		//Bind onchange event to resize on resolution selection.
-		this.select.onchange = function(){
-			var values = privateSelect.value.split("x");
-			var res = {
-				width: values[0],
-				height: values[1],
-				isFullscreen: values[2] == 1
-			};
+		function changeResolution(){
+		
+			var values = null;
 
+			if(privateSelect.value != null && privateSelect.value != '')
+				values = privateSelect.value.split("x");
+				
+			var res = {
+				width: values != null ? values[0] : Options.resolution.width,
+				height: values != null ? values[1] : Options.resolution.height,
+				isFullscreen: privateCheckbox.checked
+			};
+			
 			Options.setResolution(res);
 			
 			if(Options.resolution.isFullscreen)
@@ -39,7 +44,13 @@ var VideoScreen = cc.LayerColor.extend({
 				Options.exitFullscreen();
 				
 			Options.resizeWindow();
-		};
+		}
+		
+		//Bind onchange event to resize on resolution selection.
+		this.select.onchange = changeResolution;
+		
+		//Toggle fullscreen.
+		this.chkFullscreen.onclick = changeResolution;
 		
 		this.placeHTML();
 		
@@ -59,15 +70,16 @@ var VideoScreen = cc.LayerColor.extend({
 	},
 	onEntering: function(){
 	
-		this.originalFullscreen = Options.isFullscreen;
-	
 		this.select.value = Options.resolution.width + 'x' + Options.resolution.height;
 		this.div.style.display = "block";
+		
+		this.chkFullscreen.checked = Options.resolution.isFullscreen;
 		
 		//Set original resolution.
 		this.originalResolution = {
 			width: Options.resolution.width,
-			height: Options.resolution.height
+			height: Options.resolution.height,
+			isFullscreen: Options.resolution.isFullscreen
 		};
 	},
 	onLeaving: function(){
@@ -80,9 +92,9 @@ var VideoScreen = cc.LayerColor.extend({
 	},
 	cancel: function(){
 	
-		if(!this.originalFullscreen && Options.resolution.isFullscreen)
+		if(!this.originalResolution.isFullscreen && Options.resolution.isFullscreen)
 			Options.exitFullscreen();
-		else if(this.originalFullscreen && !Options.isFullscreen)
+		else if(this.originalResolution.isFullscreen && !Options.resolution.isFullscreen)
 			Options.enterFullscreen();
 	
 		Options.setResolution(this.originalResolution);
@@ -98,8 +110,8 @@ var VideoScreen = cc.LayerColor.extend({
 	},
 	placeHTML: function(){
 		
-		this.div.style.left = Options.resolution.width*0.35 + 'px';
-		this.div.style.top = Options.resolution.height*0.25 + 'px';
+		this.div.style.left = Options.viewport.width*0.35 + 'px';
+		this.div.style.top = Options.viewport.height*0.25 + 'px';
 	}
 });
 
