@@ -27,16 +27,17 @@ var VideoScreen = cc.LayerColor.extend({
 			var values = privateSelect.value.split("x");
 			var res = {
 				width: values[0],
-				height: values[1]
+				height: values[1],
+				isFullscreen: values[2] == 1
 			};
+
+			Options.setResolution(res);
 			
-			//Enter fullscreen if specified.
-			if(res.width == 1920 && res.height == 1080)
+			if(Options.resolution.isFullscreen)
 				Options.enterFullscreen();
 			else
 				Options.exitFullscreen();
-
-			Options.setResolution(res);
+				
 			Options.resizeWindow();
 		};
 		
@@ -72,13 +73,7 @@ var VideoScreen = cc.LayerColor.extend({
 	onLeaving: function(){
 		this.div.style.display = "none";
 	},
-	save: function(){
-		var values = this.select.value.split("x");
-		var res = {
-			width: values[0],
-			height: values[1]
-		};
-	
+	save: function(){	
 		Options.saveResolution();
 		
 		this.back();

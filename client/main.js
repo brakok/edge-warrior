@@ -5,7 +5,7 @@
 	
 	var cmdExit = document.getElementById('cmdExit');
 	cmdExit.onclick = function(){
-		window.close();
+		chrome.app.window.current().close();
 	};
 })();
 

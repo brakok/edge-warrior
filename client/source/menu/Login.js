@@ -111,8 +111,6 @@ var Login = cc.LayerColor.extend({
 		this.placeHTML();
 	},
 	placeHTML: function(){
-		var scaleFactor = cc.Director.getInstance().getContentScaleFactor();
-
 		this.loginDiv.style.left = (this.width*0.5-(HtmlHelper.computeWidth(this.loginDiv)*0.5)) + 'px';
 		this.loginDiv.style.top = this.height*0.55 + 'px';
 	}
