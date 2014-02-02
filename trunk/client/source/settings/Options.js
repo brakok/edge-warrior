@@ -89,6 +89,7 @@ var Options = new function(){
 	this.setResolution = function(resolution){
 		this.resolution.width = resolution.width;
 		this.resolution.height = resolution.height;
+		this.resolution.isFullscreen = resolution.isFullscreen;
 		
 		this.viewport.width = resolution.width;
 		this.viewport.height = resolution.height;
@@ -103,19 +104,7 @@ var Options = new function(){
 	//Enter fullscreen.
 	this.enterFullscreen = function(){
 	
-		var element = document.getElementsByTagName('body')[0];
-		
-		if(element.requestFullscreen) {
-			element.requestFullscreen();
-		} else if(element.mozRequestFullScreen) {
-			element.mozRequestFullScreen();
-		} else if(element.webkitRequestFullscreen) {
-			element.webkitRequestFullscreen();
-		} else if(element.msRequestFullscreen) {
-			element.msRequestFullscreen();
-		}
-		
-		this.resolution.isFullscreen = true;
+		chrome.app.window.current().fullscreen();
 		
 		if(!Client.game)
 		{
@@ -128,15 +117,7 @@ var Options = new function(){
 	//Exit fullscreen.
 	this.exitFullscreen = function(){
 	
-		if(document.exitFullscreen) {
-			document.exitFullscreen();
-		} else if(document.mozCancelFullScreen) {
-			document.mozCancelFullScreen();
-		} else if(document.webkitExitFullscreen) {
-			document.webkitExitFullscreen();
-		}
-		
-		this.resolution.isFullscreen = false;
+		chrome.app.window.current().restore();
 		
 		//Show exit button.
 		var exit = document.getElementById('exit');
@@ -153,8 +134,7 @@ var Options = new function(){
 			this.resolution.height = screen.availHeight;
 		
 		//Resize menus.
-		if(!this.resolution.isFullscreen)
-			window.resizeTo(this.resolution.width, this.resolution.height);
+		window.resizeTo(this.resolution.width, this.resolution.height);
 	};
 	
 	function resize(){
@@ -219,6 +199,10 @@ var Options = new function(){
 		if(this.callbackCounter >= 3)
 		{
 			this.resizeWindow();
+			
+			if(this.resolution.isFullscreen)
+				this.enterFullscreen();
+				
 			this.loaded = true;
 		}
 	};
