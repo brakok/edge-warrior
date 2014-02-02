@@ -145,7 +145,7 @@ var Options = new function(){
 			var canvas = document.getElementById('gameCanvas');
 			
 			that.viewport.width = canvas.width;
-			that.viewport.height = canvas.height/(that.resolution.isFullscreen ? 1.08 : 1);
+			that.viewport.height = canvas.height;
 			
 			//Resize canvas to new resolution.
 			var xScale = that.viewport.width / cc.originalCanvasSize.width;

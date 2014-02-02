@@ -71,7 +71,7 @@ select {
 }
 
 div.forms > div {
-	position: relative; 
+	position: absolute; 
 	z-index: 10; 
 	display: none;
 }
