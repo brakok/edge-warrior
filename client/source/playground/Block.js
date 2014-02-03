@@ -3,13 +3,15 @@ var Block = function (x, y, type, color, skill) {
 	this.x = x;
 	this.y = y;
 
-	this.scale = 1;
-	
 	this.type = type;
 	this.skill = (Enum.Block.Type.SKILLED ? skill : null);
 	
+	this.smoke = null;
+	
 	this.color = color;
 	this.originalColor = color;
+	
+	this.updatedOnce = false;
 	
 	//Create sprite associated.
 	if(this.type == Enum.Block.Type.COLORED && this.color != null)
@@ -30,14 +32,14 @@ var Block = function (x, y, type, color, skill) {
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
 		
-	this.setPosition(this.x, this.y);
-	
+	this.sprite._zOrder = Constants.Block.Z_ORDER;
+		
 	this.landingCountdown = 0;
 	this.hasDoneLandingAnimation = true;
 }
 
 Block.prototype.init = function(){
-	Client.game.layer.addChild(this.sprite);
+	this.smoke = Smoke.create(this.x, this.y);
 };
 
 Block.prototype.setPosition = function(x, y){
@@ -62,10 +64,27 @@ Block.prototype.land = function(){
 	
 	//Trigger sound.
 	AudioManager.playEffect(Constants.Sound.File.Block.LANDING, false);
+	
+	this.stopSmoke();
 };
 
 Block.prototype.update = function(dt){
-	Client.game.camera.project(this.sprite, this.x, this.y, this.scale, this.scale);
+
+	if(!this.updatedOnce)
+	{
+		if(this.smoke)
+			Client.game.layer.addChild(this.smoke);
+			
+		Client.game.layer.addChild(this.sprite);
+		
+		this.updatedOnce = true;
+	}
+
+	if(this.smoke)
+		Client.game.camera.project(this.smoke, this.x, this.y);
+
+
+	Client.game.camera.project(this.sprite, this.x, this.y);
 	
 	//Trigger landing animation if needed.
 	if(!this.hasDoneLandingAnimation)
@@ -95,8 +114,18 @@ Block.prototype.swapColor = function(color){
 	this.setPosition(this.x, this.y);
 };
 
+Block.prototype.stopSmoke = function(){
+
+	if(this.smoke){
+		this.smoke.setSpeed(0);
+		this.smoke.stopSystem();
+	}
+};
+
 Block.prototype.explode = function(cause){
 	Client.game.layer.removeChild(this.sprite);
+	
+	this.stopSmoke();
 	
 	if(this.type == Enum.Block.Type.SKILLED)
 	{

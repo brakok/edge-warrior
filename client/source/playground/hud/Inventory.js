@@ -107,8 +107,8 @@ Inventory.prototype.setOption = function(isFirst){
 	option.sprite._zOrder = isFirst ? Constants.HUD.Inventory.Option1.Z_INDEX
 									: Constants.HUD.Inventory.Option2.Z_INDEX;
 	//Resize block.
-	option.sprite.setScale(isFirst ? Constants.HUD.Inventory.Option1.SCALE*option.scale
-								   : Constants.HUD.Inventory.Option2.SCALE*option.scale);
+	option.sprite.setScale(isFirst ? Constants.HUD.Inventory.Option1.SCALE
+								   : Constants.HUD.Inventory.Option2.SCALE);
 	//Set it position.
 	option.sprite.setPosition(new cc.Point(this.x + (isFirst ? Constants.HUD.Inventory.Option1.REL_X : Constants.HUD.Inventory.Option2.REL_X), 
 										   this.y + (isFirst ? Constants.HUD.Inventory.Option1.REL_Y : Constants.HUD.Inventory.Option2.REL_Y)));
@@ -141,7 +141,7 @@ Inventory.prototype.renderBlock = function(index){
 	//Set good Z-index.
 	this.blocks[index].sprite._zOrder = Constants.HUD.Inventory.Current.Z_INDEX + (index*Constants.HUD.Inventory.Next.STEP_Z_INDEX);
 	//Resize block.
-	this.blocks[index].sprite.setScale((Constants.HUD.Inventory.Current.SCALE*this.blocks[index].scale) +  (index*Constants.HUD.Inventory.Next.STEP_SCALE));
+	this.blocks[index].sprite.setScale((Constants.HUD.Inventory.Current.SCALE) +  (index*Constants.HUD.Inventory.Next.STEP_SCALE));
 	//Set it position.
 	this.blocks[index].sprite.setPosition(new cc.Point(this.x + Constants.HUD.Inventory.Current.REL_X + (index*Constants.HUD.Inventory.Next.STEP_X), 
 													   this.y + Constants.HUD.Inventory.Current.REL_Y + (index*Constants.HUD.Inventory.Next.STEP_Y)));

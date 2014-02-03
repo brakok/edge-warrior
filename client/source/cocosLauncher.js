@@ -71,6 +71,8 @@
 				  'source/playground/hud/SkillStore.js',
 				  'source/playground/hud/SkillItem.js',
 				  
+				  'source/playground/particles/Smoke.js',
+				  
 				  'source/playground/Missile.js',
 				  'source/playground/Spike.js',
 				  'source/playground/manager/EffectManager.js',
