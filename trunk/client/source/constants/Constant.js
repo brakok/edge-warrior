@@ -2,6 +2,9 @@ var Constants = {
 	Network: {
 		ADDRESS: 'http://localhost:1050'
 	},
+	Player: {
+		Z_ORDER: 10
+	},
 	Game: {
 		Phase: {
 			Warmup: {
@@ -28,7 +31,15 @@ var Constants = {
 		ORIGINAL_WIDTH: 1024,
 		ORIGINAL_HEIGHT: 768
 	},
+	Particles: {
+		Z_ORDER: 8,
+		Smoke: {
+			PARTICLES_COUNT: 125,
+			SPEED: 500
+		}
+	},
 	Block: {
+		Z_ORDER: 9,
 		Percent: {
 			STARTING_NEUTRAL: 15,
 			LOST_FOREACH_ENEMY: 3

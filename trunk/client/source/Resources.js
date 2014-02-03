@@ -8,6 +8,7 @@ var assetsHudDir = 'assets/hud/';
 var assetsWinningGoalDir = 'assets/winningGoal/';
 var assetsEffectDir = 'assets/effects/';
 var assetsSkillDir = 'assets/skills/';
+var assetsParticles = 'assets/particles/';
 
 var soundDir = 'sounds/';
 var soundVoiceDir = 'sounds/voices/';
@@ -17,6 +18,9 @@ var assets = [
 	//Font
 	{fontName: Constants.Font.NAME, src:[{src:"assets/css/fonts/Quantico-Bold.otf", type:"truetype"}]},
 
+	//Particles
+	{type:'image', src: assetsParticles + 'smoke.png'},
+	
 	//Menu
 	{type:'image', src: assetsMenuDir + '0.png'},
 	{type:'image', src: assetsMenuDir + '1.png'},
