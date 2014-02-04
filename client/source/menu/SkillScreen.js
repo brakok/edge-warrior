@@ -64,7 +64,7 @@ var SkillScreen = cc.LayerColor.extend({
 		var pos = touches[0].getLocation();
 		var skill = this.skillList.getSkillByPosition(pos.x, pos.y);
 		
-		if(skill && this.selectSkill(skill))
+		if(skill && this.selectSkill(skill, true))
 			skill.select();
 	},
 	onTouchesMoved: function(touches, ev){
@@ -104,7 +104,7 @@ var SkillScreen = cc.LayerColor.extend({
 			if(this.skillSlots[i].selected)
 				this.skillSlots[i].unselect();
 	},
-	selectSkill: function(skill){
+	selectSkill: function(skill, doubleClickCheck){
 	
 		//Check for double click assignation.
 		var selectedSlot = null;
@@ -117,7 +117,7 @@ var SkillScreen = cc.LayerColor.extend({
 			}
 			
 		//Set skill.
-		if(selectedSlot != null && this.firstClickTimespan != null && (new Date() - this.firstClickTimespan) < Constants.Mouse.DOUBLE_CLICK_THRESHOLD)
+		if(selectedSlot != null && (!doubleClickCheck || (this.firstClickTimespan != null && (new Date() - this.firstClickTimespan) < Constants.Mouse.DOUBLE_CLICK_THRESHOLD)))
 		{
 			//Check for unicity.
 			for(var i = 0; i < 4; ++i)
