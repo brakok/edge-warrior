@@ -46,11 +46,7 @@ SkillList.prototype.init = function(){
 						  initialY + stepY*rowIndex, 
 						  Constants.Menu.SkillScreen.SkillList.SCALE_X, 
 						  Constants.Menu.SkillScreen.SkillList.SCALE_X,
-						  this.layer, 
-						  function(){
-							that.layer.selectSkill(this);
-							this.select();
-						  });
+						  this.layer);
 	}
 	
 	//Set title.
@@ -59,4 +55,20 @@ SkillList.prototype.init = function(){
 	this.title.setPosition(new cc.Point(this.x - width*0.5 + 100, this.y + height*0.5 + 40));
 	
 	this.layer.addChild(this.title);
+};
+
+//Check if a skill is positioned around the given coordinate.
+SkillList.prototype.getSkillByPosition = function(x, y){
+	
+	for(var i = 0; i < this.list.length; i++)
+	{
+		//In cc.MenuItemImage.
+		var rect = this.list[i].sprite.getTextureRect();
+		var pos = this.list[i].sprite.getPosition();
+		
+		if(x >= pos.x - (rect.width*0.5) && y >= pos.y - (rect.height*0.5) && x <= pos.x + (rect.width*0.5) && y <= pos.y + (rect.height*0.5))
+			return this.list[i];
+	}
+	
+	return null;
 };

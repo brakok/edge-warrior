@@ -5,7 +5,8 @@ var SkillScreen = cc.LayerColor.extend({
 	
 		this._super(new cc.Color4B(255, 255, 255, 255), this.width, this.height);
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
-
+		this.setTouchEnabled(true);
+		
 		this._zOrder = Constants.Menu.SkillScreen.Z_INDEX;
 		
 		this.firstClickTimespan = null;
@@ -52,10 +53,24 @@ var SkillScreen = cc.LayerColor.extend({
 			this.skillSlots.push(new SkillSlot(this.width*0.1, this.height*(1+Constants.Menu.SkillScreen.SkillSlot.STEP_Y*i), i, this));
 	},
 	onEntering: function(){
+
 		for(var i = 0; i < 4; i++)
 			this.skillSlots[i].refresh();
 	},
 	onLeaving: function(){
+
+	},
+	onTouchesBegan: function(touches, ev){
+		var pos = touches[0].getLocation();
+		var skill = this.skillList.getSkillByPosition(pos.x, pos.y);
+		
+		if(skill && this.selectSkill(skill))
+			skill.select();
+	},
+	onTouchesMoved: function(touches, ev){
+
+	},
+	onTouchesEnded: function(touches, ev){
 
 	},
 	back: function(){
@@ -112,8 +127,8 @@ var SkillScreen = cc.LayerColor.extend({
 				if(slotSkill && slotSkill.type == skill.type)
 				{
 					HtmlHelper.showError('Skill already set.');
-					return;
-				}			
+					return false;
+				}
 			}
 	
 			selectedSlot.setSkill(new SkillDescription(skill.type));
@@ -127,6 +142,7 @@ var SkillScreen = cc.LayerColor.extend({
 		this.summary.load(this.selectedSkill);
 		
 		this.firstClickTimespan = new Date();
+		return true;
 	}
 });
 
