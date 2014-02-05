@@ -10,7 +10,9 @@ var SkillScreen = cc.LayerColor.extend({
 		this._zOrder = Constants.Menu.SkillScreen.Z_INDEX;
 		
 		this.firstClickTimespan = null;
-
+		this.draggedSkill = null;
+		this.draggedSprite = null;
+		
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'skill_background.png');
 		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
@@ -65,13 +67,68 @@ var SkillScreen = cc.LayerColor.extend({
 		var skill = this.skillList.getSkillByPosition(pos.x, pos.y);
 		
 		if(skill && this.selectSkill(skill, true))
+		{
 			skill.select();
+			this.draggedSkill = skill;
+			
+			//Create sprite dragged by player.
+			if(!this.draggedSprite)
+				this.removeChild(this.draggedSprite);
+				
+			this.draggedSprite = cc.Sprite.create(this.draggedSkill.menuSpritePath);			
+			this.draggedSprite.setPosition(pos.x, pos.y);
+			this.draggedSprite.setOpacity(50);
+			
+			this.addChild(this.draggedSprite);
+		}
 	},
 	onTouchesMoved: function(touches, ev){
-
+		
+		//Move transparent skill if needed.
+		if(this.draggedSkill && this.draggedSprite)
+		{
+			var pos = touches[0].getLocation();
+			this.draggedSprite.setPosition(pos.x, pos.y);
+		}
 	},
 	onTouchesEnded: function(touches, ev){
 
+		if(this.draggedSkill)
+		{
+			//Remove transparent skill sprite.
+			if(this.draggedSprite)
+			{
+				this.removeChild(this.draggedSprite);
+				this.draggedSprite = null;
+			}
+			
+			var pos = touches[0].getLocation();
+			var slot = this.getSlotByPosition(pos.x, pos.y);
+			
+			//Select slot and assign skill.
+			if(slot)
+			{
+				slot.select();
+				this.selectSkill(this.draggedSkill, false);
+			}
+			
+			this.draggedSkill = null;
+		}
+		
+	},
+	getSlotByPosition: function(x, y){
+		
+		for(var i = 0; i < 4; ++i)
+		{
+			var menuItem = this.skillSlots[i].button;
+			var rect = menuItem.rect();
+			var pos = menuItem.getPosition();
+		
+			if(x >= pos.x - (rect.width*0.5) && y >= pos.y - (rect.height*0.5) && x <= pos.x + (rect.width*0.5) && y <= pos.y + (rect.height*0.5))
+				return this.skillSlots[i];
+		}
+		
+		return null;
 	},
 	back: function(){
 		this.unselectSlots();

@@ -13,13 +13,15 @@
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
 				  'source/common/HtmlHelper.js',
+				  'source/Resources.js',
 				  
 				  'source/playground/Block.js',
 				  'source/playground/Player.js',
 				  'source/playground/world/Wall.js',
 				  'source/playground/world/Floor.js',
 				  'source/playground/winnerGoal/FloatingBall.js',
-				  'source/playground/skills/SkillText.js',
+				  
+				  'source/playground/skills/SkillInfo.js',
 				  'source/playground/skills/SkillDescription.js',
 				  
 				  'source/settings/GameSettings.js',
@@ -61,7 +63,6 @@
 				  'source/menu/SkillScreen.js',
 				  'source/menu/LoadingScreen.js',
 				  
-				  'source/Resources.js',
 				  'source/playground/Game.js',
 				  'source/playground/hud/Inventory.js',
 				  'source/playground/manager/AnimationManager.js',

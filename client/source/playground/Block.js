@@ -25,7 +25,7 @@ var Block = function (x, y, type, color, skill) {
 		//All repertoried skills.
 		switch(this.skill.type){
 			case Enum.Block.Skill.FIRE_PULSE:
-				this.sprite = cc.Sprite.create(assetsBlockDir + 'block_firePulse.png');
+				this.sprite = cc.Sprite.create(SkillInfo.FirePulse.BLOCK_SPRITE_PATH);
 				break;
 		}
 	}

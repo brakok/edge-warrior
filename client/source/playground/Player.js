@@ -27,6 +27,7 @@ Player.prototype.changePercent = function(blockType, percent, skill){
 
 	if(blockOption)
 		blockOption.percent += percent;
+
 };
 
 //Stronger a specific skilled block.
