@@ -22,6 +22,7 @@ var SkillDescription = function(type){
 	
 	this.description = null;
 	this.sprite = null;
+	this.menuSpritePath = null;
 	
 	this.cost = null;
 	this.percent = {
@@ -35,22 +36,29 @@ var SkillDescription = function(type){
 
 SkillDescription.prototype.init = function(){
 
+	var skill = null;
+
 	switch(this.type){
 		case Enum.Block.Skill.FIRE_PULSE:
-		
-			this.sprite = cc.Sprite.create(assetsSkillDir + 'firePulse.png');
-			this.title = SkillText.FirePulse.TITLE;
-			this.description = SkillText.FirePulse.DESCRIPTION;
-			
-			this.power = -1;
-			
-			//Buying infos.
-			this.cost = Constants.Block.Skill.FirePulse.COST;
-			this.costStep = Constants.Block.Skill.FirePulse.COST_STEP;
-			this.percent.start = Constants.Block.Skill.FirePulse.PERCENT_START;
-			this.percent.step = Constants.Block.Skill.FirePulse.PERCENT_STEP;
-			
+			skill = SkillInfo.FirePulse;
 			break;
+	}
+	
+	if(skill)
+	{
+		this.sprite = cc.Sprite.create(skill.MENU_SPRITE_PATH);
+		this.menuSpritePath = skill.MENU_SPRITE_PATH;
+		
+		this.title = skill.TITLE;
+		this.description = skill.DESCRIPTION;
+		
+		this.power = -1;
+		
+		//Buying infos.
+		this.cost = skill.COST;
+		this.costStep = skill.COST_STEP;
+		this.percent.start = skill.PERCENT_START;
+		this.percent.step = skill.PERCENT_STEP;
 	}
 };
 
@@ -66,17 +74,15 @@ SkillDescription.prototype.load = function(x, y, scaleX, scaleY, layer){
 	
 	this.layer = layer;
 	
-	//Create right image.
-	switch(this.type){
-		case Enum.Block.Skill.FIRE_PULSE:
-			this.sprite = cc.Sprite.create(assetsSkillDir + 'firePulse.png');				
-			break;
+	//Add menu sprite to specified layer.
+	if(this.menuSpritePath)
+	{
+		this.sprite = cc.Sprite.create(this.menuSpritePath);
+		this.sprite.setPosition(new cc.Point(this.x, this.y));
+		this.sprite.setScale(this.scale.x, this.scale.y);
+		
+		this.layer.addChild(this.sprite);
 	}
-	
-	this.sprite.setPosition(new cc.Point(this.x, this.y));
-	this.sprite.setScale(this.scale.x, this.scale.y);
-	
-	this.layer.addChild(this.sprite);
 };
 
 SkillDescription.prototype.unselect = function(){
@@ -92,12 +98,10 @@ SkillDescription.prototype.select = function(){
 		
 	this.remove();
 	this.layer.addChild(this.background);
-	
 	this.layer.addChild(this.sprite);
 };
 
 SkillDescription.prototype.remove = function(){
-
 	this.layer.removeChild(this.sprite);
 };
 
@@ -105,6 +109,7 @@ SkillDescription.prototype.remove = function(){
 SkillDescription.loadAll = function(){
 	var list = [];
 	
+	//List all skills available.
 	list.push(new SkillDescription(Enum.Block.Skill.FIRE_PULSE));
 	
 	return list;
