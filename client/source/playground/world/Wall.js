@@ -1,8 +1,6 @@
-var Wall = function(facing, x, y, height, hasCorner, type){
+var Wall = function(facing, x, y, height, hasCorner, info){
 	
-		this.x = x;
-		this.y = y;
-		this.type = type;
+		this.info = info;
 		
 		this.hasCorner = hasCorner;
 		this.height = height;
@@ -14,16 +12,11 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		var imgName = null;
 		var cornerImgName = null;
 		
-		switch(this.type)
-		{
-			case Enum.World.Type.PIT:
-				imgName = 'wall_pit.png';
-				cornerImgName = 'corner_pit.png';
-				break;
-		}
-		
 		var mustFlip = this.facing == Enum.Direction.LEFT;
-		var firstSegment = cc.Sprite.create(assetsWorldDir + imgName);
+		var firstSegment = cc.Sprite.create(this.info.SPRITE_PATH);
+		
+		this.x = x - (firstSegment.getTextureRect().width*0.5*(mustFlip ? -1 : 1));
+		this.y = y;
 		
 		var textHeight = firstSegment.getTextureRect().height;
 		var numOfFragment = height/textHeight;
@@ -35,7 +28,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		//Add a corner at the bottom of the wall.
 		if(this.hasCorner)
 		{
-			var corner = cc.Sprite.create(assetsWorldDir + cornerImgName);
+			var corner = cc.Sprite.create(this.info.CORNER_SPRITE_PATH);
 			corner.setPosition(new cc.Point(this.x, tmpY - stepY));
 			corner.setFlippedX(mustFlip);
 			corner._zOrder = zOrder;
@@ -61,7 +54,7 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		{
 			tmpY += stepY;
 			
-			var segment = cc.Sprite.create(assetsWorldDir + imgName);
+			var segment = cc.Sprite.create(info.SPRITE_PATH);
 			segment.setPosition(new cc.Point(this.x, tmpY));
 			segment.setFlippedX(mustFlip);
 			segment._zOrder = zOrder;
@@ -73,10 +66,10 @@ var Wall = function(facing, x, y, height, hasCorner, type){
 		}
 };
 
-Wall.prototype.init = function(){
+Wall.prototype.load = function(layer){
 
 	for(var i in this.fragments)
-		Client.game.layer.addChild(this.fragments[i].sprite);
+		layer.addChild(this.fragments[i].sprite);
 };
 
 Wall.prototype.update = function(){

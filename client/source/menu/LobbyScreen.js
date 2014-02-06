@@ -66,9 +66,10 @@ var LobbyScreen = cc.LayerColor.extend({
 				HtmlHelper.showError('All players must have chosen a color and be marked has ready.');
 				return;
 			}
-				
-				
-		Client.startGame();
+		
+		//Randomize settings.
+		var settings = WorldInfo.random();
+		Client.startGame(settings);
 	},
 	onEntering: function(){
 		this.div.style.display = "block";

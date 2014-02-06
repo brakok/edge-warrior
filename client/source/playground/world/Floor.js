@@ -1,27 +1,18 @@
-var Floor = function(x, y, width, hasCorner, type){
-	
-	this.x = x;
-	this.y = y;
+var Floor = function(x, y, width, hasCorner, info){
 	
 	this.width = width;
 	this.hasCorner = hasCorner;
-	
-	this.type = type;
+	this.info = info;
 		
 	this.fragments = [];
 	var imgName = null;
 	var cornerImgName = null;
-	
-	switch(this.type)
-	{
-		case Enum.World.Type.PIT:
-			imgName = 'floor_pit.png';
-			cornerImgName = 'corner_pit.png';
-			break;
-	}
-	
-	var firstSegment = cc.Sprite.create(assetsWorldDir + imgName);
+		
+	var firstSegment = cc.Sprite.create(this.info.SPRITE_PATH);
 	var numOfFragment = (width/firstSegment.getTextureRect().width)-1; //Remove last corner.
+	
+	this.x = x;
+	this.y = y - (firstSegment.getTextureRect().height*0.5);
 	
 	var stepX = firstSegment.getTextureRect().width;
 	var tmpX = this.x - this.width*0.5 + stepX*0.5;
@@ -30,7 +21,7 @@ var Floor = function(x, y, width, hasCorner, type){
 	//Add a corner at the bottom of the wall.
 	if(hasCorner)
 	{
-		var corner = cc.Sprite.create(assetsWorldDir + cornerImgName);
+		var corner = cc.Sprite.create(this.info.CORNER_SPRITE_PATH);
 		corner.setPosition(new cc.Point(this.x, tmpX - stepX));
 		corner._zOrder = zOrder;
 		
@@ -40,7 +31,7 @@ var Floor = function(x, y, width, hasCorner, type){
 			x: tmpX - stepX
 		});
 		
-		corner = cc.Sprite.create(assetsWorldDir + cornerImgName);
+		corner = cc.Sprite.create(this.info.CORNER_SPRITE_PATH);
 		corner.setPosition(new cc.Point(this.x, tmpX + stepX*numOfFragment));
 		corner.setFlippedX(true);
 		
@@ -65,7 +56,7 @@ var Floor = function(x, y, width, hasCorner, type){
 	{
 		tmpX += stepX;
 		
-		var segment = cc.Sprite.create(assetsWorldDir + imgName);
+		var segment = cc.Sprite.create(this.info.SPRITE_PATH);
 		segment.setPosition(new cc.Point(tmpX, this.y));
 		segment._zOrder = zOrder;
 		
@@ -76,16 +67,16 @@ var Floor = function(x, y, width, hasCorner, type){
 	}
 };
 
-Floor.prototype.init = function(){
+Floor.prototype.load = function(layer){
 
 	//Add floor to layer.
 	for(var i in this.fragments)
-		Client.game.layer.addChild(this.fragments[i].sprite);
+		layer.addChild(this.fragments[i].sprite);
 };
 
 Floor.prototype.update = function(){
 
 	//Project fragments.
 	for(var i in this.fragments)
-			Client.game.camera.project(this.fragments[i].sprite, this.fragments[i].x, this.y);	
+		Client.game.camera.project(this.fragments[i].sprite, this.fragments[i].x, this.y);	
 };

@@ -29,19 +29,11 @@ var Enum = {
 	Particles: {
 		SMOKE: 0
 	},
-	Wall: {
-		Type: {
-			PIT: 0
-		}
-	},
-	Floor: {
-		Type: {
-			PIT: 0
-		}
-	},
 	World: {
 		Type: {
-			PIT: 0
+			PIT: 0,
+			CHURCH: 1,
+			ALIEN: 2
 		}
 	},
 	Block: {
