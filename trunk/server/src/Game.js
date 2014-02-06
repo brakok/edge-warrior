@@ -22,8 +22,11 @@ var Game = function(settings){
 	this.winningPhaseTimer = Constants.WinningGoal.PHASE_TIME;
 	
 	this.spawnY = Constants.Player.INITIAL_SPAWN_Y;
+	
+	//World information.
 	this.width = settings.width;
 	this.height = settings.height;
+	this.worldType = settings.worldType;
 	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;

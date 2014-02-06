@@ -196,7 +196,8 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 			var data = {
 				goal: Server.gameList[gameId].goal.toClient(),
 				width: Server.gameList[gameId].width,
-				height: Server.gameList[gameId].height
+				height: Server.gameList[gameId].height,
+				worldType: Server.gameList[gameId].worldType
 			};
 			
 			data.goal.type = Server.gameList[gameId].goal.type;

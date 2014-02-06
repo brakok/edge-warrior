@@ -9,7 +9,15 @@ var GameSettings = function(id, width, height, maxPlayers, username){
 	
 	this.width = width;
 	this.height = height;
+	this.worldType = null;
+	
 	this.maxPlayers = maxPlayers;
+};
+
+GameSettings.prototype.update = function(settings){
+	this.width = settings.width;
+	this.height = settings.height;
+	this.worldType = settings.type;
 };
 
 GameSettings.prototype.getPlayer = function(username){

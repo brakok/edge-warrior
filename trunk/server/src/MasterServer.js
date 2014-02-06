@@ -218,11 +218,12 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Lobby to game.
-	socket.on(Constants.Message.START_GAME, function(){
+	socket.on(Constants.Message.START_GAME, function(gameSettings){
 		
 		//Tweaks some informations.
 		MasterServer.lobbies[socket.userdata.gameId].settings.maxPlayers = MasterServer.lobbies[socket.userdata.gameId].connectedPlayers;
-		MasterServer.lobbies[socket.userdata.gameId].settings.validateColors();		
+		MasterServer.lobbies[socket.userdata.gameId].settings.validateColors();	
+		MasterServer.lobbies[socket.userdata.gameId].settings.update(gameSettings);
 		
 		if(ioMasterServer.sockets.clients().length > 0)
 		{
