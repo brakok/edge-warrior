@@ -26,6 +26,9 @@ var Enum = {
 			WHITE: 4
 		}
 	},
+	Particles: {
+		SMOKE: 0
+	},
 	Wall: {
 		Type: {
 			PIT: 0

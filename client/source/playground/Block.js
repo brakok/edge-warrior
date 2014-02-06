@@ -39,7 +39,7 @@ var Block = function (x, y, type, color, skill) {
 }
 
 Block.prototype.init = function(){
-	this.smoke = Smoke.create(this.x, this.y);
+	this.smoke = ParticleManager.create(Enum.Particles.SMOKE, this.x, this.y, this.sprite.getTextureRect().width*0.2, Client.game.layer);
 };
 
 Block.prototype.setPosition = function(x, y){
@@ -65,7 +65,7 @@ Block.prototype.land = function(){
 	//Trigger sound.
 	AudioManager.playEffect(Constants.Sound.File.Block.LANDING, false);
 	
-	this.stopSmoke();
+	this.smoke.stop();
 };
 
 Block.prototype.update = function(dt){
@@ -73,7 +73,7 @@ Block.prototype.update = function(dt){
 	if(!this.updatedOnce)
 	{
 		if(this.smoke)
-			Client.game.layer.addChild(this.smoke);
+			this.smoke.load();
 			
 		Client.game.layer.addChild(this.sprite);
 		
@@ -81,8 +81,15 @@ Block.prototype.update = function(dt){
 	}
 
 	if(this.smoke)
-		Client.game.camera.project(this.smoke, this.x, this.y);
-
+	{
+		if(!this.smoke.toBeDestroyed)
+		{
+			this.smoke.x = this.x;
+			this.smoke.y = this.y;	
+		}
+		else
+			delete this.smoke;
+	}
 
 	Client.game.camera.project(this.sprite, this.x, this.y);
 	
@@ -114,18 +121,11 @@ Block.prototype.swapColor = function(color){
 	this.setPosition(this.x, this.y);
 };
 
-Block.prototype.stopSmoke = function(){
-
-	if(this.smoke){
-		this.smoke.setSpeed(0);
-		this.smoke.stopSystem();
-	}
-};
-
 Block.prototype.explode = function(cause){
 	Client.game.layer.removeChild(this.sprite);
 	
-	this.stopSmoke();
+	if(this.smoke)
+		this.smoke.stop();
 	
 	if(this.type == Enum.Block.Type.SKILLED)
 	{

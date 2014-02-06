@@ -34,8 +34,7 @@ var Constants = {
 	Particles: {
 		Z_ORDER: 8,
 		Smoke: {
-			PARTICLES_COUNT: 125,
-			SPEED: 500
+			PARTICLES_COUNT: 25
 		}
 	},
 	Block: {

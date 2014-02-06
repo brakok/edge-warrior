@@ -77,6 +77,7 @@
 				  'source/playground/Missile.js',
 				  'source/playground/Spike.js',
 				  'source/playground/manager/EffectManager.js',
+				  'source/playground/manager/ParticleManager.js',
 				  'source/playground/Effect.js',
 				  'source/playground/world/BlackBox.js',
 				  'source/playground/LightBall.js',
