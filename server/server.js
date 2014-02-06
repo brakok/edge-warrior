@@ -1700,7 +1700,15 @@ var GameSettings = function(id, width, height, maxPlayers, username){
 	
 	this.width = width;
 	this.height = height;
+	this.worldType = null;
+	
 	this.maxPlayers = maxPlayers;
+};
+
+GameSettings.prototype.update = function(settings){
+	this.width = settings.width;
+	this.height = settings.height;
+	this.worldType = settings.type;
 };
 
 GameSettings.prototype.getPlayer = function(username){
@@ -1796,8 +1804,11 @@ var Game = function(settings){
 	this.winningPhaseTimer = Constants.WinningGoal.PHASE_TIME;
 	
 	this.spawnY = Constants.Player.INITIAL_SPAWN_Y;
+	
+	//World information.
 	this.width = settings.width;
 	this.height = settings.height;
+	this.worldType = settings.worldType;
 	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
@@ -2384,11 +2395,12 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 	
 	//Lobby to game.
-	socket.on(Constants.Message.START_GAME, function(){
+	socket.on(Constants.Message.START_GAME, function(gameSettings){
 		
 		//Tweaks some informations.
 		MasterServer.lobbies[socket.userdata.gameId].settings.maxPlayers = MasterServer.lobbies[socket.userdata.gameId].connectedPlayers;
-		MasterServer.lobbies[socket.userdata.gameId].settings.validateColors();		
+		MasterServer.lobbies[socket.userdata.gameId].settings.validateColors();	
+		MasterServer.lobbies[socket.userdata.gameId].settings.update(gameSettings);
 		
 		if(ioMasterServer.sockets.clients().length > 0)
 		{
@@ -2635,7 +2647,8 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 			var data = {
 				goal: Server.gameList[gameId].goal.toClient(),
 				width: Server.gameList[gameId].width,
-				height: Server.gameList[gameId].height
+				height: Server.gameList[gameId].height,
+				worldType: Server.gameList[gameId].worldType
 			};
 			
 			data.goal.type = Server.gameList[gameId].goal.type;
