@@ -187,8 +187,8 @@ var Client = new function(){
 	};
 	
 	//Start game.
-	this.startGame = function(){
-		this.masterSocket.emit(Constants.Message.START_GAME);
+	this.startGame = function(settings){
+		this.masterSocket.emit(Constants.Message.START_GAME, settings);
 	};
 	
 	//Search lobbies.
@@ -373,13 +373,8 @@ var Client = new function(){
 					break;
 			}
 			
-			Client.game.mapSize = {
-				width: data.width,
-				height: data.height
-			};
-
 			//Launch game when initiation ends.
-			Client.game.launch();
+			Client.game.launch(data.worldType);
 		});
 		
 		socket.on(Constants.Message.GO, function(){

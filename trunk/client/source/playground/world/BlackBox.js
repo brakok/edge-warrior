@@ -19,5 +19,5 @@ BlackBox.prototype.init = function(){
 };
 
 BlackBox.prototype.update = function(){
-	Client.game.camera.project(this.sprite, this.x, this.y, this.width/100, this.height/100);
+	Client.game.camera.project(this.sprite, this.x, this.y, this.width*0.01, this.height*0.01);
 };

@@ -80,6 +80,8 @@
 				  'source/playground/manager/ParticleManager.js',
 				  'source/playground/Effect.js',
 				  'source/playground/world/BlackBox.js',
+				  'source/playground/world/World.js',
+				  'source/playground/world/WorldInfo.js',
 				  'source/playground/LightBall.js',
 				  'source/playground/Voice.js',
 				  'source/playground/hud/Hud.js',

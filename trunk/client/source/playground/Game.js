@@ -58,6 +58,7 @@ Game.prototype.getPlayer = function(color){
 
 Game.prototype.init = function(width, height, layer, hud, endScreen, pauseMenu){
 
+	//Layer size.
 	this.width = width;
 	this.height = height;
 
@@ -73,24 +74,27 @@ Game.prototype.init = function(width, height, layer, hud, endScreen, pauseMenu){
 };
 
 //Game start.
-Game.prototype.launch = function(){
+Game.prototype.launch = function(type){
 
 	//Init game with needed layers.
 	var gameLayer = myApp.GameScene.layer;
 	this.init(gameLayer.width, gameLayer.height, gameLayer.playGroundLayer, gameLayer.hud, gameLayer.endScreen, gameLayer.pauseMenu);
 
 	//Add received elements to the layer (render).
-	this.createWorld();
+	this.createWorld(type);
 	
 	//Lower neutral by quantity of enemies.
 	this.player.changePercent(Enum.Block.Type.NEUTRAL, -Constants.Block.Percent.LOST_FOREACH_ENEMY*this.enemies.length);
 };
 
 //Create environment and camera.
-Game.prototype.createWorld = function(){
+Game.prototype.createWorld = function(type){
+
+	//World creation.
+	this.world = new World(type, this.layer);
 
 	//Create camera.
-	this.camera = new Camera(this.width*0.5-(this.width*0.5-this.mapSize.width*0.5), 
+	this.camera = new Camera(this.width*0.5-(this.width*0.5-this.world.width*0.5), 
 							 this.height*0.5,
 							 1,
 							 Constants.Camera.ZOOM_FACTOR,
@@ -98,26 +102,6 @@ Game.prototype.createWorld = function(){
 							 Constants.Camera.SPEED_Y,
 							 Constants.Camera.SPEED_ZOOM);
 	
-	//Create walls and floor.
-	this.floor = new Floor(this.mapSize.width*0.5, -40, this.mapSize.width, false, Enum.Wall.Type.PIT);
-	this.leftWall = new Wall(Enum.Direction.RIGHT, -50, this.mapSize.height + 10, this.mapSize.height*2, true, Enum.Wall.Type.PIT);
-	this.rightWall = new Wall(Enum.Direction.LEFT, this.mapSize.width + 50, this.mapSize.height + 10, this.mapSize.height*2, true, Enum.Wall.Type.PIT);
-
-	//Black boxes are used to hide spikes when they raise from the ground.	
-	this.blackBoxes = [];
-	this.blackBoxes.push(new BlackBox(-this.mapSize.width*0.5-Constants.World.OFFSET, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height*3));
-	this.blackBoxes.push(new BlackBox(this.mapSize.width*0.5, -this.mapSize.height*0.5, this.mapSize.width*3, this.mapSize.height));
-	this.blackBoxes.push(new BlackBox(this.mapSize.width*1.5+Constants.World.OFFSET, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height*3));
-	
-	//Add background.
-	this.background = new Background(this.mapSize.width*0.5, this.mapSize.height*0.5, this.mapSize.width, this.mapSize.height, Enum.World.Type.PIT);
-	
-	//Add walls to layer.
-	this.leftWall.init();
-	this.rightWall.init();
-	this.floor.init();
-	this.background.init();
-
 	//Init dynamic elements.
 	this.player.init();
 	
@@ -190,7 +174,7 @@ Game.prototype.update = function (dt){
 					this.camera.update();
 					
 					//Project static objects.
-					this.projectWorld();
+					this.world.update();
 					
 					//Update dynamic objects.
 					this.player.update(dt);
@@ -204,10 +188,7 @@ Game.prototype.update = function (dt){
 					for(var i in this.deathZones)
 						if(this.deathZones[i] != null)
 							this.deathZones[i].update(dt);
-						
-					for(var i = 0; i < this.blackBoxes.length; ++i)
-						this.blackBoxes[i].update();
-						
+
 					this.goal.update();
 					
 					//Update all effects.
@@ -258,7 +239,7 @@ Game.prototype.update = function (dt){
 				this.camera.update();
 				
 				//Project static objects.
-				this.projectWorld();
+				this.world.update();
 				
 				//Update dynamic objects.
 				this.player.update(dt);
@@ -271,10 +252,7 @@ Game.prototype.update = function (dt){
 				
 				for(var i in this.deathZones)
 					this.deathZones[i].update(dt);
-					
-				for(var i = 0; i < this.blackBoxes.length; ++i)
-					this.blackBoxes[i].update();
-					
+										
 				this.goal.update();
 				
 				//Update all effects.
@@ -432,15 +410,6 @@ Game.prototype.changeStep = function(stepReached){
 		this.hud.inventory.killCommand.reset();
 	else
 		this.hud.inventory.killCommand.start(stepReached);
-};
-
-//Project walls and floor.
-Game.prototype.projectWorld = function(){
-
-	this.floor.update();
-	this.leftWall.update();
-	this.rightWall.update();
-	this.background.update();
 };
 
 //Update positions from server ones.

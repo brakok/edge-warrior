@@ -1,9 +1,9 @@
 
-var Background = function(x, y, width, height, type) {
+var Background = function(x, y, width, height, info) {
 
 	this.x = x;
 	this.y = y;
-	this.type = type;
+	this.info = info;
 	
 	this.width = width;
 	this.height = height;
@@ -12,14 +12,10 @@ var Background = function(x, y, width, height, type) {
 	this.background = null;
 };
 
-Background.prototype.init = function(){
+Background.prototype.load = function(layer){
 	
-	switch(this.type){
-		case Enum.World.Type.PIT:
-			this.sky = cc.Sprite.create(assetsWorldDir + 'sky.png');
-			this.background = cc.Sprite.create(assetsWorldDir + 'background_pit.png');
-			break;
-	};
+	this.sky = cc.Sprite.create(this.info.SKY_SPRITE_PATH);
+	this.background = cc.Sprite.create(this.info.BACKGROUND_SPRITE_PATH);
 	
 	this.sky.setPosition(new cc.Point(this.x, this.y));
 	this.background.setPosition(new cc.Point(this.x, this.y));
@@ -27,8 +23,8 @@ Background.prototype.init = function(){
 	this.sky._zOrder = Constants.World.Background.Z_INDEX - 1;
 	this.background._zOrder = Constants.World.Background.Z_INDEX;
 	
-	Client.game.layer.addChild(this.sky);
-	Client.game.layer.addChild(this.background);
+	layer.addChild(this.sky);
+	layer.addChild(this.background);
 };
 
 Background.prototype.update = function(){
