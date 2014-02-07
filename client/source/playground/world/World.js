@@ -9,6 +9,9 @@ var World = function(type, layer){
 		case Enum.World.Type.PIT:
 			info = WorldInfo.Pit;
 			break;
+		case Enum.World.Type.CHURCH:
+			info = WorldInfo.Church;
+			break;
 	}
 	
 	if(info)
