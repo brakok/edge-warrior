@@ -90,12 +90,21 @@ var assets = [
 	{type:"sound", src: soundVoiceDir + 'floatingBall_summon.mp3'},
 
 	//World
-	{type:'image', src: assetsWorldDir + 'wall_pit.png'},
-	{type:'image', src: assetsWorldDir + 'floor_pit.png'},
-	{type:'image', src: assetsWorldDir + 'corner_pit.png'},
 	{type:'image', src: assetsWorldDir + 'black_box.png'},
-	{type:'image', src: assetsWorldDir + 'background_pit.png'},
-	{type:'image', src: assetsWorldDir + 'sky.png'},
+	
+	{type:'image', src: assetsWorldDir + 'pit_wall.png'}, //Pit
+	{type:'image', src: assetsWorldDir + 'pit_floor.png'},
+	{type:'image', src: assetsWorldDir + 'pit_corner.png'},
+	{type:'image', src: assetsWorldDir + 'pit_background.png'},
+	
+	{type:'image', src: assetsWorldDir + 'church_wall.png'}, //Church
+	{type:'image', src: assetsWorldDir + 'church_floor.png'},
+	{type:'image', src: assetsWorldDir + 'church_corner.png'},
+	
+	{type:'image', src: assetsWorldDir + 'sky_day.png'}, //Skies
+	{type:'image', src: assetsWorldDir + 'sky_night.png'},
+	{type:'image', src: assetsWorldDir + 'sky_evening.png'},
+	{type:'image', src: assetsWorldDir + 'sky_morning.png'},
 
 	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},

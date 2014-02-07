@@ -2,28 +2,44 @@
 var WorldInfo = {
 	random: function(){
 		
-		var w = this.Pit;
+		var w = this.Church;
 		
 		return {
 			width: w.WIDTH,
 			height: w.HEIGHT,
-			type: Enum.World.Type.PIT
+			type: Enum.World.Type.CHURCH
 		};		
 	},
 	Pit: {
 		WIDTH: 1200,
 		HEIGHT: 800,
 		Background: {
-			SKY_SPRITE_PATH: assetsWorldDir + 'sky.png',
-			BACKGROUND_SPRITE_PATH: assetsWorldDir + 'background_pit.png'
+			SKY_SPRITE_PATH: assetsWorldDir + 'sky_day.png',
+			BACKGROUND_SPRITE_PATH: assetsWorldDir + 'pit_background.png'
 		},
 		Wall: {
-			SPRITE_PATH: assetsWorldDir + 'wall_pit.png',
-			CORNER_SPRITE_PATH: assetsWorldDir + 'corner_pit.png'
+			SPRITE_PATH: assetsWorldDir + 'pit_wall.png',
+			CORNER_SPRITE_PATH: assetsWorldDir + 'pit_corner.png'
 		},
 		Floor: {
-			SPRITE_PATH: assetsWorldDir + 'floor_pit.png',
-			CORNER_SPRITE_PATH: assetsWorldDir + 'corner_pit.png'
+			SPRITE_PATH: assetsWorldDir + 'pit_floor.png',
+			CORNER_SPRITE_PATH: assetsWorldDir + 'pit_corner.png'
+		}
+	},
+	Church: {
+		WIDTH: 900,
+		HEIGHT: 1300,
+		Background: {
+			SKY_SPRITE_PATH: assetsWorldDir + 'sky_night.png',
+			BACKGROUND_SPRITE_PATH: assetsWorldDir + 'pit_background.png'
+		},
+		Wall: {
+			SPRITE_PATH: assetsWorldDir + 'church_wall.png',
+			CORNER_SPRITE_PATH: assetsWorldDir + 'church_corner.png'
+		},
+		Floor: {
+			SPRITE_PATH: assetsWorldDir + 'church_floor.png',
+			CORNER_SPRITE_PATH: assetsWorldDir + 'church_corner.png'
 		}
 	}
 };
