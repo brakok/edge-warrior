@@ -2,15 +2,28 @@
 var WorldInfo = {
 	random: function(){
 		
-		var w = this.Church;
+		var w = null;
+		var rnd = Math.floor(Math.random()*2);
+		
+		switch(rnd){
+			case Enum.World.Type.PIT:
+				w = this.Pit;
+				break;
+			case Enum.World.Type.CHURCH:
+				w = this.Church;
+				break;
+			default:
+				w = this.Pit;
+		}
 		
 		return {
 			width: w.WIDTH,
 			height: w.HEIGHT,
-			type: Enum.World.Type.CHURCH
-		};		
+			type: w.TYPE
+		};
 	},
 	Pit: {
+		TYPE: Enum.World.Type.PIT,
 		WIDTH: 1200,
 		HEIGHT: 800,
 		Background: {
@@ -27,6 +40,7 @@ var WorldInfo = {
 		}
 	},
 	Church: {
+		TYPE: Enum.World.Type.CHURCH,
 		WIDTH: 900,
 		HEIGHT: 1300,
 		Background: {
