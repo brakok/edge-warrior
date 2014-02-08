@@ -28,6 +28,6 @@ Background.prototype.load = function(layer){
 };
 
 Background.prototype.update = function(){
-	Client.game.camera.project(this.sky, this.x, this.y + this.height*0.5, this.width*0.015, this.height*0.02);
+	Client.game.camera.project(this.sky, this.x, this.y + this.height*1.5, this.width*0.015, this.height*0.03);
 	Client.game.camera.project(this.background, this.x, this.y);
 };
