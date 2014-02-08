@@ -31,7 +31,7 @@ var WorldInfo = {
 		HEIGHT: 1300,
 		Background: {
 			SKY_SPRITE_PATH: assetsWorldDir + 'sky_night.png',
-			BACKGROUND_SPRITE_PATH: assetsWorldDir + 'pit_background.png'
+			BACKGROUND_SPRITE_PATH: assetsWorldDir + 'church_background.png'
 		},
 		Wall: {
 			SPRITE_PATH: assetsWorldDir + 'church_wall.png',

@@ -39,7 +39,7 @@ var Block = function (x, y, type, color, skill) {
 }
 
 Block.prototype.init = function(){
-	this.smoke = ParticleManager.create(Enum.Particles.SMOKE, this.x, this.y, this.sprite.getTextureRect().width*0.2, Client.game.layer);
+	this.smoke = ParticleManager.create(Enum.Particles.SMOKE, this.x, this.y, this.sprite.getTextureRect().width*0.1, Client.game.layer);
 };
 
 Block.prototype.setPosition = function(x, y){
