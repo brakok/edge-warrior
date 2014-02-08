@@ -2,7 +2,8 @@
 var Constants = {
 	Game: {
 		MAX_PLAYERS: 4,
-		UNIT_TIMER: 1
+		UNIT_TIMER: 1,
+		OFFSET_Y_ALLOWED_FOR_PLAYERS: 250
 	},
 	Physic: {
 		GRAVITY: -150,

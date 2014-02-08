@@ -106,7 +106,8 @@ var Enum = {
 var Constants = {
 	Game: {
 		MAX_PLAYERS: 4,
-		UNIT_TIMER: 1
+		UNIT_TIMER: 1,
+		OFFSET_Y_ALLOWED_FOR_PLAYERS: 250
 	},
 	Physic: {
 		GRAVITY: -150,
@@ -1305,7 +1306,9 @@ Player.prototype.doubleJump = function(){
 Player.prototype.dropBlock = function(x, y, checkDropzone){
 
 	//Spawn a block if drop zone isn't obstructed.
-	if(this.obstruction == 0 || (checkDropzone != null && !checkDropzone)){	
+	if((this.obstruction == 0 || (checkDropzone != null && !checkDropzone)) 
+		&& this.y < this.currentGame.height - Constants.WinningGoal.OFFSET_Y + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
+	{
 
 		var tmpX = (x != null ? x : this.getPosition().x);
 		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
