@@ -11,7 +11,7 @@ var Smoke = cc.ParticleSystem.extend({
             this.setEmitterMode(cc.PARTICLE_MODE_GRAVITY);
 
             // Gravity Mode: gravity
-            this.setGravity(cc.p(0, 0));
+            this.setGravity(cc.p(1, 0));
 
             // Gravity Mode: radial acceleration
             this.setRadialAccel(0);
@@ -31,13 +31,13 @@ var Smoke = cc.ParticleSystem.extend({
 
             // life of particles
             this.setLife(0.75);
-            this.setLifeVar(0);
+            this.setLifeVar(0.1);
 
             // size, in pixels
             this.setStartSize(25.0);
             this.setStartSizeVar(2.0);
             this.setEndSize(5.0);
-			this.setEndSizeVar(0.0);
+			this.setEndSizeVar(1.0);
 
             // emits per frame
             this.setEmissionRate(this.getTotalParticles() / this.getLife());

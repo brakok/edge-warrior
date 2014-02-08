@@ -103,7 +103,7 @@ Player.prototype.pushNextBlock = function(){
 	
 	if(this.givenBlock == null)
 	{			
-		var rnd = Math.round(Math.random()*100);
+		var rnd = Math.floor(Math.random()*100);
 		var found = false;
 		var min = 0;
 		

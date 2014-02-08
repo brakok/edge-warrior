@@ -27,7 +27,7 @@ Voice.prototype.getRandomVoice = function(){
 
 	if(this.number > 1)
 	{
-		var sampleIndex = Math.round((this.number - 1)*Math.random()) + 1;
+		var sampleIndex = Math.floor(this.number*Math.random()) + 1;
 		
 		return this.file + (sampleIndex < 10 ? '0' + sampleIndex : sampleIndex);
 	}
