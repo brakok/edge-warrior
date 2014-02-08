@@ -25,9 +25,9 @@ var World = function(type, layer){
 		this.background = new Background(this.width*0.5, this.height*0.5, this.width, this.height, info.Background);
 		
 		//Create walls and floor.
-		this.floor = new Floor(this.width*0.5, 10, this.width, false, info.Floor);
-		this.leftWall = new Wall(Enum.Direction.RIGHT, 0, this.height + 10, this.height*2, true, info.Wall);
-		this.rightWall = new Wall(Enum.Direction.LEFT, this.width, this.height + 10, this.height*2, true, info.Wall);
+		this.floor = new Floor(this.width*0.5, 12, this.width, false, info.Floor);
+		this.leftWall = new Wall(Enum.Direction.RIGHT, 0, this.height + 12, this.height*2, true, info.Wall);
+		this.rightWall = new Wall(Enum.Direction.LEFT, this.width, this.height + 12, this.height*2, true, info.Wall);
 		
 		//Black boxes are used to hide spikes when they raise from the ground.	
 		this.blackBoxes = [];

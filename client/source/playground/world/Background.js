@@ -7,9 +7,7 @@ var Background = function(x, y, width, height, info) {
 	
 	this.width = width;
 	this.height = height;
-	
-	console.log(this.height + ' ' + this.height*0.02);
-	
+		
 	this.sky = null;
 	this.background = null;
 };
