@@ -3,7 +3,7 @@ var WorldInfo = {
 	random: function(){
 		
 		var w = null;
-		var rnd = Math.floor(Math.random()*2);
+		var rnd = Math.floor(Math.random()*3);
 		
 		switch(rnd){
 			case Enum.World.Type.PIT:
@@ -12,9 +12,14 @@ var WorldInfo = {
 			case Enum.World.Type.CHURCH:
 				w = this.Church;
 				break;
+			case Enum.World.Type.ALIEN:
+				w = this.Alien;
+				break;
 			default:
 				w = this.Pit;
 		}
+		
+		w = this.Alien;
 		
 		return {
 			width: w.WIDTH,
@@ -54,6 +59,23 @@ var WorldInfo = {
 		Floor: {
 			SPRITE_PATH: assetsWorldDir + 'church_floor.png',
 			CORNER_SPRITE_PATH: assetsWorldDir + 'church_corner.png'
+		}
+	},
+	Alien: {
+		TYPE: Enum.World.Type.ALIEN,
+		WIDTH: 1000,
+		HEIGHT: 1000,
+		Background: {
+			SKY_SPRITE_PATH: assetsWorldDir + 'sky_evening.png',
+			BACKGROUND_SPRITE_PATH: assetsWorldDir + 'pit_background.png'
+		},
+		Wall: {
+			SPRITE_PATH: assetsWorldDir + 'alien_wall.png',
+			CORNER_SPRITE_PATH: assetsWorldDir + 'alien_corner.png'
+		},
+		Floor: {
+			SPRITE_PATH: assetsWorldDir + 'alien_floor.png',
+			CORNER_SPRITE_PATH: assetsWorldDir + 'alien_corner.png'
 		}
 	}
 };

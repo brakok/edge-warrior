@@ -12,6 +12,9 @@ var World = function(type, layer){
 		case Enum.World.Type.CHURCH:
 			info = WorldInfo.Church;
 			break;
+		case Enum.World.Type.ALIEN:
+			info = WorldInfo.Alien;
+			break;
 	}
 	
 	if(info)

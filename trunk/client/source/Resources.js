@@ -100,6 +100,12 @@ var assets = [
 	{type:'image', src: assetsWorldDir + 'church_wall.png'}, //Church
 	{type:'image', src: assetsWorldDir + 'church_floor.png'},
 	{type:'image', src: assetsWorldDir + 'church_corner.png'},
+	{type:'image', src: assetsWorldDir + 'church_background.png'},
+	
+	{type:'image', src: assetsWorldDir + 'alien_wall.png'}, //Alien
+	{type:'image', src: assetsWorldDir + 'alien_floor.png'},
+	{type:'image', src: assetsWorldDir + 'alien_corner.png'},
+	//{type:'image', src: assetsWorldDir + 'church_background.png'},
 	
 	{type:'image', src: assetsWorldDir + 'sky_day.png'}, //Skies
 	{type:'image', src: assetsWorldDir + 'sky_night.png'},
