@@ -19,7 +19,7 @@ var WorldInfo = {
 				w = this.Pit;
 		}
 		
-		w = this.Alien;
+		w = this.Church;
 		
 		return {
 			width: w.WIDTH,
