@@ -10,6 +10,8 @@ var Background = function(x, y, width, height, info) {
 		
 	this.sky = null;
 	this.background = null;
+	
+	console.log(this.height);
 };
 
 Background.prototype.load = function(layer){
@@ -28,6 +30,6 @@ Background.prototype.load = function(layer){
 };
 
 Background.prototype.update = function(){
-	Client.game.camera.project(this.sky, this.x, this.y + this.height*1.5, this.width*0.015, this.height*0.03);
+	Client.game.camera.project(this.sky, this.x, this.y + this.height, this.width*0.015, this.height*0.03);
 	Client.game.camera.project(this.background, this.x, this.y);
 };
