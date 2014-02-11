@@ -19,7 +19,7 @@ var WorldInfo = {
 				w = this.Pit;
 		}
 		
-		w = this.Church;
+		w = this.Alien;
 		
 		return {
 			width: w.WIDTH,
@@ -67,7 +67,7 @@ var WorldInfo = {
 		HEIGHT: 1000,
 		Background: {
 			SKY_SPRITE_PATH: assetsWorldDir + 'sky_evening.png',
-			BACKGROUND_SPRITE_PATH: assetsWorldDir + 'pit_background.png'
+			BACKGROUND_SPRITE_PATH: assetsWorldDir + 'alien_background.png'
 		},
 		Wall: {
 			SPRITE_PATH: assetsWorldDir + 'alien_wall.png',
