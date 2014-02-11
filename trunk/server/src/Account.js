@@ -133,8 +133,6 @@ var Account = new function(){
 			
 				if(err)
 					console.log('Add victory failed (' + profile.username + ')');
-
-				console.log(username + ' score : ' + profile.score);
 			});
 		});
 	};
@@ -159,8 +157,6 @@ var Account = new function(){
 			
 				if(err)
 					console.log('Add defeat failed (' + profile.username + ')');
-
-				console.log(username + ' score : ' + profile.score);
 			});
 		});
 	};

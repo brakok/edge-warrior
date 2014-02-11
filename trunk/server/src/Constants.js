@@ -46,7 +46,7 @@ var Constants = {
 		}
 	},
 	WinningGoal: {
-		OFFSET_Y: 600,
+		OFFSET_Y: -50,
 		PHASE_TIME: 8,
 		FloatingBall: {
 			WIDTH: 90,
