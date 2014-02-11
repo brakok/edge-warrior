@@ -113,6 +113,58 @@ var Account = new function(){
 		return true;
 	}
 	
+	//Add score to winner.
+	this.win = function(username, points){
+	
+		if(username == null || username == '')
+			return;
+			
+		db.get(username.toLowerCase(), function(err, profile){
+			
+			if(profile == null)
+				return;
+				
+			if(profile.score == null)
+				profile.score = 0;
+				
+			profile.score += points;
+			
+			db.merge(username.toLowerCase(), { score: profile.score }, function(err, res){
+			
+				if(err)
+					console.log('Add victory failed (' + profile.username + ')');
+
+				console.log(username + ' score : ' + profile.score);
+			});
+		});
+	};
+	
+	//Remove score to loser.
+	this.lose = function(username){
+	
+		if(username == null || username == '')
+			return;
+			
+		db.get(username.toLowerCase(), function(err, profile){
+			
+			if(profile == null)
+				return;
+				
+			if(profile.score == null)
+				profile.score = 0;
+				
+			profile.score--;
+			
+			db.merge(username.toLowerCase(), { score: profile.score }, function(err, res){
+			
+				if(err)
+					console.log('Add defeat failed (' + profile.username + ')');
+
+				console.log(username + ' score : ' + profile.score);
+			});
+		});
+	};
+	
 	//Authentication
 	this.authenticate = function(profile, callback){
 		
@@ -184,6 +236,7 @@ var Account = new function(){
 				//Hash password.
 				profile.salt = generateSalt(12);
 				profile.password = sha1(profile.password, profile.salt);
+				profile.score = 0;
 		
 				db.save(profile.username.toLowerCase(), profile, function(err, res){
 

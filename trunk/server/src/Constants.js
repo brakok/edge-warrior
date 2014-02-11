@@ -46,7 +46,7 @@ var Constants = {
 		}
 	},
 	WinningGoal: {
-		OFFSET_Y: -100,
+		OFFSET_Y: 600,
 		PHASE_TIME: 8,
 		FloatingBall: {
 			WIDTH: 90,
@@ -73,11 +73,11 @@ var Constants = {
 			DISTANCE_STEP: 75
 		},
 		EnergySpike: {
-			SPEED: 7,
+			SPEED: 0.007,
 			WIDTH: 30,
 			COOLDOWN: 1,
-			IMPULSE_X: 2500,
-			IMPULSE_Y: 750
+			IMPULSE_X: 2250,
+			IMPULSE_Y: 1000
 		}
 	},
 	KillCommand: {

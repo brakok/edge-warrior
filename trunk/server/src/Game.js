@@ -216,8 +216,6 @@ Game.prototype.update = function(){
 					hasSurvivors = true;
 			}
 			
-			console.log(this.players);
-			
 			//Stop countdown if there's no more survivor.
 			if(!hasSurvivors)
 				this.winningPhaseTimer = 0;
@@ -253,16 +251,27 @@ Game.prototype.electWinner = function(winner){
 
 Game.prototype.end = function(){
 	var survivors = [];
-			
+	var playerCount = 0;
+	
 	//Count and kill survivors.
 	for(var i in this.players)
 	{
-		if(this.players[i].isAlive && i != this.winner.id)
+		playerCount++;
+		
+		if(i != this.winner.id)
 		{
-			this.players[i].die();
-			survivors.push(this.players[i].toClient());
+			Account.lose(this.players[i].username);
+		
+			if(this.players[i].isAlive)
+			{
+				this.players[i].die();
+				survivors.push(this.players[i].toClient());
+			}
 		}
 	}
+
+	//Calculate new scores.
+	Account.win(this.winner.username, playerCount-1 + (survivors.length < 1 ? Math.floor(playerCount*0.5) : 0));
 	
 	var data = {
 		winner: this.winner.toClient(),
