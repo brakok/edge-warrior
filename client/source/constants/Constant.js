@@ -52,7 +52,7 @@ var Constants = {
 		}
 	},
 	World: {
-		OFFSET: 4,
+		OFFSET: 10,
 		Floor: {
 			Z_INDEX: 50
 		},
