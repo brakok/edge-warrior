@@ -65,7 +65,8 @@ Block.prototype.land = function(){
 	//Trigger sound.
 	AudioManager.playEffect(Constants.Sound.File.Block.LANDING, false);
 	
-	this.smoke.stop();
+	if(this.smoke)
+		this.smoke.stop();
 };
 
 Block.prototype.update = function(dt){
@@ -75,6 +76,10 @@ Block.prototype.update = function(dt){
 		if(this.smoke)
 			this.smoke.load();
 			
+		//Set initial position.
+		this.smoke.x = this.x;
+		this.smoke.y = this.y;
+		
 		Client.game.layer.addChild(this.sprite);
 		
 		this.updatedOnce = true;
@@ -84,6 +89,7 @@ Block.prototype.update = function(dt){
 	{
 		if(!this.smoke.toBeDestroyed)
 		{
+			//Update position.
 			this.smoke.x = this.x;
 			this.smoke.y = this.y;	
 		}

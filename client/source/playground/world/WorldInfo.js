@@ -18,9 +18,7 @@ var WorldInfo = {
 			default:
 				w = this.Pit;
 		}
-		
-		w = this.Alien;
-		
+
 		return {
 			width: w.WIDTH,
 			height: w.HEIGHT,

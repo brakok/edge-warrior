@@ -10,8 +10,6 @@ var Background = function(x, y, width, height, info) {
 		
 	this.sky = null;
 	this.background = null;
-	
-	console.log(this.height);
 };
 
 Background.prototype.load = function(layer){
