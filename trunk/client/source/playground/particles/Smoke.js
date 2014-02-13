@@ -5,13 +5,13 @@ var Smoke = cc.ParticleSystem.extend({
     initWithTotalParticles:function (numberOfParticles) {
         if (cc.ParticleSystem.prototype.initWithTotalParticles.call(this, numberOfParticles)) {
             // duration
-            this.setDuration(0.75);
+            this.setDuration(-1);
 
             // Gravity Mode
             this.setEmitterMode(cc.PARTICLE_MODE_GRAVITY);
 
             // Gravity Mode: gravity
-            this.setGravity(cc.p(1, 0));
+            this.setGravity(cc.p(0, 0));
 
             // Gravity Mode: radial acceleration
             this.setRadialAccel(0);
@@ -30,8 +30,8 @@ var Smoke = cc.ParticleSystem.extend({
             this.setPosVar(cc.p(0,0));
 
             // life of particles
-            this.setLife(0.75);
-            this.setLifeVar(0.1);
+            this.setLife(1.0);
+            this.setLifeVar(0);
 
             // size, in pixels
             this.setStartSize(25.0);
@@ -47,8 +47,6 @@ var Smoke = cc.ParticleSystem.extend({
             this.setStartColorVar(cc.c4f(0,0,0,0));
             this.setEndColor(cc.c4f(0,0,0,1));
             this.setEndColorVar(cc.c4f(0,0,0,0));
-			
-			this.setPositionType(cc.PARTICLE_TYPE_FREE);
 			
             // additive
             //this.setBlendAdditive(true);
