@@ -195,7 +195,7 @@ Game.prototype.update = function (dt){
 					EffectManager.update();
 										
 					//Update particle systems.
-					ParticleManager.update();
+					ParticleManager.update(dt);
 										
 					//Update skillstore.
 					this.hud.skillStore.update(this.player.units);

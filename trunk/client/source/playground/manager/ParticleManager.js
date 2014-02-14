@@ -1,33 +1,31 @@
 
 var ParticleManager = {
-	systems: [],
-	create: function(type, x, y, width, layer){
+	emitters: [],
+	create: function(type, x, y, layer){
 		
-		var system = null;
+		var emitter = null;
 		
 		switch(type){
 			case Enum.Particles.SMOKE:
-				system = Smoke.create(x, y, width, layer);
+				emitter = new ParticleEmitter(20, x, y, 3, 0, 0, 0, 0, 0, 0.75, 0, 45, 0, 5, 0, assetsParticles + 'smoke.png', layer);
 				break;
 		}
 		
-		if(system)
-			this.systems.push(system);
+		if(emitter)
+			this.emitters.push(emitter);
 		
-		return system;
+		return emitter;
 	},
-	update: function(){
+	update: function(dt){
 		
-		for(var i in this.systems){
+		for(var i = 0; i < this.emitters.length; ++i){
 		
-			if(this.systems[i] != null && (!this.systems[i].hasStopped || this.systems[i].getParticleCount() > 0))
-				Client.game.camera.project(this.systems[i], this.systems[i].x, this.systems[i].y);
-			else if(this.systems[i] == null)
-				delete this.systems[i];
-			else if(this.systems[i].getParticleCount() == 0)
+			if(!this.emitters[i].hasStopped || this.emitters[i].getParticleCount() > 0)
+				this.emitters[i].update(dt);
+			else
 			{
-				this.systems[i].unload();
-				delete this.systems[i];
+				this.emitters[i].trash();
+				this.emitters.splice(i, 1);
 			}
 		}
 	}

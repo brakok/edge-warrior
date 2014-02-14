@@ -73,7 +73,7 @@ var Constants = {
 		SPEED_ZOOM: 0.2,
 		CONTAINER_FACTOR_X: 1.65,
 		CONTAINER_FACTOR_Y: 2,
-		ZOOM_FACTOR: 1.3
+		ZOOM_FACTOR: 1.2
 	},
 	DeathZone: {
 		EnergySpike: {
