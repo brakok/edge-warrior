@@ -34,9 +34,9 @@ var World = function(type, layer){
 		
 		//Black boxes are used to hide spikes when they raise from the ground.	
 		this.blackBoxes = [];
-		this.blackBoxes.push(new BlackBox(-this.width*0.5-Constants.World.OFFSET, this.height*0.5, this.width, this.height*3));
+		this.blackBoxes.push(new BlackBox(-this.width*0.5-Constants.World.OFFSET, this.height*0.5, this.width, this.height*4));
 		this.blackBoxes.push(new BlackBox(this.width*0.5, -this.height*0.5, this.width*3, this.height));
-		this.blackBoxes.push(new BlackBox(this.width*1.5+Constants.World.OFFSET, this.height*0.5, this.width, this.height*3));
+		this.blackBoxes.push(new BlackBox(this.width*1.5+Constants.World.OFFSET, this.height*0.5, this.width, this.height*4));
 		
 		//Add walls to layer.
 		this.leftWall.load(this.layer);
