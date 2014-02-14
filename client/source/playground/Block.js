@@ -6,7 +6,7 @@ var Block = function (x, y, type, color, skill) {
 	this.type = type;
 	this.skill = (Enum.Block.Type.SKILLED ? skill : null);
 	
-	this.smoke = null;
+	this.trail = null;
 	
 	this.color = color;
 	this.originalColor = color;
@@ -39,7 +39,7 @@ var Block = function (x, y, type, color, skill) {
 }
 
 Block.prototype.init = function(){
-	this.smoke = ParticleManager.create(Enum.Particles.SMOKE, this.x, this.y, this.sprite.getTextureRect().width*0.1, Client.game.layer);
+	this.trail = ParticleManager.create(Enum.Particles.SMOKE, this.x, this.y, Client.game.layer);
 };
 
 Block.prototype.setPosition = function(x, y){
@@ -65,36 +65,36 @@ Block.prototype.land = function(){
 	//Trigger sound.
 	AudioManager.playEffect(Constants.Sound.File.Block.LANDING, false);
 	
-	if(this.smoke)
-		this.smoke.stop();
+	if(this.trail)
+		this.trail.stop();
 };
 
 Block.prototype.update = function(dt){
 
 	if(!this.updatedOnce)
 	{
-		if(this.smoke)
-			this.smoke.load();
+		if(this.trail)
+			this.trail.run();
 			
 		//Set initial position.
-		this.smoke.x = this.x;
-		this.smoke.y = this.y;
+		this.trail.x = this.x;
+		this.trail.y = this.y;
 		
 		Client.game.layer.addChild(this.sprite);
 		
 		this.updatedOnce = true;
 	}
 
-	if(this.smoke)
+	if(this.trail)
 	{
-		if(!this.smoke.toBeDestroyed)
+		if(!this.trail.toBeDestroyed)
 		{
 			//Update position.
-			this.smoke.x = this.x;
-			this.smoke.y = this.y;	
+			this.trail.x = this.x;
+			this.trail.y = this.y;	
 		}
 		else
-			delete this.smoke;
+			delete this.trail;
 	}
 
 	Client.game.camera.project(this.sprite, this.x, this.y);
@@ -130,8 +130,8 @@ Block.prototype.swapColor = function(color){
 Block.prototype.explode = function(cause){
 	Client.game.layer.removeChild(this.sprite);
 	
-	if(this.smoke)
-		this.smoke.stop();
+	if(this.trail)
+		this.trail.stop();
 	
 	if(this.type == Enum.Block.Type.SKILLED)
 	{
