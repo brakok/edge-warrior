@@ -115,6 +115,7 @@ var assets = [
 	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'Spark.png'},
+	{type:'image', src: assetsEffectDir + 'Jaw.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_twisted.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_transform.png'},
@@ -132,6 +133,7 @@ var assets = [
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_twisted.plist'},
 	{type:"plist", src: assetsEffectDir + 'EnergySpike_transform.plist'},
 	{type:"plist", src: assetsEffectDir + 'PlayerDeath.plist'},
+	{type:"plist", src: assetsEffectDir + 'Jaw.plist'},
 	{type:"plist", src: assetsEffectDir + 'BlockLanding.plist'},
 	{type:"plist", src: assetsEffectDir + 'BlockDisappearing.plist'},
 	{type:"plist", src: assetsEffectDir + 'SwapColor.plist'},

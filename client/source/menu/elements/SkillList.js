@@ -38,7 +38,6 @@ SkillList.prototype.init = function(){
 	var rowIndex = 0;
 	var that = this;
 	
-	console.log(stepX);
 	for(var i = 0; i < this.list.length; i++)
 	{
 		rowIndex = Math.floor(i/this.columns);

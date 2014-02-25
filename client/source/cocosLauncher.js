@@ -75,8 +75,10 @@
 				  'source/playground/particles/Particle.js',
 				  'source/playground/particles/ParticleEmitter.js',
 				  
-				  'source/playground/Missile.js',
-				  'source/playground/Spike.js',
+				  'source/playground/deathzones/Missile.js',
+				  'source/playground/deathzones/Spike.js',
+				  'source/playground/deathzones/Jaw.js',
+				  
 				  'source/playground/manager/EffectManager.js',
 				  'source/playground/manager/ParticleManager.js',
 				  'source/playground/Effect.js',

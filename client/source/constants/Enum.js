@@ -87,7 +87,8 @@ var Enum = {
 	DeathZone: {
 		Type: {
 			FIREBALL: 0,
-			ENERGY_SPIKE: 1
+			ENERGY_SPIKE: 1,
+			JAW: 2
 		}
 	},
 	WinningGoal: {
