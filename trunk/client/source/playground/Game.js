@@ -448,7 +448,7 @@ Game.prototype.addBlock = function(remoteBlock){
 	this.blocks[remoteBlock.id].init();
 };
 
-//Add a new missile from the server.
+//Add a new death zone from the server.
 Game.prototype.addDeathZone = function(remoteDeathZone){	
 	
 	var deathZone = null;
@@ -461,6 +461,9 @@ Game.prototype.addDeathZone = function(remoteDeathZone){
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
 			deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.finalX, remoteDeathZone.finalY);
 			this.goal.swapAnimation(Enum.Anim.Type.GOAL_ACTION);
+			break;
+		case Enum.DeathZone.Type.JAW:
+			deathZone = new Jaw(remoteDeathZone.x, remoteDeathZone.y);
 			break;
 	}
 	

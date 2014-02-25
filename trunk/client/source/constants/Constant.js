@@ -83,6 +83,9 @@ var Constants = {
 		},
 		Missile: {
 			Z_INDEX: 40
+		},
+		Jaw: {
+			Z_INDEX: 8
 		}
 	},
 	WinningGoal: {
