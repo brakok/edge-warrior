@@ -27,6 +27,7 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 	this.skill = (type == Enum.Block.Type.SKILLED ? SkillInfo.load(skill) : null);	
 	this.color = color;
 	
+	this.launchLandTimer = (this.skill && this.skill.useLaunchTimer ? Constants.Block.LAUNCH_LAND_TIMER : 0);
 	this.mustTrigger = false;
 
 	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
@@ -115,6 +116,12 @@ Block.prototype.update = function(dt){
 		//Reduce landing timer by delta.
 		if(this.landingTimer > 0)
 			this.landingTimer -= dt;
+		
+		if(this.launchLandTimer > 0)
+		{
+			this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
+			this.launchLandTimer -= dt;
+		}
 		
 		if(this.stillExist)
 		{
