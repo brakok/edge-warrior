@@ -27,6 +27,9 @@ var Block = function (x, y, type, color, skill) {
 			case Enum.Block.Skill.FIRE_PULSE:
 				this.sprite = cc.Sprite.create(SkillInfo.FirePulse.BLOCK_SPRITE_PATH);
 				break;
+			case Enum.Block.Skill.JAW_FALL:
+				this.sprite = cc.Sprite.create(SkillInfo.JawFall.BLOCK_SPRITE_PATH);
+				break;
 		}
 	}
 	else

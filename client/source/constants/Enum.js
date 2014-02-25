@@ -44,7 +44,8 @@ var Enum = {
 			SKILLED: 3
 		},
 		Skill: {
-			FIRE_PULSE: 0
+			FIRE_PULSE: 0,
+			JAW_FALL: 1
 		},
 		Destruction: {
 			COLOR_CONTACT: 0,
