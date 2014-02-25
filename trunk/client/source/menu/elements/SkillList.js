@@ -38,6 +38,7 @@ SkillList.prototype.init = function(){
 	var rowIndex = 0;
 	var that = this;
 	
+	console.log(stepX);
 	for(var i = 0; i < this.list.length; i++)
 	{
 		rowIndex = Math.floor(i/this.columns);
@@ -52,7 +53,7 @@ SkillList.prototype.init = function(){
 	//Set title.
 	this.title = cc.LabelTTF.create("Choose your skills", Constants.Font.NAME, Constants.Font.SIZE);
 	this.title.setColor(new cc.Color3B(0,0,0));
-	this.title.setPosition(new cc.Point(this.x - width*0.5 + 100, this.y + height*0.5 + 40));
+	this.title.setPosition(new cc.Point(this.x - width*0.5 + 120, this.y + height*0.5 + 40));
 	
 	this.layer.addChild(this.title);
 };

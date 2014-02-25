@@ -42,6 +42,9 @@ SkillDescription.prototype.init = function(){
 		case Enum.Block.Skill.FIRE_PULSE:
 			skill = SkillInfo.FirePulse;
 			break;
+		case Enum.Block.Skill.JAW_FALL:
+			skill = SkillInfo.JawFall;
+			break;
 	}
 	
 	if(skill)
@@ -111,6 +114,7 @@ SkillDescription.loadAll = function(){
 	
 	//List all skills available.
 	list.push(new SkillDescription(Enum.Block.Skill.FIRE_PULSE));
+	list.push(new SkillDescription(Enum.Block.Skill.JAW_FALL));
 	
 	return list;
 };

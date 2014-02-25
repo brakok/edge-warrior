@@ -319,10 +319,10 @@ var Constants = {
 			SkillList: {
 				SCALE_X: 0.7,
 				SCALE_Y: 0.7,
-				ITEM_WIDTH: 80,
-				ITEM_HEIGHT: 80,
-				MARGIN_X: 10,
-				MARGIN_Y: 10,
+				ITEM_WIDTH: 110,
+				ITEM_HEIGHT: 110,
+				MARGIN_X: 20,
+				MARGIN_Y: 20,
 				COLUMNS: 6,
 				ROWS: 1
 			},
