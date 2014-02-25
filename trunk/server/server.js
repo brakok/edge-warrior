@@ -25,7 +25,8 @@ var Enum = {
 			BLOCK: 1,
 			WINNING_GOAL: 2,
 			FIREBALL: 3,
-			ENERGY_SPIKE: 4
+			ENERGY_SPIKE: 4,
+			JAW: 5
 		}
 	},
 	Block: {
@@ -37,9 +38,11 @@ var Enum = {
 		},
 		Skill: {
 			Trigger: {
-				ON_LANDING: 0
+				ON_LANDING: 0,
+				ON_LAUNCHING: 1
 			},
-			FIRE_PULSE: 0
+			FIRE_PULSE: 0,
+			JAW_FALL: 1
 		},
 		State: {
 			STATIC: 0,
@@ -182,6 +185,12 @@ var Constants = {
 			COOLDOWN: 1,
 			IMPULSE_X: 2250,
 			IMPULSE_Y: 1000
+		},
+		Jaw: {
+			WIDTH: 80,
+			HEIGHT: 30,
+			INITIAL_COUNT: 3,
+			STEP: 4
 		}
 	},
 	KillCommand: {
@@ -428,6 +437,7 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 	var player = null;
 	var block = null;
 	var deathZone = null;
+	var deathZoneType = null;
 	
 	if(arbiter.body_a.userdata != null)
 	{
@@ -436,7 +446,10 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 		else if(arbiter.body_a.userdata.type == Enum.UserData.Type.BLOCK)
 			block = arbiter.body_a.userdata.object;
 		else	
+		{
 			deathZone = arbiter.body_a.userdata.object;
+			deathZoneType = arbiter.body_a.userdata.type;
+		}
 	}	
 	if(arbiter.body_b.userdata != null)
 	{
@@ -445,8 +458,15 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 		else if(arbiter.body_b.userdata.type == Enum.UserData.Type.BLOCK)
 			block = arbiter.body_b.userdata.object;
 		else	
+		{
 			deathZone = arbiter.body_b.userdata.object;
+			deathZoneType = arbiter.body_b.userdata.type;
+		}
 	}	
+	
+	//Must be enabled to continue.
+	if(deathZone != null && deathZone.userdata != null && !deathZone.userdata.object.enabled)
+		return;
 	
 	if(player != null)
 	{
@@ -456,10 +476,11 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 			var killingPlayer = null;
 			
 			for(var i in this.currentGame.players)
-			{
 				if(this.currentGame.players[i].id == deathZone.ownerId)
+				{
 					killingPlayer = this.currentGame.players[i];
-			}
+					break;
+				}
 
 			//If found, mark the player to be inserted in the next update in the killer blocks list.
 			if(killingPlayer != null && killingPlayer.id != player.id)
@@ -472,7 +493,26 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 	}
 	
 	if(block != null && block.type != Enum.Block.Type.SPAWN && (deathZone == null || deathZone.blockId == null || deathZone.blockId != block.id))
+	{
 		block.markToDestroy(Enum.Block.Destruction.CRUSHED);
+		
+		if(deathZone && deathZoneType){
+		
+			switch(deathZoneType){
+				case Enum.UserData.Type.JAW:
+					//Jaw can only destroy a limited number of blocks.
+					deathZone.count--;
+					
+					if(deathZone.count == 0)
+					{
+						deathZone.enabled = false;
+						deathZone.stillExists = false;
+					}
+					
+					break;
+			}
+		}
+	}
 };
 //Drop listener.
 var DropListener = function(game){
@@ -701,8 +741,6 @@ var Account = new function(){
 			
 				if(err)
 					console.log('Add victory failed (' + profile.username + ')');
-
-				console.log(username + ' score : ' + profile.score);
 			});
 		});
 	};
@@ -727,8 +765,6 @@ var Account = new function(){
 			
 				if(err)
 					console.log('Add defeat failed (' + profile.username + ')');
-
-				console.log(username + ' score : ' + profile.score);
 			});
 		});
 	};
@@ -936,6 +972,103 @@ var Account = new function(){
 			});
 		});
 	};
+};
+var SkillInfo = {
+	load: function(skill){
+		
+		var tmpSkill = null;
+		
+		switch(skill.type){
+			case Enum.Block.Skill.FIRE_PULSE:
+				tmpSkill = this.FirePulse;
+				break;
+			case Enum.Block.Skill.JAW_FALL:
+				tmpSkill = this.JawFall;
+				break;
+		}
+		
+		if(tmpSkill)
+		{
+			skill.count = tmpSkill.COUNT;
+			skill.trigger = tmpSkill.TRIGGER;
+			skill.selfDestroy = tmpSkill.SELF_DESTROY;
+			skill.stopOnLanding = tmpSkill.STOP_ON_LANDING;
+			skill.launchAfterUpdate = tmpSkill.LAUNCH_AFTER_UPDATE;
+		}
+		
+		return skill;
+	},
+	exec: function(block){
+	
+		switch(block.skill.type)
+		{
+			case Enum.Block.Skill.FIRE_PULSE:
+
+				if(block.landingTimer <= 0 && block.skill.count > 0)
+				{
+					//Launch one fireball for both sides.
+					block.currentGame.managers.DeathZoneManager.launch(new Missile(block.currentGame.deathZoneSequence,
+																				  block.ownerId,
+																				  null,
+																				  block.x,
+																				  block.y, 
+																				  Enum.DeathZone.Type.FIREBALL,
+																				  {
+																					direction: Enum.Direction.LEFT,
+																					power: block.skill.power
+																				  },
+																				  block.currentGame));
+					
+					block.currentGame.managers.DeathZoneManager.launch(new Missile(block.currentGame.deathZoneSequence,
+																				  block.ownerId,
+																				  null,
+																				  block.x, 
+																				  block.y, 
+																				  Enum.DeathZone.Type.FIREBALL,
+																				  {
+																					direction: Enum.Direction.RIGHT,
+																					power: block.skill.power
+																				  },
+																				  block.currentGame));
+				
+					block.skill.count--;
+					block.mustTrigger = false;
+					block.explode(Enum.Block.Destruction.COLOR_CONTACT);
+				}
+				
+				break;
+			case Enum.Block.Skill.JAW_FALL:
+			
+				//Add jaw to falling block.
+				if(block.skill.count > 0)
+					block.currentGame.managers.DeathZoneManager.launch(new Jaw(block.currentGame.deathZoneSequence, 
+																			   block, 
+																			   0, 
+																			   (Constants.Block.HEIGHT*0.5 + Constants.DeathZone.Jaw.HEIGHT*0.5)*-1, 
+																			   Constants.DeathZone.Jaw.INITIAL_COUNT + Constants.DeathZone.Jaw.STEP*block.skill.power, 
+																			   Constants.DeathZone.Jaw.WIDTH, 
+																			   Constants.DeathZone.Jaw.HEIGHT, 
+																			   block.currentGame));
+			
+				block.skill.count--;
+				block.mustTrigger = false;
+				break;
+		}			
+	},
+	FirePulse: {
+		COUNT: 1,
+		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
+		SELF_DESTROY: true,
+		STOP_ON_LANDING: false,
+		LAUNCH_AFTER_UPDATE: false
+	},
+	JawFall: {
+		COUNT: 1,
+		TRIGGER: Enum.Block.Skill.Trigger.ON_LAUNCHING,
+		SELF_DESTROY: false,
+		STOP_ON_LANDING: true,
+		LAUNCH_AFTER_UPDATE: true
+	}
 };//Server version of the player.
 var Player = function(id, username, x, y, color, game){
 
@@ -1490,25 +1623,13 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 	this.x = x;
 	this.y = y;
 	this.type = type;
-	this.skill = (type == Enum.Block.Type.SKILLED ? skill : null);
 	
 	//Set skill information.
-	if(this.skill != null)
-	{
-		switch(this.skill.type){
-			case Enum.Block.Skill.FIRE_PULSE:
-				this.skill.count = 1;
-				this.skill.trigger = Enum.Block.Skill.Trigger.ON_LANDING;
-				this.skill.selfDestroy = true;
-				break;
-		}
-	}
-	
+	this.skill = (type == Enum.Block.Type.SKILLED ? SkillInfo.load(skill) : null);	
 	this.color = color;
 	
 	this.mustTrigger = false;
-	
-	
+
 	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
 	this.toggleState = false;
 	this.isStatic = false;
@@ -1546,6 +1667,10 @@ Block.prototype.markToDestroy = function(cause){
 Block.prototype.launch = function(){
 	this.landed = false;
 	this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
+	
+	//Start skill if on launch.
+	if(this.type == Enum.Block.Type.SKILLED && this.skill && this.skill.trigger == Enum.Block.Skill.Trigger.ON_LAUNCHING && !this.skill.launchAfterUpdate)
+		this.trigger();
 };
 
 Block.prototype.active = function(flag){
@@ -1582,8 +1707,8 @@ Block.prototype.update = function(dt){
 	
 	if(this.toBeDestroy)
 		this.explode(this.destroyCause);
-	else{	
-	
+	else
+	{	
 		//Trigger effect (can't during space step).
 		if(this.mustTrigger)
 			this.trigger();
@@ -1615,6 +1740,13 @@ Block.prototype.update = function(dt){
 			
 			this.x = this.body.getPos().x;
 			this.y = this.body.getPos().y;
+			
+			//Prevent block to not launch properly if launched directly on another block which is about to be destroyed.
+			if(this.skill && this.skill.launchAfterUpdate)
+			{
+				this.skill.launchAfterUpdate = false;
+				this.launch();
+			}
 		}
 	}
 };
@@ -1641,45 +1773,8 @@ Block.prototype.trigger = function(){
 		}
 		else if(this.type == Enum.Block.Type.SKILLED)
 		{
-			//All repertoried skills.
-			switch(this.skill.type)
-			{
-				case Enum.Block.Skill.FIRE_PULSE:
-
-					if(this.landingTimer <= 0 && this.skill.count > 0)
-					{
-						//Launch one fireball for both sides.
-						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.ownerId,
-																					  null,
-																					  this.x,
-																					  this.y, 
-																					  Enum.DeathZone.Type.FIREBALL,
-																					  {
-																						direction: Enum.Direction.LEFT,
-																						power: this.skill.power
-																					  },
-																					  this.currentGame));
-						
-						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.ownerId,
-																					  null,
-																					  this.x, 
-																					  this.y, 
-																					  Enum.DeathZone.Type.FIREBALL,
-																					  {
-																						direction: Enum.Direction.RIGHT,
-																						power: this.skill.power
-																					  },
-																					  this.currentGame));
-					
-						this.skill.count--;
-						this.mustTrigger = false;
-						this.explode(Enum.Block.Destruction.COLOR_CONTACT);
-					}
-					
-					break;
-			}
+			//Trigger skill.
+			SkillInfo.exec(this);
 		}
 	}
 	
@@ -2763,6 +2858,7 @@ var Missile = function(id, ownerId, blockId, x, y, type, stats, game){
 	this.y = y;
 	this.velocity = {x:0, y:0};
 	
+	this.enabled = true;
 	this.width = null;
 	this.height = null;
 	
@@ -2971,4 +3067,4 @@ BlockManager.prototype.launch = function(block){
 	
 	//Emit the new block to all players.
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
-};var Spike = function(id, x, y, width, height, ownerId, type, stats, game){		this.currentGame = game;		this.stillExists = true;	this.mustMove = true;		this.type = type;	this.stats = stats;		this.ownerId = ownerId;	this.id = id;	this.distance = stats.distance;		//Get original X and Y.	var degree = null;	switch(stats.direction)	{		case Enum.Direction.UP:			degree = 0;			break;		case Enum.Direction.LEFT:			degree = 270;			break;		case Enum.Direction.DOWN:			degree = 180;			break;		case Enum.Direction.RIGHT:			degree = 90;			break;	}		this.x = x - (this.distance*0.5*Math.sin(degree));	this.y = y - (this.distance*0.5*Math.cos(degree));		this.finalX = this.x + (this.distance*Math.sin(degree));	this.finalY = this.y + (this.distance*Math.cos(degree));		this.originalX = this.x;	this.originalY = this.y;		this.velocity = {x:0, y:0};		this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		var userDataType = null;		//Find good type for association.	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:			userDataType = Enum.UserData.Type.ENERGY_SPIKE;			break;	}		//Assign custom data to body.	this.body.userdata = {		type: userDataType,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};Spike.prototype.move = function(){		this.x += this.velocity.x;	this.y += this.velocity.y;		this.body.setPos(new chipmunk.Vect(this.x, this.y));};Spike.prototype.toClient = function(){	return {		x: this.x,		y: this.y,		id: this.id	};};Spike.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);			//Remove from game.	for(var i in this.currentGame.deathZones)		if(this.currentGame.deathZones[i] != null && this.currentGame.deathZones[i].id == this.id)			delete this.currentGame.deathZones[i];		var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};Spike.prototype.endProcess = function(){	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:						for(var i in this.currentGame.players)			{				if(this.currentGame.players[i] != null && this.currentGame.players[i].isAlive && !this.currentGame.players[i].isRemoved)				{					var factor = 1;										if(this.currentGame.players[i].body.getPos().x < this.x)						factor = -1;											this.currentGame.players[i].body.applyImpulse(new chipmunk.Vect(factor*Constants.DeathZone.EnergySpike.IMPULSE_X, 																		Constants.DeathZone.EnergySpike.IMPULSE_Y),													  new chipmunk.Vect(0,0));				}			}						break;	}};Spike.prototype.update = function(){	if(this.stillExists && this.mustMove)	{		var push = {x:0, y:0};		var degree = 0;				switch(this.stats.direction)		{			case Enum.Direction.UP:				degree = 0;				break;			case Enum.Direction.LEFT:				degree = 270;				break;			case Enum.Direction.DOWN:				degree = 180;				break;			case Enum.Direction.RIGHT:				degree = 90;				break;		}				if(this.stats.acceleration != null)		{			var tmpVelY = this.velocity.y;			var tmpVelX = this.velocity.x;						tmpVelX += this.stats.acceleration.x;			tmpVelY += this.stats.acceleration.y;						if((tmpVelX*tmpVelX)+(tmpVelY*tmpVelY) > (this.stats.maxspeed*this.stats.maxspeed))			{				this.velocity.x = this.stats.maxspeed*Math.sin(degree);				this.velocity.y = this.stats.maxspeed*Math.cos(degree);			}			else			{				this.velocity.x += this.stats.acceleration.x*Math.sin(degree);				this.velocity.y += this.stats.acceleration.y*Math.cos(degree);			}		}		else		{			this.velocity.x = this.stats.speed*Math.sin(degree);			this.velocity.y = this.stats.speed*Math.cos(degree);		}				var tmpX = this.x + this.velocity.x;		var tmpY = this.y + this.velocity.y;				var distX = (tmpX - this.originalX);		var distY = (tmpY - this.originalY);							//If distance has been reached or surpassed, spike stops moving.		if((distX*distX)+(distY*distY) >= this.stats.distance*this.stats.distance)		{			this.mustMove = false;			this.x = this.finalX;			this.y = this.finalY;						//Set new position and trigger effect when spike is set.			this.body.setPos(new chipmunk.Vect(this.x, this.y));			this.endProcess();		}			else			this.move();	}};
+};var Spike = function(id, x, y, width, height, ownerId, type, stats, game){		this.currentGame = game;		this.stillExists = true;	this.mustMove = true;		this.enabled = true;	this.type = type;	this.stats = stats;		this.ownerId = ownerId;	this.id = id;	this.distance = stats.distance;		//Get original X and Y.	var degree = null;	switch(stats.direction)	{		case Enum.Direction.UP:			degree = 0;			break;		case Enum.Direction.LEFT:			degree = 270;			break;		case Enum.Direction.DOWN:			degree = 180;			break;		case Enum.Direction.RIGHT:			degree = 90;			break;	}		this.x = x - (this.distance*0.5*Math.sin(degree));	this.y = y - (this.distance*0.5*Math.cos(degree));		this.finalX = this.x + (this.distance*Math.sin(degree));	this.finalY = this.y + (this.distance*Math.cos(degree));		this.originalX = this.x;	this.originalY = this.y;		this.velocity = {x:0, y:0};		this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		var userDataType = null;		//Find good type for association.	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:			userDataType = Enum.UserData.Type.ENERGY_SPIKE;			break;	}		//Assign custom data to body.	this.body.userdata = {		type: userDataType,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};Spike.prototype.move = function(){		this.x += this.velocity.x;	this.y += this.velocity.y;		this.body.setPos(new chipmunk.Vect(this.x, this.y));};Spike.prototype.toClient = function(){	return {		x: this.x,		y: this.y,		id: this.id	};};Spike.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);			//Remove from game.	for(var i in this.currentGame.deathZones)		if(this.currentGame.deathZones[i] != null && this.currentGame.deathZones[i].id == this.id)			delete this.currentGame.deathZones[i];		var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};Spike.prototype.endProcess = function(){	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:						for(var i in this.currentGame.players)			{				if(this.currentGame.players[i] != null && this.currentGame.players[i].isAlive && !this.currentGame.players[i].isRemoved)				{					var factor = 1;										if(this.currentGame.players[i].body.getPos().x < this.x)						factor = -1;											this.currentGame.players[i].body.applyImpulse(new chipmunk.Vect(factor*Constants.DeathZone.EnergySpike.IMPULSE_X, 																		Constants.DeathZone.EnergySpike.IMPULSE_Y),													  new chipmunk.Vect(0,0));				}			}						break;	}};Spike.prototype.update = function(){	if(this.stillExists && this.mustMove)	{		var push = {x:0, y:0};		var degree = 0;				switch(this.stats.direction)		{			case Enum.Direction.UP:				degree = 0;				break;			case Enum.Direction.LEFT:				degree = 270;				break;			case Enum.Direction.DOWN:				degree = 180;				break;			case Enum.Direction.RIGHT:				degree = 90;				break;		}				if(this.stats.acceleration != null)		{			var tmpVelY = this.velocity.y;			var tmpVelX = this.velocity.x;						tmpVelX += this.stats.acceleration.x;			tmpVelY += this.stats.acceleration.y;						if((tmpVelX*tmpVelX)+(tmpVelY*tmpVelY) > (this.stats.maxspeed*this.stats.maxspeed))			{				this.velocity.x = this.stats.maxspeed*Math.sin(degree);				this.velocity.y = this.stats.maxspeed*Math.cos(degree);			}			else			{				this.velocity.x += this.stats.acceleration.x*Math.sin(degree);				this.velocity.y += this.stats.acceleration.y*Math.cos(degree);			}		}		else		{			this.velocity.x = this.stats.speed*Math.sin(degree);			this.velocity.y = this.stats.speed*Math.cos(degree);		}				var tmpX = this.x + this.velocity.x;		var tmpY = this.y + this.velocity.y;				var distX = (tmpX - this.originalX);		var distY = (tmpY - this.originalY);							//If distance has been reached or surpassed, spike stops moving.		if((distX*distX)+(distY*distY) >= this.stats.distance*this.stats.distance)		{			this.mustMove = false;			this.x = this.finalX;			this.y = this.finalY;						//Set new position and trigger effect when spike is set.			this.body.setPos(new chipmunk.Vect(this.x, this.y));			this.endProcess();		}			else			this.move();	}};var Jaw = function(id, parent, x, y, count, width, height, game){		this.currentGame = game;		this.stillExists = true;			this.enabled = true;	this.parent = parent;	this.id = id;		this.blockId = this.parent.id;	this.ownerId = this.parent.ownerId;		this.count = count;			//Position relative to parent.	this.x = x;	this.y = y;	this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.parent.x + this.x, this.parent.y + this.y));			//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.JAW,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};Jaw.prototype.toClient = function(){	return {		x: this.x,		y: this.y,		id: this.id	};};Jaw.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);			//Remove from game.	for(var i in this.currentGame.deathZones)		if(this.currentGame.deathZones[i] != null && this.currentGame.deathZones[i].id == this.id)			delete this.currentGame.deathZones[i];		var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};Jaw.prototype.update = function(){	if(this.stillExists)	{		this.body.setPos(new chipmunk.Vect(this.parent.x + this.x, this.parent.y + this.y));				if(this.parent.isStatic)			this.explode();	}	else		this.explode();};

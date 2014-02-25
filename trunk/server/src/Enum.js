@@ -25,7 +25,8 @@ var Enum = {
 			BLOCK: 1,
 			WINNING_GOAL: 2,
 			FIREBALL: 3,
-			ENERGY_SPIKE: 4
+			ENERGY_SPIKE: 4,
+			JAW: 5
 		}
 	},
 	Block: {
@@ -37,9 +38,11 @@ var Enum = {
 		},
 		Skill: {
 			Trigger: {
-				ON_LANDING: 0
+				ON_LANDING: 0,
+				ON_LAUNCHING: 1
 			},
-			FIRE_PULSE: 0
+			FIRE_PULSE: 0,
+			JAW_FALL: 1
 		},
 		State: {
 			STATIC: 0,
