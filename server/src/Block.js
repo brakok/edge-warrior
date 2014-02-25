@@ -22,25 +22,13 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 	this.x = x;
 	this.y = y;
 	this.type = type;
-	this.skill = (type == Enum.Block.Type.SKILLED ? skill : null);
 	
 	//Set skill information.
-	if(this.skill != null)
-	{
-		switch(this.skill.type){
-			case Enum.Block.Skill.FIRE_PULSE:
-				this.skill.count = 1;
-				this.skill.trigger = Enum.Block.Skill.Trigger.ON_LANDING;
-				this.skill.selfDestroy = true;
-				break;
-		}
-	}
-	
+	this.skill = (type == Enum.Block.Type.SKILLED ? SkillInfo.load(skill) : null);	
 	this.color = color;
 	
 	this.mustTrigger = false;
-	
-	
+
 	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
 	this.toggleState = false;
 	this.isStatic = false;
@@ -78,6 +66,10 @@ Block.prototype.markToDestroy = function(cause){
 Block.prototype.launch = function(){
 	this.landed = false;
 	this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
+	
+	//Start skill if on launch.
+	if(this.type == Enum.Block.Type.SKILLED && this.skill && this.skill.trigger == Enum.Block.Skill.Trigger.ON_LAUNCHING)
+		this.trigger();
 };
 
 Block.prototype.active = function(flag){
@@ -114,8 +106,8 @@ Block.prototype.update = function(dt){
 	
 	if(this.toBeDestroy)
 		this.explode(this.destroyCause);
-	else{	
-	
+	else
+	{	
 		//Trigger effect (can't during space step).
 		if(this.mustTrigger)
 			this.trigger();
@@ -173,45 +165,8 @@ Block.prototype.trigger = function(){
 		}
 		else if(this.type == Enum.Block.Type.SKILLED)
 		{
-			//All repertoried skills.
-			switch(this.skill.type)
-			{
-				case Enum.Block.Skill.FIRE_PULSE:
-
-					if(this.landingTimer <= 0 && this.skill.count > 0)
-					{
-						//Launch one fireball for both sides.
-						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.ownerId,
-																					  null,
-																					  this.x,
-																					  this.y, 
-																					  Enum.DeathZone.Type.FIREBALL,
-																					  {
-																						direction: Enum.Direction.LEFT,
-																						power: this.skill.power
-																					  },
-																					  this.currentGame));
-						
-						this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																					  this.ownerId,
-																					  null,
-																					  this.x, 
-																					  this.y, 
-																					  Enum.DeathZone.Type.FIREBALL,
-																					  {
-																						direction: Enum.Direction.RIGHT,
-																						power: this.skill.power
-																					  },
-																					  this.currentGame));
-					
-						this.skill.count--;
-						this.mustTrigger = false;
-						this.explode(Enum.Block.Destruction.COLOR_CONTACT);
-					}
-					
-					break;
-			}
+			//Trigger skill.
+			SkillInfo.exec(this);
 		}
 	}
 	

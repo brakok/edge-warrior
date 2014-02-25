@@ -13,6 +13,7 @@ var Missile = function(id, ownerId, blockId, x, y, type, stats, game){
 	this.y = y;
 	this.velocity = {x:0, y:0};
 	
+	this.enabled = true;
 	this.width = null;
 	this.height = null;
 	

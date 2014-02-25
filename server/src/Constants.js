@@ -78,6 +78,12 @@ var Constants = {
 			COOLDOWN: 1,
 			IMPULSE_X: 2250,
 			IMPULSE_Y: 1000
+		},
+		Jaw: {
+			WIDTH: 80,
+			HEIGHT: 30,
+			INITIAL_COUNT: 3,
+			STEP: 4
 		}
 	},
 	KillCommand: {
