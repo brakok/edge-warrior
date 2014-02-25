@@ -18,6 +18,7 @@ var SkillInfo = {
 			skill.count = tmpSkill.COUNT;
 			skill.trigger = tmpSkill.TRIGGER;
 			skill.selfDestroy = tmpSkill.SELF_DESTROY;
+			skill.useLaunchTimer = tmpSkill.USE_LAUNCH_TIMER;
 		}
 		
 		return skill;
@@ -82,11 +83,13 @@ var SkillInfo = {
 	FirePulse: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
-		SELF_DESTROY: true
+		SELF_DESTROY: true,
+		USE_LAUNCH_TIMER: false
 	},
 	JawFall: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LAUNCHING,
-		SELF_DESTROY: false
+		SELF_DESTROY: false,
+		USE_LAUNCH_TIMER: true
 	}
 };

@@ -145,6 +145,7 @@ var Constants = {
 		WIDTH: 80,
 		HEIGHT: 30,
 		LANDING_TIMER: 0.01,
+		LAUNCH_LAND_TIMER: 0.1,
 		LAUNCHING_SPEED: -300,
 		SPAWN_MAXLAUNCHING_Y: 500,
 		SPAWN_MAXLAUNCHING_X: 500,
@@ -383,16 +384,16 @@ BlockListener.prototype.begin = function(arbiter, space){
 	}
 		
 	//Check if blocks land.
-	if(block1 != null && !block1.isStatic)
+	if(block1 != null && !block1.isStatic && block1.launchLandTimer  <= 0)
 	{
 		//State can't be changed during callback.
 		block1.toggleState = true;
 		block1.isStatic = true;
 		block1.justLanded = true;
 		block1.landingTimer = Constants.Block.LANDING_TIMER;
-	}	
+	}
 	
-	if(block2 != null && !block2.isStatic)
+	if(block2 != null && !block2.isStatic && block2.launchLandTimer  <= 0)
 	{
 		block2.toggleState = true;
 		block2.isStatic = true;
@@ -992,8 +993,7 @@ var SkillInfo = {
 			skill.count = tmpSkill.COUNT;
 			skill.trigger = tmpSkill.TRIGGER;
 			skill.selfDestroy = tmpSkill.SELF_DESTROY;
-			skill.stopOnLanding = tmpSkill.STOP_ON_LANDING;
-			skill.launchAfterUpdate = tmpSkill.LAUNCH_AFTER_UPDATE;
+			skill.useLaunchTimer = tmpSkill.USE_LAUNCH_TIMER;
 		}
 		
 		return skill;
@@ -1059,15 +1059,13 @@ var SkillInfo = {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 		SELF_DESTROY: true,
-		STOP_ON_LANDING: false,
-		LAUNCH_AFTER_UPDATE: false
+		USE_LAUNCH_TIMER: false
 	},
 	JawFall: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LAUNCHING,
 		SELF_DESTROY: false,
-		STOP_ON_LANDING: true,
-		LAUNCH_AFTER_UPDATE: true
+		USE_LAUNCH_TIMER: true
 	}
 };//Server version of the player.
 var Player = function(id, username, x, y, color, game){
@@ -1628,6 +1626,7 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 	this.skill = (type == Enum.Block.Type.SKILLED ? SkillInfo.load(skill) : null);	
 	this.color = color;
 	
+	this.launchLandTimer = (this.skill && this.skill.useLaunchTimer ? Constants.Block.LAUNCH_LAND_TIMER : 0);
 	this.mustTrigger = false;
 
 	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
@@ -1669,7 +1668,7 @@ Block.prototype.launch = function(){
 	this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
 	
 	//Start skill if on launch.
-	if(this.type == Enum.Block.Type.SKILLED && this.skill && this.skill.trigger == Enum.Block.Skill.Trigger.ON_LAUNCHING && !this.skill.launchAfterUpdate)
+	if(this.type == Enum.Block.Type.SKILLED && this.skill && this.skill.trigger == Enum.Block.Skill.Trigger.ON_LAUNCHING)
 		this.trigger();
 };
 
@@ -1717,6 +1716,12 @@ Block.prototype.update = function(dt){
 		if(this.landingTimer > 0)
 			this.landingTimer -= dt;
 		
+		if(this.launchLandTimer > 0)
+		{
+			this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
+			this.launchLandTimer -= dt;
+		}
+		
 		if(this.stillExist)
 		{
 			//Check if it just landed to tell client to activate animation.
@@ -1740,13 +1745,6 @@ Block.prototype.update = function(dt){
 			
 			this.x = this.body.getPos().x;
 			this.y = this.body.getPos().y;
-			
-			//Prevent block to not launch properly if launched directly on another block which is about to be destroyed.
-			if(this.skill && this.skill.launchAfterUpdate)
-			{
-				this.skill.launchAfterUpdate = false;
-				this.launch();
-			}
 		}
 	}
 };
