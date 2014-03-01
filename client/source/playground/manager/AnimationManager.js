@@ -28,7 +28,9 @@ var AnimationManager = {
 		//Jaw
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Jaw.plist', 
 														  assetsEffectDir + 'Jaw.png');
-		
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'JawDisappearing.plist', 
+														  assetsEffectDir + 'JawDisappearing.png');												  
+
 		//Effects.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 
 														  assetsEffectDir + 'PlayerDeath.png');

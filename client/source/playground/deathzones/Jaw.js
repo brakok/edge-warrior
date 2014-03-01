@@ -30,6 +30,9 @@ Jaw.prototype.fromServer = function(remoteJaw){
 
 Jaw.prototype.explode = function(){
 	Client.game.layer.removeChild(this.currentAnimation);
+	
+	//Trigger jaw disappearing effect.
+	EffectManager.create(Enum.Effect.Type.JAW_DISAPPEARING, this.x, this.y);
 };
 
 Jaw.prototype.update = function(){

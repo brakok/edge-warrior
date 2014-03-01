@@ -71,6 +71,13 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('FirePulse_explosion.0000.png');
 			this.animation = AnimationManager.create('FirePulse_explosion', 0, 12, 24);
 			break;
+		
+		case Enum.Effect.Type.JAW_DISAPPEARING:
+
+			//Effect created by dying fireball.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('JawDisappearing.0000.png');
+			this.animation = AnimationManager.create('JawDisappearing', 0, 10, 24);
+			break;
 	}
 	
 	this.sprite._zOrder = Constants.Effect.Z_INDEX;
