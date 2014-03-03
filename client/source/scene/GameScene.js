@@ -7,6 +7,11 @@ var GameLayer = cc.Layer.extend({
 		var s = cc.Director.getInstance().getWinSize();
 		this.playGroundLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 0), s.width, s.height);
 		this.playGroundLayer.setAnchorPoint(new cc.Point(0.5,0.5));	
+		this.playGroundLayer.setZOrder(0);
+		
+		this.frontLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 0), s.width, s.height);
+		this.frontLayer.setAnchorPoint(new cc.Point(0.5,0.5));	
+		this.frontLayer.setZOrder(1);
 		
 		this.hud = HUD.create(s.width, s.height);
 		this.endScreen = EndScreen.create(s.width, s.height);
@@ -21,6 +26,7 @@ var GameLayer = cc.Layer.extend({
 		
 		//Set the game layer (middle ground).
 		this.addChild(this.playGroundLayer);
+		this.addChild(this.frontLayer);
 		this.addChild(this.hud);
 		
 		this.setKeyboardEnabled(true);
