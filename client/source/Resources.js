@@ -112,6 +112,9 @@ var assets = [
 	{type:'image', src: assetsWorldDir + 'sky_evening.png'},
 	{type:'image', src: assetsWorldDir + 'sky_morning.png'},
 
+	//NPCs
+	
+	
 	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'Spark.png'},
@@ -171,11 +174,13 @@ var assets = [
 	{type:'image', src: assetsBlockDir + 'block_firePulse.png'},
 	{type:'image', src: assetsBlockDir + 'block_jawFall.png'},
 	{type:'image', src: assetsBlockDir + 'block_Eclipse.png'},
+	{type:'image', src: assetsBlockDir + 'block_peskyBox.png'},
 	
 	//Skill.
 	{type:'image', src: assetsSkillDir + 'firePulse.png'},
 	{type:'image', src: assetsSkillDir + 'jawFall.png'},
 	{type:'image', src: assetsSkillDir + 'Eclipse.png'},
+	{type:'image', src: assetsSkillDir + 'peskyBox.png'},
 	
 	//Player
 	{type:'image', src: assetsPlayerDir + 'yellow_idle.png'},

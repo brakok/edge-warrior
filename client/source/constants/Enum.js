@@ -46,7 +46,8 @@ var Enum = {
 		Skill: {
 			FIRE_PULSE: 0,
 			JAW_FALL: 1,
-			ECLIPSE: 2
+			ECLIPSE: 2,
+			PESKY_BOX: 3
 		},
 		Destruction: {
 			COLOR_CONTACT: 0,
@@ -90,6 +91,11 @@ var Enum = {
 			FIREBALL: 0,
 			ENERGY_SPIKE: 1,
 			JAW: 2
+		}
+	},
+	NPC: {
+		Type: {
+			PESKY_BOX: 0
 		}
 	},
 	WinningGoal: {
