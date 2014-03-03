@@ -212,7 +212,8 @@ var Constants = {
 		LOGIN: 'login',
 		CHANGE_PASSWORD: 'changePassword',
 		RESET_PASSWORD: 'resetPassword',
-		LOGOUT: 'logout'
+		LOGOUT: 'logout',
+		NEW_ELEMENT: 'newElement'
 	},
 	Effect: {
 		Z_INDEX: 60,
@@ -227,6 +228,14 @@ var Constants = {
 			ORBIT_SPEED: 5,
 			ORBIT_RADIUS: 8,
 			Z_INDEX: 56,
+		}
+	},
+	Element: {
+		Eclipse: {
+			Z_INDEX: 65,
+			SCALE_STEP: 0.2,
+			DURATION: 4,
+			DURATION_STEP: 0.75
 		}
 	},
 	Sound: {

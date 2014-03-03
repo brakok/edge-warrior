@@ -22,15 +22,12 @@ var Block = function (x, y, type, color, skill) {
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');
 	else if(this.type == Enum.Block.Type.SKILLED)
 	{
-		//All repertoried skills.
-		switch(this.skill.type){
-			case Enum.Block.Skill.FIRE_PULSE:
-				this.sprite = cc.Sprite.create(SkillInfo.FirePulse.BLOCK_SPRITE_PATH);
-				break;
-			case Enum.Block.Skill.JAW_FALL:
-				this.sprite = cc.Sprite.create(SkillInfo.JawFall.BLOCK_SPRITE_PATH);
-				break;
-		}
+		var tmpSkill = SkillInfo.load(this.skill.type);
+	
+		if(tmpSkill)
+			this.sprite = cc.Sprite.create(tmpSkill.BLOCK_SPRITE_PATH);
+		else
+			console.log('Skill does not exist');
 	}
 	else
 		this.sprite = cc.Sprite.create(assetsBlockDir + 'block.png');

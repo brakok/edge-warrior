@@ -194,6 +194,9 @@ Game.prototype.update = function (dt){
 					//Update all effects.
 					EffectManager.update();
 										
+					//Update all elements.
+					ElementManager.update(dt);
+										
 					//Update particle systems.
 					ParticleManager.update(dt);
 										
@@ -468,6 +471,20 @@ Game.prototype.addDeathZone = function(remoteDeathZone){
 	}
 	
 	this.deathZones[remoteDeathZone.id] = deathZone;
+};
+
+//Add a new element from the server.
+Game.prototype.addElement = function(remoteElement){
+
+	var element = null;
+	
+	switch(remoteElement.type){
+		case Enum.Element.Type.ECLIPSE:
+			element = new Eclipse(remoteElement.x, remoteElement.y, remoteElement.power, Client.username == remoteElement.username);
+			break;
+	}
+	
+	ElementManager.launch(element);
 };
 
 //Delete a missile.

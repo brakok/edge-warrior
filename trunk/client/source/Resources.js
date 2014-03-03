@@ -115,6 +115,7 @@ var assets = [
 	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
 	{type:'image', src: assetsEffectDir + 'Spark.png'},
+	{type:'image', src: assetsEffectDir + 'Eclipse.png'},
 	{type:'image', src: assetsEffectDir + 'Jaw.png'},
 	{type:'image', src: assetsEffectDir + 'JawDisappearing.png'},
 	{type:'image', src: assetsEffectDir + 'EnergySpike_tentacle.png'},
@@ -168,9 +169,13 @@ var assets = [
 	
 	//Skill block.
 	{type:'image', src: assetsBlockDir + 'block_firePulse.png'},
+	{type:'image', src: assetsBlockDir + 'block_jawFall.png'},
+	{type:'image', src: assetsBlockDir + 'block_Eclipse.png'},
 	
 	//Skill.
 	{type:'image', src: assetsSkillDir + 'firePulse.png'},
+	{type:'image', src: assetsSkillDir + 'jawFall.png'},
+	{type:'image', src: assetsSkillDir + 'Eclipse.png'},
 	
 	//Player
 	{type:'image', src: assetsPlayerDir + 'yellow_idle.png'},

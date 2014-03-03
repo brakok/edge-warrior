@@ -455,6 +455,11 @@ var Client = new function(){
 			Client.game.addDeathZone(data);
 		});
 		
+		//Add new element.
+		socket.on(Constants.Message.NEW_ELEMENT, function(data){
+			Client.game.addElement(data);
+		});
+		
 		//Execute new action for a specified block.
 		socket.on(Constants.Message.BLOCK_ACTION, function(data){
 			Client.game.blocks[data.id].execute(data.action);
