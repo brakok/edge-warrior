@@ -172,12 +172,12 @@ var Constants = {
 		PeskyBox: {
 			WIDTH: 60,
 			HEIGHT: 60,
-			SPEED: 4,
-			SPEED_STEP: 2,
+			SPEED: 0.3,
+			SPEED_STEP: 0.1,
 			DURATION: 6,
 			DURATION_STEP: 2,
 			FLEE_TIMER: 0.75,
-			FLEE_STEP: 0.075
+			FLEE_STEP: 0.125
 		}
 	},
 	WinningGoal: {
@@ -3303,6 +3303,11 @@ var PeskyBox = function(id, x, y, width, height, speed, duration, maxFleeTime, t
 	this.facing = Enum.Facing.LEFT;
 	this.type = Enum.NPC.Type.PESKY_BOX;
 	
+	this.velocity = {
+		x: 0,
+		y: 0
+	};
+	
 	this.fleeTimer = 0;
 	this.maxFleeTime = maxFleeTime;
 	
@@ -3345,19 +3350,36 @@ PeskyBox.prototype.update = function(){
 		this.explode();
 	else
 	{
-		var nextX = this.x < this.target.x ? this.speed : -this.speed;
-		var nextY = this.y < this.target.y ? this.speed : -this.speed;
+		var nextX = 0;
+		var nextY = 0;
 	
 		if(this.fleeTimer > 0)
 		{
-			nextX *= -1;
-			nextY *= -1;
+			nextX = this.speed * (this.x < this.target.x ? -1 : 1);
+			nextY = this.speed * (this.y < this.target.y ? -1 : 1);
 			
 			this.fleeTimer -= this.currentGame.dt;
 		}
+		else
+		{
+			nextX = (this.target.x - this.x)/25;
+			nextY = (this.target.y - this.y)/25;
+			
+			if(Math.abs(nextX) > this.speed)
+				nextX = this.speed * (this.x < this.target.x ? 1 : -1);
+				
+			if(Math.abs(nextY) > this.speed)
+				nextY = this.speed * (this.y < this.target.y ? 1 : -1);
+		}
+		
+		this.velocity.x += nextX;
+		this.velocity.y += nextY;
+		
+		this.velocity.x *= 0.96;
+		this.velocity.y *= 0.96;
 		
 		var pos = this.body.getPos();
-		this.body.setPos(new chipmunk.Vect(pos.x + nextX, pos.y + nextY));
+		this.body.setPos(new chipmunk.Vect(pos.x + this.velocity.x, pos.y + this.velocity.y));
 		pos = this.body.getPos();
 		
 		this.x = pos.x;
