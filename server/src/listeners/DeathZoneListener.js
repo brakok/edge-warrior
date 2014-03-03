@@ -36,8 +36,21 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 		}
 	}	
 	
+	//Some specific case for skills.
+	if(deathZone != null){
+		
+		switch(deathZoneType){
+			case Enum.UserData.Type.JAW:
+				
+				if(!player && !block)
+					deathZone.stillExists = false;
+
+				break;
+		}
+	}
+	
 	//Must be enabled to continue.
-	if(deathZone != null && deathZone.userdata != null && !deathZone.userdata.object.enabled)
+	if(deathZone != null && deathZone != null && !deathZone.enabled)
 		return;
 	
 	if(player != null)
