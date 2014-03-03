@@ -3,6 +3,8 @@ var Game = function(){
 
 	this.enemies = [];
 	this.blocks = [];
+	
+	this.npcs = {};
 	this.deathZones = {};
 	
 	//Countdown of warmup.
@@ -190,6 +192,10 @@ Game.prototype.update = function (dt){
 						if(this.deathZones[i] != null)
 							this.deathZones[i].update(dt);
 
+					for(var i in this.npcs)
+						if(this.npcs[i] != null)
+							this.npcs[i].update(dt);
+					
 					this.goal.update();
 					
 					//Update all effects.
@@ -417,7 +423,7 @@ Game.prototype.changeStep = function(stepReached){
 };
 
 //Update positions from server ones.
-Game.prototype.updateFromServer = function(remotePlayers, remoteBlocks, remoteGoal, remoteDeathZones){
+Game.prototype.updateFromServer = function(remotePlayers, remoteBlocks, remoteGoal, remoteDeathZones, remoteNPCs){
 	
 	//Update players.
 	for(var i in remotePlayers)
@@ -428,10 +434,15 @@ Game.prototype.updateFromServer = function(remotePlayers, remoteBlocks, remoteGo
 		if(this.blocks[remoteBlocks[i].id] != null)
 			this.blocks[remoteBlocks[i].id].fromServer(remoteBlocks[i]);
 		
-	//Update missiles.
+	//Update deathZones.
 	for(var i in remoteDeathZones)
 		if(this.deathZones[remoteDeathZones[i].id] != null)
 			this.deathZones[remoteDeathZones[i].id].fromServer(remoteDeathZones[i]);							
+		
+	//Update NPCs.
+	for(var i in remoteNPCs)
+		if(this.npcs[remoteNPCs[i].id] != null)
+			this.npcs[remoteNPCs[i].id].fromServer(remoteNPCs[i]);
 		
 	//Update goal.
 	this.goal.fromServer(remoteGoal);
@@ -488,7 +499,31 @@ Game.prototype.addElement = function(remoteElement){
 	ElementManager.launch(element);
 };
 
-//Delete a missile.
+//Add a new NPC from the server.
+Game.prototype.addNpc = function(remoteNpc){
+
+	var npc = null;
+	
+	switch(remoteNpc.type){
+		case Enum.NPC.Type.PESKY_BOX:
+			npc = new PeskyBox(remoteNpc.x, remoteNpc.y, remoteNpc.facing);
+			break;
+	}
+
+	this.npcs[remoteNpc.id] = npc;
+};
+
+//Delete a npc.
+Game.prototype.deleteNpc = function(remoteNpcId){
+	
+	if(this.npcs[remoteNpcId] != null)
+	{
+		this.npcs[remoteNpcId].explode();
+		delete this.npcs[remoteNpcId];
+	}
+};
+
+//Delete a death zone.
 Game.prototype.deleteDeathZone = function(remoteDeathZoneId){
 
 	if(this.deathZones[remoteDeathZoneId] != null)

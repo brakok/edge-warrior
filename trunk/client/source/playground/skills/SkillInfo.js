@@ -9,6 +9,8 @@ var SkillInfo = {
 				return this.JawFall;
 			case Enum.Block.Skill.ECLIPSE:
 				return this.Eclipse;
+			case Enum.Block.Skill.PESKY_BOX:
+				return this.PeskyBox;
 		}
 		
 		return null;
@@ -38,6 +40,16 @@ var SkillInfo = {
 		DESCRIPTION: 'When landing, create a black circle hiding everything behind it. Owner sees through it.',
 		MENU_SPRITE_PATH: assetsSkillDir + 'eclipse.png',
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_Eclipse.png',
+		PERCENT_START: 50,
+		PERCENT_STEP: 3,
+		COST: 5,
+		COST_STEP: 5
+	},
+	PeskyBox: {
+		TITLE: 'Pesky box',
+		DESCRIPTION: 'When landing, create an annoying character that follows his target for a short duration. Player loses all speed upon contact.',
+		MENU_SPRITE_PATH: assetsSkillDir + 'peskyBox.png',
+		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_peskyBox.png',
 		PERCENT_START: 50,
 		PERCENT_STEP: 3,
 		COST: 5,

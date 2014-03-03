@@ -80,6 +80,8 @@
 				  'source/playground/deathzones/Spike.js',
 				  'source/playground/deathzones/Jaw.js',
 				  
+				  'source/playground/npc/PeskyBox.js',
+				  
 				  'source/playground/manager/EffectManager.js',
 				  'source/playground/manager/ElementManager.js',
 				  'source/playground/manager/ParticleManager.js',

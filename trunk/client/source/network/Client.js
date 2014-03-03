@@ -455,6 +455,16 @@ var Client = new function(){
 			Client.game.addDeathZone(data);
 		});
 		
+		//Add a npc.
+		socket.on(Constants.Message.NEW_NPC, function(data){
+			Client.game.addNpc(data);
+		});
+		
+		//Delete a npc.
+		socket.on(Constants.Message.DELETE_NPC, function(data){
+			Client.game.deleteNpc(data.id);
+		});
+		
 		//Add new element.
 		socket.on(Constants.Message.NEW_ELEMENT, function(data){
 			Client.game.addElement(data);

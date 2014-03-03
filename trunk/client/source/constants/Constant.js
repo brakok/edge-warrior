@@ -213,7 +213,9 @@ var Constants = {
 		CHANGE_PASSWORD: 'changePassword',
 		RESET_PASSWORD: 'resetPassword',
 		LOGOUT: 'logout',
-		NEW_ELEMENT: 'newElement'
+		NEW_ELEMENT: 'newElement',
+		DELETE_NPC: 'deleteNPC',
+		NEW_NPC: 'newNPC'
 	},
 	Effect: {
 		Z_INDEX: 50,
@@ -239,6 +241,9 @@ var Constants = {
 			FADE_IN: 0.25,
 			FADE_OUT: 0.75
 		}
+	},
+	NPC: {
+		Z_ORDER: 15
 	},
 	Sound: {
 		Effect: {
