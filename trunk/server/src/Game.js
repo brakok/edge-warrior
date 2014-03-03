@@ -78,6 +78,13 @@ Game.prototype.createWorld = function(){
 									   null, 
 									   null, 
 									   null);
+									   
+		this.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
+									   Enum.Collision.Type.STATIC, 
+									   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
+									   null, 
+									   null, 
+									   null);
 		
 		//Add ground sensor callback.
 		this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
