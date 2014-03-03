@@ -35,6 +35,10 @@ NpcListener.prototype.begin = function(arbiter, space){
 			switch(npc.type){
 				case Enum.NPC.Type.PESKY_BOX:
 					player.body.setVel(new chipmunk.Vect(0,0));
+					
+					if(player.id == npc.target.id)
+						npc.fleeTimer = npc.maxFleeTime;
+					
 					break;
 			}
 		}

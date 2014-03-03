@@ -263,7 +263,7 @@ Player.prototype.update = function(){
 			
 			if(lastFacing != this.facing)
 				this.turn();
-				
+
 			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
 			
 			//Switch current action to running if player is on the ground.
