@@ -178,7 +178,7 @@ Player.prototype.init = function(){
 
 	//Base frame.
 	this.currentAnimation = cc.Sprite.createWithSpriteFrameName(colorText + '_idle.0000.png');
-	this.currentAnimation._zOrder = Constants.Player.Z_ORDER;
+	this.currentAnimation.setZOrder(Constants.Player.Z_ORDER);
 	this.setPosition(this.x, this.y);
 			
 	//Creation of the animations.

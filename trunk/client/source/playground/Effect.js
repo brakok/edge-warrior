@@ -80,7 +80,7 @@ Effect.prototype.init = function(){
 			break;
 	}
 	
-	this.sprite._zOrder = Constants.Effect.Z_INDEX;
+	this.sprite.setZOrder(Constants.Effect.Z_INDEX);
 	this.callback = cc.CallFunc.create(function(node){
 								Client.game.layer.removeChild(node);
 								this.hasEnded = true;

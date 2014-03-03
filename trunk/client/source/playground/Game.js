@@ -56,7 +56,7 @@ Game.prototype.getPlayer = function(color){
 	return null;
 };
 
-Game.prototype.init = function(width, height, layer, hud, endScreen, pauseMenu){
+Game.prototype.init = function(width, height, layer, frontLayer, hud, endScreen, pauseMenu){
 
 	//Layer size.
 	this.width = width;
@@ -64,6 +64,7 @@ Game.prototype.init = function(width, height, layer, hud, endScreen, pauseMenu){
 
 	//Layers.
 	this.layer = layer;
+	this.frontLayer = frontLayer;
 	this.hud = hud;
 	this.endScreen = endScreen;
 	this.pauseMenu = pauseMenu;
@@ -78,7 +79,7 @@ Game.prototype.launch = function(type){
 
 	//Init game with needed layers.
 	var gameLayer = myApp.GameScene.layer;
-	this.init(gameLayer.width, gameLayer.height, gameLayer.playGroundLayer, gameLayer.hud, gameLayer.endScreen, gameLayer.pauseMenu);
+	this.init(gameLayer.width, gameLayer.height, gameLayer.playGroundLayer, gameLayer.frontLayer, gameLayer.hud, gameLayer.endScreen, gameLayer.pauseMenu);
 
 	//Add received elements to the layer (render).
 	this.createWorld(type);

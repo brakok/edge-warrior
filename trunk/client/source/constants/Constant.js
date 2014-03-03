@@ -54,13 +54,13 @@ var Constants = {
 	World: {
 		OFFSET: 10,
 		Floor: {
-			Z_INDEX: 50
+			Z_INDEX: 70
 		},
 		Wall: {
-			Z_INDEX: 50
+			Z_INDEX: 70
 		},
 		BlackBox: {
-			Z_INDEX: 49
+			Z_INDEX: 69
 		},
 		Background: {
 			Z_INDEX: -1000
@@ -216,7 +216,7 @@ var Constants = {
 		NEW_ELEMENT: 'newElement'
 	},
 	Effect: {
-		Z_INDEX: 60,
+		Z_INDEX: 50,
 		DoubleJump: {
 			OFFSET: 50
 		},
@@ -232,10 +232,12 @@ var Constants = {
 	},
 	Element: {
 		Eclipse: {
-			Z_INDEX: 65,
-			SCALE_STEP: 0.2,
+			Z_INDEX: 75,
+			SCALE_STEP: 0.25,
 			DURATION: 4,
-			DURATION_STEP: 0.75
+			DURATION_STEP: 0.75,
+			FADE_IN: 0.25,
+			FADE_OUT: 0.75
 		}
 	},
 	Sound: {
