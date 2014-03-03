@@ -18,7 +18,7 @@ var Constants = {
 	},
 	Spawn: {
 		Limit: {
-		OFFSET: 150
+			OFFSET: 150
 		}
 	},
 	Player: {
@@ -141,7 +141,8 @@ var Constants = {
 		LOGIN: 'login',
 		CHANGE_PASSWORD: 'changePassword',
 		RESET_PASSWORD: 'resetPassword',
-		LOGOUT: 'logout'
+		LOGOUT: 'logout',
+		NEW_ELEMENT: 'newElement'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
