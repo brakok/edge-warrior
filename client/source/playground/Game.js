@@ -438,11 +438,11 @@ Game.prototype.updateFromServer = function(remotePlayers, remoteBlocks, remoteGo
 	for(var i in remoteDeathZones)
 		if(this.deathZones[remoteDeathZones[i].id] != null)
 			this.deathZones[remoteDeathZones[i].id].fromServer(remoteDeathZones[i]);							
-		
+				
 	//Update NPCs.
 	for(var i in remoteNPCs)
 		if(this.npcs[remoteNPCs[i].id] != null)
-			this.npcs[remoteNPCs[i].id].fromServer(remoteNPCs[i]);
+			this.npcs[remoteNPCs[i].id].fromServer(remoteNPCs[i]);		
 		
 	//Update goal.
 	this.goal.fromServer(remoteGoal);

@@ -395,7 +395,7 @@ var Client = new function(){
 		//Pulling info from server.
 		socket.on(Constants.Message.PULL, function (data){
 			if(Client.game != null)
-				Client.game.updateFromServer(data.players, data.blocks, data.goal, data.deathZones);
+				Client.game.updateFromServer(data.players, data.blocks, data.goal, data.deathZones, data.npcs);
 		});
 		
 		//Ask for next block.
