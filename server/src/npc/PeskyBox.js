@@ -1,5 +1,5 @@
 
-var PeskyBox = function(id, x, y, width, height, speed, duration, target, game){
+var PeskyBox = function(id, x, y, width, height, speed, duration, maxFleeTime, target, game){
 	
 	this.id = id;
 	this.x = x;
@@ -12,6 +12,9 @@ var PeskyBox = function(id, x, y, width, height, speed, duration, target, game){
 	
 	this.facing = Enum.Facing.LEFT;
 	this.type = Enum.NPC.Type.PESKY_BOX;
+	
+	this.fleeTimer = 0;
+	this.maxFleeTime = maxFleeTime;
 	
 	this.toBeDestroyed = false;
 	
@@ -52,9 +55,24 @@ PeskyBox.prototype.update = function(){
 		this.explode();
 	else
 	{
-		this.x = this.body.getPos().x;
-		this.y = this.body.getPos().y;
+		var nextX = this.x < this.target.x ? this.speed : -this.speed;
+		var nextY = this.y < this.target.y ? this.speed : -this.speed;
+	
+		if(this.fleeTimer > 0)
+		{
+			nextX *= -1;
+			nextY *= -1;
+			
+			this.fleeTimer -= this.currentGame.dt;
+		}
 		
+		var pos = this.body.getPos();
+		this.body.setPos(new chipmunk.Vect(pos.x + nextX, pos.y + nextY));
+		pos = this.body.getPos();
+		
+		this.x = pos.x;
+		this.y = pos.y;
+				
 		this.duration -= this.currentGame.dt;
 		
 		if(this.duration <= 0)
