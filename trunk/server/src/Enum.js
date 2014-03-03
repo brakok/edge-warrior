@@ -42,7 +42,8 @@ var Enum = {
 				ON_LAUNCHING: 1
 			},
 			FIRE_PULSE: 0,
-			JAW_FALL: 1
+			JAW_FALL: 1,
+			ECLIPSE: 2
 		},
 		State: {
 			STATIC: 0,
@@ -52,6 +53,11 @@ var Enum = {
 			COLOR_CONTACT: 0,
 			SPAWN: 1,
 			CRUSHED: 2
+		}
+	},
+	Element: {
+		Type: {
+			ECLIPSE: 0
 		}
 	},
 	Collision: {

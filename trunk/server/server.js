@@ -42,7 +42,8 @@ var Enum = {
 				ON_LAUNCHING: 1
 			},
 			FIRE_PULSE: 0,
-			JAW_FALL: 1
+			JAW_FALL: 1,
+			ECLIPSE: 2
 		},
 		State: {
 			STATIC: 0,
@@ -52,6 +53,11 @@ var Enum = {
 			COLOR_CONTACT: 0,
 			SPAWN: 1,
 			CRUSHED: 2
+		}
+	},
+	Element: {
+		Type: {
+			ECLIPSE: 0
 		}
 	},
 	Collision: {
@@ -126,7 +132,7 @@ var Constants = {
 	},
 	Spawn: {
 		Limit: {
-		OFFSET: 150
+			OFFSET: 150
 		}
 	},
 	Player: {
@@ -249,7 +255,8 @@ var Constants = {
 		LOGIN: 'login',
 		CHANGE_PASSWORD: 'changePassword',
 		RESET_PASSWORD: 'resetPassword',
-		LOGOUT: 'logout'
+		LOGOUT: 'logout',
+		NEW_ELEMENT: 'newElement'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -1000,6 +1007,9 @@ var SkillInfo = {
 			case Enum.Block.Skill.JAW_FALL:
 				tmpSkill = this.JawFall;
 				break;
+			case Enum.Block.Skill.ECLIPSE:
+				tmpSkill = this.Eclipse;
+				break;
 		}
 		
 		if(tmpSkill)
@@ -1067,6 +1077,37 @@ var SkillInfo = {
 				block.skill.count--;
 				block.mustTrigger = false;
 				break;
+			case Enum.Block.Skill.ECLIPSE:
+			
+				//Send client info to create an eclipse.
+				if(block.skill.count > 0)
+				{
+					var owner = null;
+					
+					for(var i in block.currentGame.players)
+						if(i == block.ownerId)
+						{
+							owner = block.currentGame.players[i];
+							break;
+						}
+
+					if(owner)
+					{
+						var data = {
+							username: owner.username,
+							power: block.skill.power,
+							x: block.x,
+							y: block.y,
+							type: Enum.Element.Type.ECLIPSE
+						};
+						
+						io.sockets.in(block.currentGame.id).emit(Constants.Message.NEW_ELEMENT, data);
+					}
+				}
+				
+				block.skill.count--;
+				block.mustTrigger = false;
+				break;
 		}			
 	},
 	FirePulse: {
@@ -1080,6 +1121,12 @@ var SkillInfo = {
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LAUNCHING,
 		SELF_DESTROY: false,
 		USE_LAUNCH_TIMER: true
+	},
+	Eclipse: {
+		COUNT: 1,
+		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
+		SELF_DESTROY: false,
+		USE_LAUNCH_TIMER: false
 	}
 };//Server version of the player.
 var Player = function(id, username, x, y, color, game){
