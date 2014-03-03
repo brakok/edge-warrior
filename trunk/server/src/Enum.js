@@ -26,7 +26,8 @@ var Enum = {
 			WINNING_GOAL: 2,
 			FIREBALL: 3,
 			ENERGY_SPIKE: 4,
-			JAW: 5
+			JAW: 5,
+			PESKY_BOX: 6
 		}
 	},
 	Block: {
@@ -43,7 +44,8 @@ var Enum = {
 			},
 			FIRE_PULSE: 0,
 			JAW_FALL: 1,
-			ECLIPSE: 2
+			ECLIPSE: 2,
+			PESKY_BOX: 3
 		},
 		State: {
 			STATIC: 0,
@@ -53,6 +55,11 @@ var Enum = {
 			COLOR_CONTACT: 0,
 			SPAWN: 1,
 			CRUSHED: 2
+		}
+	},
+	NPC: {
+		Type: {
+			PESKY_BOX: 0
 		}
 	},
 	Element: {
@@ -69,7 +76,8 @@ var Enum = {
 			DROP_SENSOR: 4,
 			WINNING_GOAL: 5,
 			DEATH_ZONE: 6,
-			SKILL: 7
+			SKILL: 7,
+			NPC: 8
 		}
 	},
 	Facing: {

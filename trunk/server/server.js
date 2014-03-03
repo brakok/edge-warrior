@@ -26,7 +26,8 @@ var Enum = {
 			WINNING_GOAL: 2,
 			FIREBALL: 3,
 			ENERGY_SPIKE: 4,
-			JAW: 5
+			JAW: 5,
+			PESKY_BOX: 6
 		}
 	},
 	Block: {
@@ -43,7 +44,8 @@ var Enum = {
 			},
 			FIRE_PULSE: 0,
 			JAW_FALL: 1,
-			ECLIPSE: 2
+			ECLIPSE: 2,
+			PESKY_BOX: 3
 		},
 		State: {
 			STATIC: 0,
@@ -53,6 +55,11 @@ var Enum = {
 			COLOR_CONTACT: 0,
 			SPAWN: 1,
 			CRUSHED: 2
+		}
+	},
+	NPC: {
+		Type: {
+			PESKY_BOX: 0
 		}
 	},
 	Element: {
@@ -69,7 +76,8 @@ var Enum = {
 			DROP_SENSOR: 4,
 			WINNING_GOAL: 5,
 			DEATH_ZONE: 6,
-			SKILL: 7
+			SKILL: 7,
+			NPC: 8
 		}
 	},
 	Facing: {
@@ -158,6 +166,16 @@ var Constants = {
 		SPAWN_MAXLAUNCHING_X: 500,
 		Restriction: {
 			SPAWN_TIMER: 6
+		}
+	},
+	NPC: {
+		PeskyBox: {
+			WIDTH: 60,
+			HEIGHT: 60,
+			SPEED: 3,
+			SPEED_STEP: 2,
+			DURATION: 6,
+			DURATION_STEP: 2
 		}
 	},
 	WinningGoal: {
@@ -256,7 +274,9 @@ var Constants = {
 		CHANGE_PASSWORD: 'changePassword',
 		RESET_PASSWORD: 'resetPassword',
 		LOGOUT: 'logout',
-		NEW_ELEMENT: 'newElement'
+		NEW_ELEMENT: 'newElement',
+		DELETE_NPC: 'deleteNPC',
+		NEW_NPC: 'newNPC'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -274,6 +294,7 @@ var Listeners = function(game){
 	this.DropListener = new DropListener(this.currentGame);
 	this.GroundListener = new GroundListener(this.currentGame);
 	this.BlockListener = new BlockListener(this.currentGame);
+	this.NpcListener = new NpcListener(this.currentGame);
 };
 //Block listener.
 var BlockListener = function(game){
@@ -301,6 +322,12 @@ BlockListener.prototype.begin = function(arbiter, space){
 	//Special process for collision with two blocks.
 	if(block1 != null && block2 != null)
 	{	
+		//Some skills need a target defined when touching a block.
+		if(block1.skill && block1.skill.targetWithBlock)
+			block1.linkedBlockId = block2.id;
+		
+		if(block2.skill && block2.skill.targetWithBlock)
+			block2.linkedBlockId = block1.id;
 	
 		if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED
 		&& block1.color == block2.color && block1.color < Enum.Color.GREEN)
@@ -434,6 +461,47 @@ BlockListener.prototype.destroyLeaves = function(blockId, previousId){
 		
 		if(block.linkedBlockId != null && block.linkedBlockId != previousId)
 			this.destroyLeaves(block.linkedBlockId, blockId);
+	}
+};
+var NpcListener = function(game){
+	this.currentGame = game;
+};
+
+NpcListener.prototype.begin = function(arbiter, space){
+	
+	var player = null;
+	var npc = null;
+	var block = null;
+	
+	if(arbiter.body_a.userdata != null)
+	{
+		if(arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
+			player = arbiter.body_a.userdata.object;
+		else if(arbiter.body_a.userdata.type == Enum.UserData.Type.BLOCK)
+			block = arbiter.body_a.userdata.object;
+		else	
+			npc = arbiter.body_a.userdata.object;
+	}	
+	
+	if(arbiter.body_b.userdata != null)
+	{
+		if(arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
+			player = arbiter.body_b.userdata.object;
+		else if(arbiter.body_b.userdata.type == Enum.UserData.Type.BLOCK)
+			block = arbiter.body_b.userdata.object;
+		else	
+			npc = arbiter.body_b.userdata.object;
+	}
+	
+	if(player != null)
+	{
+		if(npc != null){
+			switch(npc.type){
+				case Enum.NPC.Type.PESKY_BOX:
+					player.body.setVel(new chipmunk.Vect(0,0));
+					break;
+			}
+		}
 	}
 };
 //Mortal things listener.
@@ -628,6 +696,7 @@ var Managers = function(game){
 
 	this.BlockManager = new BlockManager(this.currentGame);
 	this.DeathZoneManager = new DeathZoneManager(this.currentGame);
+	this.NpcManager = new NpcManager(this.currentGame);
 };
 var Account = new function(){
 	var cradle = require('cradle');
@@ -1010,6 +1079,9 @@ var SkillInfo = {
 			case Enum.Block.Skill.ECLIPSE:
 				tmpSkill = this.Eclipse;
 				break;
+			case Enum.Block.Skill.PESKY_BOX:
+				tmpSkill = this.PeskyBox;
+				break;
 		}
 		
 		if(tmpSkill)
@@ -1018,6 +1090,7 @@ var SkillInfo = {
 			skill.trigger = tmpSkill.TRIGGER;
 			skill.selfDestroy = tmpSkill.SELF_DESTROY;
 			skill.useLaunchTimer = tmpSkill.USE_LAUNCH_TIMER;
+			skill.targetWithBlock = tmpSkill.TARGET_WITH_BLOCK;
 		}
 		
 		return skill;
@@ -1108,25 +1181,60 @@ var SkillInfo = {
 				block.skill.count--;
 				block.mustTrigger = false;
 				break;
+			case Enum.Block.Skill.PESKY_BOX:
+			
+				if(block.skill.count > 0)
+				{
+					var targetBlock = block.currentGame.blocks[block.linkedBlockId];
+					var targetPlayer = null;
+					
+					if(targetBlock)
+						targetPlayer = block.currentGame.players[targetBlock.ownerId];
+					
+					if(targetPlayer)
+						block.currentGame.managers.NpcManager.add(new PeskyBox(block.currentGame.npcSequence,
+																			   block.x,
+																			   block.y,
+																			   Constants.NPC.PeskyBox.WIDTH,
+																			   Constants.NPC.PeskyBox.HEIGHT,
+																			   Constants.NPC.PeskyBox.SPEED + Constants.NPC.PeskyBox.SPEED_STEP*block.skill.power,
+																			   Constants.NPC.PeskyBox.DURATION + Constants.NPC.PeskyBox.DURATION_STEP*block.skill.power,
+																			   targetPlayer,
+																			   block.currentGame));
+				}
+				
+				block.skill.count--;
+				block.mustTrigger = false;
+				break;
 		}			
 	},
 	FirePulse: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 		SELF_DESTROY: true,
-		USE_LAUNCH_TIMER: false
+		USE_LAUNCH_TIMER: false,
+		TARGET_WITH_BLOCK: false
 	},
 	JawFall: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LAUNCHING,
 		SELF_DESTROY: false,
-		USE_LAUNCH_TIMER: true
+		USE_LAUNCH_TIMER: true,
+		TARGET_WITH_BLOCK: false
 	},
 	Eclipse: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 		SELF_DESTROY: false,
-		USE_LAUNCH_TIMER: false
+		USE_LAUNCH_TIMER: false,
+		TARGET_WITH_BLOCK: false
+	},
+	PeskyBox: {
+		COUNT: 1,
+		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
+		SELF_DESTROY: false,
+		USE_LAUNCH_TIMER: false,
+		TARGET_WITH_BLOCK: true
 	}
 };//Server version of the player.
 var Player = function(id, username, x, y, color, game){
@@ -1998,6 +2106,7 @@ var Game = function(settings){
 	this.players = [];
 	this.blocks = [];
 	this.deathZones = [];
+	this.npcs = [];
 	
 	//Create delta.
 	this.previousTime = new Date();
@@ -2005,8 +2114,10 @@ var Game = function(settings){
 	
 	this.playerInfos = settings.players;
 	
+	//Sequences.
 	this.blockSequence = 0;
 	this.deathZoneSequence = 0;
+	this.npcSequence = 0;
 	
 	this.goal = null;
 	this.intervalId = null;
@@ -2074,6 +2185,14 @@ Game.prototype.createWorld = function(){
 		this.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
 									   Enum.Collision.Type.STATIC, 
 									   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
+									   null, 
+									   null, 
+									   null);
+		
+		//Add npc listener.
+		this.space.addCollisionHandler(Enum.Collision.Type.NPC, 
+									   Enum.Collision.Type.PLAYER, 
+									   function(arbiter, space){ currentListeners.NpcListener.begin(arbiter, space);}, 
 									   null, 
 									   null, 
 									   null);
@@ -2204,6 +2323,11 @@ Game.prototype.update = function(){
 		for(var i in this.deathZones)
 			if(this.deathZones[i] != null)
 				this.deathZones[i].update();
+				
+		//Update NPCs.
+		for(var i in this.npcs)
+			if(this.npcs[i] != null)
+				this.npcs[i].update();
 		
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
@@ -2304,22 +2428,27 @@ Game.prototype.pull = function(){
 	//Blocks.
 	var blocks = [];
 	for(var i in this.blocks)
-	{
 		if(this.blocks[i] != null)
 			blocks.push(this.blocks[i].toClient());
-	}
-	
+		
 	//Death zones.
 	var deathZones = [];
 	for(var i in this.deathZones)
 		if(this.deathZones[i] != null)
 			deathZones.push(this.deathZones[i].toClient());
+
+	//NPCs.
+	var npcs = [];
+	for(var i in this.npcs)
+		if(this.npcs[i] != null)
+			npcs.push(this.npcs[i].toClient());
 	
 	var data = {
 		players: players,
 		goal: this.goal.toClient(),
 		blocks: blocks,
-		deathZones: deathZones
+		deathZones: deathZones,
+		npcs: npcs
 	};
 	
 	//Send message to all players.
@@ -3120,6 +3249,24 @@ DeathZoneManager.prototype.launch = function(deathZone){
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_DEATHZONE, data);
 };
+var NpcManager = function(game){
+	this.currentGame = game;
+};
+
+NpcManager.prototype.add = function(npc){
+	
+	this.currentGame.npcSequence++;
+	this.currentGame.npcs.push(npc);
+	
+	var data = {
+		id: npc.id,
+		type: npc.type,
+		x: npc.x,
+		y: npc.y
+	};
+	
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_NPC, data);
+};
 var BlockManager = function(game){
 	this.currentGame = game;
 };
@@ -3134,3 +3281,85 @@ BlockManager.prototype.launch = function(block){
 	//Emit the new block to all players.
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
 };var Spike = function(id, x, y, width, height, ownerId, type, stats, game){		this.currentGame = game;		this.stillExists = true;	this.mustMove = true;		this.enabled = true;	this.type = type;	this.stats = stats;		this.ownerId = ownerId;	this.id = id;	this.distance = stats.distance;		//Get original X and Y.	var degree = null;	switch(stats.direction)	{		case Enum.Direction.UP:			degree = 0;			break;		case Enum.Direction.LEFT:			degree = 270;			break;		case Enum.Direction.DOWN:			degree = 180;			break;		case Enum.Direction.RIGHT:			degree = 90;			break;	}		this.x = x - (this.distance*0.5*Math.sin(degree));	this.y = y - (this.distance*0.5*Math.cos(degree));		this.finalX = this.x + (this.distance*Math.sin(degree));	this.finalY = this.y + (this.distance*Math.cos(degree));		this.originalX = this.x;	this.originalY = this.y;		this.velocity = {x:0, y:0};		this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		var userDataType = null;		//Find good type for association.	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:			userDataType = Enum.UserData.Type.ENERGY_SPIKE;			break;	}		//Assign custom data to body.	this.body.userdata = {		type: userDataType,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};Spike.prototype.move = function(){		this.x += this.velocity.x;	this.y += this.velocity.y;		this.body.setPos(new chipmunk.Vect(this.x, this.y));};Spike.prototype.toClient = function(){	return {		x: this.x,		y: this.y,		id: this.id	};};Spike.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);			//Remove from game.	for(var i in this.currentGame.deathZones)		if(this.currentGame.deathZones[i] != null && this.currentGame.deathZones[i].id == this.id)			delete this.currentGame.deathZones[i];		var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};Spike.prototype.endProcess = function(){	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:						for(var i in this.currentGame.players)			{				if(this.currentGame.players[i] != null && this.currentGame.players[i].isAlive && !this.currentGame.players[i].isRemoved)				{					var factor = 1;										if(this.currentGame.players[i].body.getPos().x < this.x)						factor = -1;											this.currentGame.players[i].body.applyImpulse(new chipmunk.Vect(factor*Constants.DeathZone.EnergySpike.IMPULSE_X, 																		Constants.DeathZone.EnergySpike.IMPULSE_Y),													  new chipmunk.Vect(0,0));				}			}						break;	}};Spike.prototype.update = function(){	if(this.stillExists && this.mustMove)	{		var push = {x:0, y:0};		var degree = 0;				switch(this.stats.direction)		{			case Enum.Direction.UP:				degree = 0;				break;			case Enum.Direction.LEFT:				degree = 270;				break;			case Enum.Direction.DOWN:				degree = 180;				break;			case Enum.Direction.RIGHT:				degree = 90;				break;		}				if(this.stats.acceleration != null)		{			var tmpVelY = this.velocity.y;			var tmpVelX = this.velocity.x;						tmpVelX += this.stats.acceleration.x;			tmpVelY += this.stats.acceleration.y;						if((tmpVelX*tmpVelX)+(tmpVelY*tmpVelY) > (this.stats.maxspeed*this.stats.maxspeed))			{				this.velocity.x = this.stats.maxspeed*Math.sin(degree);				this.velocity.y = this.stats.maxspeed*Math.cos(degree);			}			else			{				this.velocity.x += this.stats.acceleration.x*Math.sin(degree);				this.velocity.y += this.stats.acceleration.y*Math.cos(degree);			}		}		else		{			this.velocity.x = this.stats.speed*Math.sin(degree);			this.velocity.y = this.stats.speed*Math.cos(degree);		}				var tmpX = this.x + this.velocity.x;		var tmpY = this.y + this.velocity.y;				var distX = (tmpX - this.originalX);		var distY = (tmpY - this.originalY);							//If distance has been reached or surpassed, spike stops moving.		if((distX*distX)+(distY*distY) >= this.stats.distance*this.stats.distance)		{			this.mustMove = false;			this.x = this.finalX;			this.y = this.finalY;						//Set new position and trigger effect when spike is set.			this.body.setPos(new chipmunk.Vect(this.x, this.y));			this.endProcess();		}			else			this.move();	}};var Jaw = function(id, parent, x, y, count, width, height, game){		this.currentGame = game;		this.stillExists = true;			this.enabled = true;	this.parent = parent;	this.id = id;		this.blockId = this.parent.id;	this.ownerId = this.parent.ownerId;		this.type = Enum.DeathZone.Type.JAW;	this.count = count;			//Position relative to parent.	this.x = x;	this.y = y;	this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.parent.x + this.x, this.parent.y + this.y));			//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.JAW,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};Jaw.prototype.toClient = function(){	return {		x: this.parent.x + this.x,		y: this.parent.y + this.y,		id: this.id	};};Jaw.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);			var data = {		id: this.id	};			//Remove from game.	for(var i in this.currentGame.deathZones)		if(this.currentGame.deathZones[i] != null && this.currentGame.deathZones[i].id == this.id)			delete this.currentGame.deathZones[i];		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};Jaw.prototype.update = function(){	if(this.stillExists)	{		this.body.setPos(new chipmunk.Vect(this.parent.x + this.x, this.parent.y + this.y));				if(this.parent.isStatic)			this.explode();	}	else		this.explode();};
+var PeskyBox = function(id, x, y, width, height, speed, duration, target, game){
+	
+	this.id = id;
+	this.x = x;
+	this.y = y;
+	
+	this.width = width;
+	this.height = height;
+	
+	this.duration = duration;
+	
+	this.facing = Enum.Facing.LEFT;
+	this.type = Enum.NPC.Type.PESKY_BOX;
+	
+	this.toBeDestroyed = false;
+	
+	this.speed = speed;
+	
+	this.target = target;
+	this.currentGame = game;
+	
+	//Create body.
+	this.body = new chipmunk.Body(Infinity, Infinity);
+	this.body.setPos(new chipmunk.Vect(this.x, this.y));
+	
+	//Assign custom data to body.
+	this.body.userdata = {
+		type: Enum.UserData.Type.PESKY_BOX,
+		object: this
+	};
+	
+	//Create a shape associated with the body.
+	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.shape.setCollisionType(Enum.Collision.Type.NPC);
+	this.shape.sensor = true;
+};
+
+PeskyBox.prototype.toClient = function(){
+
+	return {
+		id: this.id,
+		x: this.x,
+		y: this.y,
+		facing: this.facing
+	};
+};
+
+PeskyBox.prototype.update = function(){
+	
+	if(this.toBeDestroyed)
+		this.explode();
+	else
+	{
+		this.x = this.body.getPos().x;
+		this.y = this.body.getPos().y;
+		
+		this.duration -= this.currentGame.dt;
+		
+		if(this.duration <= 0)
+			this.toBeDestroyed = true;
+	}
+	
+};
+
+PeskyBox.prototype.explode = function(){
+
+	//Remove physical presence.
+	this.currentGame.space.removeShape(this.shape);
+		
+	//Remove from game.
+	for(var i in this.currentGame.npcs)
+		if(this.currentGame.npcs[i] != null && this.currentGame.npcs[i].id == this.id)
+			delete this.currentGame.npcs[i];
+	
+	var data = {
+		id: this.id
+	};
+	
+	//Send info to client.
+	this.stillExists = false;
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_NPC, data);
+};

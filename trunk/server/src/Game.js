@@ -6,6 +6,7 @@ var Game = function(settings){
 	this.players = [];
 	this.blocks = [];
 	this.deathZones = [];
+	this.npcs = [];
 	
 	//Create delta.
 	this.previousTime = new Date();
@@ -13,8 +14,10 @@ var Game = function(settings){
 	
 	this.playerInfos = settings.players;
 	
+	//Sequences.
 	this.blockSequence = 0;
 	this.deathZoneSequence = 0;
+	this.npcSequence = 0;
 	
 	this.goal = null;
 	this.intervalId = null;
@@ -82,6 +85,14 @@ Game.prototype.createWorld = function(){
 		this.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
 									   Enum.Collision.Type.STATIC, 
 									   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
+									   null, 
+									   null, 
+									   null);
+		
+		//Add npc listener.
+		this.space.addCollisionHandler(Enum.Collision.Type.NPC, 
+									   Enum.Collision.Type.PLAYER, 
+									   function(arbiter, space){ currentListeners.NpcListener.begin(arbiter, space);}, 
 									   null, 
 									   null, 
 									   null);
@@ -212,6 +223,11 @@ Game.prototype.update = function(){
 		for(var i in this.deathZones)
 			if(this.deathZones[i] != null)
 				this.deathZones[i].update();
+				
+		//Update NPCs.
+		for(var i in this.npcs)
+			if(this.npcs[i] != null)
+				this.npcs[i].update();
 		
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
@@ -312,22 +328,27 @@ Game.prototype.pull = function(){
 	//Blocks.
 	var blocks = [];
 	for(var i in this.blocks)
-	{
 		if(this.blocks[i] != null)
 			blocks.push(this.blocks[i].toClient());
-	}
-	
+		
 	//Death zones.
 	var deathZones = [];
 	for(var i in this.deathZones)
 		if(this.deathZones[i] != null)
 			deathZones.push(this.deathZones[i].toClient());
+
+	//NPCs.
+	var npcs = [];
+	for(var i in this.npcs)
+		if(this.npcs[i] != null)
+			npcs.push(this.npcs[i].toClient());
 	
 	var data = {
 		players: players,
 		goal: this.goal.toClient(),
 		blocks: blocks,
-		deathZones: deathZones
+		deathZones: deathZones,
+		npcs: npcs
 	};
 	
 	//Send message to all players.
