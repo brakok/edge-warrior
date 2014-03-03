@@ -14,6 +14,9 @@ var SkillInfo = {
 			case Enum.Block.Skill.ECLIPSE:
 				tmpSkill = this.Eclipse;
 				break;
+			case Enum.Block.Skill.PESKY_BOX:
+				tmpSkill = this.PeskyBox;
+				break;
 		}
 		
 		if(tmpSkill)
@@ -22,6 +25,7 @@ var SkillInfo = {
 			skill.trigger = tmpSkill.TRIGGER;
 			skill.selfDestroy = tmpSkill.SELF_DESTROY;
 			skill.useLaunchTimer = tmpSkill.USE_LAUNCH_TIMER;
+			skill.targetWithBlock = tmpSkill.TARGET_WITH_BLOCK;
 		}
 		
 		return skill;
@@ -112,24 +116,59 @@ var SkillInfo = {
 				block.skill.count--;
 				block.mustTrigger = false;
 				break;
+			case Enum.Block.Skill.PESKY_BOX:
+			
+				if(block.skill.count > 0)
+				{
+					var targetBlock = block.currentGame.blocks[block.linkedBlockId];
+					var targetPlayer = null;
+					
+					if(targetBlock)
+						targetPlayer = block.currentGame.players[targetBlock.ownerId];
+					
+					if(targetPlayer)
+						block.currentGame.managers.NpcManager.add(new PeskyBox(block.currentGame.npcSequence,
+																			   block.x,
+																			   block.y,
+																			   Constants.NPC.PeskyBox.WIDTH,
+																			   Constants.NPC.PeskyBox.HEIGHT,
+																			   Constants.NPC.PeskyBox.SPEED + Constants.NPC.PeskyBox.SPEED_STEP*block.skill.power,
+																			   Constants.NPC.PeskyBox.DURATION + Constants.NPC.PeskyBox.DURATION_STEP*block.skill.power,
+																			   targetPlayer,
+																			   block.currentGame));
+				}
+				
+				block.skill.count--;
+				block.mustTrigger = false;
+				break;
 		}			
 	},
 	FirePulse: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 		SELF_DESTROY: true,
-		USE_LAUNCH_TIMER: false
+		USE_LAUNCH_TIMER: false,
+		TARGET_WITH_BLOCK: false
 	},
 	JawFall: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LAUNCHING,
 		SELF_DESTROY: false,
-		USE_LAUNCH_TIMER: true
+		USE_LAUNCH_TIMER: true,
+		TARGET_WITH_BLOCK: false
 	},
 	Eclipse: {
 		COUNT: 1,
 		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 		SELF_DESTROY: false,
-		USE_LAUNCH_TIMER: false
+		USE_LAUNCH_TIMER: false,
+		TARGET_WITH_BLOCK: false
+	},
+	PeskyBox: {
+		COUNT: 1,
+		TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
+		SELF_DESTROY: false,
+		USE_LAUNCH_TIMER: false,
+		TARGET_WITH_BLOCK: true
 	}
 };

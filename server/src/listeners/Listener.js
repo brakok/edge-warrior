@@ -8,4 +8,5 @@ var Listeners = function(game){
 	this.DropListener = new DropListener(this.currentGame);
 	this.GroundListener = new GroundListener(this.currentGame);
 	this.BlockListener = new BlockListener(this.currentGame);
+	this.NpcListener = new NpcListener(this.currentGame);
 };

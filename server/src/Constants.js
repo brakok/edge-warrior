@@ -46,6 +46,16 @@ var Constants = {
 			SPAWN_TIMER: 6
 		}
 	},
+	NPC: {
+		PeskyBox: {
+			WIDTH: 60,
+			HEIGHT: 60,
+			SPEED: 3,
+			SPEED_STEP: 2,
+			DURATION: 6,
+			DURATION_STEP: 2
+		}
+	},
 	WinningGoal: {
 		OFFSET_Y: -50,
 		PHASE_TIME: 8,
@@ -142,7 +152,9 @@ var Constants = {
 		CHANGE_PASSWORD: 'changePassword',
 		RESET_PASSWORD: 'resetPassword',
 		LOGOUT: 'logout',
-		NEW_ELEMENT: 'newElement'
+		NEW_ELEMENT: 'newElement',
+		DELETE_NPC: 'deleteNPC',
+		NEW_NPC: 'newNPC'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'

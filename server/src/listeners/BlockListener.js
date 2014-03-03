@@ -25,6 +25,12 @@ BlockListener.prototype.begin = function(arbiter, space){
 	//Special process for collision with two blocks.
 	if(block1 != null && block2 != null)
 	{	
+		//Some skills need a target defined when touching a block.
+		if(block1.skill && block1.skill.targetWithBlock)
+			block1.linkedBlockId = block2.id;
+		
+		if(block2.skill && block2.skill.targetWithBlock)
+			block2.linkedBlockId = block1.id;
 	
 		if(block1.type == Enum.Block.Type.COLORED && block2.type == Enum.Block.Type.COLORED
 		&& block1.color == block2.color && block1.color < Enum.Color.GREEN)
