@@ -26,5 +26,5 @@ PeskyBox.prototype.setPosition = function(x, y){
 PeskyBox.prototype.fromServer = function(remoteNpc){
 	
 	this.facing = remoteNpc.facing;
-	this.setPosition(data.x, data.y);
+	this.setPosition(remoteNpc.x, remoteNpc.y);
 };
