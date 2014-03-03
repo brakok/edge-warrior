@@ -45,7 +45,8 @@ var Enum = {
 		},
 		Skill: {
 			FIRE_PULSE: 0,
-			JAW_FALL: 1
+			JAW_FALL: 1,
+			ECLIPSE: 2
 		},
 		Destruction: {
 			COLOR_CONTACT: 0,
@@ -114,6 +115,11 @@ var Enum = {
 			FIREBALL_EXPLOSION: 7,
 			FIREPULSE_EXPLOSION: 8,
 			JAW_DISAPPEARING: 9
+		}
+	},
+	Element: {
+		Type: {
+			ECLIPSE: 0
 		}
 	},
 	Voice: {

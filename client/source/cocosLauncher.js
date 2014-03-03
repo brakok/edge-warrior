@@ -20,6 +20,7 @@
 				  'source/playground/world/Wall.js',
 				  'source/playground/world/Floor.js',
 				  'source/playground/winnerGoal/FloatingBall.js',
+				  'source/playground/Eclipse.js',
 				  
 				  'source/playground/skills/SkillInfo.js',
 				  'source/playground/skills/SkillDescription.js',
@@ -80,6 +81,7 @@
 				  'source/playground/deathzones/Jaw.js',
 				  
 				  'source/playground/manager/EffectManager.js',
+				  'source/playground/manager/ElementManager.js',
 				  'source/playground/manager/ParticleManager.js',
 				  'source/playground/Effect.js',
 				  'source/playground/world/BlackBox.js',
