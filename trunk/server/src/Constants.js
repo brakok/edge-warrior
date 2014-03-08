@@ -50,12 +50,14 @@ var Constants = {
 		PeskyBox: {
 			WIDTH: 60,
 			HEIGHT: 60,
-			SPEED: 0.3,
-			SPEED_STEP: 0.1,
-			DURATION: 6,
-			DURATION_STEP: 2,
-			FLEE_TIMER: 0.75,
-			FLEE_STEP: 0.125
+			SPEED: 0.6,
+			SPEED_STEP: 0.2,
+			DURATION: 7,
+			DURATION_STEP: 1.5,
+			FLEE_TIMER: 0.5,
+			FLEE_STEP: 0.065,
+			SLOWDOWN_DISTANCE_FACTOR: 25,
+			FRICTION_FACTOR: 0.94
 		}
 	},
 	WinningGoal: {

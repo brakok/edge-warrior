@@ -72,8 +72,8 @@ PeskyBox.prototype.update = function(){
 		}
 		else
 		{
-			nextX = (this.target.x - this.x)/25;
-			nextY = (this.target.y - this.y)/25;
+			nextX = (this.target.x - this.x)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
+			nextY = (this.target.y - this.y)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
 			
 			if(Math.abs(nextX) > this.speed)
 				nextX = this.speed * (this.x < this.target.x ? 1 : -1);
@@ -85,8 +85,8 @@ PeskyBox.prototype.update = function(){
 		this.velocity.x += nextX;
 		this.velocity.y += nextY;
 		
-		this.velocity.x *= 0.96;
-		this.velocity.y *= 0.96;
+		this.velocity.x *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
+		this.velocity.y *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
 		
 		var pos = this.body.getPos();
 		this.body.setPos(new chipmunk.Vect(pos.x + this.velocity.x, pos.y + this.velocity.y));
