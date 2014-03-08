@@ -16,5 +16,11 @@ NpcManager.prototype.add = function(npc){
 		facing: npc.facing
 	};
 	
+	switch(npc.type){
+		case Enum.NPC.Type.PESKY_BOX:
+			data.target = npc.target.color;
+			break;
+	}
+	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_NPC, data);
 };
