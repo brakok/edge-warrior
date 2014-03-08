@@ -506,7 +506,7 @@ Game.prototype.addNpc = function(remoteNpc){
 	
 	switch(remoteNpc.type){
 		case Enum.NPC.Type.PESKY_BOX:
-			npc = new PeskyBox(remoteNpc.x, remoteNpc.y, remoteNpc.facing);
+			npc = new PeskyBox(remoteNpc.x, remoteNpc.y, remoteNpc.facing, this.getPlayer(remoteNpc.target));
 			break;
 	}
 
