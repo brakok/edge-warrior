@@ -1,8 +1,10 @@
 
-var PeskyBox = function(x, y, facing){
+var PeskyBox = function(x, y, facing, target){
 	this.x = x;
 	this.y = y;
 	this.facing = facing;
+	
+	this.target = target;
 	
 	this.sprite = cc.Sprite.create(assestsPlaceHolderDir + 'ray_ball.png');
 	this.sprite.setZOrder(Constants.NPC.Z_ORDER);
