@@ -1202,7 +1202,7 @@ var SkillInfo = {
 					if(targetPlayer)
 						block.currentGame.managers.NpcManager.add(new PeskyBox(block.currentGame.npcSequence,
 																			   block.x,
-																			   block.y,
+																			   block.y - Constants.NPC.PeskyBox.HEIGHT*0.5,
 																			   Constants.NPC.PeskyBox.WIDTH,
 																			   Constants.NPC.PeskyBox.HEIGHT,
 																			   Constants.NPC.PeskyBox.SPEED + Constants.NPC.PeskyBox.SPEED_STEP*block.skill.power,
