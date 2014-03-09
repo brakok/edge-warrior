@@ -6,18 +6,21 @@ var PeskyBox = function(x, y, facing, target){
 	
 	this.target = target;
 	
-	this.sprite = cc.Sprite.create(assestsPlaceHolderDir + 'ray_ball.png');
-	this.sprite.setZOrder(Constants.NPC.Z_ORDER);
+	this.spawnAnimation = AnimationManager.create('PeskyBox', 0, 18, 24);
 	
-	Client.game.layer.addChild(this.sprite);
+	this.currentAnimation = cc.Sprite.createWithSpriteFrameName('PeskyBox.0000.png');
+	this.currentAnimation.setZOrder(Constants.NPC.Z_ORDER);
+	
+	this.currentAnimation.runAction(this.spawnAnimation);
+	Client.game.layer.addChild(this.currentAnimation);
 };
 
 PeskyBox.prototype.update = function(dt){
-	Client.game.camera.project(this.sprite, this.x, this.y);
+	Client.game.camera.project(this.currentAnimation, this.x, this.y);
 };
 
 PeskyBox.prototype.explode = function(){
-	Client.game.layer.removeChild(this.sprite);
+	Client.game.layer.removeChild(this.currentAnimation);
 };
 
 PeskyBox.prototype.setPosition = function(x, y){
