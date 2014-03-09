@@ -7,6 +7,7 @@ var assetsPlayerDir = 'assets/players/';
 var assetsHudDir = 'assets/hud/';
 var assetsWinningGoalDir = 'assets/winningGoal/';
 var assetsEffectDir = 'assets/effects/';
+var assetsNpcDir = 'assets/npc/';
 var assetsSkillDir = 'assets/skills/';
 var assetsParticles = 'assets/particles/';
 
@@ -113,7 +114,9 @@ var assets = [
 	{type:'image', src: assetsWorldDir + 'sky_morning.png'},
 
 	//NPCs
+	{type:'image', src: assetsNpcDir + 'PeskyBox.png'},
 	
+	{type:"plist", src: assetsNpcDir + 'PeskyBox.plist'},
 	
 	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
