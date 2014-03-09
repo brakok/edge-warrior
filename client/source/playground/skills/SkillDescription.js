@@ -47,6 +47,7 @@ SkillDescription.prototype.init = function(){
 		this.description = skill.DESCRIPTION;
 		
 		this.power = -1;
+		this.level = 0;
 		
 		//Buying infos.
 		this.cost = skill.COST;
