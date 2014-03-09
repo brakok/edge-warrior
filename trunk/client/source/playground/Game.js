@@ -72,8 +72,6 @@ Game.prototype.init = function(width, height, layer, frontLayer, hud, endScreen,
 	this.pauseMenu = pauseMenu;
 	
 	this.ready = false;
-	
-	Options.skillSet.init();
 };
 
 //Game start.

@@ -3,6 +3,9 @@ var GameLayer = cc.Layer.extend({
 	{
 		this._super();
 			
+		//Reset skills before HUD instanciation.
+		Options.skillSet.init();
+			
 		//Create color of the layer.
 		var s = cc.Director.getInstance().getWinSize();
 		this.playGroundLayer = cc.LayerColor.create(new cc.Color4B(0, 0, 0, 0), s.width, s.height);
