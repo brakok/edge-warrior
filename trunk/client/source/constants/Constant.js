@@ -243,7 +243,10 @@ var Constants = {
 		}
 	},
 	NPC: {
-		Z_ORDER: 15
+		Z_ORDER: 15,
+		PeskyBox: {
+			EYE_RADIUS: 5
+		}
 	},
 	Sound: {
 		Effect: {

@@ -45,7 +45,26 @@ PeskyBox.prototype.update = function(dt){
 	Client.game.camera.project(this.currentAnimation, this.x, this.y);
 	
 	if(this.eyesOpened)
-		Client.game.camera.project(this.eyeSprite, this.x, this.y);
+	{
+		var relX = 0;
+		var relY = 0;
+	
+		if(this.target)
+		{
+			var deltaX = this.target.x - this.x;
+			var deltaY = this.target.y - this.y;
+		
+			var hypo = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+			var cos = deltaX/hypo;
+			var sin = deltaY/hypo;
+			
+			relX = cos*Constants.NPC.PeskyBox.EYE_RADIUS;
+			relY = sin*Constants.NPC.PeskyBox.EYE_RADIUS;
+		}
+	
+		Client.game.camera.project(this.eyeSprite, this.x + relX, this.y + relY);
+	}
+		
 };
 
 PeskyBox.prototype.explode = function(){
