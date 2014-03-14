@@ -7,7 +7,7 @@ var PeskyBox = function(x, y, facing, target){
 	this.target = target;
 	
 	this.spawnAnimation = AnimationManager.create('PeskyBox', 0, 18, 24);
-	
+
 	this.currentAnimation = cc.Sprite.createWithSpriteFrameName('PeskyBox.0000.png');
 	this.currentAnimation.setZOrder(Constants.NPC.Z_ORDER);
 	
@@ -21,6 +21,7 @@ PeskyBox.prototype.update = function(dt){
 
 PeskyBox.prototype.explode = function(){
 	Client.game.layer.removeChild(this.currentAnimation);
+	EffectManager.create(Enum.Effect.Type.PESKY_BOX_DISAPPEARING, this.x, this.y);
 };
 
 PeskyBox.prototype.setPosition = function(x, y){

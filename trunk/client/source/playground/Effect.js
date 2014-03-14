@@ -67,16 +67,22 @@ Effect.prototype.init = function(){
 		
 		case Enum.Effect.Type.FIREPULSE_EXPLOSION:
 
-			//Effect created by dying fireball.
+			//Effect created when fire pulse lands.
 			this.sprite = cc.Sprite.createWithSpriteFrameName('FirePulse_explosion.0000.png');
 			this.animation = AnimationManager.create('FirePulse_explosion', 0, 12, 24);
 			break;
 		
 		case Enum.Effect.Type.JAW_DISAPPEARING:
 
-			//Effect created by dying fireball.
+			//Effect created when jaw disappears.
 			this.sprite = cc.Sprite.createWithSpriteFrameName('JawDisappearing.0000.png');
 			this.animation = AnimationManager.create('JawDisappearing', 0, 10, 24);
+			break;
+		case Enum.Effect.Type.PESKY_BOX_DISAPPEARING:
+		
+			//Effect created when pesky box ends.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('PeskyBoxDisappearing.0018.png');
+			this.animation = AnimationManager.create('PeskyBoxDisappearing', 18, 36, 24);
 			break;
 	}
 	

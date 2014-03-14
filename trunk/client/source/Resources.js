@@ -115,8 +115,10 @@ var assets = [
 
 	//NPCs
 	{type:'image', src: assetsNpcDir + 'PeskyBox.png'},
+	{type:'image', src: assetsNpcDir + 'PeskyBoxDisappearing.png'},
 	
 	{type:"plist", src: assetsNpcDir + 'PeskyBox.plist'},
+	{type:"plist", src: assetsNpcDir + 'PeskyBoxDisappearing.plist'},
 	
 	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
