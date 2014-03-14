@@ -27,7 +27,7 @@ var SkillItem = function(x, y, skill, parent){
 	this.parent.layer.addChild(this.imgLvl);
 	
 	this.lvlLabel = cc.LabelTTF.create(this.skill.power, Constants.Font.NAME, Constants.Font.VERY_SMALLSIZE); 
-	this.lvlLabel.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Skills.Level.OFFSET_X + 1, this.y + Constants.HUD.SkillStore.Skills.Level.OFFSET_Y - 2));
+	this.lvlLabel.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Skills.Level.OFFSET_X, this.y + Constants.HUD.SkillStore.Skills.Level.OFFSET_Y - 1));
 	this.lvlLabel.setColor(new cc.Color3B(50,50,50));
 	this.lvlLabel._zOrder = Constants.HUD.SkillStore.Skills.Level.Z_ORDER;
 	

@@ -181,17 +181,19 @@ Game.prototype.update = function (dt){
 					this.player.update(dt);
 					
 					for(var i = 0; i < this.enemies.length; ++i)
-						this.enemies[i].update(dt);
+						if(this.enemies[i])
+							this.enemies[i].update(dt);
 
 					for(var i in this.blocks)
-						this.blocks[i].update(dt);
+						if(this.blocks[i])
+							this.blocks[i].update(dt);
 					
 					for(var i in this.deathZones)
-						if(this.deathZones[i] != null)
+						if(this.deathZones[i])
 							this.deathZones[i].update(dt);
 
 					for(var i in this.npcs)
-						if(this.npcs[i] != null)
+						if(this.npcs[i])
 							this.npcs[i].update(dt);
 					
 					this.goal.update();
