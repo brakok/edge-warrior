@@ -271,6 +271,10 @@ var Constants = {
 				JUMP: '_jump',
 				KILL: '_kill'
 			},
+			Jaw: {
+				EAT: 'jaw',
+				DISAPPEARING: 'jawDisappearing'
+			},
 			Spike: {
 				TENTACLE_TRANSFORM: 'tentacle_transform'
 			},

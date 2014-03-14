@@ -3,6 +3,8 @@ var Jaw = function(x, y){
 	
 	this.x = x;
 	this.y = y;
+	
+	this.audioId = null;
 
 	this.init();
 };
@@ -15,6 +17,8 @@ Jaw.prototype.init = function(){
 	
 	this.currentAnimation._zOrder = Constants.DeathZone.Jaw.Z_INDEX;
 	
+	//Start sound.
+	this.audioId = AudioManager.playEffect(Constants.Sound.File.Jaw.EAT, true);
 	Client.game.layer.addChild(this.currentAnimation);
 };
 
@@ -29,8 +33,15 @@ Jaw.prototype.fromServer = function(remoteJaw){
 };
 
 Jaw.prototype.explode = function(){
+	
 	Client.game.layer.removeChild(this.currentAnimation);
 	
+	//Switch sound.
+	if(this.audioId != null)
+		AudioManager.stopEffect(this.audioId);
+		
+	AudioManager.playEffect(Constants.Sound.File.Jaw.DISAPPEARING);
+		
 	//Trigger jaw disappearing effect.
 	EffectManager.create(Enum.Effect.Type.JAW_DISAPPEARING, this.x, this.y);
 };

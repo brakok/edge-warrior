@@ -9,6 +9,7 @@ var Player = function (x, y, color, isControlled, username) {
 	this.units = 0;
 	
 	this.isControlled = isControlled;
+	this.audioId = null;
 	
 	this.blockTypeAvailable = [];
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
@@ -331,8 +332,13 @@ Player.prototype.execute = function(action){
 		
 			this.swapAnimation(Enum.Anim.Type.RUNNING);
 			
-			AudioManager.stopEffect(Constants.Sound.File.Player.FOOT_STEP);
-			AudioManager.playEffect(Constants.Sound.File.Player.FOOT_STEP, true);
+			if(this.audioId != null)
+			{
+				AudioManager.stopEffect(this.audioId);
+				this.audioId = null;
+			}
+			
+			this.audioId = AudioManager.playEffect(Constants.Sound.File.Player.FOOT_STEP, true);
 			break;
 		case Enum.Action.Type.JUMPING:
 			
@@ -370,9 +376,12 @@ Player.prototype.execute = function(action){
 			this.swapAnimation(Enum.Anim.Type.FALLING);
 			break;
 	}
-	
-	if(this.currentAction != action && this.currentAction == Enum.Action.Type.RUNNING)
-		AudioManager.stopEffect(Constants.Sound.File.Player.FOOT_STEP);
+
+	if(this.currentAction != action && this.currentAction == Enum.Action.Type.RUNNING && this.audioId != null)
+	{
+		AudioManager.stopEffect(this.audioId);
+		this.audioId = null;
+	}
 	
 	//Check if player has just landed.
 	if(this.hasLanded(action))
@@ -434,8 +443,13 @@ Player.prototype.turn = function(){
 	{
 		this.swapAnimation(Enum.Anim.Type.RUNNING, true);
 			
-		AudioManager.stopEffect(Constants.Sound.File.Player.FOOT_STEP);
-		AudioManager.playEffect(Constants.Sound.File.Player.FOOT_STEP, true);
+		if(this.audioId != null)
+		{
+			AudioManager.stopEffect(this.audioId);
+			this.audioId = null;
+		}
+		
+		this.audioId = AudioManager.playEffect(Constants.Sound.File.Player.FOOT_STEP, true);
 	}
 };
 
