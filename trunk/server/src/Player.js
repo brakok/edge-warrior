@@ -177,6 +177,9 @@ Player.prototype.leave = function(){
 		this.currentGame.space.removeShape(this.groundSensor);
 		this.currentGame.space.removeShape(this.dropSensor);
 		this.currentGame.space.removeBody(this.body);
+		
+		this.isRemoved = true;
+		this.isAlive = false;
 	}
 };
 

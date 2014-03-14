@@ -69,7 +69,7 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 
 			//If found, mark the player to be inserted in the next update in the killer blocks list.
 			if(killingPlayer != null && killingPlayer.id != player.id)
-				killingPlayer.kill(player, deathZone.stats.type);
+				killingPlayer.kill(player, Enum.Block.Type.SKILLED);
 			else
 				player.toBeDestroy = true;
 		}

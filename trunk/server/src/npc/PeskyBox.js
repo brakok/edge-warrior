@@ -60,30 +60,39 @@ PeskyBox.prototype.update = function(){
 		this.explode();
 	else
 	{
-		var nextX = 0;
-		var nextY = 0;
-	
-		if(this.fleeTimer > 0)
+		if(this.target && !this.target.isRemoved)
 		{
-			nextX = this.speed * (this.x < this.target.x ? -1 : 1);
-			nextY = this.speed * (this.y < this.target.y ? -1 : 1);
+			var nextX = 0;
+			var nextY = 0;
+		
+			//Flee after touch.
+			if(this.fleeTimer > 0)
+			{
+				nextX = this.speed * (this.x < this.target.x ? -1 : 1);
+				nextY = this.speed * (this.y < this.target.y ? -1 : 1);
+				
+				this.fleeTimer -= this.currentGame.dt;
+			}
+			else
+			{
+				nextX = (this.target.x - this.x)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
+				nextY = (this.target.y - this.y)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
+				
+				if(Math.abs(nextX) > this.speed)
+					nextX = this.speed * (this.x < this.target.x ? 1 : -1);
+					
+				if(Math.abs(nextY) > this.speed)
+					nextY = this.speed * (this.y < this.target.y ? 1 : -1);
+			}
 			
-			this.fleeTimer -= this.currentGame.dt;
-		}
+			this.velocity.x += nextX;
+			this.velocity.y += nextY;
+		}	
 		else
 		{
-			nextX = (this.target.x - this.x)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
-			nextY = (this.target.y - this.y)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
-			
-			if(Math.abs(nextX) > this.speed)
-				nextX = this.speed * (this.x < this.target.x ? 1 : -1);
-				
-			if(Math.abs(nextY) > this.speed)
-				nextY = this.speed * (this.y < this.target.y ? 1 : -1);
+			this.velocity.x *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
+			this.velocity.y *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
 		}
-		
-		this.velocity.x += nextX;
-		this.velocity.y += nextY;
 		
 		this.velocity.x *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
 		this.velocity.y *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
