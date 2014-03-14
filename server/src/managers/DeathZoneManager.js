@@ -11,10 +11,10 @@ DeathZoneManager.prototype.launch = function(deathZone){
 	var data = {
 		id: deathZone.id,
 		type: deathZone.type,
-		x: deathZone.x,
-		y: deathZone.y
+		x: deathZone.parent != null ? deathZone.parent.x + deathZone.x : deathZone.x,
+		y: deathZone.parent != null ? deathZone.parent.y + deathZone.y : deathZone.y
 	};
-	
+
 	//Insert specific custom data.
 	switch(deathZone.type){
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
