@@ -3,16 +3,16 @@
 var AudioManager = {
 	playEffect: function(file, mustLoop){
 	
-		cc.AudioEngine.getInstance().playEffect(soundDir + file, mustLoop);
+		return cc.AudioEngine.getInstance().playEffect(soundDir + file, mustLoop);
 	},
-	stopEffect: function(file){
-		cc.AudioEngine.getInstance().stopEffect(soundDir + file);
+	stopEffect: function(audioId){
+		cc.AudioEngine.getInstance().stopEffect(audioId);
 	},
 	playVoice: function(file, mustLoop){
-		cc.AudioEngine.getInstance().playEffect(soundVoiceDir + file, mustLoop);
+		return cc.AudioEngine.getInstance().playEffect(soundVoiceDir + file, mustLoop);
 	},
-	stopVoice: function(file){
-		cc.AudioEngine.getInstance().stopEffect(soundVoiceDir + file);
+	stopVoice: function(audioId){
+		cc.AudioEngine.getInstance().stopEffect(audioId);
 	},
 	playMusic: function(file, mustLoop){
 		cc.AudioEngine.getInstance().playMusic(soundDir + file, mustLoop);
