@@ -126,7 +126,7 @@ var SkillInfo = {
 					if(targetBlock)
 						targetPlayer = block.currentGame.players[targetBlock.ownerId];
 					
-					if(targetPlayer)
+					if(targetPlayer && !targetPlayer.hasWon)
 						block.currentGame.managers.NpcManager.add(new PeskyBox(block.currentGame.npcSequence,
 																			   block.x,
 																			   block.y - Constants.NPC.PeskyBox.HEIGHT*0.5,

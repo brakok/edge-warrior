@@ -582,7 +582,7 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 
 			//If found, mark the player to be inserted in the next update in the killer blocks list.
 			if(killingPlayer != null && killingPlayer.id != player.id)
-				killingPlayer.kill(player, deathZone.stats.type);
+				killingPlayer.kill(player, Enum.Block.Type.SKILLED);
 			else
 				player.toBeDestroy = true;
 		}
@@ -1199,7 +1199,7 @@ var SkillInfo = {
 					if(targetBlock)
 						targetPlayer = block.currentGame.players[targetBlock.ownerId];
 					
-					if(targetPlayer)
+					if(targetPlayer && !targetPlayer.hasWon)
 						block.currentGame.managers.NpcManager.add(new PeskyBox(block.currentGame.npcSequence,
 																			   block.x,
 																			   block.y - Constants.NPC.PeskyBox.HEIGHT*0.5,
@@ -1424,6 +1424,9 @@ Player.prototype.leave = function(){
 		this.currentGame.space.removeShape(this.groundSensor);
 		this.currentGame.space.removeShape(this.dropSensor);
 		this.currentGame.space.removeBody(this.body);
+		
+		this.isRemoved = true;
+		this.isAlive = false;
 	}
 };
 
@@ -3358,30 +3361,39 @@ PeskyBox.prototype.update = function(){
 		this.explode();
 	else
 	{
-		var nextX = 0;
-		var nextY = 0;
-	
-		if(this.fleeTimer > 0)
+		if(this.target && !this.target.isRemoved)
 		{
-			nextX = this.speed * (this.x < this.target.x ? -1 : 1);
-			nextY = this.speed * (this.y < this.target.y ? -1 : 1);
+			var nextX = 0;
+			var nextY = 0;
+		
+			//Flee after touch.
+			if(this.fleeTimer > 0)
+			{
+				nextX = this.speed * (this.x < this.target.x ? -1 : 1);
+				nextY = this.speed * (this.y < this.target.y ? -1 : 1);
+				
+				this.fleeTimer -= this.currentGame.dt;
+			}
+			else
+			{
+				nextX = (this.target.x - this.x)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
+				nextY = (this.target.y - this.y)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
+				
+				if(Math.abs(nextX) > this.speed)
+					nextX = this.speed * (this.x < this.target.x ? 1 : -1);
+					
+				if(Math.abs(nextY) > this.speed)
+					nextY = this.speed * (this.y < this.target.y ? 1 : -1);
+			}
 			
-			this.fleeTimer -= this.currentGame.dt;
-		}
+			this.velocity.x += nextX;
+			this.velocity.y += nextY;
+		}	
 		else
 		{
-			nextX = (this.target.x - this.x)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
-			nextY = (this.target.y - this.y)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
-			
-			if(Math.abs(nextX) > this.speed)
-				nextX = this.speed * (this.x < this.target.x ? 1 : -1);
-				
-			if(Math.abs(nextY) > this.speed)
-				nextY = this.speed * (this.y < this.target.y ? 1 : -1);
+			this.velocity.x *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
+			this.velocity.y *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
 		}
-		
-		this.velocity.x += nextX;
-		this.velocity.y += nextY;
 		
 		this.velocity.x *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
 		this.velocity.y *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
