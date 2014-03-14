@@ -35,6 +35,9 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsNpcDir + 'PeskyBox.plist', 
 														  assetsNpcDir + 'PeskyBox.png');
 														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsNpcDir + 'PeskyBoxDisappearing.plist', 
+														  assetsNpcDir + 'PeskyBoxDisappearing.png');
+														  
 		//Effects.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 
 														  assetsEffectDir + 'PlayerDeath.png');
