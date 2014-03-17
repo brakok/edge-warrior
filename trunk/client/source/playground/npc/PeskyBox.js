@@ -5,6 +5,7 @@ var PeskyBox = function(x, y, facing, target){
 	this.facing = facing;
 	
 	this.target = target;
+	this.audioId = null;
 	
 	//Eyes.
 	this.eyesOpened = false;
@@ -25,6 +26,8 @@ var PeskyBox = function(x, y, facing, target){
 								//Trigger eye animation.
 								that.eyeSprite.runAction(that.eyeAnimation);
 								
+								
+								
 								Client.game.layer.addChild(that.eyeSprite);
 								that.eyesOpened = true;
 							}, this.currentAnimation);
@@ -34,11 +37,9 @@ var PeskyBox = function(x, y, facing, target){
 	
 	Client.game.layer.addChild(this.currentAnimation);
 	
-	
-	
-	
-	
-	
+	//Start effects.
+	AudioManager.playEffect(Constants.Sound.File.PeskyBox.SPAWN, false);
+	this.audioId = AudioManager.playEffect(Constants.Sound.File.Common.FLOATING, true);
 };
 
 PeskyBox.prototype.update = function(dt){
@@ -70,6 +71,11 @@ PeskyBox.prototype.update = function(dt){
 PeskyBox.prototype.explode = function(){
 	Client.game.layer.removeChild(this.currentAnimation);
 	Client.game.layer.removeChild(this.eyeSprite);
+	
+	AudioManager.stopEffect(this.audioId);
+	this.audioId = null;
+	
+	AudioManager.playEffect(Constants.Sound.File.PeskyBox.DISAPPEARING, false);
 	
 	EffectManager.create(Enum.Effect.Type.PESKY_BOX_DISAPPEARING, this.x, this.y);
 };
