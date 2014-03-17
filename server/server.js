@@ -172,12 +172,12 @@ var Constants = {
 		PeskyBox: {
 			WIDTH: 60,
 			HEIGHT: 60,
-			SPEED: 0.6,
+			SPEED: 0.5,
 			SPEED_STEP: 0.2,
 			DURATION: 7,
-			DURATION_STEP: 1.5,
-			FLEE_TIMER: 0.5,
-			FLEE_STEP: 0.065,
+			DURATION_STEP: 1,
+			FLEE_TIMER: 0.4,
+			FLEE_STEP: 0.035,
 			SLOWDOWN_DISTANCE_FACTOR: 25,
 			FRICTION_FACTOR: 0.94
 		}
