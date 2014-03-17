@@ -63,6 +63,8 @@ var assets = [
 	{type:"sound", src: soundDir + 'action_menu.mp3'},
 	{type:"sound", src: soundDir + 'jaw.mp3'},
 	{type:"sound", src: soundDir + 'jawDisappearing.mp3'},
+	{type:"sound", src: soundDir + 'floating.mp3'},
+	{type:"sound", src: soundDir + 'PeskySpawn.mp3'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill.mp3'},

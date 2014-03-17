@@ -271,6 +271,10 @@ var Constants = {
 				JUMP: '_jump',
 				KILL: '_kill'
 			},
+			PeskyBox: {
+				SPAWN: 'PeskySpawn',
+				DISAPPEARING: 'PeskySpawn'
+			},
 			Jaw: {
 				EAT: 'jaw',
 				DISAPPEARING: 'jawDisappearing'
@@ -283,6 +287,9 @@ var Constants = {
 					IDLE: 'floatingBall_idle',
 					SUMMON: 'floatingBall_summon'
 				}
+			},
+			Common: {
+				FLOATING: 'floating'
 			}
 		},
 		VoiceTimer: {
