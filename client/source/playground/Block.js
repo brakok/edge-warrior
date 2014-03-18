@@ -139,6 +139,8 @@ Block.prototype.explode = function(cause){
 		switch(this.skill.type){
 			case Enum.Block.Skill.FIRE_PULSE:
 				EffectManager.create(Enum.Effect.Type.FIREPULSE_EXPLOSION, this.x, this.y);
+				
+				AudioManager.playEffect(Constants.Sound.File.Common.EXPLOSION02, false);
 				return;
 		}
 	}

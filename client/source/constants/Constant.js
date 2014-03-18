@@ -289,7 +289,10 @@ var Constants = {
 				}
 			},
 			Common: {
-				FLOATING: 'floating'
+				FLOATING: 'floating',
+				FIRE: 'fire',
+				EXPLOSION01: 'explosion01',
+				EXPLOSION02: 'explosion02'
 			}
 		},
 		VoiceTimer: {
