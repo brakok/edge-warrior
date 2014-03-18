@@ -59,20 +59,22 @@ Player.prototype.buySkill = function(number){
 		}
 		else
 		{
+			//Can't exceed buy limit.
+			if(skill.boughtCount >= Constants.Block.Skill.MAX_BUY_COUNT)
+			{
+				
+				return;
+			}
+		
 			//Change power or apparition percent chance.
 			switch(Options.buyMode){
 				case Enum.SkillStore.Mode.POWER:
 					
-					if(blockOption.skill.power < Constants.Block.Skill.MAX_POWER)
-					{
-						//Trigger buy sound.
-						AudioManager.playEffect('buy', false);
-						
-						this.changePower(skill.type);
-						skill.level++;
-					}
-					else
-						return;
+					//Trigger buy sound.
+					AudioManager.playEffect('buy', false);
+					
+					this.changePower(skill.type);
+					skill.level++;
 						
 					break;
 				case Enum.SkillStore.Mode.QUANTITY:
@@ -87,6 +89,7 @@ Player.prototype.buySkill = function(number){
 
 		this.units -= skill.cost;
 		skill.cost += skill.costStep;
+		skill.boughtCount++;
 	}
 };
 
