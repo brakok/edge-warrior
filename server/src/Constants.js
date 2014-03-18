@@ -51,11 +51,11 @@ var Constants = {
 			WIDTH: 60,
 			HEIGHT: 60,
 			SPEED: 0.5,
-			SPEED_STEP: 0.2,
+			SPEED_STEP: 0.3,
 			DURATION: 7,
 			DURATION_STEP: 1,
 			FLEE_TIMER: 0.4,
-			FLEE_STEP: 0.035,
+			FLEE_STEP: 0.045,
 			SLOWDOWN_DISTANCE_FACTOR: 25,
 			FRICTION_FACTOR: 0.94
 		}
@@ -80,12 +80,12 @@ var Constants = {
 	},
 	DeathZone: {
 		Fireball: {
-			SPEED_MIN: 7,
-			SPEED_STEP: 10,
+			SPEED_MIN: 8,
+			SPEED_STEP: 3,
 			WIDTH: 45,
 			HEIGHT: 45,
 			DISTANCE_MIN: 150,
-			DISTANCE_STEP: 75
+			DISTANCE_STEP: 85
 		},
 		EnergySpike: {
 			SPEED: 0.007,
@@ -97,7 +97,7 @@ var Constants = {
 		Jaw: {
 			WIDTH: 80,
 			HEIGHT: 30,
-			INITIAL_COUNT: 3,
+			INITIAL_COUNT: 4,
 			STEP: 4
 		}
 	},
