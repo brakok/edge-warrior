@@ -7,6 +7,8 @@ var Missile = function(x, y, type, direction){
 	this.sprite = null;
 	this.direction = direction;
 	
+	this.audioId = null;
+	
 	this.init();	
 };
 
@@ -19,6 +21,8 @@ Missile.prototype.init = function(){
 			this.currentAnimation = cc.Sprite.createWithSpriteFrameName('Fireball.0000.png');
 			var anim = AnimationManager.create('Fireball', 0, 3, 24);
 			this.currentAnimation.runAction(cc.RepeatForever.create(anim));
+			
+			this.audioId = AudioManager.playEffect(Constants.Sound.File.Common.FIRE, true);
 			
 			break;
 	}
@@ -94,8 +98,15 @@ Missile.prototype.explode = function(){
 			
 				//Create fireball explosion animation.
 				EffectManager.create(Enum.Effect.Type.FIREBALL_EXPLOSION, this.x, this.y);
+				
+				AudioManager.playEffect(Constants.Sound.File.Common.EXPLOSION01, false);
 				break;
 		}
 	}
 		
+	if(this.audioId != null)
+	{
+		AudioManager.stopEffect(this.audioId);
+		this.audioId = null;
+	}
 };
