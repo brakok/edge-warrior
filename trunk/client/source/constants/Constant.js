@@ -44,7 +44,7 @@ var Constants = {
 			LOST_FOREACH_ENEMY: 3
 		},
 		Skill: {
-			MAX_POWER: 5
+			MAX_BUY_COUNT: 5
 		},
 		Unit: {
 			TO_ADD: 4,
@@ -235,9 +235,9 @@ var Constants = {
 	Element: {
 		Eclipse: {
 			Z_INDEX: 75,
-			SCALE_STEP: 0.25,
+			SCALE_STEP: 0.3,
 			DURATION: 4,
-			DURATION_STEP: 0.75,
+			DURATION_STEP: 1,
 			FADE_IN: 0.25,
 			FADE_OUT: 0.75
 		}
