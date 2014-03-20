@@ -11,7 +11,8 @@ var SkillItem = function(x, y, skill, parent){
 	this.imgLock.setPosition(new cc.Point(this.x,  this.y));
 	
 	this.parent = parent;
-
+	this.isGolden = false;
+	
 	//Bound skill.
 	this.skill = skill;
 	
@@ -44,8 +45,29 @@ var SkillItem = function(x, y, skill, parent){
 
 SkillItem.prototype.update = function(){
 
+	//Set the skill as golden.
+	if(!this.isGolden && this.skill.level >= Constants.Block.Skill.MAX_LEVEL)
+	{
+		this.isGolden = true;
+		this.parent.layer.removeChild(this.lvlLabel);
+		this.parent.layer.removeChild(this.imgLvl);
+		
+		//Change to gold dot.
+		this.imgLvl = cc.Sprite.create(assetsHudDir + 'dot_level_gold.png');
+		this.imgLvl.setPosition(new cc.Point(this.x + Constants.HUD.SkillStore.Skills.Level.OFFSET_X, this.y + Constants.HUD.SkillStore.Skills.Level.OFFSET_Y));
+		this.imgLvl._zOrder = Constants.HUD.SkillStore.Skills.Level.Z_ORDER;
+		
+		this.parent.layer.addChild(this.imgLvl);
+		this.parent.layer.addChild(this.lvlLabel);
+		
+		//Unlock.
+		this.parent.layer.removeChild(this.imgLock);
+		this.parent.layer.removeChild(this.costLabel);
+		this.isLocked = false;
+	}
+
 	//Lock.
-	if(!this.isLocked && this.parent.currentUnits < this.skill.cost)
+	if(!this.isGolden && !this.isLocked && this.parent.currentUnits < this.skill.cost)
 	{
 		this.parent.layer.addChild(this.imgLock);	
 		
@@ -57,7 +79,7 @@ SkillItem.prototype.update = function(){
 	}
 	
 	//Unlock.
-	if(this.isLocked && this.parent.currentUnits >= this.skill.cost)
+	if(!this.isGolden && this.isLocked && this.parent.currentUnits >= this.skill.cost)
 	{
 		this.parent.layer.removeChild(this.imgLock);
 		this.parent.layer.removeChild(this.costLabel);

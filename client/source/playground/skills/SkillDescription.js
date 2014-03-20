@@ -11,7 +11,6 @@ var SkillDescription = function(type){
 	
 	//Used to display.
 	this.level = 0;
-	this.boughtCount = 0;
 	
 	//Used when selected.
 	this.background = cc.Sprite.create(assetsMenuDir + 'skill_selected.png');
@@ -49,7 +48,6 @@ SkillDescription.prototype.init = function(){
 		
 		this.power = -1;
 		this.level = 0;
-		this.boughtCount = 0;
 		
 		//Buying infos.
 		this.cost = skill.COST;
