@@ -43,6 +43,22 @@ var SkillItem = function(x, y, skill, parent){
 							   this.parent.layer);
 };
 
+SkillItem.prototype.lock = function(){
+	this.parent.layer.addChild(this.imgLock);	
+		
+	//Show cost.
+	this.costLabel.setString(this.skill.cost);
+	this.parent.layer.addChild(this.costLabel);
+	
+	this.isLocked = true;
+};
+
+SkillItem.prototype.unlock = function(){
+	this.parent.layer.removeChild(this.imgLock);
+	this.parent.layer.removeChild(this.costLabel);
+	this.isLocked = false;
+};
+
 SkillItem.prototype.update = function(){
 
 	//Set the skill as golden.
@@ -61,30 +77,16 @@ SkillItem.prototype.update = function(){
 		this.parent.layer.addChild(this.lvlLabel);
 		
 		//Unlock.
-		this.parent.layer.removeChild(this.imgLock);
-		this.parent.layer.removeChild(this.costLabel);
-		this.isLocked = false;
+		this.unlock();
 	}
 
 	//Lock.
 	if(!this.isGolden && !this.isLocked && this.parent.currentUnits < this.skill.cost)
-	{
-		this.parent.layer.addChild(this.imgLock);	
-		
-		//Show cost.
-		this.costLabel.setString(this.skill.cost);
-		this.parent.layer.addChild(this.costLabel);
-		
-		this.isLocked = true;
-	}
+		this.lock();
 	
 	//Unlock.
 	if(!this.isGolden && this.isLocked && this.parent.currentUnits >= this.skill.cost)
-	{
-		this.parent.layer.removeChild(this.imgLock);
-		this.parent.layer.removeChild(this.costLabel);
-		this.isLocked = false;
-	}
+		this.unlock();
 	
 	if(!this.levelAdded && this.skill.level > 0)
 	{
