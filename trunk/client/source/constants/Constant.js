@@ -44,7 +44,7 @@ var Constants = {
 			LOST_FOREACH_ENEMY: 3
 		},
 		Skill: {
-			MAX_BUY_COUNT: 5
+			MAX_LEVEL: 5
 		},
 		Unit: {
 			TO_ADD: 4,
