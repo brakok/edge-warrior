@@ -45,47 +45,38 @@ Player.prototype.buySkill = function(number){
 		
 	var skill = Options.getSkill(number);
 	
-	if(skill != null && skill.cost <= this.units)
+	if(skill != null)
 	{
+		//Can't exceed buy limit.
+		if(skill.cost > this.units || skill.level >= Constants.Block.Skill.MAX_LEVEL)
+		{
+			AudioManager.playEffect('deny_action', false);
+			return;
+		}
+
 		var blockOption = this.getBlockOption(Enum.Block.Type.SKILLED, skill.type);
 		
 		if(blockOption == null)
 		{
-			//Trigger buy sound.
-			AudioManager.playEffect('buy', false);
-			
-			skill.level++;
 			this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.SKILLED, skill.percent.start, skill.type, 0));
 		}
 		else
-		{
-			//Can't exceed buy limit.
-			if(skill.level >= Constants.Block.Skill.MAX_LEVEL)
-			{
-				
-				return;
-			}
-		
+		{		
 			//Change power or apparition percent chance.
 			switch(Options.buyMode){
 				case Enum.SkillStore.Mode.POWER:
-					
-					//Trigger buy sound.
-					AudioManager.playEffect('buy', false);
 					this.changePower(skill.type);
-					
 					break;
 				case Enum.SkillStore.Mode.QUANTITY:
 					this.changePercent(blockOption.type, skill.percent.step, skill.type);
-					
-					//Trigger buy sound.
-					AudioManager.playEffect('buy', false);
 					break;
 			}
-			
-			skill.level++;
 		}
 
+		//Trigger buy sound.
+		AudioManager.playEffect('buy', false);
+		skill.level++;
+		
 		this.units -= skill.cost;
 		skill.cost += skill.costStep;
 	}

@@ -68,6 +68,7 @@ var assets = [
 	{type:"sound", src: soundDir + 'fire.mp3'},
 	{type:"sound", src: soundDir + 'explosion01.mp3'},
 	{type:"sound", src: soundDir + 'explosion02.mp3'},
+	{type:"sound", src: soundDir + 'deny_action.mp3'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill.mp3'},
