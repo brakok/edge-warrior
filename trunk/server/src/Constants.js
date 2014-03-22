@@ -158,7 +158,9 @@ var Constants = {
 		LOGOUT: 'logout',
 		NEW_ELEMENT: 'newElement',
 		DELETE_NPC: 'deleteNPC',
-		NEW_NPC: 'newNPC'
+		NEW_NPC: 'newNPC',
+		REFRESH_STATS: 'refreshStats',
+		GET_STATS: 'getStats'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
