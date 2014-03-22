@@ -5,6 +5,12 @@ var Client = new function(){
 	this.username = null;
 	this.game = null;
 	
+	this.stats = {
+		score: 0,
+		wins: 0,
+		loses: 0
+	};
+	
 	this.loadingScreen = null;
 	this.isCreatingAccount = false;
 	
@@ -74,6 +80,15 @@ var Client = new function(){
 	//Authentification.
 	this.authenticate = function(profile){
 		this.masterSocket.emit(Constants.Message.LOGIN, profile);
+	};
+	
+	//Refresh player stats from server.
+	this.refreshStats = function(){
+	
+		if(this.username == null || this.username == '')
+			return;
+			
+		this.masterSocket.emit(Constants.Message.REFRESH_STATS, this.username);
 	};
 	
 	//Create an account.
@@ -240,6 +255,19 @@ var Client = new function(){
 			
 			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 			Client.currentGameId = null;
+		});
+		
+		//Set new stats gained from server.
+		masterSocket.on(Constants.Message.GET_STATS, function(stats){
+
+			if(stats != null)
+			{
+				Client.stats.score = stats.score == null ? 0 : stats.score;
+				Client.stats.wins = stats.wins == null ? 0 : stats.wins;
+				Client.stats.loses = stats.loses == null ? 0 : stats.loses;
+				
+				MenuScreens.mainMenu.refresh();
+			}
 		});
 		
 		masterSocket.on(Constants.Message.UPDATE_LOBBY, function(data){

@@ -52,6 +52,33 @@ var MainMenu = cc.LayerColor.extend({
 		this.addChild(this.menu);
 		this.addChild(this.whiteMenu);
 		this.addChild(this.commonMenu);
+		
+		//Stats labels.
+		this.lblScore = cc.LabelTTF.create("", Constants.Font.NAME, Constants.Font.SIZE);
+		this.lblWins = cc.LabelTTF.create("", Constants.Font.NAME, Constants.Font.SIZE);
+		this.lblLoses = cc.LabelTTF.create("", Constants.Font.NAME, Constants.Font.SIZE);
+		
+		this.lblScore.setPosition(new cc.Point(this.width*0.54, this.height*0.35));
+		this.lblWins.setPosition(new cc.Point(this.width*0.46, this.height*0.27));
+		this.lblLoses.setPosition(new cc.Point(this.width*0.52, this.height*0.19));
+		
+		var color = new cc.Color3B(255,255,255);
+		
+		this.lblScore.setColor(color);
+		this.lblWins.setColor(color);
+		this.lblLoses.setColor(color);
+		
+		this.addChild(this.lblScore);
+		this.addChild(this.lblWins);
+		this.addChild(this.lblLoses);
+	},
+	onEntering: function(){
+		Client.refreshStats();
+	},
+	refresh: function(){
+		this.lblScore.setString("score   " + Client.stats.score);
+		this.lblWins.setString("wins   " + Client.stats.wins);
+		this.lblLoses.setString("loses   " + Client.stats.loses);
 	},
 	create: function(){
 		Client.createLobby();

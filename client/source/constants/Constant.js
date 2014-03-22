@@ -215,7 +215,9 @@ var Constants = {
 		LOGOUT: 'logout',
 		NEW_ELEMENT: 'newElement',
 		DELETE_NPC: 'deleteNPC',
-		NEW_NPC: 'newNPC'
+		NEW_NPC: 'newNPC',
+		REFRESH_STATS: 'refreshStats',
+		GET_STATS: 'getStats'
 	},
 	Effect: {
 		Z_INDEX: 50,
