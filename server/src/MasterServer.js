@@ -44,7 +44,7 @@ var MasterServer = new function(){
 			
 		return null;
 	};
-	
+		
 	this.disconnectPlayer = function(socket){
 		if(socket.userdata.gameId != null)
 		{
@@ -88,6 +88,15 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 				};
 
 			socket.emit(Constants.Message.LOGIN, errors);
+		});
+	});
+	
+	//Send user stats to client.
+	socket.on(Constants.Message.REFRESH_STATS, function(username){
+		console.log(username + ' getting stats');
+
+		Account.getStats(username, function(stats){
+			socket.emit(Constants.Message.GET_STATS, stats);
 		});
 	});
 	

@@ -127,13 +127,38 @@ var Account = new function(){
 			if(profile.score == null)
 				profile.score = 0;
 				
-			profile.score += points;
+			if(profile.wins == null)
+				profile.wins = 0;
 			
-			db.merge(username.toLowerCase(), { score: profile.score }, function(err, res){
+			profile.score += points;
+			profile.wins++;
+			
+			db.merge(username.toLowerCase(), { score: profile.score, wins: profile.wins }, function(err, res){
 			
 				if(err)
 					console.log('Add victory failed (' + profile.username + ')');
 			});
+		});
+	};
+	
+	//Get player stats.
+	this.getStats = function(username, callback){
+		
+		if(username == null || username == '')
+			return;
+			
+		db.get(username.toLowerCase(), function(err, profile){
+		
+			if(profile == null)
+				return;
+				
+			var stats = {
+				score: profile.score,
+				wins: profile.wins,
+				loses: profile.loses
+			};
+			
+			callback(stats);
 		});
 	};
 	
@@ -151,9 +176,13 @@ var Account = new function(){
 			if(profile.score == null)
 				profile.score = 0;
 				
+			if(profile.loses == null)
+				profile.loses = 0;
+				
 			profile.score--;
+			profile.loses++;
 			
-			db.merge(username.toLowerCase(), { score: profile.score }, function(err, res){
+			db.merge(username.toLowerCase(), { score: profile.score, loses: profile.loses }, function(err, res){
 			
 				if(err)
 					console.log('Add defeat failed (' + profile.username + ')');
@@ -233,6 +262,8 @@ var Account = new function(){
 				profile.salt = generateSalt(12);
 				profile.password = sha1(profile.password, profile.salt);
 				profile.score = 0;
+				profile.wins = 0;
+				profile.loses = 0;
 		
 				db.save(profile.username.toLowerCase(), profile, function(err, res){
 
