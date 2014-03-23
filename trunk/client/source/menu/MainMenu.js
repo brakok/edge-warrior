@@ -58,11 +58,12 @@ var MainMenu = cc.LayerColor.extend({
 		this.lblWins = cc.LabelTTF.create("", Constants.Font.NAME, Constants.Font.SIZE);
 		this.lblLoses = cc.LabelTTF.create("", Constants.Font.NAME, Constants.Font.SIZE);
 		
-		this.lblScore.setPosition(new cc.Point(this.width*0.54, this.height*0.35));
-		this.lblWins.setPosition(new cc.Point(this.width*0.46, this.height*0.27));
-		this.lblLoses.setPosition(new cc.Point(this.width*0.52, this.height*0.19));
+		this.lblScore.setPosition(new cc.Point(this.width*0.9, this.height*0.95));
+		this.lblWins.setPosition(new cc.Point(this.width*0.84, this.height*0.9));
+		this.lblLoses.setPosition(new cc.Point(this.width*0.94, this.height*0.89));
 		
-		var color = new cc.Color3B(255,255,255);
+
+		var color = new cc.Color3B(0,0,0);
 		
 		this.lblScore.setColor(color);
 		this.lblWins.setColor(color);

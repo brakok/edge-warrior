@@ -29,7 +29,7 @@ var EndScreen = cc.LayerColor.extend({
 		
 		//Create winner label.
 		var label = cc.LabelTTF.create(winner.username + ' wins', Constants.Font.NAME, Constants.Font.BIGSIZE);
-		label.setPosition(new cc.Point(this.width*0.5,this.height*0.8));
+		label.setPosition(new cc.Point(this.width*0.5,this.height*0.82));
 		label.setColor(new cc.Color3B(255,255,255));
 				
 		this.addChild(label);
@@ -37,9 +37,9 @@ var EndScreen = cc.LayerColor.extend({
 		//Add bonus info if no survivor.
 		if(succeed)
 		{
-			var succeedLabel = cc.LabelTTF.create('LUDICROUS', Constants.Font.NAME, Constants.Font.BIGSIZE - 20);
-			succeedLabel.setPosition(new cc.Point(this.width*0.5,this.height*0.75));
-			succeedLabel.setColor(new cc.Color3B(75,0,25));
+			var succeedLabel = cc.LabelTTF.create('LUDICROUS', Constants.Font.NAME, Constants.Font.BIGSIZE - 10);
+			succeedLabel.setPosition(new cc.Point(this.width*0.5,this.height*0.76));
+			succeedLabel.setColor(new cc.Color3B(95,0,45));
 			
 			this.addChild(succeedLabel);
 		}
