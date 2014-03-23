@@ -237,7 +237,7 @@ var Constants = {
 	Element: {
 		Eclipse: {
 			Z_INDEX: 75,
-			SCALE_STEP: 0.3,
+			SCALE_STEP: 0.4,
 			DURATION: 4,
 			DURATION_STEP: 1,
 			FADE_IN: 0.25,

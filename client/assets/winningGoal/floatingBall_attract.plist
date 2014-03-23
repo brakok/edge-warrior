@@ -326,7 +326,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:c35027ee512ce86cfd08c7ead396bea7:c8c2e06db811decea95b607e50fe79cb:65fcf632198989dda09a129a88560517$</string>
+            <string>$TexturePacker:SmartUpdate:5e8b43d8964a8025d95bc19ea2b09d4f:b65f559732b1a67573981a93fd2f878d:65fcf632198989dda09a129a88560517$</string>
             <key>textureFileName</key>
             <string>floatingBall_attract.png</string>
         </dict>
