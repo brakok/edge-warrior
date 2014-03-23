@@ -1574,7 +1574,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:8ea58c4954a0ce0edbad11450ddfd1df:6631842ba023ebffdcd9998eef2614f5:900b672f73505ebbea02610d73c21856$</string>
+            <string>$TexturePacker:SmartUpdate:91b6b0109a198e0c56ec45ec3ad9458e:13ac5e864a14e0e0aedcbfc0c40e1e9d:900b672f73505ebbea02610d73c21856$</string>
             <key>textureFileName</key>
             <string>killCommand.png</string>
         </dict>
