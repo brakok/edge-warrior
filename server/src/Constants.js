@@ -55,9 +55,9 @@ var Constants = {
 			DURATION: 7,
 			DURATION_STEP: 1,
 			FLEE_TIMER: 0.4,
-			FLEE_STEP: 0.045,
+			FLEE_STEP: 0.05,
 			SLOWDOWN_DISTANCE_FACTOR: 25,
-			FRICTION_FACTOR: 0.94
+			FRICTION_FACTOR: 0.93
 		}
 	},
 	WinningGoal: {
