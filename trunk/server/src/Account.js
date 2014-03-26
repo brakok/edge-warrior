@@ -15,26 +15,27 @@ var Account = new function(){
 	});
 
 	//Create views.
-	db.save('_design/players', {
-		views: {
-			all: {
-				map: function(doc){ 
-					if(doc.username) 
-						emit(doc.username, doc); 
-				}
-			},
-			byEmail: {
-				map: function(doc){ 
-					if(doc.email) 
-						emit(doc.email.toLowerCase(), doc);
+	if(Config.CreateCouchDbViews)
+		db.save('_design/players', {
+			views: {
+				all: {
+					map: function(doc){ 
+						if(doc.username) 
+							emit(doc.username, doc); 
+					}
+				},
+				byEmail: {
+					map: function(doc){ 
+						if(doc.email) 
+							emit(doc.email.toLowerCase(), doc);
+					}
 				}
 			}
-		}
-	}, function(err, res){
-	
-		if(err)
-			console.log('Error when creating couchdb views.');
-	});
+		}, function(err, res){
+		
+			if(err)
+				console.log('Error when creating couchdb views.');
+		});
 	
 	//Hash password with salt.
 	function sha1(pass, salt) {
