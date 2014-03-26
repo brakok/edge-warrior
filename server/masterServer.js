@@ -291,6 +291,9 @@ var Constants = {
 		EMAIL: /^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/
 	}
 };
+var Config = {
+	CreateCouchDbViews: true
+};
 var Listeners = function(game){
 	this.currentGame = game;
 	
@@ -724,26 +727,27 @@ var Account = new function(){
 	});
 
 	//Create views.
-	db.save('_design/players', {
-		views: {
-			all: {
-				map: function(doc){ 
-					if(doc.username) 
-						emit(doc.username, doc); 
-				}
-			},
-			byEmail: {
-				map: function(doc){ 
-					if(doc.email) 
-						emit(doc.email.toLowerCase(), doc);
+	if(Config.CreateCouchDbViews)
+		db.save('_design/players', {
+			views: {
+				all: {
+					map: function(doc){ 
+						if(doc.username) 
+							emit(doc.username, doc); 
+					}
+				},
+				byEmail: {
+					map: function(doc){ 
+						if(doc.email) 
+							emit(doc.email.toLowerCase(), doc);
+					}
 				}
 			}
-		}
-	}, function(err, res){
-	
-		if(err)
-			console.log('Error when creating couchdb views.');
-	});
+		}, function(err, res){
+		
+			if(err)
+				console.log('Error when creating couchdb views.');
+		});
 	
 	//Hash password with salt.
 	function sha1(pass, salt) {
@@ -2858,241 +2862,7 @@ ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 });
 
-console.log('Master server created');//Create server.
-var server = http.createServer(function(req, res){});
-
-//Port.
-server.listen(Constants.Network.SERVER_PORT); //localhost
-
-//Remove log level or adjust it to have every log in console.
-var io = require('socket.io').listen(server).set('log level', 1);
-
-//Server object.
-var Server = new function(){
-	this.gameList = {};
-	this.address = null;
-	
-	this.addGame = function(settings){	
-		this.gameList[settings.id] = new Game(settings);
-	};
-		
-	this.register = function(){
-		var socket = require('socket.io-client').connect(Constants.Network.ADDRESS);
-		
-		//Get ip address.
-		var os = require('os')
-
-		var interfaces = os.networkInterfaces();
-
-		for (k in interfaces) {
-			for (k2 in interfaces[k]) {
-				var address = interfaces[k][k2];
-				
-				if (address.family == 'IPv4' && !address.internal)
-				{
-					this.address = address.address;
-						break;
-				}
-			}
-			
-			if(this.address != null)
-				break;
-		}
-		
-		//Lobby to game.
-		socket.on(Constants.Message.START_GAME, function(settings){
-		
-			console.log('Creating game... ' + Server.address);
-			
-			var data = {
-				gameId: settings.id,
-				address: Server.address
-			};
-			
-			//Create game.
-			Server.addGame(settings);
-			socket.emit(Constants.Message.GAME_CREATED, data);
-		});
-		
-		this.socket = socket;
-	};
-	
-	//Disconnect player.
-	this.disconnectPlayer = function(socket){
-		console.log('Player left (' + socket.userdata.gameId + ') : ' + socket.userdata.username);
-		
-		var game = this.gameList[socket.userdata.gameId];
-		var index = null;
-		
-		for(var i in game.players)
-			if(game.players[i].username == socket.userdata.username)
-			{
-				index = i;
-				break;
-			}
-			
-		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.DISCONNECT_PLAYER, socket.userdata.username);	
-		
-		if(index != null)
-		{
-			var disconnectingPlayer = this.gameList[socket.userdata.gameId].players[index]
-			disconnectingPlayer.leave();
-			io.sockets.sockets[disconnectingPlayer.id].gameId = null;
-			
-			delete this.gameList[socket.userdata.gameId].players[index];
-			
-			var hasPlayers = false;
-			
-			//Check if game has players.
-			for(var i in this.gameList[socket.userdata.gameId].players)
-				if(this.gameList[socket.userdata.gameId].players[i] != null)
-				{
-					hasPlayers = true;
-					break;
-				}
-			
-			//Remove game instance if empty.
-			if(!hasPlayers)
-			{
-				this.gameList[socket.userdata.gameId].trash();
-				delete this.gameList[socket.userdata.gameId];
-			}
-		}
-	};
-	
-	this.register();
-};
-
-//Bind listeners on sockets.
-io.sockets.on(Constants.Message.CONNECTION, function (socket){
-	socket.set("heartbeat interval", 20);
-	socket.set("heartbeat timeout", 60);
-
-	console.log('Connection to client established');
-		
-	//Socket disconnected.
-	socket.on(Constants.Message.DISCONNECT, function(){
-		console.log('Disconnect : ' + socket.userdata.gameId);
-		if(socket.userdata != null && socket.userdata.gameId != null && Server.gameList[socket.userdata.gameId] != null)
-			Server.disconnectPlayer(socket);
-	});
-		
-	//Send information about enemies to the connecting player.
-	socket.on(Constants.Message.JOIN_GAME, function(data){
-	
-		console.log('Connecting player... (' + data.gameId + ') : ' + data.username);
-		socket.join(data.gameId);
-		
-		socket.userdata = {
-			gameId: data.gameId,
-			username: data.username
-		};
-		
-		var players = [];
-		
-		for(var i in Server.gameList[data.gameId].players)
-		{
-			var enemy = Server.gameList[data.gameId].players[i].toClient();
-			enemy.username = Server.gameList[data.gameId].players[i].username;
-			players.push(enemy);
-		}
-		
-		var color = null;
-		for(var i in Server.gameList[data.gameId].playerInfos)
-			if(Server.gameList[data.gameId].playerInfos[i].username == data.username)
-				color = Server.gameList[data.gameId].playerInfos[i].color-1;
-		
-		//Create connecting player.
-		var player = new Player(socket.id, 
-								data.username,
-								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
-								Server.gameList[data.gameId].spawnY, 
-								color,
-								Server.gameList[data.gameId]);
-		
-		var playerToClient = player.toClient();
-		playerToClient.username = data.username;
-		
-		//Send last player connected.
-		players.push(playerToClient);
-		
-		//Value initiating a player.
-		var initData = {
-			players: players
-		};
-		
-		Server.gameList[data.gameId].players[socket.id] = player;
-		Server.gameList[data.gameId].connectingPlayers++;
-
-		//Start initiation.
-		if(Server.gameList[data.gameId].connectingPlayers == Server.gameList[data.gameId].maxPlayers)
-			io.sockets.in(data.gameId).emit(Constants.Message.INIT, initData);
-	});
-	
-	//Disconnect player.
-	socket.on(Constants.Message.DISCONNECT_PLAYER, function(){
-		Server.disconnectPlayer(socket);
-	});
-
-	//When player ready, refresh information of his opponents about his existence.
-	socket.on(Constants.Message.PLAYER_READY, function(){
-		var gameId = socket.userdata.gameId;
-		
-		console.log('Player ready! (' + gameId + ')');
-		
-		Server.gameList[gameId].connectedPlayers++;		
-		
-		var player = Server.gameList[gameId].players[socket.id].toClient();
-		player.username = Server.gameList[gameId].players[socket.id].username;
-				
-		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
-		{
-			console.log('Game launching...');
-			
-			//Init physic world.
-			Server.gameList[gameId].createWorld();
-			Server.gameList[gameId].launch();
-		
-			var data = {
-				goal: Server.gameList[gameId].goal.toClient(),
-				width: Server.gameList[gameId].width,
-				height: Server.gameList[gameId].height,
-				worldType: Server.gameList[gameId].worldType
-			};
-			
-			data.goal.type = Server.gameList[gameId].goal.type;
-			
-			console.log('Game launched!');
-			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
-			
-			//Launch warmup!
-			console.log('WARMUP');
-			(function(gameId){
-				console.log('...');
-				setTimeout(function(){ 
-					console.log('GO!');
-					io.sockets.in(gameId).emit(Constants.Message.GO); 
-				}, Constants.Warmup.PHASE_TIME*1000);
-			})(gameId);
-			
-			Server.gameList[gameId].ready = true;
-		}
-	});
-	
-	socket.on(Constants.Message.NEXT_BLOCK, function(command){
-		//Do not override if server has given a special block to player (as a Spawn Block).
-		if(!Server.gameList[socket.userdata.gameId].players[socket.id].hasGivenBlock)
-			Server.gameList[socket.userdata.gameId].players[socket.id].currentBlock = command;
-	});
-	
-	//Retrieving information from players.
-	socket.on(Constants.Message.PUSH, function(inputs){
-		if(socket.userdata.gameId != null)
-			Server.gameList[socket.userdata.gameId].push(inputs, socket.id);
-	});
-});
-
-console.log('Server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED * this.y,		direction: Enum.Direction.UP,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.currentGame.deathZoneSequence,													  this.x, 													  0, 													  Constants.DeathZone.EnergySpike.WIDTH, 													  this.y, 													  this.currentGame.winner.id,													  Enum.DeathZone.Type.ENERGY_SPIKE,													  this.spikeStats, 													  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+console.log('Master server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED * this.y,		direction: Enum.Direction.UP,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.currentGame.deathZoneSequence,													  this.x, 													  0, 													  Constants.DeathZone.EnergySpike.WIDTH, 													  this.y, 													  this.currentGame.winner.id,													  Enum.DeathZone.Type.ENERGY_SPIKE,													  this.spikeStats, 													  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
 var Missile = function(id, ownerId, blockId, x, y, type, stats, game){
 	
 	this.currentGame = game;
