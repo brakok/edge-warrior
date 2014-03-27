@@ -289,7 +289,8 @@ var Constants = {
 		NEW_NPC: 'newNPC',
 		REFRESH_STATS: 'refreshStats',
 		GET_STATS: 'getStats',
-		KEEP_SERVER_ALIVE: 'keepServerAlive'
+		KEEP_SERVER_ALIVE: 'keepServerAlive',
+		HANDSHAKE_INFO: 'handshakeInfo'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -2606,7 +2607,7 @@ var Server = new function(){
 		
 	this.register = function(){
 		var socket = require('socket.io-client').connect(Constants.Network.ADDRESS);
-		
+				
 		//Get ip address.
 		var os = require('os')
 
@@ -2631,7 +2632,13 @@ var Server = new function(){
 		setInterval(function(){
 			socket.emit(Constants.Message.KEEP_SERVER_ALIVE);
 		}, Constants.Network.REFRESH_PRESENCE);
-		
+				
+		//Get external ip from master server.
+		socket.on(Constants.Message.HANDSHAKE_INFO, function(data){
+			console.log('External IP : ' + data.address);
+			Server.address = data.address;
+		});
+				
 		//Lobby to game.
 		socket.on(Constants.Message.START_GAME, function(settings){
 		

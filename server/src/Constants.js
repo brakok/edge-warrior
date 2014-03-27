@@ -167,7 +167,8 @@ var Constants = {
 		NEW_NPC: 'newNPC',
 		REFRESH_STATS: 'refreshStats',
 		GET_STATS: 'getStats',
-		KEEP_SERVER_ALIVE: 'keepServerAlive'
+		KEEP_SERVER_ALIVE: 'keepServerAlive',
+		HANDSHAKE_INFO: 'handshakeInfo'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
