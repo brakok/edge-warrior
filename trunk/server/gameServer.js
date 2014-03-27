@@ -127,6 +127,9 @@ var Constants = {
 		UNIT_TIMER: 1,
 		OFFSET_Y_ALLOWED_FOR_PLAYERS: 250
 	},
+	Database: {
+		ADDRESS: 'http://127.0.0.1'
+	},
 	Physic: {
 		GRAVITY: -150,
 		FRICTION: 0.97,
@@ -717,7 +720,7 @@ var Managers = function(game){
 };
 var Account = new function(){
 	var cradle = require('cradle');
-	var db = new(cradle.Connection)('http://127.0.0.1', 5984, { cache: true, raw: false, auth: { username: 'ptlarouche', password: 'Silver75' } }).database('dream');
+	var db = new(cradle.Connection)(Constants.Database.ADDRESS, 5984, { cache: true, raw: false, auth: { username: 'ptlarouche', password: 'Silver75' } }).database('dream');
 	var crypto = require('crypto');
 	
 	//To send email.
