@@ -18,7 +18,7 @@ var Server = new function(){
 		
 	this.register = function(){
 		var socket = require('socket.io-client').connect(Constants.Network.ADDRESS);
-		
+				
 		//Get ip address.
 		var os = require('os')
 
@@ -237,4 +237,4 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 });
 
-console.log('Server created');
+console.log('Server created : ' + Server.address);

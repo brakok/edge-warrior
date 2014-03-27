@@ -5,6 +5,9 @@ var Constants = {
 		UNIT_TIMER: 1,
 		OFFSET_Y_ALLOWED_FOR_PLAYERS: 250
 	},
+	Database: {
+		ADDRESS: 'http://127.0.0.1'
+	},
 	Physic: {
 		GRAVITY: -150,
 		FRICTION: 0.97,
