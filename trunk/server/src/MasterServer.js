@@ -290,7 +290,10 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	console.log('Server connected : ' + socket.manager.handshaken[socket.id].address.address);
-		
+	
+	//Send external ip address to game server.
+	socket.emit(Constants.Message.HANDSHAKE_INFO, { address: socket.manager.handshaken[socket.id].address.address });
+	
 	socket.lastPresence = new Date();
 	
 	//Get pinged from game server.

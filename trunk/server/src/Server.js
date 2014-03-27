@@ -43,7 +43,13 @@ var Server = new function(){
 		setInterval(function(){
 			socket.emit(Constants.Message.KEEP_SERVER_ALIVE);
 		}, Constants.Network.REFRESH_PRESENCE);
-		
+				
+		//Get external ip from master server.
+		socket.on(Constants.Message.HANDSHAKE_INFO, function(data){
+			console.log('External IP : ' + data.address);
+			Server.address = data.address;
+		});
+				
 		//Lobby to game.
 		socket.on(Constants.Message.START_GAME, function(settings){
 		
@@ -237,4 +243,4 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	});
 });
 
-console.log('Server created : ' + Server.address);
+console.log('Server created');

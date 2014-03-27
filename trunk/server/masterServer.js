@@ -289,7 +289,8 @@ var Constants = {
 		NEW_NPC: 'newNPC',
 		REFRESH_STATS: 'refreshStats',
 		GET_STATS: 'getStats',
-		KEEP_SERVER_ALIVE: 'keepServerAlive'
+		KEEP_SERVER_ALIVE: 'keepServerAlive',
+		HANDSHAKE_INFO: 'handshakeInfo'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -2878,7 +2879,10 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	console.log('Server connected : ' + socket.manager.handshaken[socket.id].address.address);
-		
+	
+	//Send external ip address to game server.
+	socket.emit(Constants.Message.HANDSHAKE_INFO, { address: socket.manager.handshaken[socket.id].address.address });
+	
 	socket.lastPresence = new Date();
 	
 	//Get pinged from game server.
