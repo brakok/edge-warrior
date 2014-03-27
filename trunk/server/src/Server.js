@@ -39,6 +39,11 @@ var Server = new function(){
 				break;
 		}
 		
+		//Notify master server that this server is still running.
+		setInterval(function(){
+			socket.emit(Constants.Message.KEEP_SERVER_ALIVE);
+		}, Constants.Network.REFRESH_PRESENCE);
+		
 		//Lobby to game.
 		socket.on(Constants.Message.START_GAME, function(settings){
 		

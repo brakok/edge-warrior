@@ -233,7 +233,10 @@ var Constants = {
 		ADDRESS: 'http://localhost:1060',
 		SERVER_PORT: 1051,
 		MASTER_PORT: 1050,
-		SERVER_TO_SERVER_PORT: 1060
+		SERVER_TO_SERVER_PORT: 1060,
+		REFRESH_PRESENCE: 2000,
+		CHECK_GAME_SERVER: 5000,
+		SERVER_THRESHOLD: 15000
 	},
 	Message: {
 		NEXT_BLOCK: 'nextBlock',
@@ -282,7 +285,8 @@ var Constants = {
 		DELETE_NPC: 'deleteNPC',
 		NEW_NPC: 'newNPC',
 		REFRESH_STATS: 'refreshStats',
-		GET_STATS: 'getStats'
+		GET_STATS: 'getStats',
+		KEEP_SERVER_ALIVE: 'keepServerAlive'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -2619,6 +2623,11 @@ var Server = new function(){
 			if(this.address != null)
 				break;
 		}
+		
+		//Notify master server that this server is still running.
+		setInterval(function(){
+			socket.emit(Constants.Message.KEEP_SERVER_ALIVE);
+		}, Constants.Network.REFRESH_PRESENCE);
 		
 		//Lobby to game.
 		socket.on(Constants.Message.START_GAME, function(settings){

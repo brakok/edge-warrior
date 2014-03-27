@@ -233,7 +233,10 @@ var Constants = {
 		ADDRESS: 'http://localhost:1060',
 		SERVER_PORT: 1051,
 		MASTER_PORT: 1050,
-		SERVER_TO_SERVER_PORT: 1060
+		SERVER_TO_SERVER_PORT: 1060,
+		REFRESH_PRESENCE: 2000,
+		CHECK_GAME_SERVER: 5000,
+		SERVER_THRESHOLD: 15000
 	},
 	Message: {
 		NEXT_BLOCK: 'nextBlock',
@@ -282,7 +285,8 @@ var Constants = {
 		DELETE_NPC: 'deleteNPC',
 		NEW_NPC: 'newNPC',
 		REFRESH_STATS: 'refreshStats',
-		GET_STATS: 'getStats'
+		GET_STATS: 'getStats',
+		KEEP_SERVER_ALIVE: 'keepServerAlive'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -2639,6 +2643,25 @@ var MasterServer = new function(){
 			socket.leave(socket.userdata.gameId);
 		}
 	};
+	
+	//Check for game servers.
+	setInterval(function(){
+
+		for(var i in ioMasterServer.sockets.sockets)
+		{
+			var serverSocket = ioMasterServer.sockets.sockets[i];
+			var timeElapsed = new Date() - serverSocket.lastPresence;
+			
+			if(timeElapsed > Constants.Network.SERVER_THRESHOLD)
+			{
+				console.log('Server kicked out : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
+				ioMasterServer.sockets.sockets[i].disconnect();
+			}
+				
+		}
+			
+		
+	}, Constants.Network.CHECK_GAME_SERVER);
 };
 
 //Bind listeners on sockets.
@@ -2852,6 +2875,13 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	console.log('Server connected : ' + socket.manager.handshaken[socket.id].address.address);
+		
+	socket.lastPresence = new Date();
+	
+	//Get pinged from game server.
+	socket.on(Constants.Message.KEEP_SERVER_ALIVE, function(){
+		socket.lastPresence = new Date();
+	});
 	
 	//Send to client ip address for their game server.
 	socket.on(Constants.Message.GAME_CREATED, function(data){

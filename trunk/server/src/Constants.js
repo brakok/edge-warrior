@@ -111,7 +111,10 @@ var Constants = {
 		ADDRESS: 'http://localhost:1060',
 		SERVER_PORT: 1051,
 		MASTER_PORT: 1050,
-		SERVER_TO_SERVER_PORT: 1060
+		SERVER_TO_SERVER_PORT: 1060,
+		REFRESH_PRESENCE: 2000,
+		CHECK_GAME_SERVER: 5000,
+		SERVER_THRESHOLD: 15000
 	},
 	Message: {
 		NEXT_BLOCK: 'nextBlock',
@@ -160,7 +163,8 @@ var Constants = {
 		DELETE_NPC: 'deleteNPC',
 		NEW_NPC: 'newNPC',
 		REFRESH_STATS: 'refreshStats',
-		GET_STATS: 'getStats'
+		GET_STATS: 'getStats',
+		KEEP_SERVER_ALIVE: 'keepServerAlive'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
