@@ -17,6 +17,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		
 		this.slots = [];
 		this.isRenaming = false;
+		this.isLaunching = false;
 		
 		//Add label indicating if lobby is online.
 		this.lblOnline = cc.LabelTTF.create("Offline", Constants.Font.NAME, Constants.Font.SIZE);
@@ -58,18 +59,28 @@ var LobbyScreen = cc.LayerColor.extend({
 	},
 	launch: function(){
 				
-		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
-				
-		for(var i in this.slots)
-			if(!this.slots[i].isReady() || this.slots[i].getColor() == Enum.Slot.Color.UNASSIGNED)
-			{
-				HtmlHelper.showError('All players must have chosen a color and be marked has ready.');
-				return;
-			}
-		
-		//Randomize settings.
-		var settings = WorldInfo.random();
-		Client.startGame(settings);
+		if(!this.isLaunching)
+		{
+			this.isLaunching = true;
+			
+			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+					
+			for(var i in this.slots)
+				if(!this.slots[i].isReady() || this.slots[i].getColor() == Enum.Slot.Color.UNASSIGNED)
+				{
+					HtmlHelper.showError('All players must have chosen a color and be marked has ready.');
+					return;
+				}
+			
+			//Randomize settings.
+			var settings = WorldInfo.random();
+			Client.startGame(settings);
+			
+			var that = this;
+			setTimeout(function(){
+				that.isLaunching = false;
+			}, 3000);
+		}
 	},
 	onEntering: function(){
 		this.div.style.display = "block";

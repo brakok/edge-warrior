@@ -1,6 +1,6 @@
 var Constants = {
 	Network: {
-		ADDRESS: 'http://localhost:1050'
+		ADDRESS: 'http://crushedmaster.cloudapp.net:1050'
 	},
 	Player: {
 		Z_ORDER: 10
