@@ -31,6 +31,11 @@ var Constants = {
 		ORIGINAL_WIDTH: 1024,
 		ORIGINAL_HEIGHT: 768
 	},
+	Text: {
+		FallingLabel: {
+			GRAVITY: 1.5
+		}
+	},
 	Particles: {
 		Z_ORDER: 8,
 		Smoke: {
@@ -314,7 +319,11 @@ var Constants = {
 		BACKGROUND_Z_INDEX: 0,
 		ACTION_EFFECT: 'action_menu',
 		EndScreen: {
-			Z_INDEX: 5000
+			Z_INDEX: 5000,
+			APPEAR_TIME: 0.4,
+			SCORE_VEL_Y: 25,
+			SCORE_VAR_VEL_X: 10,
+			SCORE_VAR_VEL_Y: 5
 		},
 		Login: {
 			Z_INDEX: 0
