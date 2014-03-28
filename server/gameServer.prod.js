@@ -2454,12 +2454,24 @@ Game.prototype.end = function(){
 	}
 
 	//Calculate new scores.
-	Account.win(this.winner.username, playerCount-1 + (survivors.length < 1 ? Math.floor(playerCount*0.5) : 0));
+	var winnerScore = playerCount-1 + (survivors.length < 1 ? Math.floor(playerCount*0.5) : 0);
+	Account.win(this.winner.username, winnerScore);
+	
+	var scores = {};
+	
+	for(var i in this.players)
+	{
+		if(i != this.winner.id)
+			scores[this.players[i].username] = -1;
+		else
+			scores[this.players[i].username] = winnerScore;
+	}
 	
 	var data = {
 		winner: this.winner.toClient(),
 		succeed: (survivors.length == 0),
-		survivors: survivors
+		survivors: survivors,
+		scores: scores
 	};
 
 	io.sockets.in(this.id).emit(Constants.Message.WIN, data);
