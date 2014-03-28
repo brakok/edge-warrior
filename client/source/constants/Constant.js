@@ -246,7 +246,14 @@ var Constants = {
 			DURATION: 4,
 			DURATION_STEP: 1,
 			FADE_IN: 0.25,
-			FADE_OUT: 0.75
+			FADE_OUT: 0.75,
+			OWNER_MAX_OPACITY: 125,
+			Dot: {
+				SPEED: 4,
+				TIMER: 0.05,
+				OFFSET: 20,
+				OFFSET_VAR: 10
+			}
 		}
 	},
 	NPC: {

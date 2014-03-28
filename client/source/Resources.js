@@ -21,6 +21,7 @@ var assets = [
 
 	//Particles
 	{type:'image', src: assetsParticles + 'smoke.png'},
+	{type:'image', src: assetsParticles + 'WhiteDot.png'},
 	
 	//Menu
 	{type:'image', src: assetsMenuDir + '0.png'},
