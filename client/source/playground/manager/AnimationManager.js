@@ -94,6 +94,15 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'blue_jumping.plist', 
 														  assetsPlayerDir + 'blue_jumping.png');
 														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'white_idle.plist', 
+														  assetsPlayerDir + 'white_idle.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'white_running.plist', 
+														  assetsPlayerDir + 'white_running.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'white_jumping.plist', 
+														  assetsPlayerDir + 'white_jumping.png');
+														  
 		//Kill command.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsHudDir + 'killCommand.plist', 
 														  assetsHudDir + 'killCommand.png');
