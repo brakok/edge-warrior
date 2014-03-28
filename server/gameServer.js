@@ -136,7 +136,8 @@ var Constants = {
 		MASS_PLAYER: 10,
 		MASS_BLOCK: 999999,
 		MASS_BLOCK_STATIC: 999999999999,
-		TIME_STEP: 1/60,
+		TIME_STEP: 0.005,
+		TIME_ACCELERATION_FACTOR: 1.5,
 		FRICTION_FACTOR_ONGROUND: 0.85,
 		TURN_FRICTION_FACTOR: 0.05,
 		SLEEP_TIME_THRESHOLD: 0.075
@@ -2349,7 +2350,7 @@ Game.prototype.update = function(){
 		if(this.space != null)
 		{
 			//Update space.
-			var stepcounter = this.dt;
+			var stepcounter = this.dt*Constants.Physic.TIME_ACCELERATION_FACTOR;
 			
 			while(stepcounter > 0)
 			{
