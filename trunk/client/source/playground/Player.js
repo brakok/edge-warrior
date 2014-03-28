@@ -159,10 +159,7 @@ Player.prototype.init = function(){
 		jump: new Voice(Enum.Voice.Type.JUMP, colorText, 2),
 		idle: new Voice(Enum.Voice.Type.IDLE, colorText, 3)
 	};
-	
-	if(this.color == Enum.Color.WHITE)
-		colorText = 'yellow';
-	
+
 	this.resetVoiceTimer();
 	
 	//Set current animation to idle.

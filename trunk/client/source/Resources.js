@@ -207,6 +207,9 @@ var assets = [
 	{type:'image', src: assetsPlayerDir + 'blue_idle.png'},
 	{type:'image', src: assetsPlayerDir + 'blue_running.png'},
 	{type:'image', src: assetsPlayerDir + 'blue_jumping.png'},
+	{type:'image', src: assetsPlayerDir + 'white_idle.png'},
+	{type:'image', src: assetsPlayerDir + 'white_running.png'},
+	{type:'image', src: assetsPlayerDir + 'white_jumping.png'},
 	
 	{type:"plist", src: assetsPlayerDir + 'yellow_idle.plist'},
 	{type:"plist", src: assetsPlayerDir + 'yellow_running.plist'},
@@ -217,6 +220,9 @@ var assets = [
 	{type:"plist", src: assetsPlayerDir + 'blue_idle.plist'},
 	{type:"plist", src: assetsPlayerDir + 'blue_running.plist'},
 	{type:"plist", src: assetsPlayerDir + 'blue_jumping.plist'},
+	{type:"plist", src: assetsPlayerDir + 'white_idle.plist'},
+	{type:"plist", src: assetsPlayerDir + 'white_running.plist'},
+	{type:"plist", src: assetsPlayerDir + 'white_jumping.plist'},
 	
 	//Hud.
 	{type:'image', src: assetsHudDir + 'fieldset.png'},
