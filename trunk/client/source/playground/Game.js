@@ -409,8 +409,8 @@ Game.prototype.end = function(data){
 	//If everybody were already dead, hasWon may be false.
 	if(!winner.hasWon)
 		winner.win();
-		
-	this.endScreen.addWinner(winner, data.succeed, data.survivors);
+
+	this.endScreen.addWinner(winner, data);
 };
 
 //Used to know kill command current step.

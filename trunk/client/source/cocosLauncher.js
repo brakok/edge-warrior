@@ -82,6 +82,9 @@
 				  
 				  'source/playground/npc/PeskyBox.js',
 				  
+				  'source/text/AppearingLabel.js',
+				  'source/text/FallingLabel.js',
+				  
 				  'source/playground/manager/EffectManager.js',
 				  'source/playground/manager/ElementManager.js',
 				  'source/playground/manager/ParticleManager.js',
