@@ -192,7 +192,7 @@ Game.prototype.update = function(){
 		if(this.space != null)
 		{
 			//Update space.
-			var stepcounter = this.dt;
+			var stepcounter = this.dt*Constants.Physic.TIME_ACCELERATION_FACTOR;
 			
 			while(stepcounter > 0)
 			{
