@@ -1,8 +1,10 @@
 
-var LobbyList = function(divId){
+var LobbyList = function(divId, parent){
 	
 	this.x = 0;
 	this.y = 0;
+	
+	this.parent = parent;
 	
 	this.lobbies = null;
 	this.div = document.getElementById(divId);
@@ -10,6 +12,7 @@ var LobbyList = function(divId){
 	
 	this.selectedValue = null;
 	
+	this.firstClickTimespan = null;
 	this.visible = false;
 };
 
@@ -51,6 +54,13 @@ LobbyList.prototype.addLine = function(lobby){
 LobbyList.prototype.selectLobby = function(lobbyId, rowIndex){
 	this.selectedValue = lobbyId;
 	
+	//Join selected lobby.
+	if(this.firstClickTimespan != null && new Date() - this.firstClickTimespan < Constants.Mouse.DOUBLE_CLICK_THRESHOLD)
+	{
+		this.parent.join();
+		return;
+	}
+	
 	for(var i = 1; i < this.table.rows.length; i++)
 	{
 		if(i == rowIndex)
@@ -58,6 +68,8 @@ LobbyList.prototype.selectLobby = function(lobbyId, rowIndex){
 		else
 			this.table.rows[i].className = 'unselected';
 	}	
+	
+	this.firstClickTimespan = new Date();
 };
 
 //Return random lobby.
