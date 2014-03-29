@@ -95,7 +95,7 @@ Game.prototype.createWorld = function(){
 									   function(arbiter, space){ currentListeners.NpcListener.begin(arbiter, space);}, 
 									   null, 
 									   null, 
-									   null);
+									   function(arbiter, space){ currentListeners.NpcListener.separate(arbiter, space);});
 		
 		//Add ground sensor callback.
 		this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
