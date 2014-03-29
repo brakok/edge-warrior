@@ -34,19 +34,6 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 			deathZone = arbiter.body_b.userdata.object;
 			deathZoneType = arbiter.body_b.userdata.type;
 		}
-	}	
-	
-	//Some specific case for skills.
-	if(deathZone != null){
-		
-		switch(deathZoneType){
-			case Enum.UserData.Type.JAW:
-				
-				if(!player && !block)
-					deathZone.stillExists = false;
-
-				break;
-		}
 	}
 	
 	//Must be enabled to continue.
@@ -86,12 +73,16 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 			switch(deathZoneType){
 				case Enum.UserData.Type.JAW:
 					//Jaw can only destroy a limited number of blocks.
-					deathZone.count--;
-					
-					if(deathZone.count == 0)
+					if(deathZone.blockDestroyed[block.id] == null)
 					{
-						deathZone.enabled = false;
-						deathZone.stillExists = false;
+						deathZone.blockDestroyed[block.id] = true;
+						deathZone.count--;
+						
+						if(deathZone.count == 0)
+						{
+							deathZone.enabled = false;
+							deathZone.stillExists = false;
+						}
 					}
 					
 					break;
