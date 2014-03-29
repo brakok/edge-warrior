@@ -16,7 +16,7 @@ var ServerList = cc.LayerColor.extend({
 		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 		
 		//Get server list table.
-		this.list = new LobbyList('serverList');
+		this.list = new LobbyList('serverList', this);
 		this.placeHTML();
 		
 		//Menu creation.	
