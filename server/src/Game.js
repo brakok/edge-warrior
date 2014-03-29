@@ -185,7 +185,7 @@ Game.prototype.update = function(){
 
 	//When world's ready...
 	if(this.ready)
-	{	
+	{
 		for(var i in this.players)
 			this.players[i].update();
 
@@ -204,19 +204,44 @@ Game.prototype.update = function(){
 		for(var i in this.blocks)
 		{
 			if(this.blocks[i] != null)
-				this.blocks[i].update(this.dt);
+				if(!this.blocks[i].toBeDestroy)
+					this.blocks[i].update(this.dt);
+				else
+				{
+					this.blocks[i].explode(this.blocks[i].destroyCause);
+					delete this.blocks[i];
+				}
 		}
 		
 		//Check if Overlord needs to use a spawn block.
 		var overlordGotKills = false;
+		var allPlayersDead = true;
 		
 		for(var i in this.players)
-			if(!this.players[i].isAlive && this.players[i].killerId == null)
+			if(this.players[i].isAlive)
 			{
-				overlordGotKills = true;
+				allPlayersDead = false;
 				break;
 			}
-				
+		
+		//If all players are dead, send to overlord.
+		if(allPlayersDead)
+		{
+			for(var i in this.players)
+				this.players[i].killerId = null;
+			
+			overlordGotKills = true;
+		}
+		
+		//If someone is dead, but has no killer, spawn from overlord.
+		if(!overlordGotKills)
+			for(var i in this.players)
+				if(!this.players[i].isAlive && this.players[i].killerId == null)
+				{
+					overlordGotKills = true;
+					break;
+				}
+		
 		if(overlordGotKills && !this.overlord.hasActiveSpawnBlock)
 			this.overlord.launch(Enum.Block.Type.SPAWN);
 			

@@ -136,8 +136,8 @@ var Constants = {
 		MASS_PLAYER: 10,
 		MASS_BLOCK: 999999,
 		MASS_BLOCK_STATIC: 999999999999,
-		TIME_STEP: 0.010,
-		TIME_ACCELERATION_FACTOR: 1.5,
+		TIME_STEP: 0.017,
+		TIME_ACCELERATION_FACTOR: 1.1,
 		FRICTION_FACTOR_ONGROUND: 0.85,
 		TURN_FRICTION_FACTOR: 0.05,
 		SLEEP_TIME_THRESHOLD: 0.075
@@ -168,6 +168,7 @@ var Constants = {
 		LAUNCHING_SPEED: -300,
 		SPAWN_MAXLAUNCHING_Y: 500,
 		SPAWN_MAXLAUNCHING_X: 500,
+		LAND_SAFE_TIMER: 0.1,
 		Restriction: {
 			SPAWN_TIMER: 6
 		}
@@ -437,9 +438,9 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block1 = null;
 		block2 = null;
 	}
-		
+
 	//Check if blocks land.
-	if(block1 != null && !block1.isStatic && (block1.launchLandTimer  <= 0 || (!player && !block2)))
+	if(block1 != null && !block1.isStatic && (block1.launchLandTimer  <= 0 || block2))
 	{
 		//State can't be changed during callback.
 		block1.toggleState = true;
@@ -448,7 +449,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block1.landingTimer = Constants.Block.LANDING_TIMER;
 	}
 	
-	if(block2 != null && !block2.isStatic && (block2.launchLandTimer  <= 0 || (!player && !block1)))
+	if(block2 != null && !block2.isStatic && (block2.launchLandTimer  <= 0 || block1))
 	{
 		block2.toggleState = true;
 		block2.isStatic = true;
@@ -1908,7 +1909,11 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 	this.skill = (type == Enum.Block.Type.SKILLED ? SkillInfo.load(skill) : null);	
 	this.color = color;
 	
-	this.launchLandTimer = (this.skill && this.skill.useLaunchTimer ? Constants.Block.LAUNCH_LAND_TIMER : 0);
+	//Used to prevent a block from staying in a active state.
+	this.safeLandTimer = Constants.Block.LAND_SAFE_TIMER;
+	this.usedSafeTimer = true;
+	
+	this.launchLandTimer = (type == Enum.Block.Type.SKILLED && this.skill && this.skill.useLaunchTimer ? Constants.Block.LAUNCH_LAND_TIMER : 0);
 	this.mustTrigger = false;
 
 	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
@@ -1986,10 +1991,8 @@ Block.prototype.active = function(flag){
 
 Block.prototype.update = function(dt){
 	
-	if(this.toBeDestroy)
-		this.explode(this.destroyCause);
-	else
-	{	
+	if(this.stillExist && !this.landed){
+	
 		//Trigger effect (can't during space step).
 		if(this.mustTrigger)
 			this.trigger();
@@ -2003,31 +2006,43 @@ Block.prototype.update = function(dt){
 			this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
 			this.launchLandTimer -= dt;
 		}
+	
+		//Prevent a block from staying awake.
+		if(this.justLanded || !this.usedSafeTimer)
+		{		
+			if(this.justLanded)
+				this.usedSafeTimer = false;
 		
-		if(this.stillExist)
-		{
-			//Check if it just landed to tell client to activate animation.
-			if(this.justLanded && (this.skill == null || !this.skill.selfDestroy))
+			this.safeLandTimer -= dt;
+		
+			if(this.safeLandTimer <= 0)
 			{
-				var data = {
-					action: Enum.Action.Type.LANDING,
-					id: this.id
-				};
-			
-				io.sockets.in(this.currentGame.id).emit(Constants.Message.BLOCK_ACTION, data);
-				this.justLanded = false;
+				this.active(false);
+				this.usedSafeTimer = true;
 			}
-		
-			//Activate or desactivate a block to become static or dynamic.
-			if(this.toggleState && (this.state == Enum.Block.State.STATIC || this.body.isSleeping()))
-			{
-				this.active(!this.isStatic);
-				this.toggleState = false;
-			}	
-			
-			this.x = this.body.getPos().x;
-			this.y = this.body.getPos().y;
 		}
+		
+		//Check if it just landed to tell client to activate animation.
+		if(this.justLanded && (this.skill == null || !this.skill.selfDestroy))
+		{
+			var data = {
+				action: Enum.Action.Type.LANDING,
+				id: this.id
+			};
+		
+			io.sockets.in(this.currentGame.id).emit(Constants.Message.BLOCK_ACTION, data);
+			this.justLanded = false;
+		}
+	
+		//Activate or desactivate a block to become static or dynamic.
+		if(this.toggleState && (this.state == Enum.Block.State.STATIC || this.body.isSleeping()))
+		{
+			this.active(!this.isStatic);
+			this.toggleState = false;
+		}	
+		
+		this.x = this.body.getPos().x;
+		this.y = this.body.getPos().y;
 	}
 };
 
@@ -2108,13 +2123,6 @@ Block.prototype.explode = function(cause){
 	this.currentGame.space.removeShape(this.blockSensor);
 	this.currentGame.space.removeShape(this.shape);
 	this.currentGame.space.removeBody(this.body);
-
-	//Unreference from game's blocks list.
-	for(var i in this.currentGame.blocks)
-	{
-		if(this.currentGame.blocks[i] != null && this.currentGame.blocks[i].id == this.id)
-			delete this.currentGame.blocks[i];
-	}
 	
 	this.stillExist = false;
 	this.toBeDestroy = false;
@@ -2398,7 +2406,7 @@ Game.prototype.update = function(){
 
 	//When world's ready...
 	if(this.ready)
-	{	
+	{
 		for(var i in this.players)
 			this.players[i].update();
 
@@ -2417,19 +2425,44 @@ Game.prototype.update = function(){
 		for(var i in this.blocks)
 		{
 			if(this.blocks[i] != null)
-				this.blocks[i].update(this.dt);
+				if(!this.blocks[i].toBeDestroy)
+					this.blocks[i].update(this.dt);
+				else
+				{
+					this.blocks[i].explode(this.blocks[i].destroyCause);
+					delete this.blocks[i];
+				}
 		}
 		
 		//Check if Overlord needs to use a spawn block.
 		var overlordGotKills = false;
+		var allPlayersDead = true;
 		
 		for(var i in this.players)
-			if(!this.players[i].isAlive && this.players[i].killerId == null)
+			if(this.players[i].isAlive)
 			{
-				overlordGotKills = true;
+				allPlayersDead = false;
 				break;
 			}
-				
+		
+		//If all players are dead, send to overlord.
+		if(allPlayersDead)
+		{
+			for(var i in this.players)
+				this.players[i].killerId = null;
+			
+			overlordGotKills = true;
+		}
+		
+		//If someone is dead, but has no killer, spawn from overlord.
+		if(!overlordGotKills)
+			for(var i in this.players)
+				if(!this.players[i].isAlive && this.players[i].killerId == null)
+				{
+					overlordGotKills = true;
+					break;
+				}
+		
 		if(overlordGotKills && !this.overlord.hasActiveSpawnBlock)
 			this.overlord.launch(Enum.Block.Type.SPAWN);
 			
