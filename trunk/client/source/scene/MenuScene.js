@@ -32,11 +32,21 @@ var Menu = cc.Layer.extend({
 	},
 	onKeyDown: function(e){
 		if(this.currentScreen != null && this.currentScreen.onKeyDown != null && this.currentScreen.onKeyDown != 'undefined')
-			this.currentScreen.onKeyDown(e);
+		{
+			if(e > 96 && e < 106)
+				e -= 48;
+		
+			this.currentScreen.onKeyDown(e);	
+		}
 	},
 	onKeyUp: function(e){
 		if(this.currentScreen != null && this.currentScreen.onKeyDown != null && this.currentScreen.onKeyDown != 'undefined')
+		{
+			if(e > 96 && e < 106)
+				e -= 48;
+		
 			this.currentScreen.onKeyUp(e);
+		}
 	},
 	unload: function(){
 	

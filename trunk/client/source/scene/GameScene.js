@@ -42,9 +42,17 @@ var GameLayer = cc.Layer.extend({
 		return this;
 	},
 	onKeyDown: function(e){
+	
+		if(e > 96 && e < 106)
+				e -= 48;
+
 		Client.keys[e] = true;
 	},
 	onKeyUp: function(e){
+	
+		if(e > 96 && e < 106)
+				e -= 48;
+	
 		Client.keys[e] = false;
 	},
 	update: function(dt){

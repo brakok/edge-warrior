@@ -17,10 +17,11 @@ var KeyInput = function(id, value, parent){
 	this.input.onkeydown = function(e) { 
 		
 		var code = e.keyCode;
-		
-		if(code > 96 && code < 123)
-			code -= 32;
-		
+
+		//Numpad
+		if(code > 96 && code < 106)
+			code -= 48;
+
 		if(that.parent.valid(code))
 			that.setValue(code, true);
 
