@@ -135,7 +135,10 @@ Game.prototype.processUnits = function(){
 			newUnits += Constants.Block.Unit.TO_MINUS; 
 	}
 	
-	this.player.units += newUnits;
+	if(this.player.units + newUnits > Constants.Block.Unit.MAX)
+		this.player.units = Constants.Block.Unit.MAX;
+	else
+		this.player.units += newUnits;
 	
 	if(this.player.units < 0)
 		this.player.units = 0;
