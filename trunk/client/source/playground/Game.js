@@ -243,7 +243,7 @@ Game.prototype.update = function (dt){
 						this.camera.speed.y = Constants.Camera.SPEED_Y;
 					}
 						
-					this.moveCamera(true);
+					this.moveCamera();
 				}
 			
 				this.hud.update(dt);
@@ -332,7 +332,7 @@ Game.prototype.redirectAction = function(data){
 };
 
 //Set the new location and zoom of camera to catch all players.
-Game.prototype.moveCamera = function(test){
+Game.prototype.moveCamera = function(){
 	
 	var minX = null;
 	var maxX = null;
