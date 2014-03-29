@@ -33,7 +33,7 @@ var Constants = {
 	},
 	Text: {
 		FallingLabel: {
-			GRAVITY: 1.5
+			GRAVITY: 1
 		}
 	},
 	Particles: {
@@ -53,7 +53,8 @@ var Constants = {
 		},
 		Unit: {
 			TO_ADD: 4,
-			TO_MINUS: -2
+			TO_MINUS: -2,
+			MAX: 99999
 		}
 	},
 	World: {
@@ -328,8 +329,8 @@ var Constants = {
 		EndScreen: {
 			Z_INDEX: 5000,
 			APPEAR_TIME: 0.4,
-			SCORE_VEL_Y: 25,
-			SCORE_VAR_VEL_X: 10,
+			SCORE_VEL_Y: 20,
+			SCORE_VAR_VEL_X: 5,
 			SCORE_VAR_VEL_Y: 5
 		},
 		Login: {

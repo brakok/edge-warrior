@@ -22,8 +22,8 @@ var SkillInfo = {
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_firePulse.png',
 		PERCENT_START: 3,
 		PERCENT_STEP: 1,
-		COST: 300,
-		COST_STEP: 400
+		COST: 650,
+		COST_STEP: 850
 	},
 	JawFall: {
 		TITLE: 'Jaw fall',
@@ -32,8 +32,8 @@ var SkillInfo = {
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_jawFall.png',
 		PERCENT_START: 4,
 		PERCENT_STEP: 2,
-		COST: 350,
-		COST_STEP: 475
+		COST: 700,
+		COST_STEP: 800
 	},
 	Eclipse: {
 		TITLE: 'Eclipse',
@@ -42,8 +42,8 @@ var SkillInfo = {
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_Eclipse.png',
 		PERCENT_START: 5,
 		PERCENT_STEP: 2,
-		COST: 350,
-		COST_STEP: 650
+		COST: 850,
+		COST_STEP: 1050
 	},
 	PeskyBox: {
 		TITLE: 'Pesky box',
@@ -52,7 +52,7 @@ var SkillInfo = {
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_peskyBox.png',
 		PERCENT_START: 2,
 		PERCENT_STEP: 1,
-		COST: 350,
-		COST_STEP: 550
+		COST: 725,
+		COST_STEP: 1100
 	}
 };

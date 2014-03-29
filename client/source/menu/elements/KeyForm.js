@@ -69,6 +69,7 @@ var KeyForm = function(){
 		   || this.keys.SKILL4 == code
 		   || this.keys.TOGGLE_BUY_MODE == code)
 		 {
+			HtmlHelper.showError('Key already bound.');
 			return false;
 		 }
 		  
