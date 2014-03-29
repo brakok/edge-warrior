@@ -54,6 +54,7 @@ var ResetPassword = cc.LayerColor.extend({
 		
 		if(!this.isResettingPassword)
 		{
+			Client.connectToNetwork();
 			this.isResettingPassword = true;
 
 			//Create account.
@@ -68,7 +69,7 @@ var ResetPassword = cc.LayerColor.extend({
 		MenuScreens.switchTo(MenuScreens.login);
 	},
 	result: function(errorMsg){
-		
+				
 		if(!errorMsg || errorMsg.length == 0)
 		{
 			MenuScreens.switchTo(MenuScreens.login);
