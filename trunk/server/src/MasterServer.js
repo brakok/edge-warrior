@@ -194,6 +194,13 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Join a lobby.
 	socket.on(Constants.Message.JOIN_LOBBY, function(data){
 		
+		//If lobby no more exists, prevent from joining.
+		if(MasterServer.lobbies[data.gameId] == null)
+		{
+			socket.emit(Constants.Message.ERROR, Constants.ErrorMessage.INVALID_LOBBY);
+			return;
+		}
+		
 		if(MasterServer.lobbies[data.gameId].connectedPlayers < Constants.Game.MAX_PLAYERS)
 		{
 			console.log('Lobby joined (' + data.gameId + ') :' + data.username);

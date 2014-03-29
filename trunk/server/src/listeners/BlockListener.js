@@ -120,9 +120,9 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block1 = null;
 		block2 = null;
 	}
-		
+
 	//Check if blocks land.
-	if(block1 != null && !block1.isStatic && (block1.launchLandTimer  <= 0 || (!player && !block2)))
+	if(block1 != null && !block1.isStatic && (block1.launchLandTimer  <= 0 || block2))
 	{
 		//State can't be changed during callback.
 		block1.toggleState = true;
@@ -131,7 +131,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 		block1.landingTimer = Constants.Block.LANDING_TIMER;
 	}
 	
-	if(block2 != null && !block2.isStatic && (block2.launchLandTimer  <= 0 || (!player && !block1)))
+	if(block2 != null && !block2.isStatic && (block2.launchLandTimer  <= 0 || block1))
 	{
 		block2.toggleState = true;
 		block2.isStatic = true;

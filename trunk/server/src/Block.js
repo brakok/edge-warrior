@@ -27,7 +27,11 @@ var Block = function(id, x, y, type, color, ownerId, game, skill){
 	this.skill = (type == Enum.Block.Type.SKILLED ? SkillInfo.load(skill) : null);	
 	this.color = color;
 	
-	this.launchLandTimer = (this.skill && this.skill.useLaunchTimer ? Constants.Block.LAUNCH_LAND_TIMER : 0);
+	//Used to prevent a block from staying in a active state.
+	this.safeLandTimer = Constants.Block.LAND_SAFE_TIMER;
+	this.usedSafeTimer = true;
+	
+	this.launchLandTimer = (type == Enum.Block.Type.SKILLED && this.skill && this.skill.useLaunchTimer ? Constants.Block.LAUNCH_LAND_TIMER : 0);
 	this.mustTrigger = false;
 
 	//Needed to indicate, during update, if state is changed. Cannot be done during a space step (callback).
@@ -105,10 +109,8 @@ Block.prototype.active = function(flag){
 
 Block.prototype.update = function(dt){
 	
-	if(this.toBeDestroy)
-		this.explode(this.destroyCause);
-	else
-	{	
+	if(this.stillExist && !this.landed){
+	
 		//Trigger effect (can't during space step).
 		if(this.mustTrigger)
 			this.trigger();
@@ -122,31 +124,43 @@ Block.prototype.update = function(dt){
 			this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
 			this.launchLandTimer -= dt;
 		}
+	
+		//Prevent a block from staying awake.
+		if(this.justLanded || !this.usedSafeTimer)
+		{		
+			if(this.justLanded)
+				this.usedSafeTimer = false;
 		
-		if(this.stillExist)
-		{
-			//Check if it just landed to tell client to activate animation.
-			if(this.justLanded && (this.skill == null || !this.skill.selfDestroy))
+			this.safeLandTimer -= dt;
+		
+			if(this.safeLandTimer <= 0)
 			{
-				var data = {
-					action: Enum.Action.Type.LANDING,
-					id: this.id
-				};
-			
-				io.sockets.in(this.currentGame.id).emit(Constants.Message.BLOCK_ACTION, data);
-				this.justLanded = false;
+				this.active(false);
+				this.usedSafeTimer = true;
 			}
-		
-			//Activate or desactivate a block to become static or dynamic.
-			if(this.toggleState && (this.state == Enum.Block.State.STATIC || this.body.isSleeping()))
-			{
-				this.active(!this.isStatic);
-				this.toggleState = false;
-			}	
-			
-			this.x = this.body.getPos().x;
-			this.y = this.body.getPos().y;
 		}
+		
+		//Check if it just landed to tell client to activate animation.
+		if(this.justLanded && (this.skill == null || !this.skill.selfDestroy))
+		{
+			var data = {
+				action: Enum.Action.Type.LANDING,
+				id: this.id
+			};
+		
+			io.sockets.in(this.currentGame.id).emit(Constants.Message.BLOCK_ACTION, data);
+			this.justLanded = false;
+		}
+	
+		//Activate or desactivate a block to become static or dynamic.
+		if(this.toggleState && (this.state == Enum.Block.State.STATIC || this.body.isSleeping()))
+		{
+			this.active(!this.isStatic);
+			this.toggleState = false;
+		}	
+		
+		this.x = this.body.getPos().x;
+		this.y = this.body.getPos().y;
 	}
 };
 
@@ -227,13 +241,6 @@ Block.prototype.explode = function(cause){
 	this.currentGame.space.removeShape(this.blockSensor);
 	this.currentGame.space.removeShape(this.shape);
 	this.currentGame.space.removeBody(this.body);
-
-	//Unreference from game's blocks list.
-	for(var i in this.currentGame.blocks)
-	{
-		if(this.currentGame.blocks[i] != null && this.currentGame.blocks[i].id == this.id)
-			delete this.currentGame.blocks[i];
-	}
 	
 	this.stillExist = false;
 	this.toBeDestroy = false;
