@@ -1142,12 +1142,14 @@ var Account = new function(){
 					var mailOptions = {
 						from: 'Crushed Dream <crushed.dream.the.game@gmail.com>',
 						to: player.email,
+						port: '1052',
 						subject: 'Reset password',
 						html: '<h1>Password has been reset!</h1><p>This is your new password : ' + newPassword  
 							  + ' <br /> Please change this password in the Change Password screen after your next login. </p><p> See you soon!</p>'
 					};
 					
 					smtpTransport.sendMail(mailOptions, function(err, response){
+					
 						if(err)
 						{
 							errors.push('Error when sending email. Try again or contact crushed.dream.the.game@gmail.com for help.');
