@@ -20,8 +20,8 @@ var SkillInfo = {
 		DESCRIPTION: 'Log of fire. Release a fire wave when landing. The wave destroys blocks and kills other players.',
 		MENU_SPRITE_PATH: assetsSkillDir + 'firePulse.png',
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_firePulse.png',
-		PERCENT_START: 3,
-		PERCENT_STEP: 1,
+		PERCENT_START: 4,
+		PERCENT_STEP: 2,
 		COST: 650,
 		COST_STEP: 850
 	},
@@ -50,8 +50,8 @@ var SkillInfo = {
 		DESCRIPTION: 'When landing, create an annoying character that follows his target for a short duration. Player loses all speed upon contact.',
 		MENU_SPRITE_PATH: assetsSkillDir + 'peskyBox.png',
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_peskyBox.png',
-		PERCENT_START: 2,
-		PERCENT_STEP: 1,
+		PERCENT_START: 6,
+		PERCENT_STEP: 2,
 		COST: 725,
 		COST_STEP: 1100
 	}
