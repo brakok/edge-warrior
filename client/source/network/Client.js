@@ -79,6 +79,8 @@ var Client = new function(){
 	
 	//Authentification.
 	this.authenticate = function(profile){
+		this.connectToNetwork();
+	
 		this.masterSocket.emit(Constants.Message.LOGIN, profile);
 	};
 	
@@ -156,6 +158,7 @@ var Client = new function(){
 		this.masterSocket.emit(Constants.Message.LOGOUT, this.username);
 		this.username = null;
 
+		this.masterSocket.disconnect();
 		MenuScreens.switchTo(MenuScreens.login);
 	};
 		
@@ -214,7 +217,11 @@ var Client = new function(){
 	//Connect to master server.
 	this.connectToNetwork = function(){
 		
-		var masterSocket = io.connect(Constants.Network.ADDRESS);
+		var socketOptions = {
+			'force new connection': true
+		};
+		
+		var masterSocket = io.connect(Constants.Network.ADDRESS, socketOptions);
 		
 		//Result from account creation.
 		masterSocket.on(Constants.Message.CREATE_ACCOUNT, function(errors){

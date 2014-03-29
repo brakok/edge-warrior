@@ -53,9 +53,10 @@ var CreateAccount = cc.LayerColor.extend({
 		this.reset();
 	},
 	create: function(){
-		
+				
 		if(!this.isCreatingAccount)
 		{
+			Client.connectToNetwork();
 			this.isCreatingAccount = true;
 		
 			var profile = new Profile(this.txtUsername.value, this.txtEmail.value, this.txtPassword.value, this.txtConfirmation.value);
@@ -71,7 +72,7 @@ var CreateAccount = cc.LayerColor.extend({
 		MenuScreens.switchTo(MenuScreens.login);
 	},
 	result: function(errorMsg){
-		
+				
 		if(!errorMsg || errorMsg.length == 0)
 		{
 			MenuScreens.switchTo(MenuScreens.login);

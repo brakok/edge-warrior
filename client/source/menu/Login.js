@@ -84,6 +84,9 @@ var Login = cc.LayerColor.extend({
 		//Fail
 		if(errors && errors.length > 0)
 		{
+			//Disconnect on error.
+			Client.masterSocket.disconnect();
+			
 			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 			
 			for(var i = 0; i < errors.length; ++i)
