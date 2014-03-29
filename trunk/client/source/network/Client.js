@@ -500,7 +500,8 @@ var Client = new function(){
 		
 		//Execute new action for a specified block.
 		socket.on(Constants.Message.BLOCK_ACTION, function(data){
-			Client.game.blocks[data.id].execute(data.action);
+			if(Client.game.blocks[data.id] != null)
+				Client.game.blocks[data.id].execute(data.action);
 		});
 		
 		//Once defined, preserved the socket.
