@@ -1053,7 +1053,7 @@ var Account = new function(){
 			callback(errors);
 			return;
 		}
-	
+
 		db.get(profile.username.toLowerCase(), function(err, doc){
 			
 			if(err || !doc)
@@ -1064,12 +1064,12 @@ var Account = new function(){
 			}
 			
 			var password = sha1(oldPassword, doc.salt);
-						
+
 			//Check if old password has been correctly input.
 			if(password != doc.password)
 			{
 				errors.push('Old password mismatches current password.');
-				callback(errorMsg);
+				callback(errors);
 				return;
 			}
 			
