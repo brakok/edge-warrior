@@ -136,7 +136,7 @@ var Constants = {
 		MASS_PLAYER: 10,
 		MASS_BLOCK: 999999,
 		MASS_BLOCK_STATIC: 999999999999,
-		TIME_STEP: 0.005,
+		TIME_STEP: 0.010,
 		TIME_ACCELERATION_FACTOR: 1.5,
 		FRICTION_FACTOR_ONGROUND: 0.85,
 		TURN_FRICTION_FACTOR: 0.05,
@@ -223,8 +223,8 @@ var Constants = {
 		Jaw: {
 			WIDTH: 80,
 			HEIGHT: 30,
-			INITIAL_COUNT: 4,
-			STEP: 4
+			INITIAL_COUNT: 6,
+			STEP: 6
 		}
 	},
 	KillCommand: {
@@ -1467,6 +1467,10 @@ Player.prototype.leave = function(){
 	
 	if(this.isAlive && !this.isRemoved)
 	{
+		//Drop spawn block if hold.
+		if(this.currentBlock.type == Enum.Block.Type.SPAWN && this.isAlive)
+			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
+	
 		//Remove physical presence.
 		this.currentGame.space.removeShape(this.shape);
 		this.currentGame.space.removeShape(this.groundSensor);
@@ -1654,7 +1658,7 @@ Player.prototype.update = function(){
 Player.prototype.checkTimers = function(){
 
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
-	if(this.currentBlock == Enum.Block.Type.SPAWN && this.isAlive)
+	if(this.currentBlock.type == Enum.Block.Type.SPAWN && this.isAlive)
 	{
 		this.spawnTimer -= this.currentGame.dt;
 		
@@ -1668,9 +1672,14 @@ Player.prototype.checkTimers = function(){
 					hasLivingPlayer = true;
 					break;
 				}
-					
+			
 			if(hasLivingPlayer)
 				this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
+			else
+			{
+				this.hasGivenBlock = false;
+				io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
+			}
 			
 			//Assign kill to a random player.
 			this.currentGame.overlord.assignKill(this, hasLivingPlayer);

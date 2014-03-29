@@ -172,6 +172,10 @@ Player.prototype.leave = function(){
 	
 	if(this.isAlive && !this.isRemoved)
 	{
+		//Drop spawn block if hold.
+		if(this.currentBlock.type == Enum.Block.Type.SPAWN && this.isAlive)
+			this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
+	
 		//Remove physical presence.
 		this.currentGame.space.removeShape(this.shape);
 		this.currentGame.space.removeShape(this.groundSensor);
@@ -359,7 +363,7 @@ Player.prototype.update = function(){
 Player.prototype.checkTimers = function(){
 
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
-	if(this.currentBlock == Enum.Block.Type.SPAWN && this.isAlive)
+	if(this.currentBlock.type == Enum.Block.Type.SPAWN && this.isAlive)
 	{
 		this.spawnTimer -= this.currentGame.dt;
 		
@@ -373,9 +377,14 @@ Player.prototype.checkTimers = function(){
 					hasLivingPlayer = true;
 					break;
 				}
-					
+			
 			if(hasLivingPlayer)
 				this.dropBlock(this.body.getPos().x, this.body.getPos().y, false);
+			else
+			{
+				this.hasGivenBlock = false;
+				io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
+			}
 			
 			//Assign kill to a random player.
 			this.currentGame.overlord.assignKill(this, hasLivingPlayer);
