@@ -133,7 +133,7 @@ Block.prototype.update = function(dt){
 		
 			this.safeLandTimer -= dt;
 		
-			if(this.safeLandTimer <= 0)
+			if(this.safeLandTimer <= 0 && this.body.getVel().y > Constants.Block.LAUNCHING_SPEED*0.5)
 			{
 				this.active(false);
 				this.usedSafeTimer = true;
