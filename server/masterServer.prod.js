@@ -1458,8 +1458,11 @@ Player.prototype.die = function(){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_KILLED, data);
 	
 	//Ask for the next block if player is currently holding a spawn block.
-	if(this.currentBlock == Enum.Block.Type.SPAWN)
+	if(this.currentBlock.type == Enum.Block.Type.SPAWN)
+	{
+		this.hasGivenBlock = false;
 		io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
+	}
 };
 
 //Leave current game.
