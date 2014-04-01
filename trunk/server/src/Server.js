@@ -109,6 +109,8 @@ var Server = new function(){
 				delete this.gameList[socket.userdata.gameId];
 			}
 		}
+		
+		socket.leave(socket.userdata.gameId);
 	};
 	
 	this.register();

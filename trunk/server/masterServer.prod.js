@@ -291,7 +291,8 @@ var Constants = {
 		REFRESH_STATS: 'refreshStats',
 		GET_STATS: 'getStats',
 		KEEP_SERVER_ALIVE: 'keepServerAlive',
-		HANDSHAKE_INFO: 'handshakeInfo'
+		HANDSHAKE_INFO: 'handshakeInfo',
+		CHAT: 'chat'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -2934,6 +2935,11 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		}
 		else
 			socket.emit(Constants.Message.ERROR, Constants.ErrorMessage.INVALID_LOBBY);
+	});
+	
+	//Chat.
+	socket.on(Constants.Message.CHAT, function(data){
+		ioMasterClient.sockets.in(socket.userdata.gameId).emit(Constants.Message.CHAT, data);
 	});
 	
 	//Disconnect from lobby.

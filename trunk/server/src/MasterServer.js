@@ -226,6 +226,11 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 			socket.emit(Constants.Message.ERROR, Constants.ErrorMessage.INVALID_LOBBY);
 	});
 	
+	//Chat.
+	socket.on(Constants.Message.CHAT, function(data){
+		ioMasterClient.sockets.in(socket.userdata.gameId).emit(Constants.Message.CHAT, data);
+	});
+	
 	//Disconnect from lobby.
 	socket.on(Constants.Message.LEAVE_LOBBY, function(){
 		MasterServer.disconnectPlayer(socket);

@@ -169,7 +169,8 @@ var Constants = {
 		REFRESH_STATS: 'refreshStats',
 		GET_STATS: 'getStats',
 		KEEP_SERVER_ALIVE: 'keepServerAlive',
-		HANDSHAKE_INFO: 'handshakeInfo'
+		HANDSHAKE_INFO: 'handshakeInfo',
+		CHAT: 'chat'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
