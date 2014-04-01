@@ -101,7 +101,7 @@ var Constants = {
 		Jaw: {
 			WIDTH: 80,
 			HEIGHT: 30,
-			INITIAL_COUNT: 6,
+			INITIAL_COUNT: 4,
 			STEP: 6
 		}
 	},
