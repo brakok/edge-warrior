@@ -21,5 +21,13 @@ var AudioManager = {
 		
 		if(cc.AudioEngine.getInstance().isMusicPlaying())
            cc.AudioEngine.getInstance().stopMusic();
+	},
+	stopAllEffects: function(){
+	
+		try
+		{
+			cc.AudioEngine.getInstance().stopAllEffects();
+		}
+		catch(ex){}
 	}
 };
