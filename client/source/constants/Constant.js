@@ -223,7 +223,8 @@ var Constants = {
 		DELETE_NPC: 'deleteNPC',
 		NEW_NPC: 'newNPC',
 		REFRESH_STATS: 'refreshStats',
-		GET_STATS: 'getStats'
+		GET_STATS: 'getStats',
+		CHAT: 'chat'
 	},
 	Effect: {
 		Z_INDEX: 50,
@@ -314,6 +315,10 @@ var Constants = {
 			MIN: 6,
 			RANGE : 5
 		}
+	},
+	Chat: {
+		WAIT_BEFORE_HIDE: 5,
+		FADE_OUT: 1
 	},
 	Font: {
 		NAME: "Quantico Bold",

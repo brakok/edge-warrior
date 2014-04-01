@@ -214,6 +214,14 @@ var Client = new function(){
 		this.masterSocket.emit(Constants.Message.SEARCH_LOBBY);
 	};	
 	
+	//Send message for chat.
+	this.sendMessage = function(value){
+		this.masterSocket.emit(Constants.Message.CHAT, {
+			username: this.username,
+			value: value
+		});
+	};
+	
 	//Connect to master server.
 	this.connectToNetwork = function(){
 		
@@ -222,6 +230,14 @@ var Client = new function(){
 		};
 		
 		var masterSocket = io.connect(Constants.Network.ADDRESS, socketOptions);
+		
+		//Chat.
+		masterSocket.on(Constants.Message.CHAT, function(data){
+			Chat.addLine(data.username, data.value);
+			
+			if(Client.game != null)
+				Chat.poke();
+		});
 		
 		//Result from account creation.
 		masterSocket.on(Constants.Message.CREATE_ACCOUNT, function(errors){

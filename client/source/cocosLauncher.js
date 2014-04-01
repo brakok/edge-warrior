@@ -13,6 +13,7 @@
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
 				  'source/common/HtmlHelper.js',
+				  'source/common/Chat.js',
 				  'source/Resources.js',
 				  
 				  'source/playground/Block.js',

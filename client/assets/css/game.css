@@ -267,3 +267,30 @@ div.keys > div > div > div {
 div.keys input {
 	width: 40%;
 }
+
+div.chat > div {
+	height: 100%;
+	width: 100%;
+}
+
+div.chat > div:first-child {
+	overflow: auto;
+	position: relative;
+}
+
+div.chat .content {
+	position: absolute;
+	bottom: 0;
+}
+
+div.chat input {
+	width: 99%;
+}
+
+div.chat .bottom {
+	height: 1em;
+}
+
+div.chat .name {
+	color: blue;
+}

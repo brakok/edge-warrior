@@ -17,7 +17,7 @@ var LobbyScreen = cc.LayerColor.extend({
 		
 		this.slots = [];
 		this.isRenaming = false;
-		this.isLaunching = false;
+		this.startLaunching = null;
 		
 		//Add label indicating if lobby is online.
 		this.lblOnline = cc.LabelTTF.create("Offline", Constants.Font.NAME, Constants.Font.SIZE);
@@ -28,7 +28,6 @@ var LobbyScreen = cc.LayerColor.extend({
 		
 		//HTML.
 		this.div = document.getElementById('lobby');
-		this.placeHTML();
 		
 		//Lobby name.
 		this.txtName = document.getElementById('lobbyName');
@@ -59,9 +58,9 @@ var LobbyScreen = cc.LayerColor.extend({
 	},
 	launch: function(){
 				
-		if(!this.isLaunching)
+		if(this.startLaunching == null || new Date() - this.startLaunching > 3000)
 		{
-			this.isLaunching = true;
+			this.startLaunching = new Date();
 			
 			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 					
@@ -75,15 +74,14 @@ var LobbyScreen = cc.LayerColor.extend({
 			//Randomize settings.
 			var settings = WorldInfo.random();
 			Client.startGame(settings);
-			
-			var that = this;
-			setTimeout(function(){
-				that.isLaunching = false;
-			}, 3000);
 		}
 	},
 	onEntering: function(){
 		this.div.style.display = "block";
+		
+		Chat.clear();
+		Chat.show();
+		this.placeHTML();
 	},
 	onLeaving: function(){
 		this.reset();
@@ -158,6 +156,9 @@ var LobbyScreen = cc.LayerColor.extend({
 		
 		this.div.style.display = "none";
 		this.lblOnline._string = "Offline";
+				
+		Chat.clear();
+		Chat.hide();
 	},
 	rename: function(){
 	
@@ -200,6 +201,14 @@ var LobbyScreen = cc.LayerColor.extend({
 	placeHTML: function(){
 		this.div.style.left = Options.viewport.width*0.1 + 'px';
 		this.div.style.top = Options.viewport.height*0.09 + 'px';
+		
+		//Only replace if not in-game.
+		if(Client.game == null)
+		{
+			Chat.setColor('rgba(255,255,255,0)', 'rgba(0,0,0,1)');
+			Chat.setPosition(Options.viewport.width * 0.65, Options.viewport.height * 0.2);
+			Chat.setSize(30, 40);
+		}
 	}
 });
 

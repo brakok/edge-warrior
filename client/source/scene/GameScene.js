@@ -70,6 +70,13 @@ var GameScene = cc.Scene.extend({
 		
 		this.addChild(this.layer);
 		
+		//Place chat.
+		Chat.clear();	
+		Chat.setSize(25, 35);
+		Chat.setColor('rgba(0,0,0,0.25)', 'rgba(255,255,255,1)');
+		
+		this.placeChat();
+		
 		AudioManager.stopAllEffects();
 		
 		//Show loading screen.
@@ -77,5 +84,13 @@ var GameScene = cc.Scene.extend({
 	},
 	onExit: function(){
 		this.removeChild(this.layer);
+	},
+	resize: function(){
+	
+		if(Client.game != null)
+			this.placeChat();
+	},
+	placeChat: function(){
+		Chat.setPosition(Options.viewport.width * 0.01, Options.viewport.height*0.37);
 	}
 });

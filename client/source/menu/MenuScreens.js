@@ -57,6 +57,7 @@ var MenuScreens = new function(){
 			this.createAccount.resize();
 			this.changePassword.resize();
 			this.resetPassword.resize();
+			myApp.GameScene.resize();
 		}
 	};
 	
