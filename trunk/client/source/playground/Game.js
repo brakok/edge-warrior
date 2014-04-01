@@ -411,6 +411,7 @@ Game.prototype.end = function(data){
 
 	//Stop winning goal.
 	this.goal.end();
+	Chat.hide();
 
 	myApp.GameScene.layer.removeChild(this.hud);
 	myApp.GameScene.layer.addChild(this.endScreen);
