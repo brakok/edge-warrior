@@ -368,8 +368,6 @@ Game.prototype.moveCamera = function(){
 			maxY = containedObjects[i].y;
 	}
 	
-	this.camera.lookAt((maxX + minX)*0.5, ((maxY + minY)*0.5)+Constants.Camera.HIGHER);		
-	
 	var maxDistanceX = maxX - minX;
 	var maxDistanceY = maxY - minY;
 	
@@ -384,6 +382,8 @@ Game.prototype.moveCamera = function(){
 		this.camera.targetedZoom = 1;
 	else
 		this.camera.targetedZoom = 1/zoomRatio;
+		
+	this.camera.lookAt((maxX + minX)*0.5, (maxY + minY)*0.5);	
 };
 
 //Trigger when someone touched the goal.
