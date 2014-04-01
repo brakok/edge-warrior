@@ -12,6 +12,7 @@ var Block = function (x, y, type, color, skill) {
 	this.originalColor = color;
 	
 	this.updatedOnce = false;
+	this.isBlockAdded = false;
 	
 	//Create sprite associated.
 	if(this.type == Enum.Block.Type.COLORED && this.color != null)
@@ -80,7 +81,8 @@ Block.prototype.update = function(dt){
 		this.trail.x = this.x;
 		this.trail.y = this.y;
 		
-		Client.game.layer.addChild(this.sprite);
+		if(!this.isBlockAdded)
+			Client.game.layer.addChild(this.sprite);
 		
 		this.updatedOnce = true;
 	}
@@ -115,6 +117,7 @@ Block.prototype.update = function(dt){
 };
 
 Block.prototype.swapColor = function(color){
+
 	Client.game.layer.removeChild(this.sprite);
 	this.sprite = cc.Sprite.create(assetsBlockDir + 'block_' + color + '.png');
 	Client.game.layer.addChild(this.sprite);
@@ -125,6 +128,8 @@ Block.prototype.swapColor = function(color){
 	
 	this.color = color;
 	this.setPosition(this.x, this.y);
+	
+	this.isBlockAdded = true;
 };
 
 Block.prototype.explode = function(cause){
