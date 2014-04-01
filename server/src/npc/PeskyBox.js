@@ -1,9 +1,12 @@
 
-var PeskyBox = function(id, x, y, width, height, speed, duration, maxFleeTime, target, game){
+var PeskyBox = function(id, x, y, width, height, speed, duration, maxFleeTime, pushX, pushY, target, game){
 	
 	this.id = id;
 	this.x = x;
 	this.y = y;
+	
+	this.pushX = pushX;
+	this.pushY = pushY;
 	
 	this.width = width;
 	this.height = height;

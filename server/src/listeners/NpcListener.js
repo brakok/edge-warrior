@@ -34,11 +34,17 @@ NpcListener.prototype.begin = function(arbiter, space){
 		if(npc != null){
 			switch(npc.type){
 				case Enum.NPC.Type.PESKY_BOX:
-					player.body.setVel(new chipmunk.Vect(0,0));
-					
+				
 					if(player.id == npc.target.id)
+					{
+						player.body.setVel(new chipmunk.Vect(0,0));
+						player.body.applyImpulse(new chipmunk.Vect(npc.pushX*Math.sin(Math.PI*2),
+																   Math.abs(npc.pushY*Math.random())*-1),
+												new chipmunk.Vect(0,0));
+
 						npc.fleeTimer = 999999;
-					
+					}
+
 					break;
 			}
 		}

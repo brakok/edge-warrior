@@ -135,7 +135,9 @@ var SkillInfo = {
 																			   Constants.NPC.PeskyBox.SPEED + Constants.NPC.PeskyBox.SPEED_STEP*block.skill.power,
 																			   Constants.NPC.PeskyBox.DURATION + Constants.NPC.PeskyBox.DURATION_STEP*block.skill.power,
 																			   Constants.NPC.PeskyBox.FLEE_TIMER - Constants.NPC.PeskyBox.FLEE_STEP*block.skill.power,
-																			   targetPlayer,
+																			   Constants.NPC.PeskyBox.PUSH_X + Constants.NPC.PeskyBox.PUSH_X_STEP*block.skill.power,
+																			   Constants.NPC.PeskyBox.PUSH_Y + Constants.NPC.PeskyBox.PUSH_Y_STEP*block.skill.power,
+																			   targetPlayer,																	   
 																			   block.currentGame));
 				}
 				
