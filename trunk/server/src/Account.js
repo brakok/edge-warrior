@@ -388,6 +388,7 @@ var Account = new function(){
 						if(err)
 						{
 							errors.push('Error when sending email. Try again or contact crushed.dream.the.game@gmail.com for help.');
+							console.log(err);
 							callback(errors);
 							return;
 						}

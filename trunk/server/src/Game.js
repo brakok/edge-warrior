@@ -189,17 +189,9 @@ Game.prototype.update = function(){
 		for(var i in this.players)
 			this.players[i].update();
 
+		//Reduce to one step for better performance instead of multiple fixed time steps.
 		if(this.space != null)
-		{
-			//Update space.
-			var stepcounter = this.dt*Constants.Physic.TIME_ACCELERATION_FACTOR;
-			
-			while(stepcounter > 0)
-			{
-				this.space.step(Constants.Physic.TIME_STEP);
-				stepcounter -= Constants.Physic.TIME_STEP;
-			}
-		}
+			this.space.step(Constants.Physic.TIME_STEP);
 			
 		for(var i in this.blocks)
 		{
