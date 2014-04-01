@@ -20,6 +20,7 @@ var KeyForm = function(){
 	var txtKeySkill4 = new KeyInput('keySkill4', this.keys.SKILL4, this);
 	
 	var txtKeyBuyMode = new KeyInput('keyBuyMode', this.keys.TOGGLE_BUY_MODE, this);
+	var txtChat = new KeyInput('keyChat', this.keys.CHAT, this);
 	
 	//Update keys for new ones.
 	this.updateKeys = function(){
@@ -37,6 +38,7 @@ var KeyForm = function(){
 		this.keys.SKILL4 = txtKeySkill4.value;
 		
 		this.keys.TOGGLE_BUY_MODE = txtKeyBuyMode.value;
+		this.keys.CHAT = txtChat.value;
 	};
 	
 	//Save keys.
@@ -67,7 +69,8 @@ var KeyForm = function(){
 		   || this.keys.SKILL2 == code
 		   || this.keys.SKILL3 == code
 		   || this.keys.SKILL4 == code
-		   || this.keys.TOGGLE_BUY_MODE == code)
+		   || this.keys.TOGGLE_BUY_MODE == code
+		   || this.keys.CHAT == code)
 		 {
 			HtmlHelper.showError('Key already bound.');
 			return false;
@@ -93,6 +96,7 @@ var KeyForm = function(){
 		txtKeySkill4.setValue(this.keys.SKILL4, false);
 		
 		txtKeyBuyMode.setValue(this.keys.TOGGLE_BUY_MODE, false);
+		txtChat.setValue(this.keys.CHAT, false);
 	};
 	
 	this.init = function(){

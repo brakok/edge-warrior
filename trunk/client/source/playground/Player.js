@@ -237,7 +237,9 @@ Player.prototype.manageInput = function(){
 		this.buySkill(3);
 	if(Client.keys[Options.keys.SKILL4] && !Client.pressedKeys[Options.keys.SKILL4])
 		this.buySkill(4);
-		
+	
+	if(Client.keys[Options.keys.CHAT] && !Client.pressedKeys[Options.keys.CHAT])
+		Chat.show();
 		
 	//Store blocks in inventory.
 	if(this.givenBlock == null)

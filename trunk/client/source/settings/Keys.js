@@ -16,7 +16,7 @@ var Keys = function(keys){
 		this.SKILL3 = cc.KEY['3'];
 		this.SKILL4 = cc.KEY['4'];
 		this.TOGGLE_BUY_MODE = cc.KEY.c;
-		
+		this.CHAT = cc.KEY.enter;
 	}
 	else
 	{
@@ -34,6 +34,7 @@ var Keys = function(keys){
 		this.SKILL3 = keys.SKILL3;
 		this.SKILL4 = keys.SKILL4;
 		this.TOGGLE_BUY_MODE = keys.TOGGLE_BUY_MODE;
+		this.CHAT = keys.CHAT;
 	}
 };
 
@@ -51,4 +52,5 @@ Keys.prototype.reset = function(){
 	this.SKILL3 = cc.KEY['3'];
 	this.SKILL4 = cc.KEY['4'];
 	this.TOGGLE_BUY_MODE = cc.KEY.c;
+	this.CHAT = cc.KEY.enter;
 };

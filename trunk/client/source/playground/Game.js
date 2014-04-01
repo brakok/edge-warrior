@@ -157,9 +157,15 @@ Game.prototype.update = function (dt){
 				if(Client.keys[Options.keys.PAUSE] && this.mayPause)
 				{
 					if(!this.isPaused)
+					{
+						Chat.hide();
 						this.pause();
+					}
 					else
+					{
+						myApp.GameScene.placeChat();
 						this.unpause();
+					}
 					
 					this.mayPause = false;
 				}
@@ -294,6 +300,8 @@ Game.prototype.update = function (dt){
 	Client.pressedKeys[Options.keys.SKILL3] = Client.keys[Options.keys.SKILL3];
 	Client.pressedKeys[Options.keys.SKILL4] = Client.keys[Options.keys.SKILL4];
 	Client.pressedKeys[Options.keys.TOGGLE_BUY_MODE] = Client.keys[Options.keys.TOGGLE_BUY_MODE];
+	
+	Client.pressedKeys[Options.keys.CHAT] = Client.keys[Options.keys.CHAT];
 };
 
 //Randomize next block and emit the command related to the current block.
