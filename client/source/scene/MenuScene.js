@@ -70,6 +70,8 @@ var MenuScene = cc.Scene.extend({
 		
 		this.addChild(this.menu);
 		
+		AudioManager.stopAllEffects();
+		
 		if(Options.resolution.isFullscreen)
 		{
 			//Show exit button.

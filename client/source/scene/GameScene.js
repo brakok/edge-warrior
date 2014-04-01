@@ -70,6 +70,8 @@ var GameScene = cc.Scene.extend({
 		
 		this.addChild(this.layer);
 		
+		AudioManager.stopAllEffects();
+		
 		//Show loading screen.
 		Client.startLoading();
 	},
