@@ -268,17 +268,23 @@ div.keys input {
 	width: 40%;
 }
 
+div.chat {
+	font-size: 0.8em;
+}
+
 div.chat > div {
 	height: 100%;
 	width: 100%;
 }
 
 div.chat > div:first-child {
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 	position: relative;
 }
 
 div.chat .content {
+	width: 100%;
 	position: absolute;
 	bottom: 0;
 }
