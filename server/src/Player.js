@@ -148,12 +148,21 @@ Player.prototype.die = function(){
 	
 	var killer = null;
 	
-	for(var i in this.currentGame.players)
-		if(this.currentGame.players[i].id == this.killerId)
+	if(this.killerId != null)
+	{
+		//A player can't be is killer. Overlord needs to handle this.
+		if(this.killerId == this.id)
+			this.killerId = null;
+		else
 		{
-			killer = this.currentGame.players[i];
-			break;
+			for(var i in this.currentGame.players)
+				if(i == this.killerId)
+				{
+					killer = this.currentGame.players[i];
+					break;
+				}
 		}
+	}
 	
 	var data = {
 		killed : this.toClient(),
@@ -196,6 +205,10 @@ Player.prototype.getPosition = function(){
 };
 
 Player.prototype.update = function(){
+	
+	//Can't allow a player from falling down the map.
+	if(this.y < 0)
+		this.toBeDestroy = true;
 	
 	if(this.toBeDestroy)
 	{	
