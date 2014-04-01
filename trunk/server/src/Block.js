@@ -126,17 +126,26 @@ Block.prototype.update = function(dt){
 		}
 	
 		//Prevent a block from staying awake.
-		if(this.justLanded || !this.usedSafeTimer)
-		{		
+		if(this.justLanded || (!this.usedSafeTimer && !this.landed))
+		{
 			if(this.justLanded)
 				this.usedSafeTimer = false;
-		
-			this.safeLandTimer -= dt;
-		
-			if(this.safeLandTimer <= 0 && this.body.getVel().y > Constants.Block.LAUNCHING_SPEED*0.5)
+	
+			if(this.body.getVel().y < Constants.Block.LAUNCHING_SPEED*0.5)
 			{
-				this.active(false);
 				this.usedSafeTimer = true;
+				this.safeLandTimer = Constants.Block.LAND_SAFE_TIMER;
+				this.isStatic = false;
+			}
+			else
+			{
+				this.safeLandTimer -= dt;
+		
+				if(this.safeLandTimer <= 0 && this.body.getVel().y > Constants.Block.LAUNCHING_SPEED*0.5)
+				{
+					this.active(false);
+					this.usedSafeTimer = true;
+				}
 			}
 		}
 		
