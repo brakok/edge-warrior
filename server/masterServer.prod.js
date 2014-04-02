@@ -184,9 +184,9 @@ var Constants = {
 			FLEE_STEP: 0.04,
 			SLOWDOWN_DISTANCE_FACTOR: 25,
 			FRICTION_FACTOR: 0.93,
-			PUSH_X: 750,
+			PUSH_X: 900,
 			PUSH_X_STEP: 150,
-			PUSH_Y: 750,
+			PUSH_Y: 900,
 			PUSH_Y_STEP: 150
 		}
 	},
@@ -221,8 +221,8 @@ var Constants = {
 			SPEED: 0.007,
 			WIDTH: 30,
 			COOLDOWN: 1,
-			IMPULSE_X: 2250,
-			IMPULSE_Y: 1000
+			IMPULSE_X: 4500,
+			IMPULSE_Y: 1500
 		},
 		Jaw: {
 			WIDTH: 80,
@@ -2137,7 +2137,7 @@ Block.prototype.spawn = function(){
 		if(!this.currentGame.players[i].isAlive && this.currentGame.players[i].killerId == killerId)
 		{
 			//Spawn the player.
-			this.currentGame.players[i].spawn(this.body.getPos().x +(launchPowerX*0.04), this.body.getPos().y + posY);
+			this.currentGame.players[i].spawn(this.body.getPos().x +(launchPowerX*0.03), this.body.getPos().y + posY);
 			
 			//Launch the player to random position.
 			this.currentGame.players[i].body.setVel(new chipmunk.Vect(0,0));
