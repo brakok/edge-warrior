@@ -82,10 +82,24 @@ var MainMenu = cc.LayerColor.extend({
 		this.lblLoses.setString("loses   " + Client.stats.loses);
 	},
 	create: function(){
+	
+		if(!Options.skillSet.one && !Options.skillSet.two && !Options.skillSet.three && !Options.skillSet.four)
+		{
+			HtmlHelper.showError('No skill have been set.');
+			return;
+		}
+	
 		Client.createLobby();
 		MenuScreens.switchTo(MenuScreens.lobbyScreen);
 	},
 	join: function(){
+	
+		if(!Options.skillSet.one && !Options.skillSet.two && !Options.skillSet.three && !Options.skillSet.four)
+		{
+			HtmlHelper.showError('No skill have been set.');
+			return;
+		}
+	
 		MenuScreens.switchTo(MenuScreens.serverList);
 	},
 	logout: function(){
