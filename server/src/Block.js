@@ -223,7 +223,7 @@ Block.prototype.spawn = function(){
 		if(!this.currentGame.players[i].isAlive && this.currentGame.players[i].killerId == killerId)
 		{
 			//Spawn the player.
-			this.currentGame.players[i].spawn(this.body.getPos().x +(launchPowerX*0.01), this.body.getPos().y + posY);
+			this.currentGame.players[i].spawn(this.body.getPos().x +(launchPowerX*0.04), this.body.getPos().y + posY);
 			
 			//Launch the player to random position.
 			this.currentGame.players[i].body.setVel(new chipmunk.Vect(0,0));
