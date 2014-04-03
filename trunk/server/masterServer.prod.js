@@ -1303,8 +1303,20 @@ var SkillInfo = {
 					var targetBlock = block.currentGame.blocks[block.linkedBlockId];
 					var targetPlayer = null;
 					
-					if(targetBlock)
+					if(targetBlock && targetBlock.ownerId != block.ownerId)
 						targetPlayer = block.currentGame.players[targetBlock.ownerId];
+					
+					//If no target found, randomize.
+					if(!targetPlayer)
+					{
+						var enemies = [];
+						for(var i in block.currentGame.players)
+							if(i != block.ownerId)
+								enemies.push(block.currentGame.players[i]);
+								
+						if(enemies.length > 0)
+							targetPlayer = enemies[Math.floor(Math.random()*enemies.length)];
+					}
 					
 					if(targetPlayer && !targetPlayer.hasWon)
 						block.currentGame.managers.NpcManager.add(new PeskyBox(block.currentGame.npcSequence,
@@ -2990,22 +3002,18 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		if(ioMasterServer.sockets.clients().length > 0)
 		{
-			var index = Math.round(Math.random()*(ioMasterServer.sockets.clients().length-1));
-			var count = 0;
+			var index = Math.floor(Math.random()*ioMasterServer.sockets.clients().length);	
+			
+			if(index >= ioMasterServer.sockets.clients().length)
+				index = ioMasterServer.sockets.clients().length-1;
 			
 			var serverSocket = null;
 			var socketId = null;
 			
-			for(var i in ioMasterServer.sockets.sockets)
-			{
-				if(count == index)
-				{
-					serverSocket = ioMasterServer.sockets.sockets[i];
-					break;
-				}
-				
-				count++;
-			}
+			var keys = Object.keys(ioMasterServer.sockets.sockets);
+			
+			if(index < keys.length)
+				serverSocket = ioMasterServer.sockets.sockets[keys[index]];
 
 			//Ask specified server to create a game.
 			if(serverSocket != null)

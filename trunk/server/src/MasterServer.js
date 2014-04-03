@@ -267,22 +267,18 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		if(ioMasterServer.sockets.clients().length > 0)
 		{
-			var index = Math.round(Math.random()*(ioMasterServer.sockets.clients().length-1));
-			var count = 0;
+			var index = Math.floor(Math.random()*ioMasterServer.sockets.clients().length);	
+			
+			if(index >= ioMasterServer.sockets.clients().length)
+				index = ioMasterServer.sockets.clients().length-1;
 			
 			var serverSocket = null;
 			var socketId = null;
 			
-			for(var i in ioMasterServer.sockets.sockets)
-			{
-				if(count == index)
-				{
-					serverSocket = ioMasterServer.sockets.sockets[i];
-					break;
-				}
-				
-				count++;
-			}
+			var keys = Object.keys(ioMasterServer.sockets.sockets);
+			
+			if(index < keys.length)
+				serverSocket = ioMasterServer.sockets.sockets[keys[index]];
 
 			//Ask specified server to create a game.
 			if(serverSocket != null)
