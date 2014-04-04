@@ -302,6 +302,7 @@ Game.prototype.update = function (dt){
 	Client.pressedKeys[Options.keys.TOGGLE_BUY_MODE] = Client.keys[Options.keys.TOGGLE_BUY_MODE];
 	
 	Client.pressedKeys[Options.keys.CHAT] = Client.keys[Options.keys.CHAT];
+	Client.pressedKeys[Options.keys.DIG] = Client.keys[Options.keys.DIG];
 };
 
 //Randomize next block and emit the command related to the current block.
@@ -479,7 +480,7 @@ Game.prototype.addBlock = function(remoteBlock){
 Game.prototype.addDeathZone = function(remoteDeathZone){	
 	
 	var deathZone = null;
-
+	
 	switch(remoteDeathZone.type)
 	{
 		case Enum.DeathZone.Type.FIREBALL:
@@ -491,6 +492,9 @@ Game.prototype.addDeathZone = function(remoteDeathZone){
 			break;
 		case Enum.DeathZone.Type.JAW:
 			deathZone = new Jaw(remoteDeathZone.x, remoteDeathZone.y);
+			break;
+		case Enum.DeathZone.Type.PICK_AXE:
+			deathZone = new PickAxe(remoteDeathZone.x, remoteDeathZone.y);
 			break;
 	}
 	

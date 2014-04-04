@@ -22,6 +22,8 @@ var KeyForm = function(){
 	var txtKeyBuyMode = new KeyInput('keyBuyMode', this.keys.TOGGLE_BUY_MODE, this);
 	var txtChat = new KeyInput('keyChat', this.keys.CHAT, this);
 	
+	var txtDig = new KeyInput('keyDig', this.keys.DIG, this);
+	
 	//Update keys for new ones.
 	this.updateKeys = function(){
 		this.keys.RIGHT = txtKeyRight.value;
@@ -39,6 +41,8 @@ var KeyForm = function(){
 		
 		this.keys.TOGGLE_BUY_MODE = txtKeyBuyMode.value;
 		this.keys.CHAT = txtChat.value;
+		
+		this.keys.DIG = txtDig.value;
 	};
 	
 	//Save keys.
@@ -70,7 +74,8 @@ var KeyForm = function(){
 		   || this.keys.SKILL3 == code
 		   || this.keys.SKILL4 == code
 		   || this.keys.TOGGLE_BUY_MODE == code
-		   || this.keys.CHAT == code)
+		   || this.keys.CHAT == code
+		   || this.keys.DIG == code)
 		 {
 			HtmlHelper.showError('Key already bound.');
 			return false;
@@ -97,6 +102,8 @@ var KeyForm = function(){
 		
 		txtKeyBuyMode.setValue(this.keys.TOGGLE_BUY_MODE, false);
 		txtChat.setValue(this.keys.CHAT, false);
+		
+		txtDig.setValue(this.keys.DIG, false);
 	};
 	
 	this.init = function(){

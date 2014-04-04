@@ -90,7 +90,8 @@ var Enum = {
 		Type: {
 			FIREBALL: 0,
 			ENERGY_SPIKE: 1,
-			JAW: 2
+			JAW: 2,
+			PICK_AXE: 3
 		}
 	},
 	NPC: {
