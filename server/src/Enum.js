@@ -27,7 +27,8 @@ var Enum = {
 			FIREBALL: 3,
 			ENERGY_SPIKE: 4,
 			JAW: 5,
-			PESKY_BOX: 6
+			PESKY_BOX: 6,
+			PICK_AXE: 7
 		}
 	},
 	Block: {
@@ -112,7 +113,8 @@ var Enum = {
 		Type: {
 			FIREBALL: 0,
 			ENERGY_SPIKE: 1,
-			JAW: 2
+			JAW: 2,
+			PICK_AXE: 3
 		}
 	},
 	WinningGoal: {

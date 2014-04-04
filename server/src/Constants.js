@@ -35,7 +35,18 @@ var Constants = {
 		MAX_SPEED_FACTOR: 0.0000001,
 		MAX_VELOCITY: 175,
 		VELOCITY_FACTOR: 0.4,
-		SPEED_LOWER_LIMIT: 100
+		SPEED_LOWER_LIMIT: 100,
+		PickAxe:  {
+			TIMER: 5,
+			VEL_X: 6,
+			VEL_Y: 2.5,
+			OFFSET_X: 15,
+			OFFSET_Y: 15,
+			DISTANCE: 100,
+			WIDTH: 30,
+			HEIGHT: 30,
+			LIMIT: 2
+		}
 	},
 	Block: {
 		WIDTH: 80,
