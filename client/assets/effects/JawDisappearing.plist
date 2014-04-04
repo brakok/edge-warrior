@@ -7,24 +7,24 @@
             <key>JawDisappearing.0000.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{152,154},{76,38}}</string>
+                <string>{{154,2},{94,40}}</string>
                 <key>offset</key>
-                <string>{0,-28}</string>
+                <string>{3,-27}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{40,58},{76,38}}</string>
+                <string>{{34,56},{94,40}}</string>
                 <key>sourceSize</key>
                 <string>{156,98}</string>
             </dict>
             <key>JawDisappearing.0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{194,120},{106,48}}</string>
+                <string>{{2,200},{106,48}}</string>
                 <key>offset</key>
                 <string>{3,-14}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{28,39},{106,48}}</string>
                 <key>sourceSize</key>
@@ -33,11 +33,11 @@
             <key>JawDisappearing.0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{194,2},{116,44}}</string>
+                <string>{{110,194},{116,44}}</string>
                 <key>offset</key>
                 <string>{3,1}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{23,26},{116,44}}</string>
                 <key>sourceSize</key>
@@ -46,11 +46,11 @@
             <key>JawDisappearing.0003.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,190},{132,38}}</string>
+                <string>{{176,44},{132,38}}</string>
                 <key>offset</key>
                 <string>{2,11}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{14,19},{132,38}}</string>
                 <key>sourceSize</key>
@@ -59,78 +59,91 @@
             <key>JawDisappearing.0004.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,108},{140,32}}</string>
+                <string>{{146,46},{140,28}}</string>
                 <key>offset</key>
-                <string>{1,13}</string>
+                <string>{1,15}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{9,20},{140,32}}</string>
+                <string>{{9,20},{140,28}}</string>
                 <key>sourceSize</key>
                 <string>{156,98}</string>
             </dict>
             <key>JawDisappearing.0005.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,74},{144,32}}</string>
+                <string>{{116,46},{144,28}}</string>
                 <key>offset</key>
-                <string>{1,12}</string>
+                <string>{1,14}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{7,21},{144,32}}</string>
+                <string>{{7,21},{144,28}}</string>
                 <key>sourceSize</key>
                 <string>{156,98}</string>
             </dict>
             <key>JawDisappearing.0006.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,40},{146,32}}</string>
+                <string>{{82,46},{146,32}}</string>
                 <key>offset</key>
-                <string>{1,11}</string>
+                <string>{1,12}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{6,22},{146,32}}</string>
+                <string>{{6,21},{146,32}}</string>
                 <key>sourceSize</key>
                 <string>{156,98}</string>
             </dict>
             <key>JawDisappearing.0007.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,154},{148,34}}</string>
+                <string>{{44,46},{148,36}}</string>
                 <key>offset</key>
-                <string>{2,9}</string>
+                <string>{2,8}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{6,23},{148,34}}</string>
+                <string>{{6,23},{148,36}}</string>
                 <key>sourceSize</key>
                 <string>{156,98}</string>
             </dict>
             <key>JawDisappearing.0008.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{156,2},{150,36}}</string>
+                <string>{{2,2},{150,42}}</string>
                 <key>offset</key>
-                <string>{2,5}</string>
+                <string>{2,3}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{5,26},{150,36}}</string>
+                <string>{{5,25},{150,42}}</string>
                 <key>sourceSize</key>
                 <string>{156,98}</string>
             </dict>
             <key>JawDisappearing.0009.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{152,36}}</string>
+                <string>{{2,46},{152,40}}</string>
                 <key>offset</key>
-                <string>{2,-5}</string>
+                <string>{2,-7}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{4,36},{152,40}}</string>
+                <key>sourceSize</key>
+                <string>{156,98}</string>
+            </dict>
+            <key>JawDisappearing.0010.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{250,2},{1,1}}</string>
+                <key>offset</key>
+                <string>{-77.5,48.5}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,36},{152,36}}</string>
+                <string>{{0,0},{1,1}}</string>
                 <key>sourceSize</key>
                 <string>{156,98}</string>
             </dict>
@@ -144,7 +157,7 @@
             <key>size</key>
             <string>{256,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:bc9f4588aeed4bd873c2917f2f83b0bc:f6d122dc0aba04de60bf30d7032e0fd9:f32566f0cafb61a1cd489ffcf041c6f6$</string>
+            <string>$TexturePacker:SmartUpdate:f85f88d3b92a6262ea2b4a439f3d15da:807e0d08696a3b728be992c7786f4b1a:f32566f0cafb61a1cd489ffcf041c6f6$</string>
             <key>textureFileName</key>
             <string>JawDisappearing.png</string>
         </dict>
