@@ -50,6 +50,12 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 					deathZone.stillExists = false;
 
 				break;
+			case Enum.UserData.Type.PICK_AXE:
+				
+				if(block && (block.type == Enum.Block.Type.NEUTRAL || block.type == Enum.Block.Type.COLORED))
+					block.markToDestroy(Enum.Block.Destruction.CRUSHED);
+				
+				return;
 		}
 	}
 	

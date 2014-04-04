@@ -8,7 +8,10 @@ var Player = function(id, username, x, y, color, game){
 	this.x = x;
 	this.y = y;
 		
-	this.killTime = 0;	
+	this.pickAxeCount = 0;
+	this.pickAxeTimer = Constants.Player.PickAxe.TIMER;
+	
+	this.killTime = 0;
 	this.stepReached = Enum.StepReached.NONE;
 	
 	this.isAlive = true;
@@ -252,6 +255,22 @@ Player.prototype.update = function(){
 		if(this.keys.left)
 			nextX -= impulse;
 		
+		//Throw pickaxe.
+		if(this.keys.dig && this.pickAxeCount > 0)
+			this.throwPickAxe();
+		
+		//Add pick axe.
+		if(this.pickAxeCount < Constants.Player.PickAxe.LIMIT)
+		{
+			this.pickAxeTimer -= this.currentGame.dt;
+			
+			if(this.pickAxeTimer <= 0)
+			{
+				this.pickAxeCount++;
+				this.pickAxeTimer = Constants.Player.PickAxe.TIMER;
+			}
+		}
+		
 		if(this.groundContact > 0 && this.doubleJumpUsed)
 			this.doubleJumpUsed = false;
 		
@@ -374,6 +393,22 @@ Player.prototype.update = function(){
 	//Check timers related to player and trigger actions associated.
 	if(!this.hasWon)
 		this.checkTimers();
+};
+
+Player.prototype.throwPickAxe = function(){
+
+	//Launch pickaxe.
+	this.currentGame.managers.DeathZoneManager.launch(new PickAxe(this.currentGame.deathZoneSequence,
+																  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
+																  this.y + Constants.Player.PickAxe.OFFSET_Y, 
+																  Constants.Player.PickAxe.VEL_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1),
+																  Constants.Player.PickAxe.VEL_Y,
+																  Constants.Player.PickAxe.DISTANCE,
+																  Constants.Player.PickAxe.WIDTH, 
+																  Constants.Player.PickAxe.HEIGHT,
+																  this.currentGame));
+	
+	this.pickAxeCount--;
 };
 
 Player.prototype.checkTimers = function(){
@@ -524,13 +559,14 @@ Player.prototype.execute = function(action){
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_ACTION, data);
 };
-	
+
 //Format for client.
 Player.prototype.toClient = function(){
 	return {
 		x: this.getPosition().x,
 		y: this.getPosition().y,
 		color: this.color,
-		facing: this.facing
+		facing: this.facing,
+		pickAxeCount: this.pickAxeCount
 	};
 };

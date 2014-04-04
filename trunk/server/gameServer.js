@@ -27,7 +27,8 @@ var Enum = {
 			FIREBALL: 3,
 			ENERGY_SPIKE: 4,
 			JAW: 5,
-			PESKY_BOX: 6
+			PESKY_BOX: 6,
+			PICK_AXE: 7
 		}
 	},
 	Block: {
@@ -112,7 +113,8 @@ var Enum = {
 		Type: {
 			FIREBALL: 0,
 			ENERGY_SPIKE: 1,
-			JAW: 2
+			JAW: 2,
+			PICK_AXE: 3
 		}
 	},
 	WinningGoal: {
@@ -157,7 +159,18 @@ var Constants = {
 		MAX_SPEED_FACTOR: 0.0000001,
 		MAX_VELOCITY: 175,
 		VELOCITY_FACTOR: 0.4,
-		SPEED_LOWER_LIMIT: 100
+		SPEED_LOWER_LIMIT: 100,
+		PickAxe:  {
+			TIMER: 5,
+			VEL_X: 6,
+			VEL_Y: 2.5,
+			OFFSET_X: 15,
+			OFFSET_Y: 15,
+			DISTANCE: 100,
+			WIDTH: 30,
+			HEIGHT: 30,
+			LIMIT: 2
+		}
 	},
 	Block: {
 		WIDTH: 80,
@@ -629,6 +642,12 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 					deathZone.stillExists = false;
 
 				break;
+			case Enum.UserData.Type.PICK_AXE:
+				
+				if(block && (block.type == Enum.Block.Type.NEUTRAL || block.type == Enum.Block.Type.COLORED))
+					block.markToDestroy(Enum.Block.Destruction.CRUSHED);
+				
+				return;
 		}
 	}
 	
@@ -1374,7 +1393,10 @@ var Player = function(id, username, x, y, color, game){
 	this.x = x;
 	this.y = y;
 		
-	this.killTime = 0;	
+	this.pickAxeCount = 0;
+	this.pickAxeTimer = Constants.Player.PickAxe.TIMER;
+	
+	this.killTime = 0;
 	this.stepReached = Enum.StepReached.NONE;
 	
 	this.isAlive = true;
@@ -1618,6 +1640,22 @@ Player.prototype.update = function(){
 		if(this.keys.left)
 			nextX -= impulse;
 		
+		//Throw pickaxe.
+		if(this.keys.dig && this.pickAxeCount > 0)
+			this.throwPickAxe();
+		
+		//Add pick axe.
+		if(this.pickAxeCount < Constants.Player.PickAxe.LIMIT)
+		{
+			this.pickAxeTimer -= this.currentGame.dt;
+			
+			if(this.pickAxeTimer <= 0)
+			{
+				this.pickAxeCount++;
+				this.pickAxeTimer = Constants.Player.PickAxe.TIMER;
+			}
+		}
+		
 		if(this.groundContact > 0 && this.doubleJumpUsed)
 			this.doubleJumpUsed = false;
 		
@@ -1740,6 +1778,22 @@ Player.prototype.update = function(){
 	//Check timers related to player and trigger actions associated.
 	if(!this.hasWon)
 		this.checkTimers();
+};
+
+Player.prototype.throwPickAxe = function(){
+
+	//Launch pickaxe.
+	this.currentGame.managers.DeathZoneManager.launch(new PickAxe(this.currentGame.deathZoneSequence,
+																  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
+																  this.y + Constants.Player.PickAxe.OFFSET_Y, 
+																  Constants.Player.PickAxe.VEL_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1),
+																  Constants.Player.PickAxe.VEL_Y,
+																  Constants.Player.PickAxe.DISTANCE,
+																  Constants.Player.PickAxe.WIDTH, 
+																  Constants.Player.PickAxe.HEIGHT,
+																  this.currentGame));
+	
+	this.pickAxeCount--;
 };
 
 Player.prototype.checkTimers = function(){
@@ -1890,14 +1944,15 @@ Player.prototype.execute = function(action){
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_ACTION, data);
 };
-	
+
 //Format for client.
 Player.prototype.toClient = function(){
 	return {
 		x: this.getPosition().x,
 		y: this.getPosition().y,
 		color: this.color,
-		facing: this.facing
+		facing: this.facing,
+		pickAxeCount: this.pickAxeCount
 	};
 };
 var Lobby = function(id, hostId, username){
@@ -3361,4 +3416,94 @@ PeskyBox.prototype.explode = function(){
 	//Send info to client.
 	this.stillExists = false;
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_NPC, data);
+};
+//Considered as a deathzone, but only works on neutral and colored blocks.
+var PickAxe = function(id, x, y, velX, velY, distance, width, height, game){
+
+	this.id = id;
+	this.currentGame = game;
+	
+	this.x = x;
+	this.y = y;
+	this.enabled = true;
+	this.stillExists = true;
+	
+	this.type = Enum.DeathZone.Type.PICK_AXE;
+	
+	var velHypo = (Math.sqrt(Math.pow(velX,2)+Math.pow(velY,2)));
+	this.finalX = this.x + (velY == 0 ? distance : velX/velHypo*distance);
+	this.finalY = this.y + (velX == 0 ? distance : velY/velHypo*distance);
+		
+	this.velocity = {
+		x: velX,
+		y: velY
+	};
+	
+	this.width = width;
+	this.height = height;
+	
+	this.body = new chipmunk.Body(Infinity, Infinity);
+	this.body.setPos(new chipmunk.Vect(this.x, this.y));
+		
+	//Assign custom data to body.
+	this.body.userdata = {
+		type: Enum.UserData.Type.PICK_AXE,
+		object: this
+	};
+	
+	//Create a shape associated with the body.
+	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);
+	this.shape.sensor = true;
+};
+
+PickAxe.prototype.toClient = function(){
+	return {
+		x: this.x,
+		y: this.y,
+		id: this.id
+	};
+};
+
+
+PickAxe.prototype.explode = function(){
+
+	//Remove physical presence.
+	this.currentGame.space.removeShape(this.shape);
+		
+	var data = {
+		id: this.id
+	};
+		
+	//Remove from game.
+	for(var i in this.currentGame.deathZones)
+		if(this.currentGame.deathZones[i] != null && this.currentGame.deathZones[i].id == this.id)
+			delete this.currentGame.deathZones[i];
+	
+	//Send info to client.
+	this.stillExists = false;
+	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);
+};
+
+PickAxe.prototype.update = function(){
+
+	if(this.stillExists)
+	{
+		this.x += this.velocity.x;
+		this.y += this.velocity.y;
+		
+		if((this.velocity.x < 0 && this.x < this.finalX) || (this.velocity.x > 0 && this.x > this.finalX))
+			this.x = this.finalX;
+
+		if((this.velocity.y < 0 && this.y < this.finalY) || (this.velocity.y > 0 && this.y > this.finalY))
+			this.y = this.finalY;
+	
+		this.body.setPos(new chipmunk.Vect(this.x, this.y));
+		
+		//Destroy pick axe if it reaches his maximum distance.
+		if(this.x == this.finalX && this.y == this.finalY)
+			this.stillExists = false;
+	}
+	else
+		this.explode();
 };
