@@ -227,6 +227,7 @@ var assets = [
 	
 	//Hud.
 	{type:'image', src: assetsHudDir + 'fieldset.png'},
+	{type:'image', src: assetsHudDir + 'pickaxe.png'},
 	{type:'image', src: assetsHudDir + 'dot_level.png'},
 	{type:'image', src: assetsHudDir + 'dot_level_gold.png'},
 	{type:'image', src: assetsHudDir + 'skill_locked.png'},

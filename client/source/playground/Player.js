@@ -6,7 +6,9 @@ var Player = function (x, y, color, isControlled, username) {
 	
 	this.isAlive = true;
 	this.hasWon = false;
+	
 	this.units = 0;
+	this.pickAxeCount = 0;
 	
 	this.isControlled = isControlled;
 	this.audioId = null;
@@ -395,7 +397,8 @@ Player.prototype.land = function(){
 
 Player.prototype.fromServer = function(data){
 	this.setPosition(data.x, data.y);
-
+	this.pickAxeCount = data.pickAxeCount;
+	
 	if(data.facing != this.facing)
 	{
 		this.facing = data.facing;
