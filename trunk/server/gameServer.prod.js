@@ -161,7 +161,7 @@ var Constants = {
 		VELOCITY_FACTOR: 0.4,
 		SPEED_LOWER_LIMIT: 100,
 		PickAxe:  {
-			TIMER: 5,
+			TIMER: 10,
 			VEL_X: 6,
 			VEL_Y: 2.5,
 			OFFSET_X: 15,
@@ -646,7 +646,7 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 				break;
 			case Enum.UserData.Type.PICK_AXE:
 				
-				if(block && (block.type == Enum.Block.Type.NEUTRAL || block.type == Enum.Block.Type.COLORED))
+				if(block && block.isStatic && (block.type == Enum.Block.Type.NEUTRAL || block.type == Enum.Block.Type.COLORED))
 					block.markToDestroy(Enum.Block.Destruction.CRUSHED);
 				
 				return;
@@ -1396,7 +1396,7 @@ var Player = function(id, username, x, y, color, game){
 	this.y = y;
 		
 	this.pickAxeCount = 0;
-	this.pickAxeTimer = Constants.Player.PickAxe.TIMER;
+	this.pickAxeTimer = Constants.Player.PickAxe.TIMER + Constants.Warmup.PHASE_TIME;
 	
 	this.killTime = 0;
 	this.stepReached = Enum.StepReached.NONE;
