@@ -32,7 +32,7 @@ Effect.prototype.init = function(){
 		
 			//Create fog animation on block landing.
 			this.sprite = cc.Sprite.createWithSpriteFrameName('BlockDisappearing.0000.png');
-			this.animation = AnimationManager.create('BlockDisappearing', 0, 6, 24);
+			this.animation = AnimationManager.create('BlockDisappearing', 0, 8, 24);
 			break;
 		case Enum.Effect.Type.SWAP_COLOR:
 		
