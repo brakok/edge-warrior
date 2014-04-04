@@ -41,6 +41,7 @@
 				  'source/menu/elements/KeyInput.js',
 				  'source/playground/BlockOption.js',
 				  'source/playground/Camera.js',
+				  'source/playground/PickAxe.js',
 				  
 				  'source/network/client.js',
 				  'source/network/Profile.js',
@@ -73,6 +74,7 @@
 				  'source/playground/hud/KillCommand.js',
 				  'source/playground/hud/SkillStore.js',
 				  'source/playground/hud/SkillItem.js',
+				  'source/playground/hud/PickAxeCounter.js',
 				  
 				  'source/playground/particles/ChargingDot.js',
 				  'source/playground/particles/Particle.js',

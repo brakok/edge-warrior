@@ -37,6 +37,9 @@ var Client = new function(){
 	this.keys[Options.keys.SKILL3] = false;
 	this.keys[Options.keys.SKILL4] = false;
 	this.keys[Options.keys.TOGGLE_BUY_MODE] = false;
+	this.keys[Options.keys.CHAT] = false;
+	
+	this.keys[Options.keys.DIG] = false;
 	
 	//Pressed keys.
 	this.pressedKeys[Options.keys.RIGHT] = false;
@@ -53,6 +56,10 @@ var Client = new function(){
 	this.pressedKeys[Options.keys.SKILL3] = false;
 	this.pressedKeys[Options.keys.SKILL4] = false;
 	this.pressedKeys[Options.keys.TOGGLE_BUY_MODE] = false;
+	this.pressedKeys[Options.keys.CHAT] = false;
+	
+	this.pressedKeys[Options.keys.DIG] = false;
+	
 	
 	this.init = function(data){
 	
@@ -538,7 +545,8 @@ var Client = new function(){
 			right: this.keys[Options.keys.RIGHT],
 			left: this.keys[Options.keys.LEFT],
 			jump: this.keys[Options.keys.JUMP],
-			kill: this.keys[Options.keys.KILL]
+			kill: this.keys[Options.keys.KILL],
+			dig: this.keys[Options.keys.DIG] && !this.pressedKeys[Options.keys.DIG]
 		};
 	
 		//Send key pressed to server.
