@@ -780,7 +780,7 @@ var Managers = function(game){
 };
 var Account = new function(){
 	var cradle = require('cradle');
-	var db = new(cradle.Connection)(Constants.Database.ADDRESS, 5984, { cache: true, raw: false, auth: { username: 'ptlarouche', password: 'Silver75' } }).database('dream');
+	var db = new(cradle.Connection)(Constants.Database.ADDRESS, 5984, { cache: false, raw: false, auth: { username: 'ptlarouche', password: 'Silver75' } }).database('dream');
 	var crypto = require('crypto');
 	
 	//To send email.
