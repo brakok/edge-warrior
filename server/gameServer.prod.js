@@ -225,7 +225,7 @@ var Constants = {
 			IMPULSE_Y: 1500
 		},
 		Jaw: {
-			WIDTH: 80,
+			WIDTH: 120,
 			HEIGHT: 30,
 			INITIAL_COUNT: 4,
 			STEP: 6
