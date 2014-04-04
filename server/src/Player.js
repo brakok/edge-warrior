@@ -9,7 +9,7 @@ var Player = function(id, username, x, y, color, game){
 	this.y = y;
 		
 	this.pickAxeCount = 0;
-	this.pickAxeTimer = Constants.Player.PickAxe.TIMER;
+	this.pickAxeTimer = Constants.Player.PickAxe.TIMER + Constants.Warmup.PHASE_TIME;
 	
 	this.killTime = 0;
 	this.stepReached = Enum.StepReached.NONE;
