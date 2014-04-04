@@ -180,6 +180,11 @@ var Constants = {
 					FIRST_STEP: 5
 				}		
 			}
+		},
+		PickAxe: {
+			Z_INDEX: 1005,
+			OFFSET_X: 265,
+			Y: 50
 		}
 	},
 	Message:{
