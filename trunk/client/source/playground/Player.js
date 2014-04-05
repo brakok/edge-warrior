@@ -52,7 +52,7 @@ Player.prototype.buySkill = function(number){
 		//Can't exceed buy limit.
 		if(skill.cost > this.units || skill.level >= Constants.Block.Skill.MAX_LEVEL)
 		{
-			AudioManager.playEffect('deny_action', false);
+			AudioManager.playEffect(Constants.Sound.File.Common.DENY_ACTION, false);
 			return;
 		}
 
@@ -76,7 +76,7 @@ Player.prototype.buySkill = function(number){
 		}
 
 		//Trigger buy sound.
-		AudioManager.playEffect('buy', false);
+		AudioManager.playEffect(Constants.Sound.File.Common.BUY, false);
 		skill.level++;
 		
 		this.units -= skill.cost;
