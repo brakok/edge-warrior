@@ -58,6 +58,13 @@ var Enum = {
 			CRUSHED: 2
 		}
 	},
+	World: {
+		Type: {
+			PIT: 0,
+			CHURCH: 1,
+			ALIEN: 2
+		}
+	},
 	NPC: {
 		Type: {
 			PESKY_BOX: 0
