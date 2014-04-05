@@ -16,7 +16,7 @@ PickAxe.prototype.init = function(){
 	var anim = AnimationManager.create('PickAxe', 0, 7, 24);
 	this.currentAnimation.runAction(cc.RepeatForever.create(anim));
 	
-	this.audioId = AudioManager.playEffect(Constants.Sound.File.Common.FIRE, true);
+	this.audioId = AudioManager.playEffect(Constants.Sound.File.PickAxe.MOVING, true);
 	
 	this.setPosition(this.x, this.y);
 	
@@ -56,6 +56,7 @@ PickAxe.prototype.explode = function(){
 	
 		//Ending effect.
 		EffectManager.create(Enum.Effect.Type.PICK_AXE_DISAPPEARING, this.x, this.y);
+		AudioManager.playEffect(Constants.Sound.File.PickAxe.ENDING, false);
 	}
 		
 	if(this.audioId != null)

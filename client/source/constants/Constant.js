@@ -313,9 +313,15 @@ var Constants = {
 					SUMMON: 'floatingBall_summon'
 				}
 			},
+			PickAxe: {
+				MOVING: 'PickAxe',
+				ENDING: 'PickAxeDisappearing'
+			},
 			Common: {
 				FLOATING: 'floating',
 				FIRE: 'fire',
+				BUY: 'buy',
+				DENY_ACTION: 'deny_action',
 				EXPLOSION01: 'explosion01',
 				EXPLOSION02: 'explosion02'
 			}
