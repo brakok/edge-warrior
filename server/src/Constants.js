@@ -38,11 +38,11 @@ var Constants = {
 		SPEED_LOWER_LIMIT: 100,
 		PickAxe:  {
 			TIMER: 10,
-			VEL_X: 6,
-			VEL_Y: 2.5,
+			VEL_X: 3.5,
+			VEL_Y: 1.5,
 			OFFSET_X: 40,
 			OFFSET_Y: 15,
-			DISTANCE: 100,
+			DISTANCE: 85,
 			WIDTH: 30,
 			HEIGHT: 30,
 			LIMIT: 2
