@@ -184,7 +184,8 @@ var Constants = {
 		PickAxe: {
 			Z_INDEX: 1005,
 			OFFSET_X: 265,
-			Y: 50
+			Y: 50,
+			OFFSET: 50
 		}
 	},
 	Message:{

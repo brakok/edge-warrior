@@ -84,6 +84,13 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('PeskyBoxDisappearing.0018.png');
 			this.animation = AnimationManager.create('PeskyBoxDisappearing', 18, 36, 24);
 			break;
+			
+		case Enum.Effect.Type.PICK_AXE_DISAPPEARING:
+		
+			//Effect created when pesky box ends.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('PickAxeDisappearing.0000.png');
+			this.animation = AnimationManager.create('PickAxeDisappearing', 0, 6, 24);
+			break;
 	}
 	
 	this.sprite.setZOrder(Constants.Effect.Z_INDEX);

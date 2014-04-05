@@ -66,6 +66,12 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'FirePulse_explosion.plist', 
 														  assetsEffectDir + 'FirePulse_explosion.png');
 														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PickAxe.plist', 
+														  assetsEffectDir + 'PickAxe.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PickAxeDisappearing.plist', 
+														  assetsEffectDir + 'PickAxeDisappearing.png');
+														  
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
 														  assetsPlayerDir + 'yellow_idle.png');	

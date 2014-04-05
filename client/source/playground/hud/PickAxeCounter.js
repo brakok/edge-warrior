@@ -6,26 +6,36 @@ var PickAxeCounter = function(x, y, layer){
 
 	this.layer = layer;
 	
-	this.label = cc.LabelTTF.create("0", Constants.Font.NAME, Constants.Font.SIZE, cc.size(40, 40), cc.TEXT_ALIGNMENT_RIGHT);
-	this.sprite = cc.Sprite.create(assetsHudDir + 'pickaxe.png');
-	
-	this.label.setColor(new cc.Color3B(255,255,255));
-	this.label.setPosition(new cc.Point(this.x, this.y));
-	
-	this.sprite.setPosition(new cc.Point(this.x + 45, this.y));
-	this.sprite.setZOrder(Constants.HUD.PickAxe.Z_INDEX);
-	
+	this.sprites = [];
 	this.pickAxeCount = 0;
-	
-	this.layer.addChild(this.label);
-	this.layer.addChild(this.sprite);
 };
 
 PickAxeCounter.prototype.update = function(){
 	
 	if(Client.game.player.pickAxeCount == this.pickAxeCount)
 		return;
-		
+	
+	//Add pickaxes if there are not enough.
+	if(Client.game.player.pickAxeCount > this.pickAxeCount)
+	{
+		for(var i = this.pickAxeCount; i < Client.game.player.pickAxeCount; ++i)
+		{
+			if(!this.sprites[i])
+			{
+				var sprite = cc.Sprite.create(assetsHudDir + 'pickaxe.png');
+				sprite.setPosition(new cc.Point(this.x + Constants.HUD.PickAxe.OFFSET*i, this.y));
+				sprite.setZOrder(Constants.HUD.PickAxe.Z_INDEX);
+				this.sprites.push(sprite);
+			}
+			
+			this.layer.addChild(this.sprites[i]);
+		}
+	}
+
+	//Remove pickaxes if there are too many.
+	if(Client.game.player.pickAxeCount < this.pickAxeCount)
+		for(var i = Client.game.player.pickAxeCount; i < this.pickAxeCount; ++i)
+			this.layer.removeChild(this.sprites[i]);
+	
 	this.pickAxeCount = Client.game.player.pickAxeCount;
-	this.label.setString(Client.game.player.pickAxeCount);
 };
