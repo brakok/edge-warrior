@@ -58,6 +58,13 @@ var Enum = {
 			CRUSHED: 2
 		}
 	},
+	World: {
+		Type: {
+			PIT: 0,
+			CHURCH: 1,
+			ALIEN: 2
+		}
+	},
 	NPC: {
 		Type: {
 			PESKY_BOX: 0
@@ -185,6 +192,14 @@ var Constants = {
 			SPAWN_TIMER: 6
 		}
 	},
+	World: {
+		Common: {
+			GOAL_OFFSET_Y: 50
+		},
+		Church: {
+			GOAL_OFFSET_Y: -200
+		}
+	},
 	NPC: {
 		PeskyBox: {
 			WIDTH: 60,
@@ -204,7 +219,6 @@ var Constants = {
 		}
 	},
 	WinningGoal: {
-		OFFSET_Y: -50,
 		PHASE_TIME: 8,
 		FloatingBall: {
 			WIDTH: 90,
@@ -1870,7 +1884,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 
 	//Spawn a block if drop zone isn't obstructed.
 	if((this.obstruction == 0 || (checkDropzone != null && !checkDropzone)) 
-		&& this.y < this.currentGame.height - Constants.WinningGoal.OFFSET_Y + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
+		&& this.y < this.currentGame.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
 	{
 
 		var tmpX = (x != null ? x : this.getPosition().x);
@@ -2358,6 +2372,18 @@ var Game = function(settings){
 	this.height = settings.height;
 	this.worldType = settings.worldType;
 	
+	this.goalStartPosition = null;
+	
+	//Special case when winning goals are too far.
+	switch(this.worldType){
+		case Enum.World.Type.CHURCH:
+			this.goalStartPosition = this.height + Constants.World.Church.GOAL_OFFSET_Y;
+			break;
+		default:
+			this.goalStartPosition = this.height + Constants.World.Common.GOAL_OFFSET_Y;
+			break;
+	}
+	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
 	
@@ -2499,7 +2525,7 @@ Game.prototype.createWorld = function(){
 			this.players[i].initBody();
 			
 		//Add the goal. TODO: Random between multiples goals.
-		this.goal = new FloatingBall(this.width*0.5, this.height - Constants.WinningGoal.OFFSET_Y, this);
+		this.goal = new FloatingBall(this.width*0.5, this.goalStartPosition, this);
 	}
 };
 

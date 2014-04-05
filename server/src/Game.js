@@ -31,6 +31,18 @@ var Game = function(settings){
 	this.height = settings.height;
 	this.worldType = settings.worldType;
 	
+	this.goalStartPosition = null;
+	
+	//Special case when winning goals are too far.
+	switch(this.worldType){
+		case Enum.World.Type.CHURCH:
+			this.goalStartPosition = this.height + Constants.World.Church.GOAL_OFFSET_Y;
+			break;
+		default:
+			this.goalStartPosition = this.height + Constants.World.Common.GOAL_OFFSET_Y;
+			break;
+	}
+	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
 	
@@ -172,7 +184,7 @@ Game.prototype.createWorld = function(){
 			this.players[i].initBody();
 			
 		//Add the goal. TODO: Random between multiples goals.
-		this.goal = new FloatingBall(this.width*0.5, this.height - Constants.WinningGoal.OFFSET_Y, this);
+		this.goal = new FloatingBall(this.width*0.5, this.goalStartPosition, this);
 	}
 };
 

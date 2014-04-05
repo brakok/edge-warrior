@@ -61,6 +61,14 @@ var Constants = {
 			SPAWN_TIMER: 6
 		}
 	},
+	World: {
+		Common: {
+			GOAL_OFFSET_Y: 50
+		},
+		Church: {
+			GOAL_OFFSET_Y: -200
+		}
+	},
 	NPC: {
 		PeskyBox: {
 			WIDTH: 60,
@@ -80,7 +88,6 @@ var Constants = {
 		}
 	},
 	WinningGoal: {
-		OFFSET_Y: -50,
 		PHASE_TIME: 8,
 		FloatingBall: {
 			WIDTH: 90,

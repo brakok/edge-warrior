@@ -485,7 +485,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 
 	//Spawn a block if drop zone isn't obstructed.
 	if((this.obstruction == 0 || (checkDropzone != null && !checkDropzone)) 
-		&& this.y < this.currentGame.height - Constants.WinningGoal.OFFSET_Y + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
+		&& this.y < this.currentGame.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
 	{
 
 		var tmpX = (x != null ? x : this.getPosition().x);
