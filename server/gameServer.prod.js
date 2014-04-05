@@ -164,7 +164,7 @@ var Constants = {
 			TIMER: 10,
 			VEL_X: 6,
 			VEL_Y: 2.5,
-			OFFSET_X: 15,
+			OFFSET_X: 40,
 			OFFSET_Y: 15,
 			DISTANCE: 100,
 			WIDTH: 30,
