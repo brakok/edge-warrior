@@ -22,45 +22,6 @@ var Client = new function(){
 	this.currentGameId = null;
 	this.isHost = false;
 		
-	//Init keys.
-	this.keys[Options.keys.RIGHT] = false;
-	this.keys[Options.keys.LEFT] = false;
-	this.keys[Options.keys.JUMP] = false;
-	this.keys[Options.keys.KILL] = false;
-	
-	//Option keys.
-	this.keys[Options.keys.OPT1] = false;
-	this.keys[Options.keys.OPT2] = false;
-	
-	this.keys[Options.keys.SKILL1] = false;
-	this.keys[Options.keys.SKILL2] = false;
-	this.keys[Options.keys.SKILL3] = false;
-	this.keys[Options.keys.SKILL4] = false;
-	this.keys[Options.keys.TOGGLE_BUY_MODE] = false;
-	this.keys[Options.keys.CHAT] = false;
-	
-	this.keys[Options.keys.DIG] = false;
-	
-	//Pressed keys.
-	this.pressedKeys[Options.keys.RIGHT] = false;
-	this.pressedKeys[Options.keys.LEFT] = false;
-	this.pressedKeys[Options.keys.JUMP] = false;
-	this.pressedKeys[Options.keys.KILL] = false;
-	
-	//Option keys.
-	this.pressedKeys[Options.keys.OPT1] = false;
-	this.pressedKeys[Options.keys.OPT2] = false;
-	
-	this.pressedKeys[Options.keys.SKILL1] = false;
-	this.pressedKeys[Options.keys.SKILL2] = false;
-	this.pressedKeys[Options.keys.SKILL3] = false;
-	this.pressedKeys[Options.keys.SKILL4] = false;
-	this.pressedKeys[Options.keys.TOGGLE_BUY_MODE] = false;
-	this.pressedKeys[Options.keys.CHAT] = false;
-	
-	this.pressedKeys[Options.keys.DIG] = false;
-	
-	
 	this.init = function(data){
 	
 		//Init game.
@@ -83,6 +44,30 @@ var Client = new function(){
 			}
 		}
 	};
+	
+	this.initKeys = function(){
+	
+		//Init keys.
+		this.keys[Options.keys.RIGHT] = this.pressedKeys[Options.keys.RIGHT] = false;
+		this.keys[Options.keys.LEFT] = this.pressedKeys[Options.keys.LEFT] = false;
+		this.keys[Options.keys.JUMP] = this.pressedKeys[Options.keys.JUMP] = false;
+		this.keys[Options.keys.KILL] = this.pressedKeys[Options.keys.KILL] = false;
+		
+		//Option keys.
+		this.keys[Options.keys.OPT1] = this.pressedKeys[Options.keys.OPT1] = false;
+		this.keys[Options.keys.OPT2] = this.pressedKeys[Options.keys.OPT2] = false;
+		
+		this.keys[Options.keys.SKILL1] = this.pressedKeys[Options.keys.SKILL1] = false;
+		this.keys[Options.keys.SKILL2] = this.pressedKeys[Options.keys.SKILL2] = false;
+		this.keys[Options.keys.SKILL3] = this.pressedKeys[Options.keys.SKILL3] = false;
+		this.keys[Options.keys.SKILL4] = this.pressedKeys[Options.keys.SKILL4] = false;
+		this.keys[Options.keys.TOGGLE_BUY_MODE] = this.pressedKeys[Options.keys.TOGGLE_BUY_MODE] = false;
+		this.keys[Options.keys.CHAT] = this.pressedKeys[Options.keys.CHAT] = false;
+		
+		this.keys[Options.keys.DIG] = this.pressedKeys[Options.keys.DIG] = false;
+	};
+	
+	this.initKeys();
 	
 	//Authentification.
 	this.authenticate = function(profile){
