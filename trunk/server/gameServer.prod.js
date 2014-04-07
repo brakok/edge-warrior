@@ -168,7 +168,7 @@ var Constants = {
 		VELOCITY_FACTOR: 0.4,
 		SPEED_LOWER_LIMIT: 100,
 		PickAxe:  {
-			TIMER: 10,
+			TIMER: 15,
 			VEL_X: 3.5,
 			VEL_Y: 1.5,
 			OFFSET_X: 40,
