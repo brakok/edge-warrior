@@ -240,9 +240,10 @@ Player.prototype.manageInput = function(){
 	if(Client.keys[Options.keys.SKILL4] && !Client.pressedKeys[Options.keys.SKILL4])
 		this.buySkill(4);
 	
+	//Lose focus of canvas when opening chat.
 	if(Client.keys[Options.keys.CHAT] && !Client.pressedKeys[Options.keys.CHAT])
 		Chat.show();
-		
+	
 	//Store blocks in inventory.
 	if(this.givenBlock == null)
 	{

@@ -87,6 +87,8 @@ var Chat = new function(){
 	
 	this.show = function(showTxt){
 		
+		Client.initKeys();
+		
 		this.isVisible = true;
 		this.div.style.opacity = '1';
 		

@@ -28,6 +28,22 @@ var Login = cc.LayerColor.extend({
 		this.txtUsername = document.getElementById('username');
 		this.txtPassword = document.getElementById('password');
 		
+		var that = this;
+		this.txtUsername.addEventListener('keydown', function(){ 
+			if(event.keyCode == 13)
+			{ 
+				that.connect(); 
+			return false;
+			}
+		});
+		this.txtPassword.addEventListener('keydown', function(){ 
+			if(event.keyCode == 13)
+			{ 
+				that.connect(); 
+			return false;
+			}
+		});
+				
 		this.cmdConnect = new cc.MenuItemFont.create("CONNECT", this.connect, this);
 		this.cmdCreate = new cc.MenuItemFont.create("CREATE NEW ACCOUNT", this.createAccount, this);
 		this.cmdResetPassword = new cc.MenuItemFont.create("FORGOTTEN PASSWORD", this.resetPassword, this); 

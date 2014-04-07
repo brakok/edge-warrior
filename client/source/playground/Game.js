@@ -392,7 +392,7 @@ Game.prototype.moveCamera = function(){
 	else
 		this.camera.targetedZoom = 1/zoomRatio;
 		
-	this.camera.lookAt((maxX + minX)*0.5, (maxY + minY)*0.5);	
+	this.camera.lookAt((maxX + minX)*0.5, ((maxY + minY)*0.5) + Constants.Camera.HIGHER);	
 };
 
 //Trigger when someone touched the goal.
