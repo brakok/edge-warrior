@@ -1,11 +1,13 @@
 
-var Missile = function(x, y, type, direction){
+var Missile = function(x, y, type, vel){
 	this.x = x;
 	this.y = y;
+	this.vel = vel;
 	this.type = type
 	this.currentAnimation = null;
 	this.sprite = null;
-	this.direction = direction;
+	
+	this.facing = (this.vel.x < 0 ? Enum.Facing.LEFT : Enum.Facing.RIGHT);
 	
 	this.audioId = null;
 	
@@ -19,48 +21,32 @@ Missile.prototype.init = function(){
 		
 			//Set fireball animation.
 			this.currentAnimation = cc.Sprite.createWithSpriteFrameName('Fireball.0000.png');
-			var anim = AnimationManager.create('Fireball', 0, 3, 24);
-			this.currentAnimation.runAction(cc.RepeatForever.create(anim));
+			this.currentAnimation.runAction(cc.RepeatForever.create(AnimationManager.create('Fireball', 0, 3, 24)));
 			
 			this.audioId = AudioManager.playEffect(Constants.Sound.File.Common.FIRE, true);
+			break;
+		case Enum.DeathZone.Type.PICK_AXE:
+		
+			//Set pickaxe animation.
+			this.currentAnimation = cc.Sprite.createWithSpriteFrameName('PickAxe.0000.png');
+			this.currentAnimation.runAction(cc.RepeatForever.create(AnimationManager.create('PickAxe', 0, 7, 24)));
 			
+			this.audioId = AudioManager.playEffect(Constants.Sound.File.PickAxe.MOVING, true);
 			break;
 	}
 	
 	this.setPosition(this.x, this.y);
 	
-	if(this.sprite != null)
+	if(this.sprite)
 	{
-		if(this.direction != null)
-		{
-			switch(this.direction)
-			{
-				case Enum.Direction.LEFT:
-					this.sprite.setFlippedX(true);
-					break;
-				case Enum.Direction.RIGHT:
-					//Nothing to do.
-					break;
-			}
-		}
-	
+		this.sprite.setFlippedX(this.facing == Enum.Facing.LEFT);
+		
 		this.sprite._zOrder = Constants.DeathZone.Missile.Z_INDEX;
-		Client.game.layer.addChild(this.sprite);
+		Client.game.layer.addChild(this.sprite);		
 	}
-	else if(this.currentAnimation != null)
+	else if(this.currentAnimation)
 	{
-		if(this.direction != null)
-		{
-			switch(this.direction)
-			{
-				case Enum.Direction.LEFT:
-					this.currentAnimation.setFlippedX(true);
-					break;
-				case Enum.Direction.RIGHT:
-					//Nothing to do.
-					break;
-			}
-		}
+		this.currentAnimation.setFlippedX(this.facing == Enum.Facing.LEFT);
 	
 		this.currentAnimation._zOrder = Constants.DeathZone.Missile.Z_INDEX;
 		Client.game.layer.addChild(this.currentAnimation);
@@ -100,6 +86,11 @@ Missile.prototype.explode = function(){
 				EffectManager.create(Enum.Effect.Type.FIREBALL_EXPLOSION, this.x, this.y);
 				
 				AudioManager.playEffect(Constants.Sound.File.Common.EXPLOSION01, false);
+				break;
+			case Enum.DeathZone.Type.PICK_AXE:
+				//Create pickaxe ending animation.
+				EffectManager.create(Enum.Effect.Type.PICK_AXE_DISAPPEARING, this.x, this.y);
+				AudioManager.playEffect(Constants.Sound.File.PickAxe.ENDING, false);
 				break;
 		}
 	}

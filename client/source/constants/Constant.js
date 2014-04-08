@@ -92,9 +92,6 @@ var Constants = {
 		},
 		Jaw: {
 			Z_INDEX: 8
-		},
-		PickAxe: {
-			Z_INDEX: 40
 		}
 	},
 	WinningGoal: {
