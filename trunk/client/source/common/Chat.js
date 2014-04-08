@@ -4,6 +4,8 @@ var Chat = new function(){
 	this.divContent = document.getElementById('content');
 	this.canvas = document.getElementById('gameCanvas');
 	
+	this.playerColors = {};
+	
 	this.isVisible = false;
 	this.fadeTimer = null;
 	this.intervalId = null;
@@ -42,12 +44,41 @@ var Chat = new function(){
 	this.y = 0;
 	
 	this.addLine = function(username, value){
-		this.divContent.innerHTML += '<br /><span class="name">' + username + ': </span>' + value; 
+	
+		//Randomize player color for chat.
+		if(this.playerColors[username] == null)
+		{
+			var rndColor = {r: 0, g: 0, b: 0};
+			
+			rndColor.r = parseInt(Math.random()*255);
+			rndColor.g = parseInt(Math.random()*255);
+			rndColor.b = parseInt(Math.random()*255);
+		
+			//Minor adjusments for visibility.
+			if(Client.game == null)
+			{
+				rndColor.r = parseInt(rndColor.r*0.65);
+				rndColor.g = parseInt(rndColor.g*0.65);
+				rndColor.b = parseInt(rndColor.b*0.65);
+			}
+			else if(rndColor.r + rndColor.g + rndColor.b < 300)
+			{
+				rndColor.r += 50;
+				rndColor.g += 50;
+				rndColor.b += 50;
+			}
+		
+			this.playerColors[username] = rndColor;
+		}
+		
+		var color = this.playerColors[username];
+		this.divContent.innerHTML += '<br /><span style="color: rgb(' + color.r + ',' + color.g + ',' + color.b + ')">' + username + ': </span>' + value; 
 	};
 
 	this.clear = function(){
 		this.divContent.innerHTML = '';
 		this.txt.value = '';
+		this.playerColors = {};
 	};
 
 	this.setColor = function(background, text){
