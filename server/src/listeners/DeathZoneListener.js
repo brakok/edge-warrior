@@ -52,7 +52,8 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 				break;
 			case Enum.UserData.Type.PICK_AXE:
 				
-				if(block && block.isStatic && (block.type == Enum.Block.Type.NEUTRAL || block.type == Enum.Block.Type.COLORED))
+				//Destroyed only landed blocks.
+				if(block && block.landed)
 					block.markToDestroy(Enum.Block.Destruction.CRUSHED);
 				
 				return;
