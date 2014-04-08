@@ -480,11 +480,12 @@ Game.prototype.addBlock = function(remoteBlock){
 Game.prototype.addDeathZone = function(remoteDeathZone){	
 	
 	var deathZone = null;
-	
+		
 	switch(remoteDeathZone.type)
 	{
 		case Enum.DeathZone.Type.FIREBALL:
-			deathZone = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.direction);
+		case Enum.DeathZone.Type.PICK_AXE:
+			deathZone = new Missile(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.vel);
 			break;
 		case Enum.DeathZone.Type.ENERGY_SPIKE:
 			deathZone = new Spike(remoteDeathZone.x, remoteDeathZone.y, remoteDeathZone.type, remoteDeathZone.finalX, remoteDeathZone.finalY);
@@ -492,9 +493,6 @@ Game.prototype.addDeathZone = function(remoteDeathZone){
 			break;
 		case Enum.DeathZone.Type.JAW:
 			deathZone = new Jaw(remoteDeathZone.x, remoteDeathZone.y);
-			break;
-		case Enum.DeathZone.Type.PICK_AXE:
-			deathZone = new PickAxe(remoteDeathZone.x, remoteDeathZone.y);
 			break;
 	}
 	

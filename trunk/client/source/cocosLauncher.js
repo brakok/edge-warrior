@@ -41,7 +41,6 @@
 				  'source/menu/elements/KeyInput.js',
 				  'source/playground/BlockOption.js',
 				  'source/playground/Camera.js',
-				  'source/playground/PickAxe.js',
 				  
 				  'source/network/client.js',
 				  'source/network/Profile.js',
