@@ -323,6 +323,7 @@ Player.prototype.update = function(){
 					this.execute(Enum.Action.Type.STANDING);					
 				
 				//Calculate standing time for kill command.
+				/*
 				if(this.isAlive)
 				{
 					var addTime = false;
@@ -359,7 +360,7 @@ Player.prototype.update = function(){
 				
 					if(addTime)
 						this.killTime += this.currentGame.dt;	
-				}	
+				}	*/
 			}
 		}
 		
@@ -398,7 +399,10 @@ Player.prototype.update = function(){
 Player.prototype.throwPickAxe = function(){
 
 	//Launch pickaxe.
-	this.currentGame.managers.DeathZoneManager.launch(new PickAxe(this.currentGame.deathZoneSequence,
+	this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
+																  this.id,
+																  null,
+																  Enum.DeathZone.Type.PICK_AXE,
 																  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
 																  this.y + Constants.Player.PickAxe.OFFSET_Y, 
 																  Constants.Player.PickAxe.VEL_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1),

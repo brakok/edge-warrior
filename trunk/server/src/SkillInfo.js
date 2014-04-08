@@ -42,25 +42,27 @@ var SkillInfo = {
 					block.currentGame.managers.DeathZoneManager.launch(new Missile(block.currentGame.deathZoneSequence,
 																				  block.ownerId,
 																				  null,
+																				  Enum.DeathZone.Type.FIREBALL,
 																				  block.x,
 																				  block.y, 
-																				  Enum.DeathZone.Type.FIREBALL,
-																				  {
-																					direction: Enum.Direction.LEFT,
-																					power: block.skill.power
-																				  },
+																				  Constants.DeathZone.Fireball.SPEED_MIN + Constants.DeathZone.Fireball.SPEED_STEP*block.skill.power,
+																				  0,
+																				  Constants.DeathZone.Fireball.DISTANCE_MIN + Constants.DeathZone.Fireball.DISTANCE_STEP*block.skill.power,
+																				  Constants.DeathZone.Fireball.WIDTH,
+																				  Constants.DeathZone.Fireball.HEIGHT,
 																				  block.currentGame));
 					
 					block.currentGame.managers.DeathZoneManager.launch(new Missile(block.currentGame.deathZoneSequence,
 																				  block.ownerId,
 																				  null,
-																				  block.x, 
-																				  block.y, 
 																				  Enum.DeathZone.Type.FIREBALL,
-																				  {
-																					direction: Enum.Direction.RIGHT,
-																					power: block.skill.power
-																				  },
+																				  block.x,
+																				  block.y, 
+																				  (Constants.DeathZone.Fireball.SPEED_MIN + Constants.DeathZone.Fireball.SPEED_STEP*block.skill.power)*-1,
+																				  0,
+																				  Constants.DeathZone.Fireball.DISTANCE_MIN + Constants.DeathZone.Fireball.DISTANCE_STEP*block.skill.power,
+																				  Constants.DeathZone.Fireball.WIDTH,
+																				  Constants.DeathZone.Fireball.HEIGHT,
 																				  block.currentGame));
 				
 					block.skill.count--;
