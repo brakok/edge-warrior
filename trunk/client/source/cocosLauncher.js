@@ -5,7 +5,7 @@
 	var config = {
 		COCOS2D_DEBUG:2,
 		box2d:false,
-		showFPS:true,
+		showFPS:false,
 		frameRate:60,
 		tag:'gameCanvas',
 		engineDir:'source/lib/Cocos2d/cocos2d/',
