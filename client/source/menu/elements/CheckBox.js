@@ -30,6 +30,13 @@ CheckBox.prototype.init = function(){
 	this.layer.addChild(this.menu);
 };
 
+CheckBox.prototype.setPosition = function(x, y){
+	this.x = x;
+	this.y = y;
+
+	this.button.setPosition(new cc.Point(this.x, this.y));	
+};
+
 CheckBox.prototype.setEnabled = function(enabled){
 	this.button.setEnabled(enabled);
 };

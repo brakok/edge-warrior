@@ -26,6 +26,13 @@ ColorBox.prototype.init = function(){
 	this.layer.addChild(this.menu);
 };
 
+ColorBox.prototype.setPosition = function(x, y){
+	this.x = x;
+	this.y = y;
+	
+	this.button.setPosition(new cc.Point(this.x, this.y));
+};
+
 ColorBox.prototype.setEnabled = function(enabled){
 	this.button.setEnabled(enabled);
 };	

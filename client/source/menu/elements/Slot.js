@@ -17,20 +17,20 @@ var Slot = function(layer, number, x, y, username, color, ready){
 Slot.prototype.init = function(color, ready){
 
 	this.lblUsername = cc.LabelTTF.create(this.username, Constants.Font.NAME, Constants.Font.SIZE);
-	this.lblUsername.setPosition(new cc.Point(this.x, this.y));
 	this.lblUsername.setColor(new cc.Color3B(0,0,0));
 	
 	this.lblColor = cc.LabelTTF.create("Color", Constants.Font.NAME, Constants.Font.SIZE);
-	this.lblColor.setPosition(new cc.Point(this.x + 585, this.y));
 	this.lblColor.setColor(new cc.Color3B(0,0,0));
 	
 	this.lblReady = cc.LabelTTF.create("Ready", Constants.Font.NAME, Constants.Font.SIZE);
-	this.lblReady.setPosition(new cc.Point(this.x + 775, this.y));
 	this.lblReady.setColor(new cc.Color3B(0,0,0));
 	
 	//Create color box and checkbox with their slot in scope.
-	this.colorBox = new ColorBox(this.layer, this.x + 675, this.y, color);
-	this.chkReady = new CheckBox(this.layer, this.x + 850, this.y, ready);
+	this.colorBox = new ColorBox(this.layer, 0, 0, color);
+	this.chkReady = new CheckBox(this.layer, 0, 0, ready);
+	
+	//Force positioning.
+	this.setPosition(this.x, this.y);
 	
 	//Set callbacks.
 	(function(slot){
@@ -45,6 +45,18 @@ Slot.prototype.init = function(color, ready){
 	this.layer.addChild(this.lblUsername);
 	this.layer.addChild(this.lblColor);
 	this.layer.addChild(this.lblReady);
+};
+
+Slot.prototype.setPosition = function(x, y){
+	this.x = x;
+	this.y = y;
+
+	this.lblUsername.setPosition(new cc.Point(this.x, this.y));
+	this.lblColor.setPosition(new cc.Point(this.x + 585, this.y));
+	this.colorBox.setPosition(this.x + 675, this.y);
+	
+	this.lblReady.setPosition(new cc.Point(this.x + 775, this.y));
+	this.chkReady.setPosition(this.x + 850, this.y);
 };
 
 //Update slot from server.

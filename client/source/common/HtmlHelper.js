@@ -23,6 +23,25 @@ var HtmlHelper = {
 		
 		return width;
 	},
+	computeHeight: function(el){
+		var isVisible = el.style.display != "none";
+		
+		if(!isVisible)
+		{
+			el.style.visibility = "hidden";
+			el.style.display = "block";
+		}
+		
+		var height = parseInt(window.getComputedStyle(el).height);
+		
+		if(!isVisible)
+		{
+			el.style.visibility = null;
+			el.style.display = "none";
+		}
+		
+		return height;
+	},
 	showError: function(msg){
 		
 		if(this.errors[msg])

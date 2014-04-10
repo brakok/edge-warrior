@@ -2,9 +2,12 @@
 var Chat = new function(){
 	this.div = document.getElementById('chat');
 	this.divContent = document.getElementById('content');
+	this.divParent = document.getElementById('contentParent');
 	this.canvas = document.getElementById('gameCanvas');
 	
 	this.playerColors = {};
+	
+	this.isAbsolute = true;
 	
 	this.isVisible = false;
 	this.fadeTimer = null;
@@ -44,7 +47,9 @@ var Chat = new function(){
 	this.y = 0;
 	
 	this.addLine = function(username, value){
-	
+		
+		var needToScroll = !this.isAbsolute && this.divParent.scrollTop >= this.divParent.scrollHeight - this.divParent.offsetHeight;
+		
 		//Randomize player color for chat.
 		if(this.playerColors[username] == null)
 		{
@@ -72,7 +77,18 @@ var Chat = new function(){
 		}
 		
 		var color = this.playerColors[username];
-		this.divContent.innerHTML += '<br /><span style="color: rgb(' + color.r + ',' + color.g + ',' + color.b + ')">' + username + ': </span>' + value; 
+		this.divContent.innerHTML += (this.divContent.innerHTML == '' ? '' : '<br />') + '<span style="color: rgb(' + color.r + ',' + color.g + ',' + color.b + ')">' + username + ': </span>' + value; 
+				
+		//If content is taller than parent div, make it no longer absolute.
+		if(this.isAbsolute && HtmlHelper.computeHeight(this.divContent) >= HtmlHelper.computeHeight(this.divParent))
+		{
+			this.divContent.style.position = 'relative';
+			this.isAbsolute = false;
+			needToScroll = true;
+		}
+		
+		if(!this.isAbsolute && needToScroll)
+			this.divParent.scrollTop = this.divParent.scrollHeight;
 	};
 
 	this.clear = function(){
