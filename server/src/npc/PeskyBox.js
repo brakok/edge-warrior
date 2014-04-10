@@ -23,8 +23,8 @@ var PeskyBox = function(id, x, y, width, height, speed, duration, maxFleeTime, p
 	
 	this.fleeTimer = 0;
 	this.maxFleeTime = maxFleeTime;
-	
-	this.toBeDestroyed = false;
+
+	this.stillExists = true;
 	
 	this.speed = speed;
 	
@@ -57,74 +57,84 @@ PeskyBox.prototype.toClient = function(){
 	};
 };
 
+//Called when contact begins.
+PeskyBox.prototype.onBegin = function(player){
+
+	if(player.id == this.target.id)
+	{
+		player.body.setVel(new chipmunk.Vect(0,0));
+		
+		var impulseX = this.pushX*Math.sin(Math.PI*2*Math.random());
+		var impulseY = Math.abs(this.pushY*Math.random())*-1;
+
+		player.body.applyImpulse(new chipmunk.Vect(impulseX, impulseY), new chipmunk.Vect(0,0));
+		this.fleeTimer = 999999;
+	}
+};
+
+//Called when contact ends.
+PeskyBox.prototype.onEnd = function(player){
+	if(player.id == this.target.id)
+		this.fleeTimer = this.maxFleeTime;
+};
+
 PeskyBox.prototype.update = function(){
 	
-	if(this.toBeDestroyed)
-		this.explode();
-	else
+	if(this.target && !this.target.isRemoved)
 	{
-		if(this.target && !this.target.isRemoved)
+		var nextX = 0;
+		var nextY = 0;
+	
+		//Flee after touch.
+		if(this.fleeTimer > 0)
 		{
-			var nextX = 0;
-			var nextY = 0;
-		
-			//Flee after touch.
-			if(this.fleeTimer > 0)
-			{
-				nextX = this.speed * (this.x < this.target.x ? -1 : 1);
-				nextY = this.speed * (this.y < this.target.y ? -1 : 1);
-				
-				this.fleeTimer -= this.currentGame.dt;
-			}
-			else
-			{
-				nextX = (this.target.x - this.x)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
-				nextY = (this.target.y - this.y)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
-				
-				if(Math.abs(nextX) > this.speed)
-					nextX = this.speed * (this.x < this.target.x ? 1 : -1);
-					
-				if(Math.abs(nextY) > this.speed)
-					nextY = this.speed * (this.y < this.target.y ? 1 : -1);
-			}
+			nextX = this.speed * (this.x < this.target.x ? -1 : 1);
+			nextY = this.speed * (this.y < this.target.y ? -1 : 1);
 			
-			this.velocity.x += nextX;
-			this.velocity.y += nextY;
-		}	
+			this.fleeTimer -= this.currentGame.dt;
+		}
 		else
 		{
-			this.velocity.x *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
-			this.velocity.y *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
+			nextX = (this.target.x - this.x)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
+			nextY = (this.target.y - this.y)/Constants.NPC.PeskyBox.SLOWDOWN_DISTANCE_FACTOR;
+			
+			if(Math.abs(nextX) > this.speed)
+				nextX = this.speed * (this.x < this.target.x ? 1 : -1);
+				
+			if(Math.abs(nextY) > this.speed)
+				nextY = this.speed * (this.y < this.target.y ? 1 : -1);
 		}
 		
+		this.velocity.x += nextX;
+		this.velocity.y += nextY;
+	}	
+	else
+	{
 		this.velocity.x *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
 		this.velocity.y *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
-		
-		var pos = this.body.getPos();
-		this.body.setPos(new chipmunk.Vect(pos.x + this.velocity.x, pos.y + this.velocity.y));
-		pos = this.body.getPos();
-		
-		this.x = pos.x;
-		this.y = pos.y;
-				
-		this.duration -= this.currentGame.dt;
-		
-		if(this.duration <= 0)
-			this.toBeDestroyed = true;
 	}
 	
+	this.velocity.x *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
+	this.velocity.y *= Constants.NPC.PeskyBox.FRICTION_FACTOR;
+	
+	var pos = this.body.getPos();
+	this.body.setPos(new chipmunk.Vect(pos.x + this.velocity.x, pos.y + this.velocity.y));
+	pos = this.body.getPos();
+	
+	this.x = pos.x;
+	this.y = pos.y;
+			
+	this.duration -= this.currentGame.dt;
+	
+	if(this.duration <= 0)
+		this.stillExists = false;
 };
 
 PeskyBox.prototype.explode = function(){
 
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
-		
-	//Remove from game.
-	for(var i in this.currentGame.npcs)
-		if(this.currentGame.npcs[i] != null && this.currentGame.npcs[i].id == this.id)
-			delete this.currentGame.npcs[i];
-	
+			
 	var data = {
 		id: this.id
 	};

@@ -67,12 +67,7 @@ Missile.prototype.explode = function(){
 
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
-		
-	//Remove from game.
-	for(var i in this.currentGame.deathZones)
-		if(this.currentGame.deathZones[i] != null && this.currentGame.deathZones[i].id == this.id)
-			delete this.currentGame.deathZones[i];
-	
+			
 	var data = {
 		id: this.id
 	};
@@ -84,24 +79,19 @@ Missile.prototype.explode = function(){
 
 Missile.prototype.update = function(){
 
-	if(this.stillExists)
-	{	
-		this.x += this.vel.x;
-		this.y += this.vel.y;
-		
-		if((this.vel.x < 0 && this.x < this.finalX) || (this.vel.x > 0 && this.x > this.finalX))
-			this.x = this.finalX;
-
-		if((this.vel.y < 0 && this.y < this.finalY) || (this.vel.y > 0 && this.y > this.finalY))
-			this.y = this.finalY;
+	this.x += this.vel.x;
+	this.y += this.vel.y;
 	
-		this.body.setPos(new chipmunk.Vect(this.x, this.y));
-		
-		//Destroy pick axe if it reaches his maximum distance.
-		if(this.x == this.finalX && this.y == this.finalY)
-			this.stillExists = false;
-	}
-	else
-		this.explode();
+	if((this.vel.x < 0 && this.x < this.finalX) || (this.vel.x > 0 && this.x > this.finalX))
+		this.x = this.finalX;
+
+	if((this.vel.y < 0 && this.y < this.finalY) || (this.vel.y > 0 && this.y > this.finalY))
+		this.y = this.finalY;
+
+	this.body.setPos(new chipmunk.Vect(this.x, this.y));
+	
+	//Destroy pick axe if it reaches his maximum distance.
+	if(this.x == this.finalX && this.y == this.finalY)
+		this.stillExists = false;
 };
 

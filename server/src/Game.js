@@ -249,14 +249,32 @@ Game.prototype.update = function(){
 		if(overlordGotKills && !this.overlord.hasActiveSpawnBlock)
 			this.overlord.launch(Enum.Block.Type.SPAWN);
 			
+		//Update DeathZones.
 		for(var i in this.deathZones)
 			if(this.deathZones[i] != null)
-				this.deathZones[i].update();
+			{
+				if(this.deathZones[i].stillExists)
+					this.deathZones[i].update();
+				else
+				{
+					this.deathZones[i].explode();
+					delete this.deathZones[i];
+					
+				}
+			}
 				
 		//Update NPCs.
 		for(var i in this.npcs)
 			if(this.npcs[i] != null)
-				this.npcs[i].update();
+			{
+				if(this.npcs[i].stillExists)
+					this.npcs[i].update();
+				else
+				{
+					this.npcs[i].explode();
+					delete this.npcs[i];
+				}
+			}
 		
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
