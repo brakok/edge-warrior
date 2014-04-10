@@ -29,26 +29,9 @@ NpcListener.prototype.begin = function(arbiter, space){
 			npc = arbiter.body_b.userdata.object;
 	}
 	
-	if(player != null)
-	{
-		if(npc != null){
-			switch(npc.type){
-				case Enum.NPC.Type.PESKY_BOX:
-				
-					if(player.id == npc.target.id)
-					{
-						player.body.setVel(new chipmunk.Vect(0,0));
-						player.body.applyImpulse(new chipmunk.Vect(npc.pushX*Math.sin(Math.PI*2),
-																   Math.abs(npc.pushY*Math.random())*-1),
-												new chipmunk.Vect(0,0));
-
-						npc.fleeTimer = 999999;
-					}
-
-					break;
-			}
-		}
-	}
+	//Trigger npc.
+	if(player && npc && npc.onBegin)
+		npc.onBegin(player);
 };
 
 NpcListener.prototype.separate = function(arbiter, space){
@@ -76,18 +59,8 @@ NpcListener.prototype.separate = function(arbiter, space){
 		else	
 			npc = arbiter.body_b.userdata.object;
 	}
-	
-	if(player != null)
-	{
-		if(npc != null){
-			switch(npc.type){
-				case Enum.NPC.Type.PESKY_BOX:
 
-					if(player.id == npc.target.id)
-						npc.fleeTimer = npc.maxFleeTime;
-					
-					break;
-			}
-		}
-	}
+	//Trigger npc.
+	if(player && npc && npc.onEnd)
+		npc.onEnd(player);
 };

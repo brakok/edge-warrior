@@ -196,7 +196,7 @@ Block.prototype.trigger = function(){
 		else if(this.type == Enum.Block.Type.SKILLED)
 		{
 			//Trigger skill.
-			SkillInfo.exec(this);
+			this.skill.exec(this);
 		}
 	}
 	
