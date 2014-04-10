@@ -118,18 +118,26 @@ var LobbyScreen = cc.LayerColor.extend({
 		
 		var index = null;
 		
-		for(var i in this.slots)
+		//Find slot index.
+		for(var i = 0; i < this.slots.length; ++i)
 			if(this.slots[i].username == username)
 			{
 				index = i;
 				break;
 			}
 		
+		//Remove.
 		if(index != null)
 		{
 			this.slots[i].close();
 			this.slots.splice(index, 1);
 		}
+		
+		//Replace.
+		for(var i = 0; i < this.slots.length; ++i)
+			if(this.slots[i] != null)
+				this.slots[i].setPosition(this.width*0.15, this.height*(0.85 - 0.1*(i+1)));
+		
 	},
 	getSlot: function(username){
 		
