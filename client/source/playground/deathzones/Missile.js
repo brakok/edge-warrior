@@ -27,9 +27,18 @@ Missile.prototype.init = function(){
 			break;
 		case Enum.DeathZone.Type.PICK_AXE:
 		
+			var degree = 0;
+			var that = this;
+		
 			//Set pickaxe animation.
-			this.currentAnimation = cc.Sprite.createWithSpriteFrameName('PickAxe.0000.png');
-			this.currentAnimation.runAction(cc.RepeatForever.create(AnimationManager.create('PickAxe', 0, 7, 24)));
+			this.sprite = cc.Sprite.create(assetsEffectDir + 'PickAxe.png');
+			this.sprite.schedule(function(dt){
+				that.sprite.setRotation(degree);
+				degree += 24*(that.facing == Enum.Facing.LEFT ? -1 : 1); //360 degree for 60 frames.
+				
+				if(degree == 360)
+					degree = 0;
+			});
 			
 			this.audioId = AudioManager.playEffect(Constants.Sound.File.PickAxe.MOVING, true);
 			break;
@@ -74,7 +83,17 @@ Missile.prototype.fromServer = function(remoteMissile){
 Missile.prototype.explode = function(){
 
 	if(this.sprite != null)
+	{
 		Client.game.layer.removeChild(this.sprite);
+			
+		switch(this.type){
+			case Enum.DeathZone.Type.PICK_AXE:
+				//Create pickaxe ending animation.
+				EffectManager.create(Enum.Effect.Type.PICK_AXE_DISAPPEARING, this.x, this.y);
+				AudioManager.playEffect(Constants.Sound.File.PickAxe.ENDING, false);
+				break;
+		}
+	}
 	else if(this.currentAnimation != null)
 	{
 		Client.game.layer.removeChild(this.currentAnimation);
@@ -86,11 +105,6 @@ Missile.prototype.explode = function(){
 				EffectManager.create(Enum.Effect.Type.FIREBALL_EXPLOSION, this.x, this.y);
 				
 				AudioManager.playEffect(Constants.Sound.File.Common.EXPLOSION01, false);
-				break;
-			case Enum.DeathZone.Type.PICK_AXE:
-				//Create pickaxe ending animation.
-				EffectManager.create(Enum.Effect.Type.PICK_AXE_DISAPPEARING, this.x, this.y);
-				AudioManager.playEffect(Constants.Sound.File.PickAxe.ENDING, false);
 				break;
 		}
 	}

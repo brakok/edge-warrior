@@ -66,9 +66,6 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'FirePulse_explosion.plist', 
 														  assetsEffectDir + 'FirePulse_explosion.png');
 														  
-		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PickAxe.plist', 
-														  assetsEffectDir + 'PickAxe.png');
-														  
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PickAxeDisappearing.plist', 
 														  assetsEffectDir + 'PickAxeDisappearing.png');
 														  
