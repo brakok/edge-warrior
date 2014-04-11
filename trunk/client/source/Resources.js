@@ -169,7 +169,6 @@ var assets = [
 	{type:"plist", src: assetsEffectDir + 'Fireball.plist'},
 	{type:"plist", src: assetsEffectDir + 'Fireball_explosion.plist'},
 	{type:"plist", src: assetsEffectDir + 'FirePulse_explosion.plist'},
-	{type:"plist", src: assetsEffectDir + 'PickAxe.plist'},
 	{type:"plist", src: assetsEffectDir + 'PickAxeDisappearing.plist'},
 
 	//Winning goal.
