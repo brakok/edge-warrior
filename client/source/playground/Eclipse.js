@@ -58,8 +58,8 @@ Eclipse.prototype.update = function(dt){
 											   assetsParticles + 'WhiteDot.png', 
 											   this.radius + Constants.Element.Eclipse.Dot.OFFSET*this.scale, 
 											   Constants.Element.Eclipse.Dot.OFFSET_VAR*this.scale, 
-											   this.radius*0.66, 
-											   this.scale, 
+											   this.radius*0.45, 
+											   this.scale*Constants.Element.Eclipse.Dot.SCALE, 
 											   Client.game.frontLayer));
 											   
 				this.dotTimer = Constants.Element.Eclipse.Dot.TIMER;
