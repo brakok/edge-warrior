@@ -34,10 +34,10 @@ Missile.prototype.init = function(){
 			this.sprite = cc.Sprite.create(assetsEffectDir + 'PickAxe.png');
 			this.sprite.schedule(function(dt){
 				that.sprite.setRotation(degree);
-				degree += 24*(that.facing == Enum.Facing.LEFT ? -1 : 1); //360 degree for 60 frames.
+				degree += 24*(that.facing == Enum.Facing.LEFT ? -1 : 1);
 				
-				if(degree == 360)
-					degree = 0;
+				if(degree >= 360)
+					degree = degree%360;
 			});
 			
 			this.audioId = AudioManager.playEffect(Constants.Sound.File.PickAxe.MOVING, true);

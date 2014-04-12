@@ -257,10 +257,11 @@ var Constants = {
 			FADE_OUT: 0.75,
 			OWNER_MAX_OPACITY: 125,
 			Dot: {
-				SPEED: 4,
+				SPEED: 5,
 				TIMER: 0.05,
-				OFFSET: 20,
-				OFFSET_VAR: 10
+				OFFSET: 10,
+				OFFSET_VAR: 5,
+				SCALE: 0.8
 			}
 		}
 	},

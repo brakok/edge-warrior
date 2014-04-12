@@ -13,7 +13,7 @@ var ChargingDot = function(x, y, speed, spritePath, radius, radiusVar, radiusToE
 	this.x = x + this.cos*rndRadius;
 	this.y = y + this.sin*rndRadius;
 	
-	this.radius = radius;
+	this.radius = rndRadius;
 	this.radiusToEnd = radiusToEnd;
 	this.scale = scale;
 	this.displayScale = scale + Math.random();
@@ -42,7 +42,7 @@ ChargingDot.prototype.update = function(){
 	
 	var delta = Math.sqrt(Math.pow(this.x - this.finalX, 2) + Math.pow(this.y - this.finalY, 2));
 	
-	var opacity = delta < this.radiusToEnd ? 0 : (this.radiusToEnd - delta/this.radiusToEnd - this.radius)*255;
+	var opacity = delta < this.radiusToEnd ? 0 : ((this.radiusToEnd - delta)/(this.radiusToEnd - this.radius))*255;
 	this.sprite.setOpacity(opacity);
 	
 	if(delta <= this.radiusToEnd)
