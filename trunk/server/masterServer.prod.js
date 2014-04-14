@@ -332,7 +332,7 @@ var Constants = {
 		EMAIL: /^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/
 	}
 };
-Constants.Database.ADDRESS = 'http://crusheddbdeploy.cloudapp.net';
+Constants.Database.ADDRESS = 'http://crusheddb.cloudapp.net';
 Constants.Network.ADDRESS = 'http://crushedmaster.cloudapp.net:1060';
 var Config = {
 	CreateCouchDbViews: true
