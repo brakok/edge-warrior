@@ -1,0 +1,367 @@
+/******************************** GENERAL **********************************/
+* {
+	margin:0;
+	padding:o;
+}
+body{
+	background: url(../Images/CharacterBG.jpg) no-repeat 0 640px;
+	background-size: 100%;
+}
+html, body {
+	width:100%;
+    height:100%;
+    min-height:100%;
+}
+article p{
+	font-family: hallo_sansLight;
+}
+li,a{
+	text-decoration:none;
+}
+
+ul{
+	list-style-type:none;
+}
+li{
+	display:inline;
+}
+a,h2{
+	font-variant:small-caps;
+}
+h2{
+	color:#7b0000;
+}
+
+.wrapper{
+	margin:0 auto;
+	max-width:1618px;
+	width:90%;
+	background-size: 100%;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0px auto -300px;
+}
+
+/* FONT */
+/* Quantico */
+/* Regular */
+@font-face {
+    font-family: quantico;
+    src: url('../Font/Quantico/quantico_r.eot');
+    src: url('../Font/Quantico/quantico_r.eot?#iefix') format('embedded-opentype'),
+         url('../Font/Quantico/quantico_r.woff') format('woff'),
+         url('../Font/Quantico/quantico_r.ttf') format('truetype'),
+         url('../Font/Quantico/quantico_r.svg#quanticobold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+/* Bold */
+@font-face {
+    font-family: quantico_bold;
+    src: url('../Font/Quantico/quantico_b.eot');
+    src: url('../Font/Quantico/quantico_b.eot?#iefix') format('embedded-opentype'),
+         url('../Font/Quantico/quantico_b.woff') format('woff'),
+         url('../Font/Quantico/quantico_b.ttf') format('truetype'),
+         url('../Font/Quantico/quantico_b.svg#quanticobold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Hallo Sans */
+/* Light */
+@font-face {
+    font-family: hallo_sansLight;
+    src: url('../Font/HalloSans/hallosans_l.eot');
+    src: url('../Font/HalloSans/hallosans_l.eot?#iefix') format('embedded-opentype'),
+         url('../Font/HalloSans/hallosans_l.woff') format('woff'),
+         url('../Font/HalloSans/hallosans_l.ttf') format('truetype'),
+         url('../Font/HalloSans/hallosans_l.svg#hallo_sansLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+/* Regular */
+@font-face {
+    font-family: hallo_sans;
+    src: url('../Font/HalloSans/hallosans.eot');
+    src: url('../Font/HalloSans/hallosans.eot?#iefix') format('embedded-opentype'),
+         url('../Font/HalloSans/hallosans.woff') format('woff'),
+         url('../Font/HalloSans/hallosans.ttf') format('truetype'),
+         url('../Font/HalloSans/hallosans.svg#hallo_sans') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Bold*/
+@font-face {
+    font-family: hallo_sansblack;
+    src: url('../Font/HalloSans/hallosans_b.eot');
+    src: url('../Font/HalloSans/hallosans_b.eot?#iefix') format('embedded-opentype'),
+         url('../Font/HalloSans/hallosans_b.woff') format('woff'),
+         url('../Font/HalloSans/hallosans_b.ttf') format('truetype'),
+         url('../Font/HalloSans/hallosans_b.svg#hallo_sansblack') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/******************************** HEADER **********************************/
+header{
+	background: url(../Images/BG_header.png) repeat-x center top;
+	background-size: 100%;
+	height:450px;
+	max-width: 1906px;
+	width: 100%;
+}
+
+header #PlayGame_BT{
+	background: url(../Images/BT_playGame.png) no-repeat;
+	border: none;
+	float: left;
+	height: 199px;
+	width: 255px;
+}
+header #PlayGame_BT a{	
+	cursor: pointer;
+	color:#d2d2d2;
+	float: left;
+	font-family:hallo_sansblack;
+	margin: 25px;
+	width: 130px;
+}
+header #PlayGame_BT a:hover{
+	color:white;
+	text-shadow: 1px 1px 1px gray;
+}
+
+header #PlayGame_BT p:first-child{
+	font-size:25px;
+}
+header #PlayGame_BT p:last-child{
+	font-size:62px;
+	text-transform: uppercase;
+}
+
+
+/* Main nav */
+header nav {
+	float:right;
+	margin-top:30px;
+}
+header nav li {
+	background: url(../Images/navList_Dot.jpg) no-repeat center right;
+	width: 120px;
+	float: left;
+	text-align: center;
+}
+/* Select the first item of the nav */
+header nav li:first-child{
+	width:160px;
+}
+/* Select the last item of the nav */
+header nav li:last-child{
+	background:none;
+}
+header nav li a{
+	color:#d2d2d2;
+	font-family: quantico;
+	font-size:24px;	
+}
+header nav li a:hover{
+	color:white;
+	text-shadow:1px 1px 1px red;
+}
+/* Logo */
+h1{
+	color:black;
+	font-family:quantico_bold;
+	font-size: 121px;
+	height: 0;
+	text-align:center;
+	padding-bottom: 19%;
+}
+#logo{
+	margin:0 auto 120px;
+	max-width:920px;
+	padding:160px 0 0;
+	width:100%;
+}
+#logo p{
+	background: white;
+	color: #7b0000;
+	font-family:hallo_sans;
+	font-size: 65px;
+	font-variant: small-caps;
+	text-align: center;
+	margin: -35px auto;
+	width: 45%;
+}
+#logo span{
+	background:#7b0000;
+	height:10px;
+	float:left;
+	width:100%;
+}
+
+/* Characters */
+#characters{
+	float:left;
+	width:100%;
+}
+#characters p{
+	font-family: hallo_sans;
+	font-size:40pt;
+	font-variant: small-caps;
+	height:50px;
+	text-align:center;
+}
+#characters p:nth-child(2){
+	color:#aeadad;
+	font-size:24pt;
+}
+
+#characters .back p{
+	font-family: hallo_sansLight;
+	font-size: 14pt;
+	text-align: left;
+	width: 190px;
+	padding: 80px 0 0 220px;
+	font-variant: initial;
+	
+}
+#characters #blue .back p{
+	width: 200px;
+	padding: 80px 0 0 170px;
+}
+#red,#yellow,#blue,#white{
+	float:left;
+}
+/* Red*/
+.flip-container#red,.flip-container#red .front,.flip-container#red .back {
+	height: 363px;
+}
+#red .front{
+	background:url(../Images/Red_Front.png) no-repeat;
+}
+#red .back{
+	background:url(../Images/Red_Back.png) no-repeat;
+}
+/* Yellow */
+#yellow .front{
+	background:url(../Images/Yellow_Front.png) no-repeat;
+}
+#yellow .back{
+	background:url(../Images/Yellow_Back.png) no-repeat;
+}
+.flip-container#yellow, .flip-container#yellow .front, .flip-container#yellow .back {
+	width:429px;
+	height: 370px;
+}
+.flip-container#yellow .back{
+	margin-top:-371px;
+}
+/* Blue */
+#blue .front{
+	background:url(../Images/Blue_Front.png) no-repeat;
+}
+#blue .back{
+	background:url(../Images/Blue_Back.png) no-repeat;
+}
+.flip-container#blue, .flip-container#blue .front, .flip-container#blue .back {
+	width:382px;
+	height: 366px;
+}	
+.flip-container#blue .back{
+	margin-top:-366px;
+}
+/* White */
+#white .front{
+	background:url(../Images/White_Front.png) no-repeat;
+}
+#white .back{
+	background:url(../Images/White_Back.png) no-repeat;
+}
+.flip-container#white, .flip-container#white .front, .flip-container#white .back {
+	width:414px;
+	height: 363px;
+}
+
+/* FLIP ANIMATION CSS */
+
+/* START: Accommodating for IE */
+	.flip-container:hover .back, .flip-container.hover .back {
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+	}
+
+.flip-container:hover .front, .flip-container.hover .front {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}
+		
+/* END: Accommodating for IE */
+
+.flip-container, .front, .back {
+	margin:10px 22px 0;
+	width: 422px;
+}
+
+.front, .back {
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-ms-backface-visibility: hidden;
+	backface-visibility: hidden;
+    -webkit-transition: 0.6s;
+    -webkit-transform-style: preserve-3d;
+    -moz-transition: 0.6s;
+    -moz-transform-style: preserve-3d;
+    -o-transition: 0.6s;
+    -o-transform-style: preserve-3d;
+    -ms-transition: 0.6s;
+    -ms-transform-style: preserve-3d;
+    transition: 0.6s;
+    transform-style: preserve-3d;
+	top: 0;
+	left: 0;
+}
+
+.front {
+	-webkit-transform: rotateY(0deg);
+	-ms-transform: rotateY(0deg);
+	z-index: 2;
+}
+
+.back {
+	-webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    -o-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+	margin-top:-362px;
+}
+	
+		
+/***************************** MAIN CONTENT *******************************/
+
+/******************************** FOOTER **********************************/
+footer, .push {
+	height: 300px;
+}
+footer{
+	background: url(../Images/BG_footer.png) repeat-x center bottom;
+	background-size: 100%;
+	max-width: 1906px;
+	width: 100%;
+}
+footer a{
+	color:#575757;
+	font-size:22pt;
+}
+footer p{
+	color:white;
+}
