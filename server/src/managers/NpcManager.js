@@ -5,7 +5,9 @@ var NpcManager = function(game){
 
 NpcManager.prototype.add = function(npc){
 	
+	npc.id = this.currentGame.npcSequence;
 	this.currentGame.npcSequence++;
+	
 	this.currentGame.npcs.push(npc);
 	
 	var data = {

@@ -5,4 +5,5 @@ var Managers = function(game){
 	this.BlockManager = new BlockManager(this.currentGame);
 	this.DeathZoneManager = new DeathZoneManager(this.currentGame);
 	this.NpcManager = new NpcManager(this.currentGame);
+	this.TriggerManager = new TriggerManager(this.currentGame);
 };

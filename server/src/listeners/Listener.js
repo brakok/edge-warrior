@@ -9,4 +9,5 @@ var Listeners = function(game){
 	this.GroundListener = new GroundListener(this.currentGame);
 	this.BlockListener = new BlockListener(this.currentGame);
 	this.NpcListener = new NpcListener(this.currentGame);
+	this.TriggerListener = new TriggerListener(this.currentGame);
 };

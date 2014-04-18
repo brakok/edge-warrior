@@ -399,8 +399,7 @@ Player.prototype.update = function(){
 Player.prototype.throwPickAxe = function(){
 
 	//Launch pickaxe.
-	this.currentGame.managers.DeathZoneManager.launch(new Missile(this.currentGame.deathZoneSequence,
-																  this.id,
+	this.currentGame.managers.DeathZoneManager.launch(new Missile(this.id,
 																  null,
 																  Enum.DeathZone.Type.PICK_AXE,
 																  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
@@ -496,8 +495,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
-		this.currentGame.managers.BlockManager.launch(new Block(this.currentGame.blockSequence, 
-															  tmpX, 
+		this.currentGame.managers.BlockManager.launch(new Block(tmpX, 
 															  tmpY, 
 															  this.currentBlock.type, 
 															  this.color,

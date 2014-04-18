@@ -1,8 +1,8 @@
 
-var Missile = function(id, ownerId, blockId, type, x, y, velX, velY, distance, width, height, game){
+var Missile = function(ownerId, blockId, type, x, y, velX, velY, distance, width, height, game){
 	
 	this.currentGame = game;
-	this.id = id;
+	this.id = -1;
 
 	this.ownerId = ownerId;
 	this.blockId = blockId;

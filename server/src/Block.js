@@ -1,9 +1,9 @@
 //Server version of the block.
-var Block = function(id, x, y, type, color, ownerId, game, skill){
+var Block = function(x, y, type, color, ownerId, game, skill){
 	
 	this.currentGame = game;
 	
-	this.id = id;
+	this.id = -1;
 	this.linkedBlockId = null;
 	this.ownerId = ownerId;
 	

@@ -9,8 +9,7 @@ SkillInfo.FirePulse = {
 		if(block.landingTimer <= 0 && block.skill.count > 0)
 		{
 			//Launch one fireball for both sides.
-			block.currentGame.managers.DeathZoneManager.launch(new Missile(block.currentGame.deathZoneSequence,
-																		  block.ownerId,
+			block.currentGame.managers.DeathZoneManager.launch(new Missile(block.ownerId,
 																		  null,
 																		  Enum.DeathZone.Type.FIREBALL,
 																		  block.x,
@@ -22,8 +21,7 @@ SkillInfo.FirePulse = {
 																		  Constants.DeathZone.Fireball.HEIGHT,
 																		  block.currentGame));
 			
-			block.currentGame.managers.DeathZoneManager.launch(new Missile(block.currentGame.deathZoneSequence,
-																		  block.ownerId,
+			block.currentGame.managers.DeathZoneManager.launch(new Missile(block.ownerId,
 																		  null,
 																		  Enum.DeathZone.Type.FIREBALL,
 																		  block.x,

@@ -1,7 +1,7 @@
 
-var PeskyBox = function(id, x, y, width, height, speed, duration, maxFleeTime, pushX, pushY, target, game){
+var PeskyBox = function(x, y, width, height, speed, duration, maxFleeTime, pushX, pushY, target, game){
 	
-	this.id = id;
+	this.id = -1;
 	this.x = x;
 	this.y = y;
 	

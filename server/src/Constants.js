@@ -81,10 +81,22 @@ var Constants = {
 			FLEE_STEP: 0.04,
 			SLOWDOWN_DISTANCE_FACTOR: 25,
 			FRICTION_FACTOR: 0.93,
-			PUSH_X: 900,
-			PUSH_X_STEP: 150,
-			PUSH_Y: 900,
-			PUSH_Y_STEP: 150
+			PUSH_X: 1250,
+			PUSH_X_STEP: 25,
+			PUSH_Y: 1250,
+			PUSH_Y_STEP: 25
+		}
+	},
+	Trigger: {
+		Deflector: {
+			REL_Y: 100,
+			DURATION: 4,
+			DURATION_STEP: 2,
+			WIDTH: 75,
+			HEIGHT: 75,
+			PUSH: 2000,
+			PUSH_STEP: 350,
+			MAX_PUSH_Y_FACTOR: 0.25
 		}
 	},
 	WinningGoal: {
@@ -192,7 +204,10 @@ var Constants = {
 		GET_STATS: 'getStats',
 		KEEP_SERVER_ALIVE: 'keepServerAlive',
 		HANDSHAKE_INFO: 'handshakeInfo',
-		CHAT: 'chat'
+		CHAT: 'chat',
+		NEW_TRIGGER: 'newTrigger',
+		DELETE_TRIGGER: 'deleteTrigger',
+		ACTION_TRIGGER: 'actionTrigger'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'

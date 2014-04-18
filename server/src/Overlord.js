@@ -36,19 +36,12 @@ Overlord.prototype.launch = function(blockType){
 			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(this.currentGame.width-Constants.Block.WIDTH));
 			
 			//Create a block and launch it.
-			var block = new Block(this.currentGame.blockSequence, 
-								  spawnX, 
-								  spawnY, 
-								  Enum.Block.Type.SPAWN, 
-								  null,
-								  null, 
-								  this.currentGame);
-			
-			this.currentGame.blocks.push(block);
-			block.launch();
-			
-			this.currentGame.blockSequence++;	
-			io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
+			this.currentGame.managers.BlockManager.launch(new Block(spawnX, 
+																  spawnY, 
+																  Enum.Block.Type.SPAWN, 
+																  null,
+																  null, 
+																  this.currentGame));
 			
 			this.hasActiveSpawnBlock = true;
 		}
