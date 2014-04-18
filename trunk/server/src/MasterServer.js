@@ -112,7 +112,6 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	//Send user stats to client.
 	socket.on(Constants.Message.REFRESH_STATS, function(username){
-		console.log(username + ' getting stats');
 
 		Account.getStats(username, function(stats){
 			socket.emit(Constants.Message.GET_STATS, stats);
@@ -267,19 +266,17 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		if(ioMasterServer.sockets.clients().length > 0)
 		{
-			var index = Math.floor(Math.random()*ioMasterServer.sockets.clients().length);	
-			
-			if(index >= ioMasterServer.sockets.clients().length)
-				index = ioMasterServer.sockets.clients().length-1;
-			
+			var lowestPercent = 100;
 			var serverSocket = null;
-			var socketId = null;
-			
-			var keys = Object.keys(ioMasterServer.sockets.sockets);
-			
-			if(index < keys.length)
-				serverSocket = ioMasterServer.sockets.sockets[keys[index]];
 
+			//Find socket with lowest cpu usage.
+			for(var i in ioMasterServer.sockets.sockets)
+				if(ioMasterServer.sockets.sockets[i].cpuUsage < lowestPercent)
+				{
+					lowestPercent = ioMasterServer.sockets.sockets[i].cpuUsage;
+					serverSocket = ioMasterServer.sockets.sockets[i];
+				}
+								
 			//Ask specified server to create a game.
 			if(serverSocket != null)
 			{
@@ -287,7 +284,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[socket.userdata.gameId].settings);
 			}
 			else
-				console.log('No server socket found');
+				console.log('No server found');
 		}
 		else
 			console.log('No server found');
@@ -305,8 +302,9 @@ ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 	socket.lastPresence = new Date();
 	
 	//Get pinged from game server.
-	socket.on(Constants.Message.KEEP_SERVER_ALIVE, function(){
+	socket.on(Constants.Message.KEEP_SERVER_ALIVE, function(data){
 		socket.lastPresence = new Date();
+		socket.cpuUsage = data.cpuUsage;
 	});
 	
 	//Send to client ip address for their game server.

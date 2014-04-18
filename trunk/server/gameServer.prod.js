@@ -2802,11 +2802,11 @@ Overlord.prototype.kill = function(killed, cause){
 	
 	//Force player to die.
 	killed.toBeDestroy = true;
-};//Modules.var http = require('http');var chipmunk = require('chipmunk');//Create server.
+};//Modules.var http = require('http');var chipmunk = require('chipmunk');var os = require('os');//Create server.
 var server = http.createServer(function(req, res){});
 
 //Port.
-server.listen(Constants.Network.SERVER_PORT); //localhost
+server.listen(Constants.Network.SERVER_PORT);
 
 //Remove log level or adjust it to have every log in console.
 var io = require('socket.io').listen(server).set('log level', 1);
@@ -2816,36 +2816,56 @@ var Server = new function(){
 	this.gameList = {};
 	this.address = null;
 	
+	var previousUserTime = 0;
+	var previousSysTime = 0;
+	var previousIdleTime = 0;
+	
 	this.addGame = function(settings){	
 		this.gameList[settings.id] = new Game(settings);
 	};
 		
 	this.register = function(){
 		var socket = require('socket.io-client').connect(Constants.Network.ADDRESS);
-				
-		//Get ip address.
-		var os = require('os')
 
-		var interfaces = os.networkInterfaces();
-
-		for (k in interfaces) {
-			for (k2 in interfaces[k]) {
-				var address = interfaces[k][k2];
-				
-				if (address.family == 'IPv4' && !address.internal)
-				{
-					this.address = address.address;
-						break;
-				}
-			}
-			
-			if(this.address != null)
-				break;
-		}
-		
 		//Notify master server that this server is still running.
 		setInterval(function(){
-			socket.emit(Constants.Message.KEEP_SERVER_ALIVE);
+		
+			//Process cpu usage for load balacing between game servers.
+			var cpuUsage = 0;
+			var cpus = os.cpus();
+			var cpuCount = 0;
+			
+			var userTime = 0;
+			var sysTime = 0;
+			var idleTime = 0;
+			
+			for(var i in cpus)
+			{
+				cpuCount++;
+				var cpu = cpus[i];
+				
+				userTime += cpu.times.user;
+				sysTime += cpu.times.sys;
+				idleTime += cpu.times.idle;
+			}
+			
+			userTime /= cpuCount;
+			sysTime /= cpuCount;
+			idleTime /= cpuCount;
+			
+			var tmpUserTime = userTime - previousUserTime;
+			var tmpSysTime = sysTime - previousSysTime;
+			var tmpIdleTime = idleTime - previousIdleTime;
+			
+			//Get cpu usage in percent.
+			cpuUsage = parseInt((tmpUserTime + tmpSysTime)/(tmpUserTime + tmpSysTime + tmpIdleTime)*100);
+			
+			previousUserTime = userTime;
+			previousSysTime = sysTime;
+			previousIdleTime = idleTime;
+			
+			socket.emit(Constants.Message.KEEP_SERVER_ALIVE, { cpuUsage: cpuUsage });
+			
 		}, Constants.Network.REFRESH_PRESENCE);
 				
 		//Get external ip from master server.
