@@ -47,7 +47,8 @@ var Enum = {
 			FIRE_PULSE: 0,
 			JAW_FALL: 1,
 			ECLIPSE: 2,
-			PESKY_BOX: 3
+			PESKY_BOX: 3,
+			DEFLECTOR: 4
 		},
 		Destruction: {
 			COLOR_CONTACT: 0,
@@ -97,6 +98,16 @@ var Enum = {
 	NPC: {
 		Type: {
 			PESKY_BOX: 0
+		}
+	},
+	Trigger: {
+		Action: {
+			Type: {
+				COMMON: 0
+			}
+		},
+		Type: {
+			DEFLECTOR: 0
 		}
 	},
 	WinningGoal: {

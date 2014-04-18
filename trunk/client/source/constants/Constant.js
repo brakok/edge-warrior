@@ -230,7 +230,10 @@ var Constants = {
 		NEW_NPC: 'newNPC',
 		REFRESH_STATS: 'refreshStats',
 		GET_STATS: 'getStats',
-		CHAT: 'chat'
+		CHAT: 'chat',
+		NEW_TRIGGER: 'newTrigger',
+		DELETE_TRIGGER: 'deleteTrigger',
+		ACTION_TRIGGER: 'actionTrigger'
 	},
 	Effect: {
 		Z_INDEX: 50,
@@ -270,6 +273,9 @@ var Constants = {
 		PeskyBox: {
 			EYE_RADIUS: 5
 		}
+	},
+	Trigger: {
+		Z_ORDER: 14
 	},
 	Sound: {
 		Effect: {

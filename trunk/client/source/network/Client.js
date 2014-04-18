@@ -498,6 +498,11 @@ var Client = new function(){
 			Client.game.addDeathZone(data);
 		});
 		
+		//Add a trigger.
+		socket.on(Constants.Message.NEW_TRIGGER, function(data){
+			Client.game.addTrigger(data);
+		});
+		
 		//Add a npc.
 		socket.on(Constants.Message.NEW_NPC, function(data){
 			Client.game.addNpc(data);
@@ -506,6 +511,17 @@ var Client = new function(){
 		//Delete a npc.
 		socket.on(Constants.Message.DELETE_NPC, function(data){
 			Client.game.deleteNpc(data.id);
+		});
+		
+		//Delete a Trigger.
+		socket.on(Constants.Message.DELETE_TRIGGER, function(data){
+			Client.game.deleteTrigger(data.id);
+		});
+		
+		//Action for triggers.
+		socket.on(Constants.Message.ACTION_TRIGGER, function(data){
+			if(Client.game.triggers[data.id] != null)
+				Client.game.triggers[data.id].execute(data.type);
 		});
 		
 		//Add new element.

@@ -11,6 +11,8 @@ var SkillInfo = {
 				return this.Eclipse;
 			case Enum.Block.Skill.PESKY_BOX:
 				return this.PeskyBox;
+			case Enum.Block.Skill.DEFLECTOR:
+				return this.Deflector;
 		}
 		
 		return null;
@@ -54,5 +56,15 @@ var SkillInfo = {
 		PERCENT_STEP: 3,
 		COST: 725,
 		COST_STEP: 1100
+	},
+	Deflector: {
+		TITLE: 'Deflector',
+		DESCRIPTION: 'When landing, create a deflector which bumps players who touch it.',
+		MENU_SPRITE_PATH: assetsSkillDir + 'deflector.png',
+		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_deflector.png',
+		PERCENT_START: 50,
+		PERCENT_STEP: 3,
+		COST: 1,
+		COST_STEP: 1
 	}
 };

@@ -6,6 +6,7 @@ var Game = function(){
 	
 	this.npcs = {};
 	this.deathZones = {};
+	this.triggers = {};
 	
 	//Countdown of warmup.
 	this.warmupTimer = Constants.Game.Phase.Warmup.PHASE_TIME;
@@ -205,6 +206,10 @@ Game.prototype.update = function (dt){
 						if(this.npcs[i])
 							this.npcs[i].update(dt);
 					
+					for(var i in this.triggers)
+						if(this.triggers[i])
+							this.triggers[i].update(dt);
+					
 					this.goal.update();
 					
 					//Update all effects.
@@ -271,7 +276,10 @@ Game.prototype.update = function (dt){
 				
 				for(var i in this.deathZones)
 					this.deathZones[i].update(dt);
-										
+				
+				for(var i in this.triggers)
+					this.triggers[i].update(dt);
+				
 				this.goal.update();
 				
 				//Update all effects.
@@ -527,6 +535,20 @@ Game.prototype.addNpc = function(remoteNpc){
 	this.npcs[remoteNpc.id] = npc;
 };
 
+//Add a trigger.
+Game.prototype.addTrigger = function(remoteTrigger){
+
+	var trigger = null;
+	
+	switch(remoteTrigger.type){
+		case Enum.Trigger.Type.DEFLECTOR:
+			trigger = new Deflector(remoteTrigger.x, remoteTrigger.y);
+			break;
+	}
+
+	this.triggers[remoteTrigger.id] = trigger;
+};
+
 //Delete a npc.
 Game.prototype.deleteNpc = function(remoteNpcId){
 	
@@ -534,6 +556,15 @@ Game.prototype.deleteNpc = function(remoteNpcId){
 	{
 		this.npcs[remoteNpcId].explode();
 		delete this.npcs[remoteNpcId];
+	}
+};
+
+//Delete a trigger.
+Game.prototype.deleteTrigger = function(remoteTriggerId){
+	if(this.triggers[remoteTriggerId] != null)
+	{
+		this.triggers[remoteTriggerId].explode();
+		delete this.triggers[remoteTriggerId];
 	}
 };
 
