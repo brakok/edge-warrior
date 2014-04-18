@@ -109,6 +109,7 @@ SkillDescription.loadAll = function(){
 	list.push(new SkillDescription(Enum.Block.Skill.JAW_FALL));
 	list.push(new SkillDescription(Enum.Block.Skill.ECLIPSE));
 	list.push(new SkillDescription(Enum.Block.Skill.PESKY_BOX));
+	list.push(new SkillDescription(Enum.Block.Skill.DEFLECTOR));
 	
 	return list;
 };

@@ -83,6 +83,8 @@
 				  'source/playground/deathzones/Spike.js',
 				  'source/playground/deathzones/Jaw.js',
 				  
+				  'source/playground/triggers/Deflector.js',
+				  
 				  'source/playground/npc/PeskyBox.js',
 				  
 				  'source/text/AppearingLabel.js',
