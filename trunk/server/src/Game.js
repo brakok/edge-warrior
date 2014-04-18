@@ -7,6 +7,7 @@ var Game = function(settings){
 	this.blocks = [];
 	this.deathZones = [];
 	this.npcs = [];
+	this.triggers = [];
 	
 	//Create delta.
 	this.previousTime = new Date();
@@ -18,6 +19,7 @@ var Game = function(settings){
 	this.blockSequence = 0;
 	this.deathZoneSequence = 0;
 	this.npcSequence = 0;
+	this.triggerSequence = 0;
 	
 	this.goal = null;
 	this.intervalId = null;
@@ -108,6 +110,14 @@ Game.prototype.createWorld = function(){
 									   null, 
 									   null, 
 									   function(arbiter, space){ currentListeners.NpcListener.separate(arbiter, space);});
+									   
+		//Add trigger listener.
+		this.space.addCollisionHandler(Enum.Collision.Type.TRIGGER, 
+									   Enum.Collision.Type.PLAYER, 
+									   function(arbiter, space){ currentListeners.TriggerListener.begin(arbiter, space);}, 
+									   null, 
+									   null, 
+									   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
 		
 		//Add ground sensor callback.
 		this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
@@ -276,6 +286,19 @@ Game.prototype.update = function(){
 				}
 			}
 		
+		//Update Triggers.
+		for(var i in this.triggers)
+			if(this.triggers[i] != null)
+			{
+				if(this.triggers[i].stillExists)
+					this.triggers[i].update();
+				else
+				{
+					this.triggers[i].explode();
+					delete this.triggers[i];
+				}
+			}
+		
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
 		{
@@ -402,12 +425,19 @@ Game.prototype.pull = function(){
 		if(this.npcs[i] != null)
 			npcs.push(this.npcs[i].toClient());
 	
+	//Triggers.
+	var triggers = [];
+	for(var i in this.triggers)
+		if(this.triggers[i] != null)
+			triggers.push(this.triggers[i].toClient());
+	
 	var data = {
 		players: players,
 		goal: this.goal.toClient(),
 		blocks: blocks,
 		deathZones: deathZones,
-		npcs: npcs
+		npcs: npcs,
+		triggers: triggers
 	};
 	
 	//Send message to all players.

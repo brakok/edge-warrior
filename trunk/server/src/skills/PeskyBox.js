@@ -27,8 +27,7 @@ SkillInfo.PeskyBox = {
 			}
 			
 			if(targetPlayer && !targetPlayer.hasWon)
-				block.currentGame.managers.NpcManager.add(new PeskyBox(block.currentGame.npcSequence,
-																	   block.x,
+				block.currentGame.managers.NpcManager.add(new PeskyBox(block.x,
 																	   block.y - Constants.NPC.PeskyBox.HEIGHT*0.5,
 																	   Constants.NPC.PeskyBox.WIDTH,
 																	   Constants.NPC.PeskyBox.HEIGHT,

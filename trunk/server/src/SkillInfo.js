@@ -17,6 +17,8 @@ var SkillInfo = {
 			case Enum.Block.Skill.PESKY_BOX:
 				tmpSkill = this.PeskyBox;
 				break;
+			case Enum.Block.Skill.DEFLECTOR:
+				tmpSkill = this.Deflector;
 		}
 		
 		if(tmpSkill)

@@ -5,7 +5,9 @@ var DeathZoneManager = function(game){
 
 DeathZoneManager.prototype.launch = function(deathZone){
 	
+	deathZone.id = this.currentGame.deathZoneSequence;
 	this.currentGame.deathZoneSequence++;
+	
 	this.currentGame.deathZones.push(deathZone);
 	
 	var data = {

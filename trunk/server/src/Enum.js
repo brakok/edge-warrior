@@ -28,7 +28,8 @@ var Enum = {
 			ENERGY_SPIKE: 4,
 			JAW: 5,
 			PESKY_BOX: 6,
-			PICK_AXE: 7
+			PICK_AXE: 7,
+			DEFLECTOR: 8
 		}
 	},
 	Block: {
@@ -46,7 +47,8 @@ var Enum = {
 			FIRE_PULSE: 0,
 			JAW_FALL: 1,
 			ECLIPSE: 2,
-			PESKY_BOX: 3
+			PESKY_BOX: 3,
+			DEFLECTOR: 4
 		},
 		State: {
 			STATIC: 0,
@@ -70,6 +72,16 @@ var Enum = {
 			PESKY_BOX: 0
 		}
 	},
+	Trigger: {
+		Action: {
+			Type: {
+				COMMON: 0
+			}
+		},
+		Type: {
+			DEFLECTOR: 0
+		}
+	},
 	Element: {
 		Type: {
 			ECLIPSE: 0
@@ -85,7 +97,8 @@ var Enum = {
 			WINNING_GOAL: 5,
 			DEATH_ZONE: 6,
 			SKILL: 7,
-			NPC: 8
+			NPC: 8,
+			TRIGGER: 9
 		}
 	},
 	Facing: {
