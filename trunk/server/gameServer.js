@@ -1,3 +1,4 @@
+//Version 0.9.0.3
 //Enums
 var Enum = {
 	Color: {
