@@ -266,7 +266,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		if(ioMasterServer.sockets.clients().length > 0)
 		{
-			var lowestPercent = 100;
+			var lowestPercent = 110;
 			var serverSocket = null;
 
 			//Find socket with lowest cpu usage.
