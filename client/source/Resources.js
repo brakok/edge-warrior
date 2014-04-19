@@ -8,6 +8,7 @@ var assetsHudDir = 'assets/hud/';
 var assetsWinningGoalDir = 'assets/winningGoal/';
 var assetsEffectDir = 'assets/effects/';
 var assetsNpcDir = 'assets/npc/';
+var assetsTriggerDir = 'assets/triggers/';
 var assetsSkillDir = 'assets/skills/';
 var assetsParticles = 'assets/particles/';
 
@@ -132,6 +133,15 @@ var assets = [
 	{type:"plist", src: assetsNpcDir + 'PeskyBox.plist'},
 	{type:"plist", src: assetsNpcDir + 'PeskyBoxDisappearing.plist'},
 	{type:"plist", src: assetsNpcDir + 'Eyes.plist'},
+	
+	//Triggers
+	{type:'image', src: assetsTriggerDir + 'Deflector_spawn.png'},
+	{type:'image', src: assetsTriggerDir + 'Deflector_idle.png'},
+	{type:'image', src: assetsTriggerDir + 'Deflector_disappearing.png'},
+	
+	{type:"plist", src: assetsTriggerDir + 'Deflector_spawn.plist'},
+	{type:"plist", src: assetsTriggerDir + 'Deflector_idle.plist'},
+	{type:"plist", src: assetsTriggerDir + 'Deflector_disappearing.plist'},
 	
 	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
