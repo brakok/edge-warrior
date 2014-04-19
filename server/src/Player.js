@@ -10,10 +10,9 @@ var Player = function(id, username, x, y, color, game){
 		
 	this.pickAxeCount = 0;
 	this.pickAxeTimer = Constants.Player.PickAxe.TIMER + Constants.Warmup.PHASE_TIME;
-	
-	this.killTime = 0;
-	this.stepReached = Enum.StepReached.NONE;
-	
+		
+	this.stunTimer = 0;
+		
 	this.isAlive = true;
 	this.toBeDestroy = false;
 	this.hasWon = false;
@@ -145,8 +144,6 @@ Player.prototype.die = function(){
 	this.isRemoved = true;
 	this.hasGivenBlock = false;
 		
-	this.stepReached = 0;
-	this.killTime = 0;
 	this.groundContact = 0;
 	
 	var killer = null;
@@ -233,20 +230,14 @@ Player.prototype.update = function(){
 		var nextX = 0;
 		var impulse = 0;
 		
-		if(this.keys.right || this.keys.left)
+		if((this.keys.right || this.keys.left) && this.stunTimer <= 0)
 		{
 			var velX = Math.abs(this.body.getVel().x);
-			var factor = 1;
-			
-			if(velX > Constants.Player.MAX_VELOCITY)
-				factor *= Constants.Player.MAX_SPEED_FACTOR;
-				
-			//Reduce impulse if velocity is above a specified limit.
-			if(velX > Constants.Player.SPEED_LOWER_LIMIT)
-				factor /= velX*Constants.Player.VELOCITY_FACTOR;
+			var factor = 1-((this.keys.right && this.body.getVel().x < 0) || (this.keys.left && this.body.getVel().x > 0) ? Constants.Player.WRONG_SIDE_MINUS_FACTOR 
+																														  : (velX/Constants.Player.MAX_SPEED_FACTOR));
 				
 			impulse = Constants.Player.RUN_POWER_ONGROUND * factor;
-		}	
+		}
 		
 		//Move
 		if(this.keys.right)
@@ -301,10 +292,15 @@ Player.prototype.update = function(){
 		if(nextX != 0)
 		{
 			var lastFacing = this.facing;
-			this.facing = (nextX > 0 ? Enum.Facing.RIGHT : Enum.Facing.LEFT);
 			
-			if(lastFacing != this.facing)
-				this.turn();
+			//Turn only if one of movement keys is pressed.
+			if((this.keys.right && !this.keys.left) || (!this.keys.right && this.keys.left))
+			{
+				this.facing = (this.keys.right ? Enum.Facing.RIGHT : Enum.Facing.LEFT);
+				
+				if(lastFacing != this.facing)
+					this.turn();
+			}
 
 			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
 			
@@ -319,78 +315,22 @@ Player.prototype.update = function(){
 			{
 				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
 				
-				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING)
+				//Stand if no movement keys are pressed.
+				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING && !this.keys.right && !this.keys.left)
 					this.execute(Enum.Action.Type.STANDING);					
-				
-				//Calculate standing time for kill command.
-				/*
-				if(this.isAlive)
-				{
-					var addTime = false;
-					var sendMessage = false;
-				
-					if(this.killTime < Constants.KillCommand.Time.FIRST_STEP)
-						addTime = true;
-				
-					//Standing phase.
-					if(this.killTime == 0)
-					{
-						sendMessage = true;
-						this.stepReached = Enum.StepReached.STANDING;
-					}
-									
-					//Assign to a player phase.
-					if(this.killTime >= Constants.KillCommand.Time.FIRST_STEP && this.keys.kill)
-					{
-						addTime = true;
-						
-						if(this.stepReached < Enum.StepReached.PLAYER)
-						{
-							sendMessage = true;
-							this.stepReached = Enum.StepReached.PLAYER;
-						}
-					}
-					
-					//Assign to the overlord phase.
-					if(this.killTime >= Constants.KillCommand.Time.SECOND_STEP && this.keys.kill && this.stepReached < Enum.StepReached.OVERLORD)
-						this.stepReached = Enum.StepReached.OVERLORD;
-				
-					if(sendMessage)
-						io.sockets.sockets[this.id].emit(Constants.Message.KILL_COMMAND, this.stepReached);
-				
-					if(addTime)
-						this.killTime += this.currentGame.dt;	
-				}	*/
 			}
 		}
+				
 		
-		//Reset kill command timer.
-		if(this.killTime > 0 && (nextX != 0 || this.keys.jump))
-		{
-			this.killTime = 0;
-			this.stepReached = 0;
-			
-			io.sockets.sockets[this.id].emit(Constants.Message.KILL_COMMAND, Enum.StepReached.NONE);
-		}	
-		
-		if(this.jumpCooldown > 0)
-			this.jumpCooldown -= this.currentGame.dt;
 	}
 	
-	//Manage kill command.
-	if(this.stepReached > Enum.StepReached.STANDING && (!this.keys.kill || this.stepReached == Enum.StepReached.OVERLORD))
-	{	
-		switch(this.stepReached)
-		{
-			case Enum.StepReached.PLAYER:
-				this.currentGame.overlord.assignKill(this);
-				break;
-			case Enum.StepReached.OVERLORD:
-				this.currentGame.overlord.kill(this, null);
-				break;
-		}
-	}
+	if(this.jumpCooldown > 0)
+		this.jumpCooldown -= this.currentGame.dt;
 	
+	//Reduce stun timer.
+	if(this.stunTimer > 0)
+		this.stunTimer -= this.currentGame.dt;
+		
 	//Check timers related to player and trigger actions associated.
 	if(!this.hasWon)
 		this.checkTimers();
@@ -453,7 +393,7 @@ Player.prototype.checkTimers = function(){
 };
 
 Player.prototype.turn = function(){
-	this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.TURN_FRICTION_FACTOR, this.body.getVel().y));
+	//Nothing.
 };
 
 Player.prototype.jump = function(isDoubleJumping){
