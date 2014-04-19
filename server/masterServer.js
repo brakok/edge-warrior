@@ -176,7 +176,7 @@ var Constants = {
 		WIDTH: 30,
 		HEIGHT: 50,
 		MAX_SPEED_FACTOR: 245,
-		WRONG_SIDE_MINUS_FACTOR: 0.65,
+		WRONG_SIDE_MINUS_FACTOR: 0.5,
 		PickAxe:  {
 			TIMER: 15,
 			VEL_X: 3.5,
