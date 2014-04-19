@@ -89,14 +89,15 @@ var Constants = {
 	},
 	Trigger: {
 		Deflector: {
-			REL_Y: 100,
-			DURATION: 4,
+			REL_Y: 75,
+			DURATION: 4.5,
 			DURATION_STEP: 2,
 			WIDTH: 75,
 			HEIGHT: 75,
-			PUSH: 2000,
-			PUSH_STEP: 350,
-			MAX_PUSH_Y_FACTOR: 0.25
+			PUSH: 350,
+			PUSH_STEP: 35,
+			MAX_PUSH_Y_FACTOR: 0.3,
+			PRESENCE_TIMER: 0.5
 		}
 	},
 	WinningGoal: {
