@@ -91,6 +91,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('PickAxeDisappearing.0000.png');
 			this.animation = AnimationManager.create('PickAxeDisappearing', 0, 6, 24);
 			break;
+		case Enum.Effect.Type.DEFLECTOR_DISAPPEARING:
+		
+			//Effect created when pesky box ends.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('Deflector_disappearing.0036.png');
+			this.animation = AnimationManager.create('Deflector_disappearing', 36, 48, 24);
+			break;
 	}
 	
 	this.sprite.setZOrder(Constants.Effect.Z_INDEX);

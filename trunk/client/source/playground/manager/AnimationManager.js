@@ -41,6 +41,16 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsNpcDir + 'Eyes.plist', 
 														  assetsNpcDir + 'Eyes.png');
 														  
+		//Triggers
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'Deflector_spawn.plist', 
+														  assetsTriggerDir + 'Deflector_spawn.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'Deflector_idle.plist', 
+														  assetsTriggerDir + 'Deflector_idle.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'Deflector_disappearing.plist', 
+														  assetsTriggerDir + 'Deflector_disappearing.png');
+		
 		//Effects.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 
 														  assetsEffectDir + 'PlayerDeath.png');
