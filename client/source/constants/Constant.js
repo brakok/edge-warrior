@@ -321,6 +321,12 @@ var Constants = {
 				MOVING: 'PickAxe',
 				ENDING: 'PickAxeDisappearing'
 			},
+			Deflector: {
+				SPAWN: 'deflector_spawn',
+				IDLE: 'deflector_idle',
+				DISAPPEARING: 'deflector_disappearing',
+				BOUNCE: 'Bounce'
+			},
 			Common: {
 				FLOATING: 'floating',
 				FIRE: 'fire',

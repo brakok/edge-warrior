@@ -73,6 +73,10 @@ var assets = [
 	{type:"sound", src: soundDir + 'deny_action.mp3'},
 	{type:"sound", src: soundDir + 'PickAxe.mp3'},
 	{type:"sound", src: soundDir + 'PickAxeDisappearing.mp3'},
+	{type:"sound", src: soundDir + 'deflector_spawn.mp3'},
+	{type:"sound", src: soundDir + 'deflector_idle.mp3'},
+	{type:"sound", src: soundDir + 'deflector_disappearing.mp3'},
+	{type:"sound", src: soundDir + 'Bounce.mp3'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill.mp3'},
