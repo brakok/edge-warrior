@@ -45,7 +45,7 @@ var SkillInfo = {
 		PERCENT_START: 5,
 		PERCENT_STEP: 3,
 		COST: 850,
-		COST_STEP: 1050
+		COST_STEP: 1150
 	},
 	PeskyBox: {
 		TITLE: 'Pesky box',
@@ -55,16 +55,16 @@ var SkillInfo = {
 		PERCENT_START: 6,
 		PERCENT_STEP: 3,
 		COST: 725,
-		COST_STEP: 1100
+		COST_STEP: 850
 	},
 	Deflector: {
 		TITLE: 'Deflector',
 		DESCRIPTION: 'When landing, create a deflector which bumps players who touch it.',
 		MENU_SPRITE_PATH: assetsSkillDir + 'deflector.png',
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_deflector.png',
-		PERCENT_START: 50,
+		PERCENT_START: 5,
 		PERCENT_STEP: 3,
-		COST: 1,
-		COST_STEP: 1
+		COST: 675,
+		COST_STEP: 825
 	}
 };
