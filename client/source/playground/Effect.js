@@ -93,9 +93,15 @@ Effect.prototype.init = function(){
 			break;
 		case Enum.Effect.Type.DEFLECTOR_DISAPPEARING:
 		
-			//Effect created when pesky box ends.
+			//Effect created when deflector ends.
 			this.sprite = cc.Sprite.createWithSpriteFrameName('Deflector_disappearing.0036.png');
 			this.animation = AnimationManager.create('Deflector_disappearing', 36, 48, 24);
+			break;
+		case Enum.Effect.Type.BOUNCE:
+		
+			//Effect created player touches deflector.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('Bounce.0000.png');
+			this.animation = AnimationManager.create('Bounce', 0, 6, 24);
 			break;
 	}
 	
