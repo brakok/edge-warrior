@@ -52,6 +52,9 @@ var AnimationManager = {
 														  assetsTriggerDir + 'Deflector_disappearing.png');
 		
 		//Effects.
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Bounce.plist', 
+														  assetsEffectDir + 'Bounce.png');
+														  
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PlayerDeath.plist', 
 														  assetsEffectDir + 'PlayerDeath.png');
 		
