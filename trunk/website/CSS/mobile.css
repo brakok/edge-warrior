@@ -1,0 +1,40 @@
+/******************************** 1263px **********************************/
+
+@media all and (min-width: 1263px){
+	/* Main nav */
+	header {
+		background: url(../Images/BG_header.png) repeat-x -250px top;
+		background-size: 120%;
+		height:400px;
+	}
+	header nav{
+		margin-top:20px;
+	}
+	/* Main Logo */
+	h1{
+		font-size:105px;
+	}
+	#logo{
+		width:70%;
+	}
+	#logo p{
+		font-size:58px;
+	}
+	
+	/* Play Game Button */
+	header #PlayGame_BT{
+		background-size:90%;
+	}
+	header #PlayGame_BT a{
+		margin:8%;
+	}
+	
+	/* Maps slideshow */
+	.swiper-container{
+		height:420px;
+	}
+	.device .arrow-left, .device .arrow-right,.device .arrow-left:hover, .device .arrow-right:hover{
+		background-size:80%;
+	}
+
+}
