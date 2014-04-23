@@ -3,6 +3,11 @@
     <head>
         <title>Crushed Dream - Website </title>
         <link rel="stylesheet" type="text/css" href="CSS/style.css" />
+		<!-- Stylesheet for responsive -->
+		<link rel="stylesheet" type="text/css" href="CSS/mobile.css" />
+		<!-- Stylesheet for slideshow -->
+		<link rel="stylesheet" type="text/css" href="CSS/slideshow.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <!-- Internet Explorer HTML5 enabling code: -->
         <!--[if IE]>
@@ -15,7 +20,8 @@
         </style>
         <![endif]-->    
     </head>
-    <body>    		
+    <body>   
+		<div class="wrapper">  
         <header>    
 			<!-- Play the game Button -->
 			<span id="PlayGame_BT">
@@ -24,13 +30,13 @@
 					<p>Now</p>
 				</a>
 			</span>
-			<div class="wrapper"> 
+			<div class="wrap"> 
 				<nav class="clear">
 					<ul>
 						<li><a href="#updates">Updates </a></li>
 						<li><a href="#rules">Rules</a></li>
 						<li><a href="#maps">Maps</a></li>
-					<li><a href="#about">About </a></li>
+						<li><a href="#about">About </a></li>
 						<li><a href="#">Anglais</a></li>
 					</ul>
 				</nav>
@@ -39,8 +45,7 @@
 					<span><p>Time to be crushed</p></span>
 				</div>
 			</div>
-        </header>
-		<!-- Characters Section -->
+			<!-- Characters Section -->
 		<section id="characters">
 			<p> The Players </p>
 			<p> Choose yours </p>			
@@ -54,7 +59,7 @@
 			<!-- Yellow -->
 			<div class="flip-container" id="yellow">
 				<div class="front" ></div>
-				<div class="back" >
+				<div class="back">
 					<p> Créature timide ayant peu d'assurance. Se cache dans son précieux coquillage, afin de survivre dans ce monde un peu trop cruel pour elle.</p>
 				</div>
 			</div>
@@ -73,23 +78,65 @@
 				</div>
 			</div>	
 		</section>
-        <div class="wrapper">  
-			<section id="articles">
+        </header>
+			<section id="content">
 				<!-- Updates section -->             
 				<article id="updates"> 
 					<span><h2>Updates</h2></span>
+					<!-- News slideshow -->
+					<div class="swiper-container">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide news1">
+							<article> 
+									<h2>New website launched</h2> 
+									<i>may 01, 2014</i>
+									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend. Quisque ultricies vulputate tortor sed sollicitudin.</p>
+									<a href="#" >read all [ + ]</a>
+								</article>
+							</div>
+							<div class="swiper-slide news2">
+								<article> 
+									<h2>New skills blocks available</h2> 
+									<i>may 05, 2014</i>
+									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. </p>
+									<p>Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. </p>
+									<a href="#rules">see the new block [ + ]</a>
+								</article>
+							</div>
+							<div class="swiper-slide news3">
+								<article> 
+									<h2>New map event created</h2> 
+									<i>may 11, 2014</i>
+									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend.</p>
+									<a href="#maps">see the new map event [ + ]</a>
+								</article>
+							</div>
+							<div class="swiper-slide news4">
+								<article> 
+									<h2>New website launched</h2> 
+									<i>may 01, 2014</i>
+									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend. Quisque ultricies vulputate tortor sed sollicitudin.</p>
+									<a href="#">read all [ + ]</a>
+								</article>
+							</div>
+						</div>
+						<div class="pagination"></div>
+					</div>
+					<!-- Script for the slideshow -->
+					<script src="Script/jquery-1.10.1.min.js"></script>
+					<script src="Script/plugIn_slideshow.min.js"></script>
+					<script src="Script/slideshow.js"></script>
 				</article>
-			
 				<!-- Rules section --> 
 				<article id="rules">
 					<span><h2>Rules</h2></span>
 				</article>  
-			
 				<!-- Maps section --> 				
 				<article id="maps">
 					<span><h2>Maps</h2></span>
-				</article>	
-			
+					<!-- Slideshow iframe -->
+					<iframe src="iframe/Maps/maps.html" scrolling="no" frameborder="0"></iframe>
+				</article>
 				<!-- About section --> 
 				<article id="about">
 					<span><h2>About</h2></span>

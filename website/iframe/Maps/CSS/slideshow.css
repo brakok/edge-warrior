@@ -1,0 +1,193 @@
+/*
+ * Swiper - Mobile Touch Slider CSS
+ * http://www.idangero.us/sliders/swiper
+ *
+ * Vladimir Kharlampidi, The iDangero.us
+ * http://www.idangero.us/
+ * 
+ * Copyright 2012-2013, Vladimir Kharlampidi
+ * The iDangero.us
+ * http://www.idangero.us
+ *
+ * Licensed under GPL & MIT
+ *
+*/
+
+/* ===============================================================
+Basic Swiper Styles 
+================================================================*/
+.swiper-container {
+	margin:0 auto;
+	position:relative;
+	overflow:hidden;
+	-webkit-backface-visibility:hidden;
+	-moz-backface-visibility:hidden;
+	-ms-backface-visibility:hidden;
+	-o-backface-visibility:hidden;
+	backface-visibility:hidden;
+	/* Fix of Webkit flickering */
+	z-index:1;
+}
+.swiper-wrapper {
+	position:relative;
+	width:100%;
+	-webkit-transition-property:-webkit-transform, left, top;
+	-webkit-transition-duration:0s;
+	-webkit-transform:translate3d(0px,0,0);
+	-webkit-transition-timing-function:ease;
+	
+	-moz-transition-property:-moz-transform, left, top;
+	-moz-transition-duration:0s;
+	-moz-transform:translate3d(0px,0,0);
+	-moz-transition-timing-function:ease;
+	
+	-o-transition-property:-o-transform, left, top;
+	-o-transition-duration:0s;
+	-o-transform:translate3d(0px,0,0);
+	-o-transition-timing-function:ease;
+	-o-transform:translate(0px,0px);
+	
+	-ms-transition-property:-ms-transform, left, top;
+	-ms-transition-duration:0s;
+	-ms-transform:translate3d(0px,0,0);
+	-ms-transition-timing-function:ease;
+	
+	transition-property:transform, left, top;
+	transition-duration:0s;
+	transform:translate3d(0px,0,0);
+	transition-timing-function:ease;
+}
+.swiper-free-mode > .swiper-wrapper {
+	-webkit-transition-timing-function: ease-out;
+	-moz-transition-timing-function: ease-out;
+	-ms-transition-timing-function: ease-out;
+	-o-transition-timing-function: ease-out;
+	transition-timing-function: ease-out;
+	margin: 0 auto;
+}
+.swiper-slide {
+	float: left;
+}
+
+/* IE10 Windows Phone 8 Fixes */
+.swiper-wp8-horizontal {
+	-ms-touch-action: pan-y;
+}
+.swiper-wp8-vertical {
+	-ms-touch-action: pan-x;
+}
+
+/* Personalize style for the slideshow */
+* {
+	margin:0;
+	padding:o;
+}
+img{
+	width:100%;
+}
+.device {
+	background: black;
+	margin:0;
+	position: relative;
+}
+
+.device .arrow-left, .device .arrow-right{	
+	height: 123px;
+	margin-top: -15px;
+	top: 40%;
+	position: absolute;
+	width: 49px;
+}
+
+.device .arrow-left {
+  background: url(../Images/L_Arrow.png) no-repeat left top;
+  left: 10px;
+}
+.device .arrow-right {
+  background: url(../Images/R_Arrow.png) no-repeat right bottom;
+  right: 10px;
+}
+
+.device .arrow-left:hover {
+  background: url(../Images/L_Arrow_Hover.png) no-repeat left top;
+}
+.device .arrow-right:hover {
+  background: url(../Images/R_Arrow_Hover.png) no-repeat right bottom;
+}
+
+.swiper-container {
+	width: 90%;
+}
+/* Slideshow Text */
+.textBG{
+	background:rgba(0,0,0,0.4);
+	bottom:0;
+	height:35%;
+	position:absolute;
+	width:100%;
+}
+.mapsTXT{
+	margin:0 auto;
+	width:400px;
+}
+.swiper-slide span{
+	float:left;
+	font-size:25px;
+	margin-bottom:40px;
+	text-transform:uppercase;
+	width:60px;
+}
+.swiper-slide span,.swiper-slide p{
+	bottom:7.5%;
+	color:white;
+	font-variant:small-caps;
+	position:absolute;
+	font-family: quantico;
+	display:inline;
+}
+.swiper-slide p{
+	font-size:60px;
+	margin-left:60px;
+}
+.title {
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.pagination {
+  position: absolute;
+  left: 0;
+  text-align: center;
+  bottom:5px;
+  width: 100%;
+}
+
+.swiper-pagination-switch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background: #999;
+  box-shadow: 0px 1px 2px #555 inset;
+  margin: 0 3px;
+  cursor: pointer;
+}
+.swiper-active-switch {
+  background: #fff;
+}
+
+
+/******************************** 1263px **********************************/
+
+@media all and (min-width: 1263px){
+	.device{
+		height:425px;
+	}
+	.swiper-container{
+		height:425px;
+	}
+	.device .arrow-left, .device .arrow-right,.device .arrow-left:hover, .device .arrow-right:hover{
+		background-size:80%;
+	}
+}
+
