@@ -48,7 +48,8 @@ var Enum = {
 			JAW_FALL: 1,
 			ECLIPSE: 2,
 			PESKY_BOX: 3,
-			DEFLECTOR: 4
+			DEFLECTOR: 4,
+			TIME_ZONE: 5
 		},
 		Destruction: {
 			COLOR_CONTACT: 0,
@@ -107,7 +108,8 @@ var Enum = {
 			}
 		},
 		Type: {
-			DEFLECTOR: 0
+			DEFLECTOR: 0,
+			TIME_ZONE: 1
 		}
 	},
 	WinningGoal: {

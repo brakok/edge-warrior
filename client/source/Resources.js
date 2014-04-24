@@ -212,12 +212,16 @@ var assets = [
 	{type:'image', src: assetsBlockDir + 'block_jawFall.png'},
 	{type:'image', src: assetsBlockDir + 'block_Eclipse.png'},
 	{type:'image', src: assetsBlockDir + 'block_peskyBox.png'},
+	{type:'image', src: assetsBlockDir + 'block_deflector.png'},
+	{type:'image', src: assetsBlockDir + 'block_timeZone.png'},
 	
 	//Skill.
 	{type:'image', src: assetsSkillDir + 'firePulse.png'},
 	{type:'image', src: assetsSkillDir + 'jawFall.png'},
 	{type:'image', src: assetsSkillDir + 'Eclipse.png'},
 	{type:'image', src: assetsSkillDir + 'peskyBox.png'},
+	{type:'image', src: assetsSkillDir + 'deflector.png'},
+	{type:'image', src: assetsSkillDir + 'timeZone.png'},
 	
 	//Player
 	{type:'image', src: assetsPlayerDir + 'yellow_idle.png'},
