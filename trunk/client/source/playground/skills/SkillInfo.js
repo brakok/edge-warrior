@@ -13,6 +13,8 @@ var SkillInfo = {
 				return this.PeskyBox;
 			case Enum.Block.Skill.DEFLECTOR:
 				return this.Deflector;
+			case Enum.Block.Skill.TIME_ZONE:
+				return this.TimeZone;
 		}
 		
 		return null;
@@ -66,5 +68,15 @@ var SkillInfo = {
 		PERCENT_STEP: 3,
 		COST: 675,
 		COST_STEP: 825
+	},
+	TimeZone: {
+		TITLE: 'Time zone',
+		DESCRIPTION: 'When landing, create a time zone which restores players position when ending. Destroy blocks that were not landed when the time zone started.',
+		MENU_SPRITE_PATH: assetsSkillDir + 'timeZone.png',
+		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_timeZone.png',
+		PERCENT_START: 50,
+		PERCENT_STEP: 3,
+		COST: 1,
+		COST_STEP: 1
 	}
 };
