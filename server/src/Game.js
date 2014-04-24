@@ -118,6 +118,13 @@ Game.prototype.createWorld = function(){
 									   null, 
 									   null, 
 									   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
+									   
+		this.space.addCollisionHandler(Enum.Collision.Type.TRIGGER, 
+									   Enum.Collision.Type.BLOCK, 
+									   function(arbiter, space){ currentListeners.TriggerListener.begin(arbiter, space);}, 
+									   null, 
+									   null, 
+									   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
 		
 		//Add ground sensor callback.
 		this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
@@ -215,6 +222,33 @@ Game.prototype.update = function(){
 		if(this.space != null)
 			this.space.step(Constants.Physic.TIME_STEP);
 			
+		//Update Triggers.
+		for(var i in this.triggers)
+			if(this.triggers[i] != null)
+			{
+				if(this.triggers[i].stillExists)
+					this.triggers[i].update();
+				else
+				{
+					this.triggers[i].explode();
+					delete this.triggers[i];
+				}
+			}
+			
+		//Update NPCs.
+		for(var i in this.npcs)
+			if(this.npcs[i] != null)
+			{
+				if(this.npcs[i].stillExists)
+					this.npcs[i].update();
+				else
+				{
+					this.npcs[i].explode();
+					delete this.npcs[i];
+				}
+			}
+			
+		//Update blocks.
 		for(var i in this.blocks)
 		{
 			if(this.blocks[i] != null)
@@ -273,32 +307,6 @@ Game.prototype.update = function(){
 				}
 			}
 				
-		//Update NPCs.
-		for(var i in this.npcs)
-			if(this.npcs[i] != null)
-			{
-				if(this.npcs[i].stillExists)
-					this.npcs[i].update();
-				else
-				{
-					this.npcs[i].explode();
-					delete this.npcs[i];
-				}
-			}
-		
-		//Update Triggers.
-		for(var i in this.triggers)
-			if(this.triggers[i] != null)
-			{
-				if(this.triggers[i].stillExists)
-					this.triggers[i].update();
-				else
-				{
-					this.triggers[i].explode();
-					delete this.triggers[i];
-				}
-			}
-		
 		//Reduce winning phase timer when there's a winner.
 		if(this.winner != null)
 		{

@@ -19,6 +19,10 @@ var SkillInfo = {
 				break;
 			case Enum.Block.Skill.DEFLECTOR:
 				tmpSkill = this.Deflector;
+				break;
+			case Enum.Block.Skill.TIME_ZONE:
+				tmpSkill = this.TimeZone;
+				break;
 		}
 		
 		if(tmpSkill)
