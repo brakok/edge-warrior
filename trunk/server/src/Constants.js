@@ -95,6 +95,12 @@ var Constants = {
 			MAX_PUSH_Y_FACTOR: 0.3,
 			PRESENCE_TIMER: 0.5,
 			STUN_TIME: 0.3
+		},
+		TimeZone: {
+			DURATION: 2.5,
+			DURATION_STEP: 1,
+			WIDTH: 250,
+			HEIGHT: 250
 		}
 	},
 	WinningGoal: {

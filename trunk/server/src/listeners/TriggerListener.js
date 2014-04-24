@@ -30,8 +30,8 @@ TriggerListener.prototype.begin = function(arbiter, space){
 	}
 	
 	//Trigger.
-	if(player && trigger && trigger.onBegin)
-		trigger.onBegin(player);
+	if(trigger && trigger.onBegin)
+		trigger.onBegin(player, block);
 };
 
 TriggerListener.prototype.separate = function(arbiter, space){
@@ -61,6 +61,6 @@ TriggerListener.prototype.separate = function(arbiter, space){
 	}
 
 	//Trigger.
-	if(player && trigger && trigger.onEnd)
-		trigger.onEnd(player);
+	if(trigger && trigger.onEnd)
+		trigger.onEnd(player, block);
 };

@@ -17,7 +17,7 @@ var Block = function(x, y, type, color, ownerId, game, skill){
 	//Precision timer to trigger action shortly after the block just landed. Prevents to trigger action when bodies are collapsing.
 	this.landingTimer = 0;
 	
-	this.stillExist = true;
+	this.stillExists = true;
 	
 	this.x = x;
 	this.y = y;
@@ -109,7 +109,7 @@ Block.prototype.active = function(flag){
 
 Block.prototype.update = function(dt){
 	
-	if(this.stillExist && !this.landed){
+	if(this.stillExists && !this.landed){
 	
 		//Trigger effect (can't during space step).
 		if(this.mustTrigger)
@@ -186,7 +186,7 @@ Block.prototype.toClient = function(){
 
 Block.prototype.trigger = function(){
 
-	if(this.stillExist)
+	if(this.stillExists)
 	{
 		if(this.type == Enum.Block.Type.SPAWN)
 		{
@@ -251,7 +251,7 @@ Block.prototype.explode = function(cause){
 	this.currentGame.space.removeShape(this.shape);
 	this.currentGame.space.removeBody(this.body);
 	
-	this.stillExist = false;
+	this.stillExists = false;
 	this.toBeDestroy = false;
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_BLOCK, data);

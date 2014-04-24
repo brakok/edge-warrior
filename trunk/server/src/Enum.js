@@ -29,7 +29,8 @@ var Enum = {
 			JAW: 5,
 			PESKY_BOX: 6,
 			PICK_AXE: 7,
-			DEFLECTOR: 8
+			DEFLECTOR: 8,
+			TIME_ZONE: 9
 		}
 	},
 	Block: {
@@ -48,7 +49,8 @@ var Enum = {
 			JAW_FALL: 1,
 			ECLIPSE: 2,
 			PESKY_BOX: 3,
-			DEFLECTOR: 4
+			DEFLECTOR: 4,
+			TIME_ZONE: 5
 		},
 		State: {
 			STATIC: 0,
@@ -79,7 +81,8 @@ var Enum = {
 			}
 		},
 		Type: {
-			DEFLECTOR: 0
+			DEFLECTOR: 0,
+			TIME_ZONE: 1
 		}
 	},
 	Element: {
