@@ -87,7 +87,8 @@ var Enum = {
 	},
 	Element: {
 		Type: {
-			ECLIPSE: 0
+			ECLIPSE: 0,
+			TELEPORT: 1
 		}
 	},
 	Collision: {
