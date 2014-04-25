@@ -40,6 +40,9 @@ var Game = function(settings){
 		case Enum.World.Type.CHURCH:
 			this.goalStartPosition = this.height + Constants.World.Church.GOAL_OFFSET_Y;
 			break;
+		case Enum.World.Type.ALIEN:
+			this.goalStartPosition = this.height + Constants.World.Alien.GOAL_OFFSET_Y;
+			break;
 		default:
 			this.goalStartPosition = this.height + Constants.World.Common.GOAL_OFFSET_Y;
 			break;

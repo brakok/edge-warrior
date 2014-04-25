@@ -211,7 +211,10 @@ var Constants = {
 			GOAL_OFFSET_Y: 50
 		},
 		Church: {
-			GOAL_OFFSET_Y: -200
+			GOAL_OFFSET_Y: -400
+		},
+		Alien: {
+			GOAL_OFFSET_Y: -150
 		}
 	},
 	NPC: {
@@ -2553,6 +2556,9 @@ var Game = function(settings){
 	switch(this.worldType){
 		case Enum.World.Type.CHURCH:
 			this.goalStartPosition = this.height + Constants.World.Church.GOAL_OFFSET_Y;
+			break;
+		case Enum.World.Type.ALIEN:
+			this.goalStartPosition = this.height + Constants.World.Alien.GOAL_OFFSET_Y;
 			break;
 		default:
 			this.goalStartPosition = this.height + Constants.World.Common.GOAL_OFFSET_Y;
