@@ -327,6 +327,10 @@ var Constants = {
 				DISAPPEARING: 'deflector_disappearing',
 				BOUNCE: 'Bounce'
 			},
+			TimeZone: {
+				SPAWN: 'timeZone_spawn',
+				DISAPPEARING: 'timeZone_disappearing'
+			},
 			Common: {
 				FLOATING: 'floating',
 				FIRE: 'fire',

@@ -50,6 +50,12 @@ var AnimationManager = {
 														  
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'Deflector_disappearing.plist', 
 														  assetsTriggerDir + 'Deflector_disappearing.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'TimeZone_spawn.plist', 
+														  assetsTriggerDir + 'TimeZone_spawn.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'TimeZone_disappearing.plist', 
+														  assetsTriggerDir + 'TimeZone_disappearing.png');
 		
 		//Effects.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Bounce.plist', 
