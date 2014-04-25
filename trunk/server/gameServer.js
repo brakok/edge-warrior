@@ -384,6 +384,108 @@ var Listeners = function(game){
 	this.BlockListener = new BlockListener(this.currentGame);
 	this.NpcListener = new NpcListener(this.currentGame);
 	this.TriggerListener = new TriggerListener(this.currentGame);
+	
+};
+
+Listeners.prototype.registerHandlers = function(){
+
+	var currentListeners = this;
+
+	//Add goal listener.
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.WINNING_GOAL, 
+											   Enum.Collision.Type.PLAYER, 
+											   function(arbiter, space){ currentListeners.GoalListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   null);
+	
+	//Add death zone listener.
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
+											   Enum.Collision.Type.PLAYER, 
+											   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   null);
+								   
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
+											   Enum.Collision.Type.BLOCK, 
+											   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   null);
+								   
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
+											   Enum.Collision.Type.STATIC, 
+											   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   null);
+	
+	//Add npc listener.
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.NPC, 
+											   Enum.Collision.Type.PLAYER, 
+											   function(arbiter, space){ currentListeners.NpcListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.NpcListener.separate(arbiter, space);});
+								   
+	//Add trigger listener.
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.TRIGGER, 
+											   Enum.Collision.Type.PLAYER, 
+											   function(arbiter, space){ currentListeners.TriggerListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
+								   
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.TRIGGER, 
+											   Enum.Collision.Type.BLOCK, 
+											   function(arbiter, space){ currentListeners.TriggerListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
+	
+	//Add ground sensor callback.
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
+											   Enum.Collision.Type.STATIC, 
+											   function(arbiter, space){ currentListeners.GroundListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.GroundListener.separate(arbiter, space);});
+								   
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
+											   Enum.Collision.Type.PLAYER, 
+											   function(arbiter, space){ currentListeners.GroundListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.GroundListener.separate(arbiter, space);});
+				
+	//Add block listener callback.
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
+											   Enum.Collision.Type.STATIC, 
+											   function(arbiter, space){ currentListeners.BlockListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   null);
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
+											   Enum.Collision.Type.BLOCK, 
+											   function(arbiter, space){ currentListeners.BlockListener.begin(arbiter, space); }, 
+											   null, 
+											   null, 
+											   null);
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
+											   Enum.Collision.Type.PLAYER, 
+											   function(arbiter, space){ currentListeners.BlockListener.begin(arbiter, space); }, 
+											   null, 
+											   null, 
+											   null);
+
+	//Add drop zone listener callback.
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.DROP_SENSOR, 
+											   Enum.Collision.Type.STATIC, 
+											   function(arbiter, space){ currentListeners.DropListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
 };
 //Block listener.
 var BlockListener = function(game){
@@ -1527,6 +1629,7 @@ var Player = function(id, username, x, y, color, game){
 		
 	this.pickAxeCount = 0;
 	this.pickAxeTimer = Constants.Player.PickAxe.TIMER + Constants.Warmup.PHASE_TIME;
+	this.pickAxePressed = false;
 		
 	this.stunTimer = 0;
 		
@@ -1614,6 +1717,7 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 		   && this.currentGame.blocks[i].color == this.color)
 	    {
 			this.currentGame.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
+			this.currentGame.blocks[i].needPush = true;
 		}
 	}
 };
@@ -1764,8 +1868,14 @@ Player.prototype.update = function(){
 			nextX -= impulse;
 		
 		//Throw pickaxe.
-		if(this.keys.dig && this.pickAxeCount > 0)
+		if(this.keys.dig && !this.pickAxePressed && this.pickAxeCount > 0)
+		{
 			this.throwPickAxe();
+			this.pickAxePressed = true;
+		}
+			
+		if(!this.keys.dig && this.pickAxePressed)
+			this.pickAxePressed = false;
 		
 		//Add pick axe.
 		if(this.pickAxeCount < Constants.Player.PickAxe.LIMIT)
@@ -2071,6 +2181,7 @@ var Block = function(x, y, type, color, ownerId, game, skill){
 	this.landingTimer = 0;
 	
 	this.stillExists = true;
+	this.needPush = false;
 	
 	this.x = x;
 	this.y = y;
@@ -2469,106 +2580,11 @@ Game.prototype.createWorld = function(){
 
 	if(this.space == null || this.space == 'undefined')
 	{
-		var currentListeners = this.listeners;
-	
 		this.space = new chipmunk.Space();
 		this.space.gravity = new chipmunk.Vect(0, Constants.Physic.GRAVITY);
 		
-		//Add goal listener.
-		this.space.addCollisionHandler(Enum.Collision.Type.WINNING_GOAL, 
-									   Enum.Collision.Type.PLAYER, 
-									   function(arbiter, space){ currentListeners.GoalListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   null);
-		
-		//Add death zone listener.
-		this.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
-									   Enum.Collision.Type.PLAYER, 
-									   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   null);
-									   
-		this.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
-									   Enum.Collision.Type.BLOCK, 
-									   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   null);
-									   
-		this.space.addCollisionHandler(Enum.Collision.Type.DEATH_ZONE, 
-									   Enum.Collision.Type.STATIC, 
-									   function(arbiter, space){ currentListeners.DeathZoneListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   null);
-		
-		//Add npc listener.
-		this.space.addCollisionHandler(Enum.Collision.Type.NPC, 
-									   Enum.Collision.Type.PLAYER, 
-									   function(arbiter, space){ currentListeners.NpcListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   function(arbiter, space){ currentListeners.NpcListener.separate(arbiter, space);});
-									   
-		//Add trigger listener.
-		this.space.addCollisionHandler(Enum.Collision.Type.TRIGGER, 
-									   Enum.Collision.Type.PLAYER, 
-									   function(arbiter, space){ currentListeners.TriggerListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
-									   
-		this.space.addCollisionHandler(Enum.Collision.Type.TRIGGER, 
-									   Enum.Collision.Type.BLOCK, 
-									   function(arbiter, space){ currentListeners.TriggerListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
-		
-		//Add ground sensor callback.
-		this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
-									   Enum.Collision.Type.STATIC, 
-									   function(arbiter, space){ currentListeners.GroundListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   function(arbiter, space){ currentListeners.GroundListener.separate(arbiter, space);});
-									   
-		this.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 
-									   Enum.Collision.Type.PLAYER, 
-									   function(arbiter, space){ currentListeners.GroundListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   function(arbiter, space){ currentListeners.GroundListener.separate(arbiter, space);});
-					
-		//Add block listener callback.
-		this.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
-									   Enum.Collision.Type.STATIC, 
-									   function(arbiter, space){ currentListeners.BlockListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   null);
-		this.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
-									   Enum.Collision.Type.BLOCK, 
-									   function(arbiter, space){ currentListeners.BlockListener.begin(arbiter, space); }, 
-									   null, 
-									   null, 
-									   null);
-		this.space.addCollisionHandler(Enum.Collision.Type.BLOCK, 
-									   Enum.Collision.Type.PLAYER, 
-									   function(arbiter, space){ currentListeners.BlockListener.begin(arbiter, space); }, 
-									   null, 
-									   null, 
-									   null);
-
-		//Add drop zone listener callback.
-		this.space.addCollisionHandler(Enum.Collision.Type.DROP_SENSOR, 
-									   Enum.Collision.Type.STATIC, 
-									   function(arbiter, space){ currentListeners.DropListener.begin(arbiter, space);}, 
-									   null, 
-									   null, 
-									   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
+		//Register handlers for physic contacts.
+		this.listeners.registerHandlers();
 		
 		//Force bodies to sleep when idle after 0.075 second.
 		this.space.sleepTimeThreshold = Constants.Physic.SLEEP_TIME_THRESHOLD;
@@ -2582,12 +2598,12 @@ Game.prototype.createWorld = function(){
 		
 		var leftWall = new chipmunk.SegmentShape(this.space.staticBody,
 												new chipmunk.Vect(-5, 0),
-												new chipmunk.Vect(0, this.height*3),
+												new chipmunk.Vect(-5, this.height*3),
 												10);
 												
 		var rightWall = new chipmunk.SegmentShape(this.space.staticBody,
 													new chipmunk.Vect(this.width + 5, 0),
-													new chipmunk.Vect(this.width, this.height*3),
+													new chipmunk.Vect(this.width + 5, this.height*3),
 													10);																
 		
 		//Set friction on ground.
@@ -2819,8 +2835,13 @@ Game.prototype.pull = function(){
 	//Blocks.
 	var blocks = [];
 	for(var i in this.blocks)
-		if(this.blocks[i] != null)
+		if(this.blocks[i] != null && (!this.blocks[i].landed || this.blocks[i].needPush))
+		{
+			if(this.blocks[i].needPush)
+				this.blocks[i].needPush = false;
+				
 			blocks.push(this.blocks[i].toClient());
+		}
 		
 	//Death zones.
 	var deathZones = [];

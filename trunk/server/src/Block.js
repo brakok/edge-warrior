@@ -18,6 +18,7 @@ var Block = function(x, y, type, color, ownerId, game, skill){
 	this.landingTimer = 0;
 	
 	this.stillExists = true;
+	this.needPush = false;
 	
 	this.x = x;
 	this.y = y;
