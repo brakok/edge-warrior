@@ -74,9 +74,9 @@ var SkillInfo = {
 		DESCRIPTION: 'When landing, create a time zone which restores players position when ending. Destroy blocks that were not landed when the time zone started.',
 		MENU_SPRITE_PATH: assetsSkillDir + 'timeZone.png',
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_timeZone.png',
-		PERCENT_START: 50,
+		PERCENT_START: 4,
 		PERCENT_STEP: 3,
-		COST: 1,
-		COST_STEP: 1
+		COST: 915,
+		COST_STEP: 925
 	}
 };

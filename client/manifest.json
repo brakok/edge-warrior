@@ -1,8 +1,8 @@
 {
 	"name": "Crushed Dream",
-	"version": "0.9.0.4",
+	"version": "0.9.0.5",
 	"manifest_version" : 3,
-	"description": "A competitive game based on players crushing others by dropping blocks on their head. The goal is to climb to the 'Winner Star'.",
+	"description": "A competitive game based on players crushing others by dropping blocks on their head. The goal is to climb to the 'Winning Goal'.",
 	"icons": {
 				"128" : "assets/icons/128.png" 
 	},
