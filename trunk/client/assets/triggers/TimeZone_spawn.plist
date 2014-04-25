@@ -105,7 +105,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:a1465a5686878ec8ee0b5e3108f7d32f:c4576ed49f43417edb1364351a6241a8:92caf8bf95e64dd72a5d8ea8247ae389$</string>
+            <string>$TexturePacker:SmartUpdate:fc9feef7910f16af38be660559617d9a:042a67a9a22cfd32435ff52f8ecdce4c:92caf8bf95e64dd72a5d8ea8247ae389$</string>
             <key>textureFileName</key>
             <string>TimeZone_spawn.png</string>
         </dict>
