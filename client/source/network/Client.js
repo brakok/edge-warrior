@@ -546,8 +546,7 @@ var Client = new function(){
 			right: this.keys[Options.keys.RIGHT],
 			left: this.keys[Options.keys.LEFT],
 			jump: this.keys[Options.keys.JUMP],
-			kill: this.keys[Options.keys.KILL],
-			dig: this.keys[Options.keys.DIG] && !this.pressedKeys[Options.keys.DIG]
+			dig: this.keys[Options.keys.DIG]
 		};
 	
 		//Send key pressed to server.
