@@ -103,6 +103,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('Bounce.0000.png');
 			this.animation = AnimationManager.create('Bounce', 0, 6, 24);
 			break;
+		case Enum.Effect.Type.TELEPORT:
+		
+			//Effect created when player teleports.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('Teleport.0000.png');
+			this.animation = AnimationManager.create('Teleport', 0, 8, 24);
+			break;
 		case Enum.Effect.Type.TIME_ZONE_DISAPPEARING:
 		
 			//Effect created when time zone ends.

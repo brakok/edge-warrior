@@ -88,6 +88,9 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'PickAxeDisappearing.plist', 
 														  assetsEffectDir + 'PickAxeDisappearing.png');
 														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Teleport.plist', 
+														  assetsEffectDir + 'Teleport.png');
+														  
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
 														  assetsPlayerDir + 'yellow_idle.png');	
