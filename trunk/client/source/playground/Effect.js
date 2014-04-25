@@ -99,9 +99,15 @@ Effect.prototype.init = function(){
 			break;
 		case Enum.Effect.Type.BOUNCE:
 		
-			//Effect created player touches deflector.
+			//Effect created when player touches deflector.
 			this.sprite = cc.Sprite.createWithSpriteFrameName('Bounce.0000.png');
 			this.animation = AnimationManager.create('Bounce', 0, 6, 24);
+			break;
+		case Enum.Effect.Type.TIME_ZONE_DISAPPEARING:
+		
+			//Effect created when time zone ends.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('TimeZone_disappearing.0006.png');
+			this.animation = AnimationManager.create('TimeZone_disappearing', 6, 12, 24);
 			break;
 	}
 	

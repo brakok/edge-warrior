@@ -84,6 +84,7 @@
 				  'source/playground/deathzones/Jaw.js',
 				  
 				  'source/playground/triggers/Deflector.js',
+				  'source/playground/triggers/TimeZone.js',
 				  
 				  'source/playground/npc/PeskyBox.js',
 				  

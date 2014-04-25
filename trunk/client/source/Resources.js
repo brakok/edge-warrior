@@ -77,6 +77,8 @@ var assets = [
 	{type:"sound", src: soundDir + 'deflector_idle.mp3'},
 	{type:"sound", src: soundDir + 'deflector_disappearing.mp3'},
 	{type:"sound", src: soundDir + 'Bounce.mp3'},
+	{type:"sound", src: soundDir + 'timeZone_spawn.mp3'},
+	{type:"sound", src: soundDir + 'timeZone_disappearing.mp3'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill.mp3'},
@@ -142,10 +144,14 @@ var assets = [
 	{type:'image', src: assetsTriggerDir + 'Deflector_spawn.png'},
 	{type:'image', src: assetsTriggerDir + 'Deflector_idle.png'},
 	{type:'image', src: assetsTriggerDir + 'Deflector_disappearing.png'},
+	{type:'image', src: assetsTriggerDir + 'TimeZone_spawn.png'},
+	{type:'image', src: assetsTriggerDir + 'TimeZone_disappearing.png'},
 	
 	{type:"plist", src: assetsTriggerDir + 'Deflector_spawn.plist'},
 	{type:"plist", src: assetsTriggerDir + 'Deflector_idle.plist'},
 	{type:"plist", src: assetsTriggerDir + 'Deflector_disappearing.plist'},
+	{type:"plist", src: assetsTriggerDir + 'TimeZone_spawn.plist'},
+	{type:"plist", src: assetsTriggerDir + 'TimeZone_disappearing.plist'},
 	
 	//Effects
 	{type:'image', src: assetsEffectDir + 'lightBall.png'},
