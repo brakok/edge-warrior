@@ -139,12 +139,14 @@ var Enum = {
 			PICK_AXE_DISAPPEARING: 11,
 			DEFLECTOR_DISAPPEARING: 12,
 			BOUNCE: 13,
-			TIME_ZONE_DISAPPEARING: 14
+			TIME_ZONE_DISAPPEARING: 14,
+			TELEPORT: 15
 		}
 	},
 	Element: {
 		Type: {
-			ECLIPSE: 0
+			ECLIPSE: 0,
+			TELEPORT: 1
 		}
 	},
 	Voice: {

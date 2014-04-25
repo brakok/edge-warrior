@@ -275,7 +275,10 @@ var Constants = {
 		}
 	},
 	Trigger: {
-		Z_ORDER: 14
+		Z_ORDER: 14,
+		TimeZone: {
+			EXEC_TIMER: 0.25
+		}
 	},
 	Sound: {
 		Effect: {

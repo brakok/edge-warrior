@@ -58,13 +58,20 @@ var LobbyScreen = cc.LayerColor.extend({
 	},
 	launch: function(){
 				
+		//Do not launch if there's not enough players.
+		if(this.slots.length < 2)
+		{
+			HtmlHelper.showError('Need at least two players.');
+			return;
+		}
+				
 		if(this.startLaunching == null || new Date() - this.startLaunching > 3000)
 		{
 			this.startLaunching = new Date();
 			
 			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 					
-			for(var i in this.slots)
+			for(var i = 0; i < this.slots.length; i++)
 				if(!this.slots[i].isReady() || this.slots[i].getColor() == Enum.Slot.Color.UNASSIGNED)
 				{
 					HtmlHelper.showError('All players must have chosen a color and be marked has ready.');

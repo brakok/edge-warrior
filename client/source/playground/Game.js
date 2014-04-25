@@ -516,6 +516,9 @@ Game.prototype.addElement = function(remoteElement){
 		case Enum.Element.Type.ECLIPSE:
 			element = new Eclipse(remoteElement.x, remoteElement.y, remoteElement.power, Client.username == remoteElement.username);
 			break;
+		case Enum.Element.Type.TELEPORT:
+			EffectManager.create(Enum.Effect.Type.TELEPORT, remoteElement.x, remoteElement.y);
+			return;
 	}
 	
 	ElementManager.launch(element);
