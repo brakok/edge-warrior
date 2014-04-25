@@ -62,7 +62,10 @@ var Constants = {
 			GOAL_OFFSET_Y: 50
 		},
 		Church: {
-			GOAL_OFFSET_Y: -200
+			GOAL_OFFSET_Y: -400
+		},
+		Alien: {
+			GOAL_OFFSET_Y: -150
 		}
 	},
 	NPC: {
