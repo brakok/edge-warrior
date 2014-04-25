@@ -10,6 +10,7 @@ var Player = function(id, username, x, y, color, game){
 		
 	this.pickAxeCount = 0;
 	this.pickAxeTimer = Constants.Player.PickAxe.TIMER + Constants.Warmup.PHASE_TIME;
+	this.pickAxePressed = false;
 		
 	this.stunTimer = 0;
 		
@@ -97,6 +98,7 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 		   && this.currentGame.blocks[i].color == this.color)
 	    {
 			this.currentGame.blocks[i].color = killed.color + 4; //Color + 4 = complementary one.
+			this.currentGame.blocks[i].needPush = true;
 		}
 	}
 };
@@ -247,8 +249,14 @@ Player.prototype.update = function(){
 			nextX -= impulse;
 		
 		//Throw pickaxe.
-		if(this.keys.dig && this.pickAxeCount > 0)
+		if(this.keys.dig && !this.pickAxePressed && this.pickAxeCount > 0)
+		{
 			this.throwPickAxe();
+			this.pickAxePressed = true;
+		}
+			
+		if(!this.keys.dig && this.pickAxePressed)
+			this.pickAxePressed = false;
 		
 		//Add pick axe.
 		if(this.pickAxeCount < Constants.Player.PickAxe.LIMIT)
