@@ -373,5 +373,5 @@ Game.prototype.launch = function(){
 	};
 
 	//17 milliseconds = 60 FPS
-	this.intervalId = setInterval(updateFunc, 17);
+	this.intervalId = setInterval(updateFunc, 25);
 };

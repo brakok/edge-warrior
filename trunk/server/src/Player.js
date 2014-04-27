@@ -461,7 +461,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 //Init the physical part of the player.
 Player.prototype.initBody = function(space){
 	
-	var groundSensorHalfWidth = Constants.Player.WIDTH*0.33;
+	var groundSensorHalfWidth = Constants.Player.WIDTH*0.25;
 	var playerHalfHeight = Constants.Player.HEIGHT*0.5;
 	var groundSensorHeight = 2;
 
