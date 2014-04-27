@@ -163,7 +163,7 @@ var Constants = {
 		MASS_PLAYER: 10,
 		MASS_BLOCK: 999999,
 		MASS_BLOCK_STATIC: 999999999999,
-		TIME_STEP: 0.017,
+		TIME_STEP: 0.025,
 		FRICTION_FACTOR_ONGROUND: 0.9,
 		SLEEP_TIME_THRESHOLD: 0.075
 	},
@@ -2085,7 +2085,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 //Init the physical part of the player.
 Player.prototype.initBody = function(space){
 	
-	var groundSensorHalfWidth = Constants.Player.WIDTH*0.33;
+	var groundSensorHalfWidth = Constants.Player.WIDTH*0.25;
 	var playerHalfHeight = Constants.Player.HEIGHT*0.5;
 	var groundSensorHeight = 2;
 
@@ -2890,7 +2890,7 @@ Game.prototype.launch = function(){
 	};
 
 	//17 milliseconds = 60 FPS
-	this.intervalId = setInterval(updateFunc, 17);
+	this.intervalId = setInterval(updateFunc, 25);
 };
 var Overlord = function(game){
 	this.currentGame = game;
