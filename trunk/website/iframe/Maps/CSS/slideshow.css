@@ -78,6 +78,7 @@ Basic Swiper Styles
 }
 
 /* Personalize style for the slideshow */
+
 * {
 	margin:0;
 	padding:o;
@@ -118,6 +119,20 @@ img{
 .swiper-container {
 	width: 90%;
 }
+/* FONT */
+/* Quantico */
+/* Regular */
+@font-face {
+    font-family: quantico;
+    src: url('../Font/Quantico/quantico_r.eot');
+    src: url('../Font/Quantico/quantico_r.eot?#iefix') format('embedded-opentype'),
+         url('../Font/Quantico/quantico_r.woff') format('woff'),
+         url('../Font/Quantico/quantico_r.ttf') format('truetype'),
+         url('../Font/Quantico/quantico_r.svg#quanticobold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* Slideshow Text */
 .textBG{
 	background:rgba(0,0,0,0.4);
@@ -175,6 +190,8 @@ img{
 .swiper-active-switch {
   background: #fff;
 }
+
+
 
 
 /******************************** 1263px **********************************/
