@@ -1,6 +1,111 @@
-/******************************** 1263px **********************************/
 
-@media all and (min-width: 1263px){
+@media all and (max-width: 1840px){
+	/* Red*/
+	.flip-container#red,.flip-container#red .front,.flip-container#red .back {
+		height: 363px;
+	}
+	#red .front{
+		background:url(../Images/CharacterMobile/Red_Front.png) no-repeat;
+	}
+	#red .back{
+		background:url(../Images/CharacterMobile/Red_Back.png) no-repeat;
+		margin-top: -365px;
+	}
+	/* Yellow */
+	#yellow .front{
+		background:url(../Images/CharacterMobile/Yellow_Front.png) no-repeat;
+	}
+	#yellow .back{
+		background:url(../Images/CharacterMobile/Yellow_Back.png) no-repeat;
+	}
+	.flip-container#yellow, .flip-container#yellow .front, .flip-container#yellow .back {
+		width:350px;
+		height: 307px;
+	}
+	.flip-container#yellow .back{
+		margin-top:-307px;
+	}
+	/* Blue */
+	#blue .front{
+		background:url(../Images/CharacterMobile/Blue_Front.png) no-repeat;
+	}
+	#blue .back{
+		background:url(../Images/CharacterMobile/Blue_Back.png) no-repeat;
+	}
+	.flip-container#blue, .flip-container#blue .front, .flip-container#blue .back {
+		width:350px;
+		height: 335px;
+	}	
+	.flip-container#blue .back{
+		margin-top:-336px;
+	}
+	/* White */
+	#white .front{
+		background:url(../Images/CharacterMobile/White_Front.png) no-repeat;
+	}
+	#white .back{
+		background:url(../Images/CharacterMobile/White_Back.png) no-repeat;
+	}
+	.flip-container#white, .flip-container#white .front, .flip-container#white .back {
+		width:350px;
+		height: 307px;
+	}
+	.flip-container#white .back{
+		margin-top:-305px;
+	}
+	#characters .back p{
+		font-size: 17px;
+		width: 165px;
+		padding: 65px 0 0 180px;
+	}
+	#characters .flip-container#blue .back p{
+		padding: 65px 0 0 130px;
+	}
+	.flip-container, .front, .back{
+		margin: 10px 2.5% 0;
+		width:350px;
+	}
+}
+@media all and (max-width: 1768px){
+	.flip-container, .front, .back {
+		margin: 10px 2% 0;
+	}
+}
+@media all and (max-width: 1685px){
+	.flip-container, .front, .back {
+		margin: 10px 1% 0;
+	}	
+}
+@media all and (max-width: 1545px){
+	.flip-container, .front, .back {
+		margin: 10px 0.4% 0;
+	}
+	
+}
+
+@media all and (max-width: 1480px){
+	/* Character slideshow for mobile */
+	 #characters .widescreen{
+		display:none;
+	}
+	#characters iframe{
+		display:block;
+	}	
+	header nav {
+		margin-top: 10px;
+	}
+}
+
+@media all and (max-width: 1385px){
+		h1{
+			font-size: 112px;
+		}
+}
+
+
+/******************************** 1280px **********************************/
+
+@media all and (max-width: 1280px){
 	/* Main nav */
 	header {
 		background: url(../Images/BG_header.png) repeat-x -250px top;
@@ -12,13 +117,24 @@
 	}
 	/* Main Logo */
 	h1{
-		font-size:105px;
+		font-size:102px;
 	}
 	#logo{
-		width:70%;
+		width:72%;
 	}
 	#logo p{
 		font-size:58px;
+	}
+	/* Main Nav */
+	header nav li{
+		width:120px;
+	}
+	/* Select the first item of the nav */
+	header nav li:first-child{
+		width:160px;
+	}
+	header nav li a{
+		font-size:26px;
 	}
 	
 	/* Play Game Button */
@@ -28,13 +144,59 @@
 	header #PlayGame_BT a{
 		margin:8%;
 	}
+	/* Updates slideshow */
+	#updates article p {
+		font-size: 21px;
+		line-height: 28px;
+	}
+	#updates article a{
+		bottom:35px;
+	}
 	
-	/* Maps slideshow */
-	.swiper-container{
-		height:420px;
+	article#updates .swiper-container{
+		height:460px;
 	}
-	.device .arrow-left, .device .arrow-right,.device .arrow-left:hover, .device .arrow-right:hover{
-		background-size:80%;
+	#content article#updates span h2{
+	width:13%;
+		
 	}
-
+	
+	/* ABOUT */
+	#about article#creatorTXT {
+		margin: 90px 0 0 25%;
+	}
+	#about article#creatorTXT h2{
+		font-size: 35px;
+		height: 50px;
+	}
+	#about article#creatorTXT p,#about article#projectTXT p,#about article#projectTXT li{
+		font-size:22px;
+	}
+	#about .wrap h2{
+		font-size:45px;
+	}
+	/* Reseaux sociaux */
+	#creator #reseauxSociaux a{
+		border:2px solid #9a9a9a;
+		border-radius:4px;
+		font-size:26px;
+		height:35px;
+		width:35px;
+	}
+	#reseauxSociaux a#GooglePlus span{
+		margin-top:-4px;
+	}
+	#reseauxSociaux a#GooglePlus i{
+		font-size:20px;
+	}
+	#creator #reseauxSociaux a:hover{
+		border:2px solid #7b0000;
+	}
+	/* PROJECT */
+	#about #project{
+		background-size:28%;
+	}
+	#projectTXT ul li{
+		background-size:0.8%;
+	}
 }
