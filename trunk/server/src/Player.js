@@ -324,7 +324,7 @@ Player.prototype.update = function(){
 				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
 				
 				//Stand if no movement keys are pressed.
-				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING && !this.keys.right && !this.keys.left)
+				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING && this.keys.right == this.keys.left)
 					this.execute(Enum.Action.Type.STANDING);					
 			}
 		}

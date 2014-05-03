@@ -34,13 +34,13 @@ var Constants = {
 		WRONG_SIDE_MINUS_FACTOR: 0.5,
 		PickAxe:  {
 			TIMER: 15,
-			VEL_X: 3.5,
-			VEL_Y: 1.5,
+			VEL_X: 6,
+			VEL_Y: 2,
 			OFFSET_X: 40,
 			OFFSET_Y: 15,
-			DISTANCE: 85,
-			WIDTH: 30,
-			HEIGHT: 30,
+			DISTANCE: 100,
+			WIDTH: 35,
+			HEIGHT: 35,
 			LIMIT: 2
 		}
 	},
@@ -58,9 +58,6 @@ var Constants = {
 		}
 	},
 	World: {
-		Common: {
-			GOAL_OFFSET_Y: 50
-		},
 		Church: {
 			GOAL_OFFSET_Y: -400
 		},

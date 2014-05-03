@@ -44,7 +44,7 @@ var Game = function(settings){
 			this.goalStartPosition = this.height + Constants.World.Alien.GOAL_OFFSET_Y;
 			break;
 		default:
-			this.goalStartPosition = this.height + Constants.World.Common.GOAL_OFFSET_Y;
+			this.goalStartPosition = this.height;
 			break;
 	}
 	
