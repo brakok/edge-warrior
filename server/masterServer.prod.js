@@ -2293,6 +2293,10 @@ Block.prototype.update = function(dt){
 			this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
 			this.launchLandTimer -= dt;
 		}
+		
+		//Prevent block from going faster than launching speed.
+		if(this.body.getVel().y < Constants.Block.LAUNCHING_SPEED)
+			this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
 	
 		//Prevent a block from staying awake.
 		if(this.justLanded || (!this.usedSafeTimer && !this.landed))
