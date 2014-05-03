@@ -13,6 +13,12 @@ var Block = function (x, y, type, color, skill) {
 	
 	this.updatedOnce = false;
 	this.isBlockAdded = false;
+	this.isSmoothering = false;
+	
+	this.newPos = {
+		x: x,
+		y: y
+	};
 	
 	//Create sprite associated.
 	if(this.type == Enum.Block.Type.COLORED && this.color != null)
@@ -99,6 +105,17 @@ Block.prototype.update = function(dt){
 			delete this.trail;
 	}
 
+	//Update position.
+	if(this.x != this.newPos.x || this.y != this.newPos.y)
+	{
+		if(this.isSmoothering && Math.sqrt(Math.pow(this.x - this.newPos.x, 2) + Math.pow(this.y - this.newPos.y, 2)) < Constants.Common.SMOOTH_DISTANCE)
+			this.setPosition((this.newPos.x + this.x)*0.5, (this.newPos.y + this.y)*0.5);
+		else 
+			this.setPosition(this.newPos.x, this.newPos.y);
+			
+		this.isSmoothering = !this.isSmoothering;
+	}
+	
 	Client.game.camera.project(this.sprite, this.x, this.y);
 	
 	//Trigger landing animation if needed.
@@ -185,5 +202,8 @@ Block.prototype.fromServer = function(data){
 	if(this.color != data.color)
 		this.swapColor(data.color);
 	
-	this.setPosition(data.x, data.y);
+	this.newPos.x = data.x;
+	this.newPos.y = data.y;
+	
+	this.isSmoothering = true;
 };

@@ -5,6 +5,9 @@ var Constants = {
 	Player: {
 		Z_ORDER: 10
 	},
+	Common: {
+		SMOOTH_DISTANCE: 50
+	},
 	Game: {
 		Phase: {
 			Warmup: {
