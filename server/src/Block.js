@@ -217,8 +217,8 @@ Block.prototype.spawn = function(){
 	{
 		var factor = Math.PI*(Math.random()*2);
 		
-		var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-		var launchPowerY = Math.abs(Constants.Block.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+		var launchPowerX = Constants.Spawn.MAXLAUNCHING_X*Math.sin(factor);
+		var launchPowerY = Math.abs(Constants.Spawn.MAXLAUNCHING_Y*Math.cos(factor));
 		
 		//Prevent block to spawn player on the world edges.
 		if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
