@@ -118,6 +118,7 @@ Player.prototype.spawn = function(x, y){
 	this.killerId = null;
 	this.isRemoved = false;
 	
+	this.stunTimer = Constants.Spawn.STUN_TIMER;
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
 };
 
@@ -230,34 +231,7 @@ Player.prototype.update = function(){
 		this.y = this.getPosition().y;
 		
 		var nextX = 0;
-		var impulse = 0;
-		
-		if((this.keys.right || this.keys.left) && this.stunTimer <= 0)
-		{
-			var velX = Math.abs(this.body.getVel().x);
-			var factor = 1-((this.keys.right && this.body.getVel().x < 0) || (this.keys.left && this.body.getVel().x > 0) ? Constants.Player.WRONG_SIDE_MINUS_FACTOR 
-																														  : (velX/Constants.Player.MAX_SPEED_FACTOR));
-				
-			impulse = Constants.Player.RUN_POWER_ONGROUND * factor;
-		}
-		
-		//Move
-		if(this.keys.right)
-			nextX += impulse;
-			
-		if(this.keys.left)
-			nextX -= impulse;
-		
-		//Throw pickaxe.
-		if(this.keys.dig && !this.pickAxePressed && this.pickAxeCount > 0)
-		{
-			this.throwPickAxe();
-			this.pickAxePressed = true;
-		}
-			
-		if(!this.keys.dig && this.pickAxePressed)
-			this.pickAxePressed = false;
-		
+
 		//Add pick axe.
 		if(this.pickAxeCount < Constants.Player.PickAxe.LIMIT)
 		{
@@ -282,16 +256,48 @@ Player.prototype.update = function(){
 				this.currentAction = Enum.Action.Type.NONE;
 		}
 		
-		//Jump
-		if(this.keys.jump && this.groundContact > 0)
+		//If not stunned.
+		if(this.stunTimer <= 0)
 		{
-			this.jump(false);
-			this.doubleJumpEnabled = false;
+			var impulse = 0;
+		
+			if(this.keys.right || this.keys.left)
+			{
+				var velX = Math.abs(this.body.getVel().x);
+				var factor = 1-((this.keys.right && this.body.getVel().x < 0) || (this.keys.left && this.body.getVel().x > 0) ? Constants.Player.WRONG_SIDE_MINUS_FACTOR 
+																															  : (velX/Constants.Player.MAX_SPEED_FACTOR));
+					
+				impulse = Constants.Player.RUN_POWER_ONGROUND * factor;
+			}
+			
+			//Move
+			if(this.keys.right)
+				nextX += impulse;
+				
+			if(this.keys.left)
+				nextX -= impulse;
+		
+			//Throw pickaxe.
+			if(this.keys.dig && !this.pickAxePressed && this.pickAxeCount > 0)
+			{
+				this.throwPickAxe();
+				this.pickAxePressed = true;
+			}
+		
+			//Jump
+			if(this.keys.jump && this.groundContact > 0)
+			{
+				this.jump(false);
+				this.doubleJumpEnabled = false;
+			}
+				
+			//Double jump
+			if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
+				this.doubleJump();
 		}
 			
-		//Double jump
-		if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
-			this.doubleJump();
+		if(!this.keys.dig && this.pickAxePressed)
+			this.pickAxePressed = false;
 			
 		//Allow double jump.
 		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
@@ -328,8 +334,6 @@ Player.prototype.update = function(){
 					this.execute(Enum.Action.Type.STANDING);					
 			}
 		}
-				
-		
 	}
 	
 	if(this.jumpCooldown > 0)
@@ -490,9 +494,9 @@ Player.prototype.initBody = function(space){
 	
 	//Add drop sensor to prevent double jump when drop zone is obstructed.
 	this.dropSensor = this.currentGame.space.addShape(chipmunk.BoxShape2(this.body,
-															new chipmunk.BB(-(Constants.Block.WIDTH*0.33), 
-																			-(playerHalfHeight+(Constants.Block.HEIGHT*0.75)), 
-																			(Constants.Block.WIDTH*0.33), 
+															new chipmunk.BB(-(Constants.Block.WIDTH*0.4), 
+																			-(playerHalfHeight+(Constants.Block.HEIGHT*0.9)), 
+																			(Constants.Block.WIDTH*0.4), 
 																			-(playerHalfHeight))));
 																
 	this.dropSensor.setCollisionType(Enum.Collision.Type.DROP_SENSOR);

@@ -48,6 +48,9 @@ var Game = function(settings){
 			break;
 	}
 	
+	//Lower winning goal if they are less player than max intended.
+	this.goalStartPosition *= 1 - (Constants.Game.MAX_PLAYERS - settings.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR;
+	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
 	
@@ -123,12 +126,13 @@ Game.prototype.update = function(){
 	//When world's ready...
 	if(this.ready)
 	{
-		for(var i in this.players)
-			this.players[i].update();
-
 		//Reduce to one step for better performance instead of multiple fixed time steps.
 		if(this.space != null)
 			this.space.step(Constants.Physic.TIME_STEP);
+			
+		//Update players.
+		for(var i in this.players)
+			this.players[i].update();
 			
 		//Update Triggers.
 		for(var i in this.triggers)
@@ -155,6 +159,8 @@ Game.prototype.update = function(){
 					delete this.npcs[i];
 				}
 			}
+			
+		
 			
 		//Update blocks.
 		for(var i in this.blocks)

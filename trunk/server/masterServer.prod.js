@@ -170,7 +170,10 @@ var Constants = {
 	Spawn: {
 		Limit: {
 			OFFSET: 150
-		}
+		},
+		MAXLAUNCHING_Y: 850,
+		MAXLAUNCHING_X: 2200,
+		STUN_TIMER: 0.4
 	},
 	Player: {
 		INITIAL_SPAWN_Y: 100,
@@ -199,8 +202,6 @@ var Constants = {
 		LANDING_TIMER: 0.01,
 		LAUNCH_LAND_TIMER: 0.1,
 		LAUNCHING_SPEED: -400,
-		SPAWN_MAXLAUNCHING_Y: 850,
-		SPAWN_MAXLAUNCHING_X: 2200,
 		LAND_SAFE_TIMER: 0.3,
 		Restriction: {
 			SPAWN_TIMER: 6
@@ -254,6 +255,7 @@ var Constants = {
 	},
 	WinningGoal: {
 		PHASE_TIME: 8,
+		LOWER_GOAL_FACTOR: 0.1,
 		FloatingBall: {
 			WIDTH: 90,
 			HEIGHT: 90,
@@ -1739,6 +1741,7 @@ Player.prototype.spawn = function(x, y){
 	this.killerId = null;
 	this.isRemoved = false;
 	
+	this.stunTimer = Constants.Spawn.STUN_TIMER;
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
 };
 
@@ -1851,34 +1854,7 @@ Player.prototype.update = function(){
 		this.y = this.getPosition().y;
 		
 		var nextX = 0;
-		var impulse = 0;
-		
-		if((this.keys.right || this.keys.left) && this.stunTimer <= 0)
-		{
-			var velX = Math.abs(this.body.getVel().x);
-			var factor = 1-((this.keys.right && this.body.getVel().x < 0) || (this.keys.left && this.body.getVel().x > 0) ? Constants.Player.WRONG_SIDE_MINUS_FACTOR 
-																														  : (velX/Constants.Player.MAX_SPEED_FACTOR));
-				
-			impulse = Constants.Player.RUN_POWER_ONGROUND * factor;
-		}
-		
-		//Move
-		if(this.keys.right)
-			nextX += impulse;
-			
-		if(this.keys.left)
-			nextX -= impulse;
-		
-		//Throw pickaxe.
-		if(this.keys.dig && !this.pickAxePressed && this.pickAxeCount > 0)
-		{
-			this.throwPickAxe();
-			this.pickAxePressed = true;
-		}
-			
-		if(!this.keys.dig && this.pickAxePressed)
-			this.pickAxePressed = false;
-		
+
 		//Add pick axe.
 		if(this.pickAxeCount < Constants.Player.PickAxe.LIMIT)
 		{
@@ -1903,16 +1879,48 @@ Player.prototype.update = function(){
 				this.currentAction = Enum.Action.Type.NONE;
 		}
 		
-		//Jump
-		if(this.keys.jump && this.groundContact > 0)
+		//If not stunned.
+		if(this.stunTimer <= 0)
 		{
-			this.jump(false);
-			this.doubleJumpEnabled = false;
+			var impulse = 0;
+		
+			if(this.keys.right || this.keys.left)
+			{
+				var velX = Math.abs(this.body.getVel().x);
+				var factor = 1-((this.keys.right && this.body.getVel().x < 0) || (this.keys.left && this.body.getVel().x > 0) ? Constants.Player.WRONG_SIDE_MINUS_FACTOR 
+																															  : (velX/Constants.Player.MAX_SPEED_FACTOR));
+					
+				impulse = Constants.Player.RUN_POWER_ONGROUND * factor;
+			}
+			
+			//Move
+			if(this.keys.right)
+				nextX += impulse;
+				
+			if(this.keys.left)
+				nextX -= impulse;
+		
+			//Throw pickaxe.
+			if(this.keys.dig && !this.pickAxePressed && this.pickAxeCount > 0)
+			{
+				this.throwPickAxe();
+				this.pickAxePressed = true;
+			}
+		
+			//Jump
+			if(this.keys.jump && this.groundContact > 0)
+			{
+				this.jump(false);
+				this.doubleJumpEnabled = false;
+			}
+				
+			//Double jump
+			if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
+				this.doubleJump();
 		}
 			
-		//Double jump
-		if(this.keys.jump && this.groundContact == 0 && this.doubleJumpEnabled && !this.doubleJumpUsed)
-			this.doubleJump();
+		if(!this.keys.dig && this.pickAxePressed)
+			this.pickAxePressed = false;
 			
 		//Allow double jump.
 		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
@@ -1949,8 +1957,6 @@ Player.prototype.update = function(){
 					this.execute(Enum.Action.Type.STANDING);					
 			}
 		}
-				
-		
 	}
 	
 	if(this.jumpCooldown > 0)
@@ -2111,9 +2117,9 @@ Player.prototype.initBody = function(space){
 	
 	//Add drop sensor to prevent double jump when drop zone is obstructed.
 	this.dropSensor = this.currentGame.space.addShape(chipmunk.BoxShape2(this.body,
-															new chipmunk.BB(-(Constants.Block.WIDTH*0.33), 
-																			-(playerHalfHeight+(Constants.Block.HEIGHT*0.75)), 
-																			(Constants.Block.WIDTH*0.33), 
+															new chipmunk.BB(-(Constants.Block.WIDTH*0.4), 
+																			-(playerHalfHeight+(Constants.Block.HEIGHT*0.9)), 
+																			(Constants.Block.WIDTH*0.4), 
 																			-(playerHalfHeight))));
 																
 	this.dropSensor.setCollisionType(Enum.Collision.Type.DROP_SENSOR);
@@ -2382,8 +2388,8 @@ Block.prototype.spawn = function(){
 	{
 		var factor = Math.PI*(Math.random()*2);
 		
-		var launchPowerX = Constants.Block.SPAWN_MAXLAUNCHING_X*Math.sin(factor);
-		var launchPowerY = Math.abs(Constants.Block.SPAWN_MAXLAUNCHING_Y*Math.cos(factor));
+		var launchPowerX = Constants.Spawn.MAXLAUNCHING_X*Math.sin(factor);
+		var launchPowerY = Math.abs(Constants.Spawn.MAXLAUNCHING_Y*Math.cos(factor));
 		
 		//Prevent block to spawn player on the world edges.
 		if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
@@ -2566,6 +2572,9 @@ var Game = function(settings){
 			break;
 	}
 	
+	//Lower winning goal if they are less player than max intended.
+	this.goalStartPosition *= 1 - (Constants.Game.MAX_PLAYERS - settings.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR;
+	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
 	
@@ -2641,12 +2650,13 @@ Game.prototype.update = function(){
 	//When world's ready...
 	if(this.ready)
 	{
-		for(var i in this.players)
-			this.players[i].update();
-
 		//Reduce to one step for better performance instead of multiple fixed time steps.
 		if(this.space != null)
 			this.space.step(Constants.Physic.TIME_STEP);
+			
+		//Update players.
+		for(var i in this.players)
+			this.players[i].update();
 			
 		//Update Triggers.
 		for(var i in this.triggers)
@@ -2673,6 +2683,8 @@ Game.prototype.update = function(){
 					delete this.npcs[i];
 				}
 			}
+			
+		
 			
 		//Update blocks.
 		for(var i in this.blocks)

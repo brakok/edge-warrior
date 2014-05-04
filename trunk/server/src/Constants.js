@@ -21,7 +21,10 @@ var Constants = {
 	Spawn: {
 		Limit: {
 			OFFSET: 150
-		}
+		},
+		MAXLAUNCHING_Y: 850,
+		MAXLAUNCHING_X: 2200,
+		STUN_TIMER: 0.4
 	},
 	Player: {
 		INITIAL_SPAWN_Y: 100,
@@ -50,8 +53,6 @@ var Constants = {
 		LANDING_TIMER: 0.01,
 		LAUNCH_LAND_TIMER: 0.1,
 		LAUNCHING_SPEED: -400,
-		SPAWN_MAXLAUNCHING_Y: 850,
-		SPAWN_MAXLAUNCHING_X: 2200,
 		LAND_SAFE_TIMER: 0.3,
 		Restriction: {
 			SPAWN_TIMER: 6
@@ -105,6 +106,7 @@ var Constants = {
 	},
 	WinningGoal: {
 		PHASE_TIME: 8,
+		LOWER_GOAL_FACTOR: 0.1,
 		FloatingBall: {
 			WIDTH: 90,
 			HEIGHT: 90,
