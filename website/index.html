@@ -33,10 +33,14 @@
 			<div class="wrap"> 
 				<nav class="clear">
 					<ul>
-						<li><a href="#updates">Updates </a></li>
-						<li><a href="#rules">Rules</a></li>
-						<li><a href="#maps">Maps</a></li>
-						<li><a href="#about">About </a></li>
+						<li><a href="#updates">Nouvelles</a></li>
+						<li class="navDivid"></li>
+						<li><a href="#rules">Règlements</a></li>
+						<li class="navDivid"></li>
+						<li><a href="#maps">Mondes</a></li>
+						<li class="navDivid"></li>
+						<li><a href="#about">À propos</a></li>
+						<li class="navDivid"></li>
 						<li><a href="#">Anglais</a></li>
 					</ul>
 				</nav>
@@ -85,18 +89,20 @@
 			<section id="content">
 				<!-- Updates section -->             
 				<article id="updates"> 
-					<span><h2>Updates</h2></span>
+					<span><h2>Nouvelles</h2></span>
 					<!-- News slideshow -->
 					<div class="swiper-container">
 						<div class="swiper-wrapper">
+							<!-- Article #1 -->
 							<div class="swiper-slide news1">
-							<article> 
+								<article> 
 									<h2>New website launched</h2> 
 									<i>may 01, 2014</i>
 									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend. Quisque ultricies vulputate tortor sed sollicitudin.</p>
 									<a href="#" >read all [ + ]</a>
 								</article>
 							</div>
+							<!-- Article #2 -->
 							<div class="swiper-slide news2">
 								<article> 
 									<h2>New skills blocks available</h2> 
@@ -106,6 +112,7 @@
 									<a href="#rules">see the new block [ + ]</a>
 								</article>
 							</div>
+							<!-- Article #3 -->
 							<div class="swiper-slide news3">
 								<article> 
 									<h2>New map event created</h2> 
@@ -114,38 +121,114 @@
 									<a href="#maps">see the new map event [ + ]</a>
 								</article>
 							</div>
-							<div class="swiper-slide news4">
-								<article> 
-									<h2>New website launched</h2> 
-									<i>may 01, 2014</i>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend. Quisque ultricies vulputate tortor sed sollicitudin.</p>
-									<a href="#">read all [ + ]</a>
-								</article>
-							</div>
 						</div>
 						<div class="pagination"></div>
 					</div>
-					<!-- Script for the slideshow -->
+					<!-- Script for the news slideshow -->
 					<script src="Script/jquery-1.10.1.min.js"></script>
 					<script src="Script/plugIn_slideshow.min.js"></script>
 					<script src="Script/slideshow.js"></script>
 				</article>
 				<!-- Rules section --> 
 				<article id="rules">
-					<span><h2>Rules</h2></span>
+					<span><h2>Règlements</h2></span>
+						<section id="hud">
+							<h2 class="wrap">The Hud </h2>
+							<div id="hudContent">
+								<div class="wrap"> 
+									<article class="legendTXT">
+										<p><span class="legendNB">1</span> Buy Mode </p>
+										<p><span class="legendNB">2</span> Units counter </p>
+									</article>
+									<article class="legendTXT">
+										<p><span class="legendNB">3</span> Skill blocks </p>
+										<p><span class="legendNB">4</span> Actual block to drops</p>
+									</article>
+									<article class="legendTXT">
+										<p><span class="legendNB">5</span> Next block to drops </p>
+										<p><span class="legendNB">6</span> Pickaxes </p>
+									</article>
+									<article class="legendTXT">
+										<p><span class="legendNB">7</span> Inventory 1 </p>
+										<p><span class="legendNB">8</span> Inventory 2 </p>
+									</article>
+								</div>	
+								<div id="hudImage"></div>
+							</div>
+						</section>
+						<section id="basicRules">
+							<h2 class="wrap">Basic rules</h2>
+								<article class="rules">
+									<div class="wrap">
+										<!-- Rule #01 -->
+										<div id="rules_part01"> 
+											<p>The goal is to reach the cursed ball in the sky by dropping blocks.</p>
+											<img src="Images/winningGoal.png"/>
+										</div> 
+										<div id="rules_part02"> 
+											<p>Once, one of the player reach the goal, he can use the overlord to destroy the others. The winner gets 10 sec to destroy all his opponent. He’ll gets an higher score if he destroys all of them in the allowed time.</p>
+											<img src="Images/winningGoal_Reach.png"/>
+											<span>></span>
+											<img src="Images/winningGoal_Final.png"/>
+										</div> 
+									</div>								
+								</article>
+								<article class="rules">
+									<div class="wrap">
+										<!-- Rule #02 -->
+										<div id="rules_part04"> 
+											<p>3 or more same colored blocks in contact will vanished.</p>
+											<img src="Images/tripleBlocks.png"/>
+										</div> 
+										<!-- Rule #03 -->
+										<div id="rules_part05"> 
+											<p>2 complementary blocks in contact will vanished.<i> [ You don’t remember your chromatic circle ? ]</i><a href="#">Click here</a></p>
+											<img src="Images/complementaryBlocks.png"/>
+										</div> 
+										<!-- Rule #04 -->
+										<div id="rules_part06"> 
+											<p>To get complementary blocks, you need to drop your block on another player. By doing that, all your victim’s block will turn into complementary blocks. So if yellow Kills blue, all yellow’s blocks will turn into orange block. </p>
+											<img src="Images/oppositeBlocks.png"/>
+										</div> 
+									</div>								
+								</article>
+								<article class="rules">
+									<div class="wrap">
+										<!-- Rule #05 -->
+										<div id="rules_part07"> 
+											<p>Gray block are neutral. Can only be destroyed by skills block or pickaxe</p>
+											<img src="Images/grayBlock.png"/>
+										</div> 
+										<!-- Rule #06 -->
+										<div id="rules_part08"> 
+											<p>Pickaxes can be used to destroy any kind of blocks. Appear at 10 sec of interval. There’s a maximum of 2 at the same time.</p>
+											<img src="Images/pickaxes.png"/>
+										</div> 
+										<!-- Rule #08 -->
+										<div id="rules_part09"> 
+											<p>To reach your goal easily, you can drop your blocks on another player. It will gives you a spawn blocks and will allow you to spawn your victim wherever you want. Work as well with multiple kill.                      </p>
+											<img src="Images/spawnBlock.png"/>
+										</div> 
+									</div>							
+								</article>
+						</section>
+						<section id="skillBlocks">							
+								<h2 class="wrap">Skill blocks</h2>
+								<p class="wrap">To get those skill blocks, before joining a lobby, you need to go to the <b>skills menu</b> and select the skills you want for the match. However you’ll play without any special blocks. There is a maximum of <b>4</b> skills per match. </p>
+						</section>
 				</article>  
 				<!-- Maps section --> 				
 				<article id="maps">
-					<span><h2>Maps</h2></span>
+					<span><h2>Mondes</h2></span>
 					<!-- Slideshow iframe -->
 					<iframe src="iframe/Maps/maps.html" scrolling="no" frameborder="0"></iframe>
 				</article>
 				<!-- About section --> 
 				<article id="about">
-					<span><h2>About</h2></span>
+					<span><h2>À propos</h2></span>
 					<div class="wrap"> 
 						<section id="creator">
-							<h2> The Creator </h2>
+							<h2> Le Créateur</h2>
 							<article id="creatorTXT">
 								<h2>Pascal Thibault Larouche</h2>
 								<p>Une personne en quête de connaissance dans le but éventuel de produire un code de qualité, rapidement. Je possède aussi de bonnes aptitudes d'assimilations et d'adaptations qui m'ont aidé à découvrir rapidement certaines technologies et, ainsi, diversifier mes connaissances et outils dans le cadre de développement de programmes.</p>
@@ -157,20 +240,28 @@
 							</article>
 						</section>
 						<section id="project">
-							<h2> The Project </h2>
+							<h2> Le Projet</h2>
 							<article id="projectTXT">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. </p>
-								<p>Praesent ullamcorper mi id facilisis eleifend. Quisque ultricies vulputate tortor sed sollicitudin. Ut suscipit, diam sit amet fringilla lobortis, nunc orci sollicitudin ante, vitae rhoncus enim eros in justo.</p>
+								<p class="boldTXT">Crushed Dream est ma première création que j'ai développé en grande partie comme un loup solitaire. Le principe est simple: les joueurs doivent s'écraser les uns les autres dans une ascension frénétique vers l'objectif de fin. Lorsqu'il est atteint, le gagnant se doit d'éléminer le reste des survivants pour démontrer sa suprématie. </p>
+								<p>	Ce premier jeu est mon fer de lance pour montrer à mes futurs coéquipiers le style de jeux que j'aime conceptualiser et aussi une opportunité pour la communauté des joueurs de ce monde de découvrir de nouvelles manières de jouer des styles existants depuis longtemps, mais avec une autre vision.</p>							
+								<p>J'aimerais bâtir une communauté autour de ce jeu en ajoutant périodiquement du nouveaux contenus, ainsi incitant les joueurs à revenir souvent pour essayer les nouvelles fonctionnalités/habiletés introduites. Je n'ai pas opté pour le modèle le plus payant pour ce jeu et j'aurais bien aimé pouvoir l'offrir gratuitement, mais je vise à réinvestir les profits dans les serveurs et, si le jeu grossit beaucoup, dans un futur projet où il n'y aurait pas qu'un seul développeur. 
+								Je ne souhaite pas m'enrichir sur les joueurs avec des modèles qui nuisent à l'expérience de jeux, étant moi-même un joueur et n'aimant pas particulièrement certains moyens de prendre les gens pour des vaches à lait. Le coût de ce jeu risque de monter progressivement au fil du temps, pour compenser avec les nouvelles choses intégrées, mais le jeu risque de toujours rester abordable, car un coût excessif ne serait pas justifié pour un jeu de cette envergure. 
+								Il serait possible que dans un futur rapproché, j'accepte les requêtes des joueurs pour du nouveaux contenus qu'ils auront déterminés, mais pour l'instant, j'ai la  tête remplie d'idées non développées.</p> 
+								<p class="boldTXT">Voici ce que j'aimerais intégrer dans le futur: </p>
 								<ul>							
-									<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
-									<li>Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque.</li>
-									<li>Duis semper tortor arcu, nec ornare dolor volutpat lacinia. </li>
+									<li>Des événements dans les cartes ;</li>
+									<li>Des ligues (si le volume de joueur est assez important) ;</li>
+									<li>Une nouvelle catégorie de blocs (Util Block, des blocs utilitaires) ;</li>
+									<li>Une musique dynamique qui s'accère durant l'ascension ;</li>
+									<li>Peut-être, plus de personnages ; </li>
+									<li>Peut-être, des habiletés spéciales pour chaque personnage ;</li>
+									<li>Etc. </li>
 								</ul>
 							</article>
 						</section>
 					</div>
 					<!-- Link for downloading the game -->
-					<a id="download" href="#">Download Crushed Dream </a>
+					<a id="download" href="#">Télécharger Crushed Dream </a>
 				</article>
 			</section>
 			<div id="push"></div>
@@ -180,9 +271,9 @@
 			<div class="wrap"> 
 				<nav class="clear">
 					<ul>
-						<li><a href="#updates">Updates </a></li>
-						<li><a href="#rules">Rules</a></li>
-						<li><a href="#maps">Maps</a></li>
+						<li><a href="#updates">Nouvelles</a></li>
+						<li><a href="#rules">Règlements</a></li>
+						<li><a href="#maps">Mondes</a></li>
 						<li><a href="#about">About </a></li>
 					</ul>
 				</nav>
