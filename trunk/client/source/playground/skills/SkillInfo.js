@@ -31,7 +31,7 @@ var SkillInfo = {
 	},
 	JawFall: {
 		TITLE: 'Jaw fall',
-		DESCRIPTION: 'Launch a carnivorous block that destroys other block on contact. Kill players too.',
+		DESCRIPTION: 'Launch a carnivorous block that destroys other blocks on contact. Kill players too.',
 		MENU_SPRITE_PATH: assetsSkillDir + 'jawFall.png',
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_jawFall.png',
 		PERCENT_START: 4,
@@ -51,7 +51,7 @@ var SkillInfo = {
 	},
 	PeskyBox: {
 		TITLE: 'Pesky box',
-		DESCRIPTION: 'When landing, create an annoying character that follows his target for a short duration. Player loses all speed upon contact.',
+		DESCRIPTION: 'When landing, create an annoying character that follows his target for a short duration. Target loses all speed upon contact.',
 		MENU_SPRITE_PATH: assetsSkillDir + 'peskyBox.png',
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_peskyBox.png',
 		PERCENT_START: 6,
@@ -71,7 +71,7 @@ var SkillInfo = {
 	},
 	TimeZone: {
 		TITLE: 'Time zone',
-		DESCRIPTION: 'When landing, create a time zone which restores players position when ending. Destroy blocks that were not landed when the time zone started.',
+		DESCRIPTION: 'When landing, create a time zone that restores players position when ending. Destroy blocks that were not landed when the time zone started.',
 		MENU_SPRITE_PATH: assetsSkillDir + 'timeZone.png',
 		BLOCK_SPRITE_PATH: assetsBlockDir + 'block_timeZone.png',
 		PERCENT_START: 4,

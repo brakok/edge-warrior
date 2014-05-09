@@ -22,6 +22,7 @@ var Login = cc.LayerColor.extend({
 
 		//Seek login div (created in html file).
 		this.loginDiv = document.getElementById('login');
+		this.loginFooter = document.getElementById('loginFooter');
 		this.placeHTML();
 		
 		//Menu creation.
@@ -59,10 +60,10 @@ var Login = cc.LayerColor.extend({
 		this.addChild(this.menu);
 	},
 	onEntering: function(){
-		this.loginDiv.style.display = 'block'; 
+		this.loginFooter.style.display = this.loginDiv.style.display = 'block'; 
 	},
 	onLeaving: function(){
-		this.loginDiv.style.display = 'none';
+		this.loginFooter.style.display = this.loginDiv.style.display = 'none';
 		this.txtUsername.value = '';
 		this.txtPassword.value = '';
 	},
@@ -132,6 +133,8 @@ var Login = cc.LayerColor.extend({
 	placeHTML: function(){
 		this.loginDiv.style.left = (this.width*0.5-(HtmlHelper.computeWidth(this.loginDiv)*0.5)) + 'px';
 		this.loginDiv.style.top = this.height*0.55 + 'px';
+
+		this.loginFooter.style.top = this.height*0.9 + 'px';
 	}
 });
 
