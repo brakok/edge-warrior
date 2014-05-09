@@ -4,7 +4,7 @@
 	padding:o;
 }
 body{
-	background: url(../Images/CharacterBG.jpg) no-repeat 0 640px;
+	background: url(../Images/CharacterBG.jpg) no-repeat 0 540px;
 	background-size: 100%;
 }
 html, body {
@@ -25,13 +25,14 @@ ul{
 li{
 	display:inline;
 }
-a,h2{
+h2{
 	font-variant:small-caps;
 }
 #content article>span {
 	background: #7b0000;
 	float:left;
 	height: 10px;
+	margin:80px 0;
 	width: 100%;	
 }
 #content article span h2{
@@ -135,6 +136,7 @@ header #PlayGame_BT{
 	background: url(../Images/BT_playGame.png) no-repeat;
 	border: none;
 	float: left;
+	font-variant:small-caps;
 	height: 199px;
 	width: 255px;
 }
@@ -169,19 +171,16 @@ header nav {
 	margin-top:30px;
 }
 header nav li {
-	background: url(../Images/navList_Dot.jpg) no-repeat center right;
-	width: 150px;
 	float: left;
 	text-align: center;
 }
-/* Select the first item of the nav */
-header nav li:first-child{
-	width:190px;
+header nav li.navDivid{
+	background: url(../Images/navList_Dot.jpg) no-repeat center right;
+	height: 10px;
+	margin: 15px 18px 0;
+	width: 9px;
 }
-/* Select the last item of the nav */
-header nav li:last-child{
-	background:none;
-}
+
 header nav li a{
 	color:#DADADA;
 	font-family: quantico;
@@ -391,8 +390,6 @@ h1{
 	width: 100%;
 }
 article{
-	margin:60px 0 0;
-	padding: 40px 0 0;
 	width:100%;
 }
 /* UPDATES */
@@ -409,11 +406,10 @@ article{
 	width: 85%;
 }
 #updates article a{
-	bottom:30px;
 	color:#767676;
 	float:right;
-	font-size:22px;
-	position:absolute;
+	font-size:24px;
+	margin-top:40px;
 }
 #updates article a:hover{
 	color:#7b0000;
@@ -445,36 +441,184 @@ article{
 	width:100%;
 }
 
+/* RULES */
+/* the hud */
+#hudContent,#basicRules .rules{
+	background:#f5f5f5;
+	border-top:2px solid #dedede;
+	border-bottom:2px solid #dedede;
+	color:#5d5d5d;
+	font-size:26px;
+	margin:30px 0 40px;
+}
+article.legendTXT{
+	display:inline-block;
+	margin:20px 0;
+	width:24%;
+}
+article.legendTXT p{
+	line-height:40px;
+}
+span.legendNB{
+	border:3px solid #bebebe;
+	float:left;
+	font-family:quantico;
+	background:white;
+	height:26px;
+	line-height:26px;
+	margin: 5px 10px 0 0;
+	text-align:center;
+	width:26px;
+}
+
+#hudContent #hudImage{
+	background:url(../Images/hudIMG.jpg) no-repeat center;
+	height:233px;
+	width:100%;
+}
+#hudImage{
+	margin-bottom:20px;
+}
+
+/* Basic rules */
+#basicRules .rules{
+	height:268px;
+}
+#rules_part01,#rules_part02,#rules_part03,#rules_part03,#rules_part04,#rules_part05,#rules_part06,#rules_part07,#rules_part08,#rules_part09{
+	float:left;
+	padding-top:40px;
+}
+#basicRules #rules_part01{
+	background:url(../Images/nb01_BG.png) no-repeat left 40px;
+	height:228px;
+	margin-right:15%;
+	width:25%;
+}
+#rules_part01 img{
+	margin: 30px 30% 0;
+	width: auto;
+}
+#basicRules #rules_part02,#rules_part06{
+	width:60%;
+}
+#rules_part02 img,#rules_part02 span{
+	float:left;
+}
+/* Image winningGoal_Reach.png */
+#rules_part02 img:nth-child(2){
+	margin-top:30px;
+}
+/* Image winningGoal_final.png */
+#rules_part02 img:nth-child(4){
+	margin-top:32px;
+}
+#rules_part02 span{
+	background:url(../Images/imgDivid.png) no-repeat center;
+	font-size:0;
+	height:32px;
+	margin:60px 15%;
+	width:14px;
+}
+#rules_part04{
+	background:url(../Images/nb02_BG.png) no-repeat left 40px;	
+}
+#rules_part05{
+	background:url(../Images/nb03_BG.png) no-repeat left 40px;	
+}
+#rules_part04,#rules_part05,#rules_part07,#rules_part08{
+	font-family:hallo_sansLight;
+	margin-right:3%;
+	width:22%;
+}
+#rules_part05 i{
+	color:#5d5d5d;
+	font-size:25px;
+}
+#rules_part05 a{
+	color:#7b0000;
+	margin-left:10px;
+}
+#rules_part05 a:hover{
+	font-family:hallo_sans;
+	text-decoration:underline;
+}
+#rules_part06{
+	background:url(../Images/nb04_BG.png) no-repeat left 40px;	
+	width:50%;
+}
+#rules_part04 img{
+	margin:80px 16% 0;
+}
+#rules_part05 img{
+	margin:50px 20% 0;
+}
+#rules_part06 img{
+	margin:50px 15% 0;
+}
+#rules_part07{
+	background:url(../Images/nb05_BG.png) no-repeat left 40px;	
+}
+#rules_part08{
+	background:url(../Images/nb06_BG.png) no-repeat left 40px;	
+}
+#rules_part09{
+	background:url(../Images/nb07_BG.png) no-repeat left 40px;	
+	margin-left:5%;
+	width:45%;
+}
+#rules_part07 img{
+	margin:100px 16% 0;
+}
+#rules_part08 img{
+	margin:50px 20% 0;
+}
+#rules_part09 img{
+	margin:75px 15% 0;
+}
+
+/* Skill blocks */
+#skillBlocks{
+	color:#5d5d5d;
+	font-family:hallo_sansLight;
+	font-size:26px;
+}
+#skillBlocks p{
+	line-height:35px;
+	margin-top:30px;
+}
+#skillBlocks b{
+	color:#7b0000;
+}
+
 /* MAPS */
 article#maps iframe{
 	border-top: 10px solid #d7d7d7;
 	border-bottom: 10px solid #d7d7d7;
 	height:425px;
-	margin:60px 0;
+	margin:20px 0;
 	width:100%;
 }
 
 /* ABOUT */
-#about .wrap h2{
+#about .wrap h2,#rules  h2.wrap{
 	color:#7b0000;
 	font-family:hallo_sans;
 	font-size:50px;
 }
 article#about{
-	background:url(../images/CreatorBG.png) no-repeat 0 140px;
+	background:url(../images/CreatorBG.png) no-repeat 0 180px;
 	background-size:100%;
-	height:780px;
+	height:860px;
 	max-width:1905px;
 	width:100%;
 }
 section#creator,section#project{
 	float:left;
-	margin:60px 0 140px;
 }
 #about article#creatorTXT{
 	display:block;
-	margin:200px 0 0 25%;
-	width:initial;
+	margin:220px 0 0 25%;
+	width:auto;
 }
 #about article#creatorTXT h2{
 	color:#292929;
@@ -486,7 +630,7 @@ section#creator,section#project{
 #about article#creatorTXT p,#about article#projectTXT p,#about article#projectTXT li{
 	color:#646464;
 	font-family:hallo_sansLight;
-	font-size:27px;
+	font-size:25px;
 	line-height:36px;
 }
 /* Reseaux Sociaux */
@@ -526,10 +670,7 @@ section#creator,section#project{
 /* PROJECT */
 #about #project{
 	background:url(../images/projectBG.png) no-repeat top right;
-}
-section#project{
-	height:470px;
-	margin-bottom:40px;
+	margin:220px 0 40px;
 }
 article#projectTXT{
 	margin:0;
@@ -539,8 +680,11 @@ article#projectTXT{
 	margin:25px 0;
 	width:70%;
 }
-
+#projectTXT p.boldTXT{
+	font-weight:bold;
+}
 #projectTXT ul{
+	margin-top:-20px;
 	padding-left:4%;
 }
 #projectTXT ul li{
@@ -587,8 +731,9 @@ footer{
 }
 footer a{
 	color:#575757;
-	font-size:22pt;
+	font-size:28px;
 	font-family:quantico;
+	font-variant:small-caps;
 }
 footer a:hover{
 	color:#7b0000;
@@ -596,7 +741,7 @@ footer a:hover{
 footer a.up{
 	color:#DADADA;
 	float:right;
-	margin-top:200px;
+	margin-top:-80px;
 }
 footer a.up:hover{
 	color: white;
@@ -610,25 +755,65 @@ footer p{
 	text-align:center;
 }
 /* Footer Nav */
+footer nav ul{
+	width:100%;
+}
 footer nav li{
-	margin:140px 0 0 15.5%;
+	margin:140px 0 0;
 }
 footer nav li a{
 	position:absolute;
 }
 /* Updates*/
 footer nav li:first-child a{
-	margin-top:85px;
+	margin: -215px 0 0 240px;
 }
 /* Rules */
 footer nav li:nth-child(2) a{
-	margin: 10px 0 0 2%;
+	margin: -285px 0 0 27%;
 }
 /* Maps */
 footer nav li:nth-child(3) a {
-	margin: -5px 0 0 8.7%;
+	margin: -300px 0 0 47%;
 }
 /* About */
 footer nav li:last-child a {
-	margin: 125px 0 0 9.5%;
+	margin: -155px 0 0 61%;
 }
+
+/******************************** FONT FIX FOR SAFARI **********************************/
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+	::i-block-chrome, header nav ul li a{
+		letter-spacing:-4px;
+		text-transform:lowercase;
+	}
+	::i-block-chrome, #logo p{
+		letter-spacing:-6px;
+		margin-top:-48px;
+		text-transform:lowercase;
+	}
+	::i-block-chrome, #logo p::first-letter{
+		font-size:80px;
+	}
+	
+	/* Play the game */
+	::i-block-chrome, header #PlayGame_BT p:first-child{
+		letter-spacing:-4px;
+		word-spacing: 4px;
+	}
+	::i-block-chrome, header #PlayGame_BT p:first-child::first-letter{
+		font-size:30px;
+		margin-right:4px;
+	}
+	::i-block-chrome, #content article span h2{
+		margin-top:-45px;
+		letter-spacing:-6px;
+		text-transform:lowercase;
+	}
+	::i-block-chrome,#content article span h2::first-letter{
+		font-size:75px;
+	}
+	
+}
+
+

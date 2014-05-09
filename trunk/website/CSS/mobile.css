@@ -75,6 +75,11 @@
 	.flip-container, .front, .back {
 		margin: 10px 1% 0;
 	}	
+	#hudContent #hudImage{
+		background-size:110%;
+		height:0;
+		padding-bottom:14%;
+	}
 }
 @media all and (max-width: 1545px){
 	.flip-container, .front, .back {
@@ -126,17 +131,9 @@
 		font-size:58px;
 	}
 	/* Main Nav */
-	header nav li{
-		width:120px;
-	}
-	/* Select the first item of the nav */
-	header nav li:first-child{
-		width:160px;
-	}
 	header nav li a{
 		font-size:26px;
 	}
-	
 	/* Play Game Button */
 	header #PlayGame_BT{
 		background-size:90%;
@@ -151,6 +148,7 @@
 	}
 	#updates article a{
 		bottom:35px;
+		font-size:22px;
 	}
 	
 	article#updates .swiper-container{
@@ -160,7 +158,53 @@
 	width:13%;
 		
 	}
+	/* RULES */
 	
+	#hudContent #hudImage{
+		background:url(../Images/hudIMG_02.jpg)no-repeat center;
+		background-size:100%;
+		height:0;
+		padding-bottom:14%;
+	}
+	article.legendTXT p{
+		font-size:21px;
+	}
+	#rules_part02 span{
+		margin: 60px 10%;
+	}
+	.rules p,#rules_part05 i{
+		font-size:22px;
+	}
+	#rules_part01, #rules_part02, #rules_part03, #rules_part03, #rules_part04, #rules_part05, #rules_part06, #rules_part07, #rules_part08, #rules_part09{
+		padding-top:30px;
+	}
+	#rules_part01 img{
+		margin-top:55px;
+	}
+	#rules_part02 img:nth-child(4){
+		margin-top:28px;
+	}
+	#rules_part04, #rules_part05, #rules_part07, #rules_part08{
+		width:24%;
+	}
+	#rules_part04 img{
+		margin-top:92px;
+	}
+	#rules_part05 img{
+		margin-top:70px;
+	}
+	#rules_part06{
+		width:45%;
+	}
+	#rules_part06 img{
+		margin:50px 0 0;
+	}
+	#rules_part07 img{
+		margin-top:120px;
+	}
+	#rules_part09{
+		width:40%;
+	}
 	/* ABOUT */
 	#about article#creatorTXT {
 		margin: 90px 0 0 25%;
@@ -171,6 +215,7 @@
 	}
 	#about article#creatorTXT p,#about article#projectTXT p,#about article#projectTXT li{
 		font-size:22px;
+		line-height:30px;
 	}
 	#about .wrap h2{
 		font-size:45px;
@@ -195,8 +240,38 @@
 	/* PROJECT */
 	#about #project{
 		background-size:28%;
+		margin: 160px 0 0;
+	}
+	section#project{
+		margin-bottom:0;
 	}
 	#projectTXT ul li{
 		background-size:0.8%;
+	}
+	/* Link for downloading the game */
+	#about a#download{
+		margin:50px 0;
+	}
+	/* FOOTER */
+	footer{
+		background-size:140%;
+	}
+	footer a{
+		font-size:25px;
+	}
+	footer nav li:first-child a {
+		margin: -195px 0 0 3%;
+	}
+	footer nav li:nth-child(2) a {
+		margin: -265px 0 0 23%;
+	}
+	footer nav li:nth-child(3) a {
+		margin: -22% 0 0 51%;
+	}
+	footer nav li:last-child a {
+		margin: -155px 0 0 70%;
+	}
+	footer a.up{
+		margin:-60px 2% 0 0;
 	}
 }
