@@ -27,6 +27,10 @@
 	float: right;
 }
 
+.rightContent{
+	text-align: right;
+}
+
 .error {
 	color: #ff8888;
 	font-size: 0.8em;
@@ -103,6 +107,23 @@ div.login > div > div:first-child {
 	width: 35%;
 	text-align: left;
 	float: left;
+}
+
+div.loginFooter {
+	width: 100%;
+}
+
+div.loginFooter > div {
+	width: 100%;
+	padding: 0 5%;
+}
+
+div.loginFooter > div > div {
+	width: 45%;
+}
+
+div.loginFooter span {
+	font-size: 0.8em;
 }
 
 div.account {
