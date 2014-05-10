@@ -93,7 +93,7 @@ img{
 
 .device .arrow-left, .device .arrow-right{	
 	height: 123px;
-	top: 25%;
+	top: 15%;
 	position: absolute;
 	width: 49px;
 }
@@ -164,85 +164,79 @@ img{
 }
 
 /* Skill block CSS */
-.swiper-slide:hover{
-	transition:0.4s;
+
+.skillBlocks{
+	border-radius:10px;
+	border: 6px solid #c9c9c9; 
+	height:240px;
+	margin:0 auto;
+	width:240px;
 }
-.swiper-slide p{
+.skillBlocks p{
 	display:none;
 }
-/* Red */
-#red.swiper-slide{
-	background: url(../Images/Red_Front.png) no-repeat;
-	height:344px;
-}
-#red.swiper-slide:hover{
-	background: url(../Images/Red_Back.png) no-repeat;
-	height:344px;
-}
-#red.swiper-slide:hover p,#yellow.swiper-slide:hover p,#blue.swiper-slide:hover p,#white.swiper-slide:hover p{
+.skillBlocks:hover p{
+	color:#434343;
 	display:block;
-	font-family: hallo_sansLight;
-	font-size: 19px;
-	text-align: left;
-	width: 199px;
-	padding: 70px 0 0 200px;
-	font-variant: normal;
+	font-family:hallo_sansLight;
+	font-size:25px;
+	padding: 20px 10px 0;
+	text-align:left;
+	width:220px;
 }
-/* Yellow */
-#yellow.swiper-slide{
-	background: url(../Images/Yellow_Front.png) no-repeat;
-	height:350px;
+.skillBlocks h3{
+	color:#fff;
+	font-family:quantico;
+	font-size:30px;
+	font-variant:small-caps;
+	margin-top:20px;
+	text-align:center;
 }
-#yellow.swiper-slide:hover{
-	background: url(../Images/Yellow_Back.png) no-repeat;
+.skillBlocks:hover h3{
+	display:none;
 }
-/* Blue */
-#blue.swiper-slide{
-	background: url(../Images/Blue_Front.png) no-repeat;
-	height:366px;
+/* Fire Pulse */
+#firePulse.skillBlocks{
+	background:#000 url(../Images/firePulse_Front.png) no-repeat center 90px;
 }
-#blue.swiper-slide:hover{
-	background: url(../Images/Blue_Back.png) no-repeat;
+#firePulse.skillBlocks:hover{
+	background:#fff url(../Images/firePulse_Back.png) no-repeat center 180px;
 }
-
-#blue.swiper-slide:hover p{
-	padding: 90px 0 0 160px;
+/* Jaw Fall */
+#jawFall.skillBlocks{
+	background:#000 url(../Images/jawFall_Front.png) no-repeat center 90px;
 }
-/* White */
-#white.swiper-slide{
-	background: url(../Images/White_Front.png) no-repeat;
-	height:351px;
+#jawFall.skillBlocks:hover{
+	background:#fff url(../Images/jawFall_Back.png) no-repeat center 180px;
 }
-#white.swiper-slide:hover{
-	background: url(../Images/White_Back.png) no-repeat;
+/* Eclipse */
+#eclipse.skillBlocks{
+	background:#000 url(../Images/eclipse_Front.png) no-repeat center 70px;
 }
-/* Adjust the padding according to the media query */
-@media all and (max-width: 1370px){
-		.swiper-wrapper{
-			padding:0 5% !important;
-		}
+#eclipse.skillBlocks:hover{
+	background:#fff url(../Images/eclipse_Back.png) no-repeat center 180px;
 }
-@media all and (max-width: 1045px){
-		.swiper-wrapper{
-			padding:0 2% !important;
-		}
+/* Pisky Box */
+#peskyBox.skillBlocks{
+	background:#000 url(../Images/peskyBox_Front.png) no-repeat center 70px;
 }
-@media all and (max-width: 950px){
-		.swiper-wrapper{
-			padding:0 25% !important;
-		}
-}
-@media all and (max-width: 750px){
-		.swiper-wrapper{
-			padding:0 15% !important;
-		}
-}
-
-@media all and (max-width: 600px){
-		.swiper-wrapper{
-			padding:0 8% !important;
-		}
+#peskyBox.skillBlocks:hover{
+	background:#fff url(../Images/peskyBox_Back.png) no-repeat center 180px;
 }
 
 
+
+/******************************** 1263px **********************************/
+
+@media all and (min-width: 1263px){
+	.device{
+		height:425px;
+	}
+	.swiper-container{
+		height:425px;
+	}
+	.device .arrow-left, .device .arrow-right,.device .arrow-left:hover, .device .arrow-right:hover{
+		background-size:80%;
+	}
+}
 
