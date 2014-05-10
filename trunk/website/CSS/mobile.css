@@ -25,6 +25,11 @@
 	.flip-container#yellow .back{
 		margin-top:-307px;
 	}
+	
+	#characters #yellow .back p{
+		padding: 60px 0 0 180px;
+		width: 190px;
+	}
 	/* Blue */
 	#blue .front{
 		background:url(../Images/CharacterMobile/Blue_Front.png) no-repeat;
@@ -53,6 +58,11 @@
 	.flip-container#white .back{
 		margin-top:-305px;
 	}
+	
+	#characters #white .back p {
+		padding: 60px 0 0 175px;
+		width: 170px;
+	}
 	#characters .back p{
 		font-size: 17px;
 		width: 165px;
@@ -60,6 +70,7 @@
 	}
 	#characters .flip-container#blue .back p{
 		padding: 65px 0 0 130px;
+		width:200px;
 	}
 	.flip-container, .front, .back{
 		margin: 10px 2.5% 0;
@@ -111,6 +122,9 @@
 /******************************** 1280px **********************************/
 
 @media all and (max-width: 1280px){
+	body{
+		background-position: 0 600px;
+	}
 	/* Main nav */
 	header {
 		background: url(../Images/BG_header.png) repeat-x -250px top;
@@ -147,7 +161,7 @@
 		line-height: 28px;
 	}
 	#updates article a{
-		bottom:35px;
+		bottom:115px;
 		font-size:22px;
 	}
 	
@@ -204,6 +218,10 @@
 	}
 	#rules_part09{
 		width:40%;
+	}
+	/* RULES */
+	#skillBlocks, #units{
+		font-size:24px;
 	}
 	/* ABOUT */
 	#about article#creatorTXT {
