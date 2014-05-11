@@ -223,6 +223,20 @@ img{
 #peskyBox.skillBlocks:hover{
 	background:#fff url(../Images/peskyBox_Back.png) no-repeat center 180px;
 }
+/* Deflector */
+#deflector.skillBlocks{
+	background:#000 url(../Images/deflector_Front.png) no-repeat center 75px;
+}
+#deflector.skillBlocks:hover{
+	background:#fff url(../Images/deflector_Back.png) no-repeat center 180px;
+}
+/* Time Zone */
+#timeZone.skillBlocks{
+	background:#000 url(../Images/timeZone_Front.png) no-repeat center 75px;
+}
+#timeZone.skillBlocks:hover{
+	background:#fff url(../Images/timeZone_Back.png) no-repeat center 200px;
+}
 
 
 
