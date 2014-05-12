@@ -406,6 +406,7 @@ article{
 	width: 85%;
 }
 #updates article a{
+	bottom:80px;
 	color:#767676;
 	float:right;
 	font-size:24px;
@@ -494,9 +495,11 @@ span.legendNB{
 	margin-right:15%;
 	width:25%;
 }
-#rules_part01 img{
-	margin: 30px 30% 0;
-	width: auto;
+#rules_part01 p,#rules_part04 p,#rules_part05 p,#rules_part07 p,#rules_part08 p,#rules_part09 p{
+	height:230px;
+}
+#rules_part01 p{
+	background:url(../Images/winningGoal.png) no-repeat 45% 100px;
 }
 #basicRules #rules_part02,#rules_part06{
 	width:60%;
@@ -519,16 +522,26 @@ span.legendNB{
 	margin:60px 15%;
 	width:14px;
 }
-#rules_part04{
-	background:url(../Images/nb02_BG.png) no-repeat left 40px;	
-}
-#rules_part05{
-	background:url(../Images/nb03_BG.png) no-repeat left 40px;	
-}
 #rules_part04,#rules_part05,#rules_part07,#rules_part08{
 	font-family:hallo_sansLight;
 	margin-right:3%;
 	width:22%;
+}
+#rules_part04{
+	background:url(../Images/nb02_BG.png) no-repeat left 40px;	
+}
+
+#rules_part04 p{
+	background:url(../Images/tripleBlocks.png) no-repeat 45% 140px;	
+}
+#rules_part04 img{
+	margin:80px 16% 0;
+}
+#rules_part05{
+	background:url(../Images/nb03_BG.png) no-repeat left 40px;	
+}
+#rules_part05 p{
+	background:url(../Images/complementaryBlocks.png) no-repeat 40% 140px;	
 }
 #rules_part05 i{
 	color:#5d5d5d;
@@ -541,36 +554,46 @@ span.legendNB{
 #rules_part05 a:hover{
 	text-decoration:underline;
 }
+#rules_part05 img{
+	margin:50px 20% 0;
+}
 #rules_part06{
 	background:url(../Images/nb04_BG.png) no-repeat left 40px;	
 	width:50%;
-}
-#rules_part04 img{
-	margin:80px 16% 0;
-}
-#rules_part05 img{
-	margin:50px 20% 0;
 }
 #rules_part06 img{
 	margin:50px 15% 0;
 }
 #rules_part07{
+	width:23%;
+}
+#rules_part07{
 	background:url(../Images/nb05_BG.png) no-repeat left 40px;	
 }
-#rules_part08{
-	background:url(../Images/nb06_BG.png) no-repeat left 40px;	
-}
-#rules_part09{
-	background:url(../Images/nb07_BG.png) no-repeat left 40px;	
-	margin-left:5%;
-	width:45%;
+#rules_part07 p{
+	background:url(../Images/grayBlock.png) no-repeat 40% 170px;	
 }
 #rules_part07 img{
 	margin:100px 16% 0;
 }
+#rules_part08{
+	background:url(../Images/nb06_BG.png) no-repeat left 40px;	
+}
+#rules_part08 p{
+	background:url(../Images/pickaxes.png) no-repeat 40% 145px;	
+}
 #rules_part08 img{
 	margin:50px 20% 0;
 }
+#rules_part09{
+	background:url(../Images/nb07_BG.png) no-repeat left 40px;	
+	margin-left:5%;
+	width:44%;
+}
+#rules_part09 p{
+	background:url(../Images/spawnBlock.png) no-repeat 40% 170px;	
+}
+
 #rules_part09 img{
 	margin:75px 15% 0;
 }
@@ -678,8 +701,8 @@ section#creator,section#project{
 }
 /* Reseaux Sociaux */
 #reseauxSociaux{
-	float:right;
-	margin-top:40px;
+	margin: 30px auto;
+	width: 320px;
 }
 #creator #reseauxSociaux a{
 	background:#5a5a5a;
