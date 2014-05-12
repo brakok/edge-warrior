@@ -11,6 +11,7 @@ var assetsNpcDir = 'assets/npc/';
 var assetsTriggerDir = 'assets/triggers/';
 var assetsSkillDir = 'assets/skills/';
 var assetsParticles = 'assets/particles/';
+var assetsCommon = 'assets/common/';
 
 var soundDir = 'sounds/';
 var soundVoiceDir = 'sounds/voices/';
@@ -20,6 +21,9 @@ var assets = [
 	//Font
 	{fontName: Constants.Font.NAME, src:[{src:"assets/css/fonts/Quantico-Bold.otf", type:"truetype"}]},
 
+	//Common
+	{type:'image', src: assetsCommon + 'logo.png'},
+	
 	//Particles
 	{type:'image', src: assetsParticles + 'smoke.png'},
 	{type:'image', src: assetsParticles + 'WhiteDot.png'},
