@@ -238,7 +238,7 @@ var Client = new function(){
 		
 		//Result from log in.
 		masterSocket.on(Constants.Message.LOGIN, function(errors){
-			MenuScreens.login.result(errors);
+			myApp.MenuScene.menu.currentScreen.result(errors);
 		});
 		
 		//Result from change password.

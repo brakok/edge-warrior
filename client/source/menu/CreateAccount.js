@@ -12,6 +12,7 @@ var CreateAccount = cc.LayerColor.extend({
 		this._zOrder = Constants.Menu.CreateAccount.Z_INDEX;
 		
 		this.isCreatingAccount = false;
+		this.isLogin = false;
 		
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'account_background.png');
@@ -54,7 +55,7 @@ var CreateAccount = cc.LayerColor.extend({
 	},
 	create: function(){
 				
-		if(!this.isCreatingAccount)
+		if(!this.isCreatingAccount && !this.isLogin)
 		{
 			Client.connectToNetwork();
 			this.isCreatingAccount = true;
@@ -75,8 +76,21 @@ var CreateAccount = cc.LayerColor.extend({
 				
 		if(!errorMsg || errorMsg.length == 0)
 		{
-			MenuScreens.switchTo(MenuScreens.login);
-			HtmlHelper.showMessage('Account created.');
+			//Authentication.
+			if(this.isCreatingAccount)
+			{
+				Client.authenticate(new Profile(this.txtUsername.value, null, this.txtPassword.value, null));
+				this.isLogin = true;
+			}
+			else
+			{
+				//Authenticate player.
+				HtmlHelper.showMessage('Account created.');
+				Client.username = this.txtUsername.value;
+				MenuScreens.switchTo(MenuScreens.mainMenu);
+				
+				this.isLogin = false;
+			}
 		}
 		else
 		{
