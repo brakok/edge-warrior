@@ -19,7 +19,7 @@ var Login = cc.LayerColor.extend({
 		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 		
 		this.logo = cc.Sprite.create(assetsCommon + 'logo.png');
-		this.logo.setPosition(new cc.Point(this.width*0.28, this.height*0.1));
+		this.logo.setPosition(new cc.Point(this.width*0.07, this.height*0.1));
 		this.logo._zOrder = Constants.Menu.BACKGROUND_Z_INDEX + 1;
 		
 		this.addChild(this.background);
@@ -139,7 +139,7 @@ var Login = cc.LayerColor.extend({
 		this.loginDiv.style.left = (this.width*0.5-(HtmlHelper.computeWidth(this.loginDiv)*0.5)) + 'px';
 		this.loginDiv.style.top = this.height*0.55 + 'px';
 
-		this.loginFooter.style.top = this.height*0.9 + 'px';
+		this.loginFooter.style.top = this.height*0.85 + 'px';
 	}
 });
 
