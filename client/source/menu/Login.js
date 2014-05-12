@@ -18,8 +18,13 @@ var Login = cc.LayerColor.extend({
 		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
 		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 		
+		this.logo = cc.Sprite.create(assetsCommon + 'logo.png');
+		this.logo.setPosition(new cc.Point(this.width*0.28, this.height*0.1));
+		this.logo._zOrder = Constants.Menu.BACKGROUND_Z_INDEX + 1;
+		
 		this.addChild(this.background);
-
+		this.addChild(this.logo);
+		
 		//Seek login div (created in html file).
 		this.loginDiv = document.getElementById('login');
 		this.loginFooter = document.getElementById('loginFooter');
