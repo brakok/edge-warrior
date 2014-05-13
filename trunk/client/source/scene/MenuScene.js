@@ -71,6 +71,7 @@ var MenuScene = cc.Scene.extend({
 		this.addChild(this.menu);
 		
 		AudioManager.stopAllEffects();
+		AudioManager.playMusic(Constants.Sound.File.Music.MENU, true);
 		
 		if(Options.resolution.isFullscreen)
 		{
@@ -82,6 +83,8 @@ var MenuScene = cc.Scene.extend({
 	onExit: function(){
 		this.menu.unload();
 		this.removeChild(this.menu);
+		
+		AudioManager.stopMusic();
 		
 		//Hide exit button.
 		var exit = document.getElementById('exit');
