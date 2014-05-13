@@ -15,7 +15,7 @@ var AudioManager = {
 		cc.AudioEngine.getInstance().stopEffect(audioId);
 	},
 	playMusic: function(file, mustLoop){
-		cc.AudioEngine.getInstance().playMusic(soundDir + file, mustLoop);
+		cc.AudioEngine.getInstance().playMusic(soundMusicDir + file, mustLoop);
 	},
 	stopMusic: function(){
 		

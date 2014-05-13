@@ -15,6 +15,7 @@ var assetsCommon = 'assets/common/';
 
 var soundDir = 'sounds/';
 var soundVoiceDir = 'sounds/voices/';
+var soundMusicDir = 'sounds/musics/';
 
 var assets = [
 
@@ -111,6 +112,9 @@ var assets = [
 	{type:"sound", src: soundVoiceDir + 'white_idle03.mp3'},
 	
 	{type:"sound", src: soundVoiceDir + 'floatingBall_summon.mp3'},
+	
+	//Musics
+	{type:"sound", src: soundMusicDir + 'menu.mp3'},
 
 	//World
 	{type:'image', src: assetsWorldDir + 'black_box.png'},

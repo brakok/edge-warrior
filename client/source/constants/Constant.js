@@ -285,10 +285,10 @@ var Constants = {
 	},
 	Sound: {
 		Effect: {
-			VOLUME: 0.5
+			VOLUME: 0.65
 		},
 		Music: {
-			VOLUME: 0.5
+			VOLUME: 0.25
 		},
 		File: {
 			Block: {
@@ -336,6 +336,9 @@ var Constants = {
 			TimeZone: {
 				SPAWN: 'timeZone_spawn',
 				DISAPPEARING: 'timeZone_disappearing'
+			},
+			Music: {
+				MENU: 'menu'
 			},
 			Common: {
 				FLOATING: 'floating',
