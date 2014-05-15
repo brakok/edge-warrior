@@ -12,9 +12,13 @@
 		appFiles:['source/constants/Constant.js',
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
+				  
+				  'source/Resources.js',
+				  
 				  'source/common/HtmlHelper.js',
 				  'source/common/Chat.js',
-				  'source/Resources.js',
+				  'source/common/Util.js',
+				  'source/common/Smoothering.js',
 				  
 				  'source/playground/Block.js',
 				  'source/playground/Player.js',

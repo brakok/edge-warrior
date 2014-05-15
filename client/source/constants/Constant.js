@@ -6,7 +6,7 @@ var Constants = {
 		Z_ORDER: 10
 	},
 	Common: {
-		SMOOTH_DISTANCE: 50
+		SMOOTH_DISTANCE: 2500
 	},
 	Game: {
 		Phase: {
