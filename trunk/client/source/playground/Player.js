@@ -1,4 +1,8 @@
 var Player = function (x, y, color, isControlled, username) {
+	
+	this.x = x;
+	this.y = y;
+	
 	this.color = color;
 	this.username = username;
 	
@@ -9,6 +13,8 @@ var Player = function (x, y, color, isControlled, username) {
 	
 	this.units = 0;
 	this.pickAxeCount = 0;
+	
+	Smoothering.init(this, x, y);
 	
 	this.isControlled = isControlled;
 	this.audioId = null;
@@ -279,11 +285,20 @@ Player.prototype.manageInput = function(){
 
 Player.prototype.update = function(dt){
 	
+	//Update position.
+	var newPos = Smoothering.pop(this);
+	
+	if(newPos.x != this.x || newPos.y != this.y)
+	{
+		this.x = newPos.x;
+		this.y = newPos.y;
+	}
+	
 	Client.game.camera.project(this.currentAnimation, this.x, this.y);
 	
 	//Block inputs during warmup phase.
 	if(this.isControlled && Client.game.currentPhase != Enum.Game.Phase.WARMUP)
-	{
+	{	
 		//Handle inputs.
 		this.manageInput();
 	
@@ -397,7 +412,9 @@ Player.prototype.land = function(){
 };
 
 Player.prototype.fromServer = function(data){
-	this.setPosition(data.x, data.y);
+
+	Smoothering.push(this, data.x, data.y);	
+		
 	this.pickAxeCount = data.pickAxeCount;
 	
 	if(data.facing != this.facing)
@@ -454,6 +471,8 @@ Player.prototype.leave = function(){
 };
 
 Player.prototype.spawn = function(x, y){
+	
+	//Smoothering.reset(this, x, y);
 	this.setPosition(x, y);
 	
 	Client.game.layer.addChild(this.currentAnimation);

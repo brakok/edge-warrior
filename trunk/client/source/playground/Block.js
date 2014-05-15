@@ -13,12 +13,8 @@ var Block = function (x, y, type, color, skill) {
 	
 	this.updatedOnce = false;
 	this.isBlockAdded = false;
-	this.isSmoothering = false;
 	
-	this.newPos = {
-		x: x,
-		y: y
-	};
+	Smoothering.init(this, x, y);
 	
 	//Create sprite associated.
 	if(this.type == Enum.Block.Type.COLORED && this.color != null)
@@ -106,14 +102,12 @@ Block.prototype.update = function(dt){
 	}
 
 	//Update position.
-	if(this.x != this.newPos.x || this.y != this.newPos.y)
+	var newPos = Smoothering.pop(this);
+	
+	if(newPos.x != this.x || newPos.y != this.y)
 	{
-		if(this.isSmoothering && Math.sqrt(Math.pow(this.x - this.newPos.x, 2) + Math.pow(this.y - this.newPos.y, 2)) < Constants.Common.SMOOTH_DISTANCE)
-			this.setPosition((this.newPos.x + this.x)*0.5, (this.newPos.y + this.y)*0.5);
-		else 
-			this.setPosition(this.newPos.x, this.newPos.y);
-			
-		this.isSmoothering = !this.isSmoothering;
+		this.x = newPos.x;
+		this.y = newPos.y;
 	}
 	
 	Client.game.camera.project(this.sprite, this.x, this.y);
@@ -202,8 +196,5 @@ Block.prototype.fromServer = function(data){
 	if(this.color != data.color)
 		this.swapColor(data.color);
 	
-	this.newPos.x = data.x;
-	this.newPos.y = data.y;
-	
-	this.isSmoothering = true;
+	Smoothering.push(this, data.x, data.y);
 };
