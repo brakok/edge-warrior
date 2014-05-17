@@ -25,12 +25,14 @@ LightBall.prototype.explode = function(){
 	EffectManager.create(Enum.Effect.Type.SPARK, this.x, this.y);
 };
 
-LightBall.prototype.update = function(dt){
-
+LightBall.prototype.render = function(){
 	//Create some movement for the floating light ball.	
 	var tmpY = this.y + (Math.sin(this.orbitTime)*Constants.Effect.LightBall.ORBIT_RADIUS);
 	Client.game.camera.project(this.sprite, this.x, tmpY);
-	
+};
+
+LightBall.prototype.update = function(dt){
+
 	this.orbitTime += dt*Constants.Effect.LightBall.ORBIT_SPEED;
 		
 	if(this.orbitTime > 360)

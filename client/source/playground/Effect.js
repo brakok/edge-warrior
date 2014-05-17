@@ -134,6 +134,10 @@ Effect.prototype.launch = function(){
 	Client.game.layer.addChild(this.sprite);
 };
 
-Effect.prototype.update = function(){
+Effect.prototype.render = function(){
 	Client.game.camera.project(this.sprite, this.x, this.y);
+};
+
+Effect.prototype.update = function(){
+	//Nothing.
 };

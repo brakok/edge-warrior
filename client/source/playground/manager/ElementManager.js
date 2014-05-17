@@ -17,6 +17,11 @@ var ElementManager = {
 				else
 					this.currentElements.splice(i, 1);
 		}
+	},
+	render: function(){
+		for(var i = 0; i < this.currentElements.length; ++i)
+			if(this.currentElements[i] != null)
+				this.currentElements[i].render();
 	}
 };
 

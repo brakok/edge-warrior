@@ -72,6 +72,10 @@ Block.prototype.land = function(){
 		this.trail.stop();
 };
 
+Block.prototype.render = function(){
+	Client.game.camera.project(this.sprite, this.x, this.y);
+};
+
 Block.prototype.update = function(dt){
 
 	if(!this.updatedOnce)
@@ -109,9 +113,7 @@ Block.prototype.update = function(dt){
 		this.x = newPos.x;
 		this.y = newPos.y;
 	}
-	
-	Client.game.camera.project(this.sprite, this.x, this.y);
-	
+
 	//Trigger landing animation if needed.
 	if(!this.hasDoneLandingAnimation)
 	{

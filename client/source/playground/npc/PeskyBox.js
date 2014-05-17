@@ -42,7 +42,7 @@ var PeskyBox = function(x, y, facing, target){
 	this.audioId = AudioManager.playEffect(Constants.Sound.File.Common.FLOATING, true);
 };
 
-PeskyBox.prototype.update = function(dt){
+PeskyBox.prototype.render = function(){
 	Client.game.camera.project(this.currentAnimation, this.x, this.y);
 	
 	if(this.eyesOpened)
@@ -65,7 +65,10 @@ PeskyBox.prototype.update = function(dt){
 	
 		Client.game.camera.project(this.eyeSprite, this.x + relX, this.y + relY);
 	}
-		
+};
+
+PeskyBox.prototype.update = function(dt){
+	
 };
 
 PeskyBox.prototype.explode = function(){

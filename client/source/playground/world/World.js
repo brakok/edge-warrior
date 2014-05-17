@@ -46,6 +46,16 @@ var World = function(type, layer){
 	}	
 };
 
+World.prototype.render = function(){
+	this.floor.render();
+	this.leftWall.render();
+	this.rightWall.render();
+	this.background.render();
+	
+	for(var i = 0; i < this.blackBoxes.length; ++i)
+		this.blackBoxes[i].render();
+};
+
 World.prototype.update = function(){
 	
 	this.floor.update();

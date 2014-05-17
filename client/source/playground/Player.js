@@ -282,6 +282,9 @@ Player.prototype.manageInput = function(){
 	}
 };
 
+Player.prototype.render = function(){
+	Client.game.camera.project(this.currentAnimation, this.x, this.y);
+};
 
 Player.prototype.update = function(dt){
 	
@@ -293,8 +296,6 @@ Player.prototype.update = function(dt){
 		this.x = newPos.x;
 		this.y = newPos.y;
 	}
-	
-	Client.game.camera.project(this.currentAnimation, this.x, this.y);
 	
 	//Block inputs during warmup phase.
 	if(this.isControlled && Client.game.currentPhase != Enum.Game.Phase.WARMUP)

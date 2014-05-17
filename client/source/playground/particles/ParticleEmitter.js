@@ -53,6 +53,13 @@ ParticleEmitter.prototype.getParticleCount = function(){
 	return this.particles.length;
 };
 
+ParticleEmitter.prototype.render = function(){
+
+	for(var i = 0; i < this.particles.length; ++i)
+		if(this.particles[i] != null)
+			this.particles[i].render();		
+};
+
 ParticleEmitter.prototype.update = function(dt){
 		
 	if(this.isRunning)

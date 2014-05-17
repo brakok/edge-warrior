@@ -1,26 +1,22 @@
-
 //Smooth move from server.
 var Smoothering = new function(){
 	
 	//Init smoothering for specified instance.
 	this.init = function(instance, x, y){
 		instance.smoothPos = [];
-		instance.smoothPos.push({ x: x, y: y});
-		instance.isSmoothering = true;
-		instance.popLast = false;
+		instance.smoothPos.push({ x: x, y: y, fracture: false, original: true});
+		this.needFracture = true;
 	};
 	
 	//Push new position in array.
 	this.push = function(instance, x, y){
-		
-		if(instance.smoothPos.length >= 3)
-			instance.smoothPos.splice(2, 1);
-		
+				
 		//Do not add same position.
-		if(instance.smoothPos[instance.smoothPos.length-1].x == x && instance.smoothPos[instance.smoothPos.length-1].y == y)
+		if(instance.smoothPos.length > 0 && instance.smoothPos[instance.smoothPos.length-1].x == x && instance.smoothPos[instance.smoothPos.length-1].y == y)
 			return;
 		
-		instance.smoothPos.push({x : x, y: y});
+		instance.smoothPos.push({x : x, y: y, fracture: this.needFracture, original: true});
+		this.needFracture = !this.needFracture;		
 	};
 	
 	this.reset = function(instance, x, y){
@@ -28,7 +24,7 @@ var Smoothering = new function(){
 		var newPos = instance.smoothPos[instance.smoothPos.length-1];
 		
 		if(x != null && y != null)
-			newPos = {x: x, y: y};
+			newPos = {x: x, y: y, fracture: false, original: true};
 	
 		instance.smoothPos = [];
 		instance.smoothPos.push(newPos);
@@ -37,55 +33,68 @@ var Smoothering = new function(){
 	//Get new position from array.
 	this.pop = function(instance){
 
-		//Not enough data to go further.
 		if(instance.smoothPos.length < 2)
-			return instance.smoothPos.length == 1 ? { x: instance.smoothPos[0].x, y: instance.smoothPos[0].y} : { x:0, y: 0};
-		
+			return instance.smoothPos.length == 1 ? {x: instance.smoothPos[0].x, y: instance.smoothPos[0].y} : {x: 0, y: 0};
+			
 		//Get delta distance from first and next point in order to teleport or not.		
 		var delta = Math.pow(instance.smoothPos[0].x - instance.smoothPos[instance.smoothPos.length-1].x, 2) + Math.pow(instance.smoothPos[0].y - instance.smoothPos[instance.smoothPos.length-1].y, 2);
 		
 		//Teleport if beyond allowed distance.
 		if(delta >= Constants.Common.SMOOTH_DISTANCE)
 		{
-			var newPos = {x: instance.smoothPos[instance.smoothPos.length-1].x, y: instance.smoothPos[instance.smoothPos.length-1].y};
+			var newPos = {
+				x: instance.smoothPos[instance.smoothPos.length-1].x, 
+				y: instance.smoothPos[instance.smoothPos.length-1].y, 
+				fracture: false,
+				original: true
+			};
+			
 			instance.smoothPos = [];
 			instance.smoothPos.push(newPos);
-			instance.popLast = false;
 		}
 
-		if(instance.smoothPos.length >= 3)
+		var pos = {
+			x: instance.smoothPos[0].x,
+			y: instance.smoothPos[0].y
+		};
+		
+		//Process fracture.
+		for(var i = 0; i < instance.smoothPos.length; i++)
 		{
-			if(instance.isSmoothering)
+			//Before.
+			if(instance.smoothPos[i].fracture)
 			{
-				instance.smoothPos[1].x = (instance.smoothPos[0].x + instance.smoothPos[1].x + instance.smoothPos[2].x)/3;
-				instance.smoothPos[1].y = (instance.smoothPos[0].y + instance.smoothPos[1].y + instance.smoothPos[2].y)/3;
-			}
-			
-			instance.isSmoothering = !instance.isSmoothering;
-			
-			instance.smoothPos[0].x = instance.smoothPos[1].x;
-			instance.smoothPos[0].y = instance.smoothPos[1].y;
-			
-			instance.smoothPos[1].x = instance.smoothPos[instance.smoothPos.length - 1].x;
-			instance.smoothPos[1].y = instance.smoothPos[instance.smoothPos.length - 1].y;
-			instance.smoothPos.splice(2, 1);
-			instance.popLast = false;
-		}
-		else if(instance.smoothPos.length == 2)
-		{
-			if(!instance.isSmoothering || instance.popLast)
-			{
-				instance.smoothPos[0].x = instance.smoothPos[1].x;
-				instance.smoothPos[0].y = instance.smoothPos[1].y;
+				//Before.
+				if(i > 0 && instance.smoothPos[i-1].original)
+				{
+					var tmpX = (instance.smoothPos[i-1].x + instance.smoothPos[i].x*2)/3;
+					var tmpY = (instance.smoothPos[i-1].y + instance.smoothPos[i].y*2)/3;
 				
-				instance.smoothPos.splice(1,1);
-				instance.isSmoothering = true;
-				instance.popLast = false;
+					instance.smoothPos.splice(i-1, 0, {
+						x: tmpX,
+						y: tmpY,
+						fracture: false,
+						original: false
+					});
+				}
+				
+				//After.
+				if(i+1 < instance.smoothPos.length && instance.smoothPos[i+1].original)
+				{				
+					var tmpX = (instance.smoothPos[i].x*2 + instance.smoothPos[i+1].x)/3;
+					var tmpY = (instance.smoothPos[i].y*2 + instance.smoothPos[i+1].y)/3;
+					
+					instance.smoothPos[i].x = tmpX;
+					instance.smoothPos[i].y = tmpY;
+					instance.smoothPos[i].fracture = false;
+					instance.smoothPos[i].original = false;
+				}
 			}
-			else
-				instance.popLast = true;
 		}
 			
-		return {x: instance.smoothPos[0].x, y: instance.smoothPos[0].y};
+		//Remove first entry.
+		instance.smoothPos.splice(0,1);
+			
+		return pos;
 	};
 };

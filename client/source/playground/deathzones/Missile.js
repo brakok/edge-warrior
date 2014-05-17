@@ -68,12 +68,15 @@ Missile.prototype.setPosition = function(x, y){
 	this.y = y;
 };
 
-Missile.prototype.update = function(){
-
+Missile.prototype.render = function(){
 	if(this.sprite != null)
 		Client.game.camera.project(this.sprite, this.x, this.y);
 	else if(this.currentAnimation != null)
 		Client.game.camera.project(this.currentAnimation, this.x, this.y);
+};
+
+Missile.prototype.update = function(){
+
 };
 
 Missile.prototype.fromServer = function(remoteMissile){	

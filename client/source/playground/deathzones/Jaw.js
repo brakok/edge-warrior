@@ -46,6 +46,10 @@ Jaw.prototype.explode = function(){
 	EffectManager.create(Enum.Effect.Type.JAW_DISAPPEARING, this.x, this.y);
 };
 
-Jaw.prototype.update = function(){
+Jaw.prototype.render = function(){
 	Client.game.camera.project(this.currentAnimation, this.x, this.y);
+};
+
+Jaw.prototype.update = function(){
+	
 };
