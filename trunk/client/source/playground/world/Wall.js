@@ -72,9 +72,12 @@ Wall.prototype.load = function(layer){
 		layer.addChild(this.fragments[i].sprite);
 };
 
-Wall.prototype.update = function(){
-	
+Wall.prototype.render = function(){
 	//Project fragments.
 	for(var i in this.fragments)
 		Client.game.camera.project(this.fragments[i].sprite, this.x, this.fragments[i].y);	
+};
+
+Wall.prototype.update = function(){
+	
 };

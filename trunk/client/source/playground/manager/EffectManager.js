@@ -9,14 +9,21 @@ var EffectManager = {
 	},
 	update: function(){
 		
-		for(var i in this.currentEffects)
+		
+		for(var i = 0; i < this.currentEffects.length; i++)
 		{
 			if(this.currentEffects[i] != null)
 				if(!this.currentEffects[i].hasEnded)
 					this.currentEffects[i].update();
 				else
-					delete this.currentEffects[i];
+					this.currentEffects.splice(i, 1);
 		}
+	},
+	render: function(){
+
+		for(var i = 0; i < this.currentEffects.length; i++)
+			if(this.currentEffects[i] != null)
+				this.currentEffects[i].render();
 	}
 };
 

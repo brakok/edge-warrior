@@ -35,6 +35,10 @@ ChargingDot.prototype.end = function(){
 	this.layer.removeChild(this.sprite);
 };
 
+ChargingDot.prototype.render = function(){
+	Client.game.camera.project(this.sprite, this.x, this.y, this.displayScale, this.displayScale);
+};
+
 ChargingDot.prototype.update = function(){
 	
 	this.x -= this.speed.x;
@@ -47,6 +51,4 @@ ChargingDot.prototype.update = function(){
 	
 	if(delta <= this.radiusToEnd)
 		this.isAlive = false;
-	
-	Client.game.camera.project(this.sprite, this.x, this.y, this.displayScale, this.displayScale);
 };

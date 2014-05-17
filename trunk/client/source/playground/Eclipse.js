@@ -35,6 +35,15 @@ Eclipse.prototype.end = function(){
 	this.hasEnded = true;
 };
 
+Eclipse.prototype.render = function(){
+	Client.game.camera.project(this.sprite, this.x, this.y, this.scale, this.scale);
+	
+	if(this.dots != null)
+		for(var i = 0; i < this.dots.length; i++)
+			if(this.dots[i] != null)
+				this.dots[i].render();
+};
+
 Eclipse.prototype.update = function(dt){
 
 	if(this.duration > 0)
@@ -68,7 +77,6 @@ Eclipse.prototype.update = function(dt){
 		
 		this.dotTimer -= dt;
 		this.duration -= dt;
-		Client.game.camera.project(this.sprite, this.x, this.y, this.scale, this.scale);
 		
 		//Manage dots.
 		for(var i = 0; i < this.dots.length; i++)

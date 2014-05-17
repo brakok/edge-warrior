@@ -18,6 +18,10 @@ BlackBox.prototype.init = function(){
 	Client.game.layer.addChild(this.sprite);
 };
 
-BlackBox.prototype.update = function(){
+BlackBox.prototype.render = function(){
 	Client.game.camera.project(this.sprite, this.x, this.y, this.width*0.01, this.height*0.01);
+};
+
+BlackBox.prototype.update = function(){
+	
 };

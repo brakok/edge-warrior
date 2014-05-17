@@ -27,7 +27,11 @@ Background.prototype.load = function(layer){
 	layer.addChild(this.background);
 };
 
-Background.prototype.update = function(){
+Background.prototype.render = function(){
 	Client.game.camera.project(this.sky, this.x, this.y + this.height, this.width*0.015, this.height*0.03);
 	Client.game.camera.project(this.background, this.x, this.y);
+};
+
+Background.prototype.update = function(){
+	
 };

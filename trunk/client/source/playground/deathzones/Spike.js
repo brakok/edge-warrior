@@ -84,10 +84,23 @@ Spike.prototype.setPosition = function(x, y){
 	this.y = y;
 };
 
+Spike.prototype.render = function(){
+	Client.game.camera.project(this.currentAnimation, this.x, this.y, 1, this.ratioY);
+	
+	switch(this.type){
+		case Enum.DeathZone.Type.ENERGY_SPIKE:
+			this.lightBall.render();
+			break;
+	}
+};
+
 Spike.prototype.update = function(dt){
 
-	Client.game.camera.project(this.currentAnimation, this.x, this.y, 1, this.ratioY);
-	this.lightBall.update(dt);
+	switch(this.type){
+		case Enum.DeathZone.Type.ENERGY_SPIKE:
+			this.lightBall.update(dt);
+			break;
+	}
 };
 
 Spike.prototype.fromServer = function(remoteSpike){

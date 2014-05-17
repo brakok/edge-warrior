@@ -28,5 +28,12 @@ var ParticleManager = {
 				this.emitters.splice(i, 1);
 			}
 		}
+	},
+	render: function(){
+	
+		for(var i = 0; i < this.emitters.length; ++i)
+			if(this.emitters[i] != null)
+				this.emitters[i].render();
+
 	}
 };

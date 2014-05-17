@@ -30,6 +30,23 @@ var Particle = function(x, y, emitter){
 	this.emitter = emitter;
 };
 
+Particle.prototype.render = function(){
+	var scaleX = 1;
+	var scaleY = 1;
+
+	//Calculate new size for particle.
+	if(this.startSize != this.endSize)
+	{
+		var width = this.endSize + (this.life/this.originalLife*(this.startSize - this.endSize));
+		var height = this.sprite.getTextureRect().height*(width/this.sprite.getTextureRect().width);
+		
+		scaleX = width/this.sprite.getTextureRect().width;
+		scaleY = height/this.sprite.getTextureRect().height;
+	}
+	
+	Client.game.camera.project(this.sprite, this.x, this.y, scaleX, scaleY);
+};
+
 Particle.prototype.update = function(dt){
 	
 	if(this.life < 0)
@@ -44,22 +61,7 @@ Particle.prototype.update = function(dt){
 		this.x += this.speed.x;
 	if(this.speed.y != 0)
 		this.y += this.speed.y;
-	
-	var scaleX = 1;
-	var scaleY = 1;
 
-	//Calculate new size for particle.
-	if(this.startSize != this.endSize)
-	{
-		var width = this.endSize + (this.life/this.originalLife*(this.startSize - this.endSize));
-		var height = this.sprite.getTextureRect().height*(width/this.sprite.getTextureRect().width);
-		
-		scaleX = width/this.sprite.getTextureRect().width;
-		scaleY = height/this.sprite.getTextureRect().height;
-	}
-	
 	this.sprite.setOpacity(this.life/this.originalLife*255);
-	Client.game.camera.project(this.sprite, this.x, this.y, scaleX, scaleY);
-	
 	this.life -= dt;
 };

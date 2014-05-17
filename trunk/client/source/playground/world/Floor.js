@@ -74,9 +74,13 @@ Floor.prototype.load = function(layer){
 		layer.addChild(this.fragments[i].sprite);
 };
 
-Floor.prototype.update = function(){
-
+Floor.prototype.render = function(){
 	//Project fragments.
 	for(var i in this.fragments)
 		Client.game.camera.project(this.fragments[i].sprite, this.fragments[i].x, this.y);	
+};
+
+Floor.prototype.update = function(){
+
+	
 };

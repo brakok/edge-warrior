@@ -145,6 +145,44 @@ Game.prototype.processUnits = function(){
 		this.player.units = 0;
 };
 
+//Render game elements.
+Game.prototype.render = function(){
+
+	this.world.render();
+	this.player.render();
+	
+	for(var i = 0; i < this.enemies.length; ++i)
+		if(this.enemies[i])
+			this.enemies[i].render();
+
+	for(var i in this.blocks)
+		if(this.blocks[i])
+			this.blocks[i].render();
+	
+	for(var i in this.deathZones)
+		if(this.deathZones[i])
+			this.deathZones[i].render();
+
+	for(var i in this.npcs)
+		if(this.npcs[i])
+			this.npcs[i].render();
+	
+	for(var i in this.triggers)
+		if(this.triggers[i])
+			this.triggers[i].render();
+	
+	this.goal.render();
+	
+	//Update all effects.
+	EffectManager.render();
+	
+	//Update all elements.
+	ElementManager.render();
+	
+	//Update particle systems.
+	ParticleManager.render();
+};
+
 //Update elements contained in the container.
 Game.prototype.update = function (dt){
 		
@@ -180,10 +218,6 @@ Game.prototype.update = function (dt){
 				
 					this.hud.update(dt);
 					
-					//Position camera.
-					this.moveCamera();
-					this.camera.update();
-					
 					//Project static objects.
 					this.world.update();
 					
@@ -217,17 +251,52 @@ Game.prototype.update = function (dt){
 										
 					//Update all elements.
 					ElementManager.update(dt);
-										
+					
 					//Update particle systems.
 					ParticleManager.update(dt);
-										
+					
 					//Update skillstore.
 					this.hud.skillStore.update(this.player.units);
+					
+					//Position camera.
+					this.moveCamera();
+					this.camera.update();
+					
+					//Rendering.
+					this.render();
 				}
 			
 				break;
 			case Enum.Game.Phase.WARMUP:
 			
+				this.hud.update(dt);
+					
+				//Position camera.
+				this.camera.update();
+
+				//Project static objects.
+				this.world.update();
+				
+				//Update dynamic objects.
+				this.player.update(dt);
+				
+				for(var i = 0; i < this.enemies.length; ++i)
+					this.enemies[i].update(dt);
+
+				for(var i in this.blocks)
+					this.blocks[i].update(dt);
+				
+				for(var i in this.deathZones)
+					this.deathZones[i].update(dt);
+				
+				for(var i in this.triggers)
+					this.triggers[i].update(dt);
+				
+				this.goal.update();
+				
+				//Update all effects.
+				EffectManager.update();
+					
 				if(this.warmupTimer > Constants.Game.Phase.Warmup.ON_PLAYER)
 				{
 					if(this.camera.y != this.player.y && this.camera.x != this.player.x)
@@ -256,36 +325,12 @@ Game.prototype.update = function (dt){
 						
 					this.moveCamera();
 				}
-			
-				this.hud.update(dt);
-					
-				//Position camera.
-				this.camera.update();
-				
-				//Project static objects.
-				this.world.update();
-				
-				//Update dynamic objects.
-				this.player.update(dt);
-				
-				for(var i = 0; i < this.enemies.length; ++i)
-					this.enemies[i].update(dt);
-
-				for(var i in this.blocks)
-					this.blocks[i].update(dt);
-				
-				for(var i in this.deathZones)
-					this.deathZones[i].update(dt);
-				
-				for(var i in this.triggers)
-					this.triggers[i].update(dt);
-				
-				this.goal.update();
-				
-				//Update all effects.
-				EffectManager.update();
 					
 				this.warmupTimer -= dt;
+				
+				//Rendering.
+				this.render();
+				
 				break;
 		};
 		
