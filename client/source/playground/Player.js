@@ -473,8 +473,7 @@ Player.prototype.leave = function(){
 
 Player.prototype.spawn = function(x, y){
 	
-	//Smoothering.reset(this, x, y);
-	this.setPosition(x, y);
+	Smoothering.push(this, x, y);
 	
 	Client.game.layer.addChild(this.currentAnimation);
 	this.isAlive = true;
