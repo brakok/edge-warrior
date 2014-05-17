@@ -41,7 +41,7 @@ var Smoothering = new function(){
 		
 		//Teleport if beyond allowed distance.
 		if(delta >= Constants.Common.SMOOTH_DISTANCE)
-		{
+		{			
 			var newPos = {
 				x: instance.smoothPos[instance.smoothPos.length-1].x, 
 				y: instance.smoothPos[instance.smoothPos.length-1].y, 
@@ -89,11 +89,13 @@ var Smoothering = new function(){
 					instance.smoothPos[i].fracture = false;
 					instance.smoothPos[i].original = false;
 				}
+				
 			}
 		}
 			
 		//Remove first entry.
-		instance.smoothPos.splice(0,1);
+		if(instance.smoothPos.length > 1)
+			instance.smoothPos.splice(0,1);
 			
 		return pos;
 	};
