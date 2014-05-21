@@ -1,14 +1,19 @@
  <?php
-  
+	header( 'content-type: text/html; charset=utf-8' ); 
+	
+	//---------------------------------------------------------
+	// PLAY THE GAME BUTTON
+	//---------------------------------------------------------
+	define('TXT_PLAY_BUTTON',"<p>Play the game </p><p>Now</p>");
+	
 	//---------------------------------------------------------
 	// MAIN NAV
 	//---------------------------------------------------------
- 
 	define('TXT_NAV_NEWS', 'News');
 	define('TXT_NAV_RULES', 'Rules');
 	define('TXT_NAV_MAPS', 'Maps');
 	define('TXT_NAV_ABOUT', 'About');
-	define('TXT_NAV_LANGUE', 'Français');
+	define('TXT_NAV_LANGUE', "<a href='?lang=fr'> French </a>");
 	
 	//---------------------------------------------------------
 	// SLOGAN
@@ -47,7 +52,7 @@
 									<a href='#maps'>see the new map event [ + ]</a>");
 	
 	//---------------------------------------------------------
-	// NEWS
+	// RULES
 	//---------------------------------------------------------
 	/* The Hud */
 	define('TXT_HUD','The Hud');
@@ -83,5 +88,50 @@
 	define('TXT_UNITS_QUANTITY_MODE_01',"Quantity mode");
 	define('TXT_UNITS_QUANTITY_MODE_02',"It boost his percent of apparition when buying the block skill.");
 	
+	//---------------------------------------------------------
+	// ABOUT
+	//---------------------------------------------------------
+	/* The creator */
+	define('TXT_ABOUT_CREATOR_TITLE',"The creator ");
+	define('TXT_ABOUT_CREATOR_01'," Hi,I am a gamer driven by a passion for original games who's trying to bring something to an already huge industry by developping stuff based on new concepts. Originality without quality and enjoyment doesn't worth it, yet I want to create games with different and funny gameplay to fulfill my own thirst for diversity.");
+	define('TXT_ABOUT_CREATOR_02'," I'm currently working in Quebec City (Canada) as the lone developer of <b>Another piece</b> Studio and I'm open to timely application to form a team of innovative people.");
+	define('TXT_ABOUT_CREATOR_03',"You can contact me by writting to this email address if you have any interest:  ");
+	define('TXT_ABOUT_CREATOR_04',". However, for now, I don't have anything to ensure employee (not even mine), but any profit will be invested back into the business in staff and stuff.");
+	
+	/* The project */
+	define('TXT_ABOUT_PROJECT_TITLE',"The project");
+	define('TXT_ABOUT_PROJECT_01',"Crushed Dream is my first creation majorly developed by myself, as a lone wolf. The principle is simple : players must crush one another in a frantic ascent toward the Winning Goal. Once reached, the winner must prove is supremacy by killing the survivors.");
+	define('TXT_ABOUT_PROJECT_02',"Some people help me throughout the development for some game aspects and I thank them all in my in-game credits. This game is my spearhead to show to my futur teammates which kind of games I love to conceptualize and is also an opportunity for the gamers community to discover new gameplays for long-time existing game styles, but with a new twist. ");
+	define('TXT_ABOUT_PROJECT_03',"I would like to build a core community around this game by releasing new content over time, thereby encouraging players to come back often to try newly delivered skills/features. I didn't opt for the most profitable business model for this game and I even would like to release it for free, but I aim to invest back gains into Crushed Dream's servers and, if the game becomes successful, in a new project where I won't be the only developer. I don't wish to compromise gameplay over a business model that milks players out of their money, being myself a player hating that kind of shit. Crushed Dream's cost will eventually raise progressively over time, when new features will be released,  but I will maintain it cheap, because an excessive cost wouldn't be justified for a game of this magnitude. There is an hope in a not so distant futur that I will accept players' requests for new content that they will have imagined, but for now, my head is filled with undeveloped ideas.");
+	define('TXT_ABOUT_PROJECT_04',"Here what I would like to add in the next months: ");
+	define('TXT_ABOUT_PROJECT_LIST_01',"Map events ;");
+	define('TXT_ABOUT_PROJECT_LIST_02',"Leagues (if there are enough players to classify them) ;");
+	define('TXT_ABOUT_PROJECT_LIST_03',"A new kind of block (Util Block) ;");
+	define('TXT_ABOUT_PROJECT_LIST_04',"Dynamic music accelerating over ascent ;");
+	define('TXT_ABOUT_PROJECT_LIST_05',"More characters ;");
+	define('TXT_ABOUT_PROJECT_LIST_06',"Special move specific to each character ;");
+	define('TXT_ABOUT_PROJECT_LIST_07',"Ect. ");
+	
+	/* Download button */
+	define('TXT_DOWNLOAD_BOTTOM',"Download Crushed Dream ");
+	
+	//---------------------------------------------------------
+	// FOOTER
+	//---------------------------------------------------------
+	/* Top button */
+	define('TXT_NAV_TOP','Top');
+	
+	/* Copyright */
+	define('TXT_FOOTER_COPYRIGHT','Copyright © Crushed Dream 2014  . All Rights Reserved.');
+	define('TXT_FOOTER_DESIGN_BY','Website design by: ');
+	
+	//---------------------------------------------------------
+	// ADAPTATIV CSS ACCORDING TO LANGUAGE
+	//---------------------------------------------------------
+	define('SLOGAN_WIDTH',"430px");
+	define('NEWS_WIDTH',"150px");
+	define('RULES_WIDTH',"150px");
+	define('MAPS_WIDTH',"160px");
+	define('ABOUT_WIDTH',"180px");
 	
 ?>

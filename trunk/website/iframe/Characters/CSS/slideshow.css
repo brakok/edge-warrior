@@ -182,7 +182,7 @@ img{
 #red.swiper-slide:hover p,#yellow.swiper-slide:hover p,#blue.swiper-slide:hover p,#white.swiper-slide:hover p{
 	display:block;
 	font-family: hallo_sansLight;
-	font-size: 19px;
+	font-size: 20px;
 	text-align: left;
 	width: 199px;
 	padding: 70px 0 0 200px;
@@ -238,10 +238,69 @@ img{
 		}
 }
 
-@media all and (max-width: 600px){
+@media all and (max-width: 583px){
 		.swiper-wrapper{
-			padding:0 8% !important;
+			padding:0 6% !important;
 		}
+		.device {
+			position:initial;
+		}
+		.device .arrow-left, .device .arrow-right {
+			height: 70px;
+			width: 57px;
+		}
+		.device .arrow-left {
+			background: url(../Images/L_Arrow_Mobile.png) no-repeat left top;
+			border-top-right-radius:8px;
+			border-bottom-right-radius:8px;
+			left: 0px;
+			z-index:100;
+		}
+		.device .arrow-right {
+			background: url(../Images/R_Arrow_mobile.png) no-repeat right top;
+			border-top-left-radius:8px;
+			border-bottom-left-radius:8px;
+			right: 0px;
+			z-index:100;
+		}
+		.device .arrow-left:hover {
+			background: url(../Images/L_Arrow_Mobile_Hover.png) no-repeat left top;
+		}
+		.device .arrow-right:hover {
+			background: url(../Images/R_Arrow_Mobile_Hover.png) no-repeat right top;
+		}	
+		/* Yellow */
+		#yellow.swiper-slide,#yellow.swiper-slide:hover{
+			background:url(../Images/Yellow_front_mobile.png) no-repeat;
+		}
+		/* Blue*/
+		#blue.swiper-slide,#blue.swiper-slide:hover{
+			background:url(../Images/Blue_front_mobile.png) no-repeat;
+		}
+		/* Red */
+		#red.swiper-slide,#red.swiper-slide:hover{
+			background:url(../Images/Red_front_mobile.png) no-repeat;
+		}
+		/* White */
+		#white.swiper-slide,#white.swiper-slide:hover{
+			background:url(../Images/White_front_mobile.png) no-repeat;
+		}
+		#red.swiper-slide:hover p, #yellow.swiper-slide:hover p, #blue.swiper-slide:hover p, #white.swiper-slide:hover p ,#red.swiper-slide:hover p,.swiper-container .swiper-slide p{
+			font-size: 24px;
+			width: 90%; 
+			padding: 0; 
+			margin-top:360px;
+		}
+		.swiper-container .swiper-slide p{
+			display:inline-block;
+			font-family:hallo_sansLight;
+		}
+}
+@media all and (max-width: 518px){
+		.swiper-wrapper{
+			padding:0 6% !important;
+		}
+	
 }
 
 

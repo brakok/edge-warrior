@@ -192,8 +192,6 @@ img{
 }
 
 
-
-
 /******************************** 1263px **********************************/
 
 @media all and (min-width: 1263px){
@@ -207,4 +205,28 @@ img{
 		background-size:80%;
 	}
 }
+@media all and (max-width: 600px){
+	.swiper-container{
+		height:185px;
+	}
+	.device .arrow-left ,.device .arrow-left:hover,.device .arrow-right,.device .arrow-right:hover{
+		background-size:40%;
+		top:45%;
+	}
+	.device .arrow-right,.device .arrow-right:hover{
+		background-position: right top;
+	}
+
+	.swiper-slide p{
+		font-size:40px;
+		margin-left:4%;
+	}
+	.swiper-slide span, .swiper-slide p{
+		bottom:2.5%;
+	}
+	.swiper-slide span{
+		margin:0 0 20px 40px;
+	}
+}
+
 

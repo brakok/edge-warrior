@@ -4,5 +4,5 @@ $(document).ready(function(){
 		// If a link has been clicked, scroll the page to the link's hash target:
 		$.scrollTo( this.hash || 0, 1500);
 		e.preventDefault();
-	});
+	});	
 });
