@@ -1,5 +1,11 @@
  <?php
-  
+	header( 'content-type: text/html; charset=utf-8' );
+	
+	//---------------------------------------------------------
+	// PLAY THE GAME BUTTON
+	//---------------------------------------------------------
+	define('TXT_PLAY_BUTTON',"<p style='margin:-5px 0 0px;font-size:25px'>Jouer au jeu </p><p style='font-size:95px;letter-spacing:3px;'>ICI</p>");
+	
 	//---------------------------------------------------------
 	// MAIN NAV
 	//---------------------------------------------------------
@@ -7,12 +13,12 @@
 	define('TXT_NAV_RULES', 'Règlements');
 	define('TXT_NAV_MAPS', 'Mondes');
 	define('TXT_NAV_ABOUT', 'À propos');
-	define('TXT_NAV_LANGUE', 'English');
+	define('TXT_NAV_LANGUE', "<a href='?lang=en'> Anglais </a>");
 	
 	//---------------------------------------------------------
 	// SLOGAN
 	//---------------------------------------------------------	
-	define('TXT_SLOGAN', "C'est le temps d'écraser");
+	define('TXT_SLOGAN', "Préparez-vous au massacre");
 	
 	//---------------------------------------------------------
 	// CHARACTERS SLIDESHOW
@@ -77,6 +83,52 @@
 	define('TXT_UNITS_POWER_MODE_02',"Augmente la puissance de la compétence achetée.");
 	define('TXT_UNITS_QUANTITY_MODE_01',"Mode quantité");
 	define('TXT_UNITS_QUANTITY_MODE_02',"Augmente le pourcentage de chance d'apparition de la compétence achetée.");
+	
+	//---------------------------------------------------------
+	// ABOUT
+	//---------------------------------------------------------
+	/* The creator */
+	define('TXT_ABOUT_CREATOR_TITLE',"Le créateur ");
+	define('TXT_ABOUT_CREATOR_01',"Salut, je suis un joueur ayant une passion pour les jeux originaux et qui tente de faire sa part dans une industrie déjà immense en voulant amener des concepts nouveaux et intéressants. L'originalité sans la qualité et le plaisir ne vaut pas la peine, alors je cherche à créer des jeux aux mécaniques différentes et amusantes pour combler ma propre soif de diversité. ");
+	define('TXT_ABOUT_CREATOR_02',"J'oeuvre dans la ville de Québec (Canada) comme seul développeur du studio <b>Another Piece</b> et je suis ouvert aux candidatures ponctuelles pour assembler une équipe de gens aux idées originales et aux envies de divergence flagrantes.");
+	define('TXT_ABOUT_CREATOR_03',"Vous pouvez me contacter sur ce courriel pour me faire part d'un quelconque intérêt : ");
+	define('TXT_ABOUT_CREATOR_04',". Cependant, pour l'instant, je n'ai pas encore de fonds pour assurer un emploi (ni même le mien), mais le moindre profit sera réinvesti dans le studio en équipement et personnel.");
+	
+	/* The project */
+	define('TXT_ABOUT_PROJECT_TITLE',"Le projet");
+	define('TXT_ABOUT_PROJECT_01',"Crushed Dream est ma première création que j'ai développé en grande partie comme un loup solitaire. Le principe est simple: les joueurs doivent s'écraser les uns les autres dans une ascension frénétique vers l'objectif de fin. Lorsqu'il est atteint, le gagnant se doit d'éléminer le reste des survivants pour démontrer sa suprématie."); 
+	define('TXT_ABOUT_PROJECT_02',"Certaines personnes m'ont aidées au fil du développement pour certains aspects et je les remercie tous dans les crédits du jeu. Ce premier jeu est mon fer de lance pour montrer à mes futurs coéquipiers le style de jeux que j'aime conceptualiser et aussi une opportunité pour la communauté des joueurs de ce monde de découvrir de nouvelles manières de jouer des styles existants depuis longtemps, mais avec une autre vision.");
+	define('TXT_ABOUT_PROJECT_03',"J'aimerais bâtir une communauté autour de ce jeu en ajoutant périodiquement du nouveaux contenus, ainsi incitant les joueurs à revenir souvent pour essayer les nouvelles fonctionnalités/habiletés introduites. Je n'ai pas opté pour le modèle le plus payant pour ce jeu et j'aurais bien aimé pouvoir l'offrir gratuitement, mais je vise à réinvestir les profits dans les serveurs et, si le jeu grossit beaucoup, dans un futur projet où il n'y aurait pas qu'un seul développeur. Je ne souhaite pas m'enrichir sur les joueurs avec des modèles qui nuisent à l'expérience de jeux, étant moi-même un joueur et n'aimant pas particulièrement certains moyens de prendre les gens pour des vaches à lait. Le coût de ce jeu risque de monter progressivement au fil du temps, pour compenser avec les nouvelles choses intégrées, mais le jeu risque de toujours rester abordable, car un coût excessif ne serait pas justifié pour un jeu de cette envergure. Il serait possible que dans un futur rapproché, j'accepte les requêtes des joueurs pour du nouveaux contenus qu'ils auront déterminés, mais pour l'instant, j'ai la  tête remplie d'idées non développées.");
+	define('TXT_ABOUT_PROJECT_04',"Voici ce que j'aimerais intégrer dans le futur: ");
+	define('TXT_ABOUT_PROJECT_LIST_01',"Des événements dans les cartes ;");
+	define('TXT_ABOUT_PROJECT_LIST_02',"Des ligues (si le volume de joueur est assez important) ;");
+	define('TXT_ABOUT_PROJECT_LIST_03',"Une nouvelle catégorie de blocs(Des blocs utilitaires) ;");
+	define('TXT_ABOUT_PROJECT_LIST_04',"Une musique dynamique qui s'accélère durant l'ascension ;");
+	define('TXT_ABOUT_PROJECT_LIST_05',"Plus de personnages ; ");
+	define('TXT_ABOUT_PROJECT_LIST_06',"Des habiletés spéciales, spécifiques à chaque personnages ;");
+	define('TXT_ABOUT_PROJECT_LIST_07',"Etc. ");
+	
+	/* Download button */
+	define('TXT_DOWNLOAD_BOTTOM',"Télécharger Crushed Dream ");
+	
+	//---------------------------------------------------------
+	// FOOTER
+	//---------------------------------------------------------
+	/* Top button */
+	define('TXT_NAV_TOP','Haut');
+	
+	/* Copyright */
+	define('TXT_FOOTER_COPYRIGHT','Copyright © Crushed Dream 2014. Tous droits réservés.');
+	define('TXT_FOOTER_DESIGN_BY','Conception et design par: ');
+	
+	//---------------------------------------------------------
+	// ADAPTATIV CSS ACCORDING TO LANGUAGE
+	//---------------------------------------------------------
+	define('SLOGAN_WIDTH',"560px");
+	define('NEWS_WIDTH',"220px");
+	define('RULES_WIDTH',"210px");
+	define('MAPS_WIDTH',"160px");
+	define('ABOUT_WIDTH',"180px");
 	
  
 ?>

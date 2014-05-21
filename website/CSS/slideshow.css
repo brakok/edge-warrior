@@ -1,4 +1,11 @@
+
+
 .swiper-container {
+	display:inline-block;
+	color: #000;
+	height:420px;
+	text-align: left;
+	margin:60px 0;
 	margin:0 auto;
 	position:relative;
 	overflow:hidden;
@@ -7,6 +14,7 @@
 	-ms-backface-visibility:hidden;
 	-o-backface-visibility:hidden;
 	backface-visibility:hidden;
+	width: 100%;
 	/* Fix of Webkit flickering */
 	z-index:1;
 }
@@ -59,13 +67,6 @@
 	-ms-touch-action: pan-x;
 }
 
-.swiper-container {
-	color: #000;
-	height:420px;
-	text-align: left;
-	margin:60px 0;
-	width: 100%;
-}
 .pagination {
   position: absolute;
   z-index: 20;
@@ -90,3 +91,6 @@
   background: #830000;
 	border: 2px solid #611212;
 }
+
+
+

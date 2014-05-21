@@ -38,7 +38,8 @@ h2{
 #content article span h2{
 	background: white;
 	font-family: hallo_sans;
-	font-size: 48px;
+	font-size: 54px;
+	font-variant:small-caps;
 	margin: -25px auto;
 	text-align: center;
 	width: 10%;
@@ -164,11 +165,14 @@ header #PlayGame_BT p:last-child{
 	text-transform: uppercase;
 }
 
-
 /* Main nav */
-header nav {
-	float:right;
+.slicknav_menu {
+	display:none;
+}
+header nav ul{
 	margin-top:30px;
+	position:absolute;
+	right:12.2%;
 }
 header nav li {
 	float: left;
@@ -177,27 +181,35 @@ header nav li {
 header nav li.navDivid{
 	background: url(../Images/navList_Dot.jpg) no-repeat center right;
 	height: 10px;
-	margin: 15px 18px 0;
+	margin: 10px 18px 0;
 	width: 9px;
 }
 
-header nav li a{
+header nav li a,header nav+a{
 	color:#DADADA;
 	font-family: quantico;
 	font-variant:small-caps;
-	font-size:28px;	
+	font-size:28px;
+	font-size-adjust:0.45;
 }
-header nav li a:hover{
+header nav li a:hover,header nav+a:hover{
 	color:white;
 	text-shadow:1px 1px 1px red;
 }
+/* Language */
+header nav+a{
+	float:right;
+	margin-top:30px;
+}
+header #menu  .navDivid+a{
+	display:none;
+}
 /* Logo */
-h1{
+header h1{
 	color:black;
 	font-family:quantico_bold;
 	font-size: 121px;
 	height: 0;
-	text-align:center;
 	padding-bottom: 19%;
 }
 #logo{
@@ -210,11 +222,12 @@ h1{
 	background: white;
 	color: #7b0000;
 	font-family:hallo_sans;
-	font-size: 65px;
+	font-size: 400%;
 	font-variant: small-caps;
+	font-size-adjust: 0.39;
 	text-align: center;
 	margin: -35px auto;
-	width: 50%;
+	width: 360px;
 }
 #logo span{
 	background:#7b0000;
@@ -410,6 +423,7 @@ article{
 	color:#767676;
 	float:right;
 	font-size:24px;
+	font-size-adjust:0.45;
 	position:absolute;
 }
 #updates article a:hover{
@@ -420,7 +434,7 @@ article{
 	display:block;
 	font-size:18px;
 	font-style:normal;
-	margin:4px 0 20px;
+	margin:40px 0 20px;
 	text-transform:uppercase;
 }
 #updates article p{
@@ -471,7 +485,9 @@ span.legendNB{
 	text-align:center;
 	width:26px;
 }
-
+#hudImage_02{
+	display:none;
+}
 #hudContent #hudImage{
 	background:url(../Images/hudIMG.jpg) no-repeat center;
 	height:233px;
@@ -507,13 +523,10 @@ span.legendNB{
 #rules_part02 img,#rules_part02 span{
 	float:left;
 }
-/* Image winningGoal_Reach.png */
-#rules_part02 img:nth-child(2){
-	margin-top:30px;
-}
-/* Image winningGoal_final.png */
-#rules_part02 img:nth-child(4){
-	margin-top:32px;
+
+#rules_part02 p{
+	background:url(../Images/OverlordFinal_IMG.png) no-repeat bottom center;
+	height:229px;
 }
 #rules_part02 span{
 	background:url(../Images/imgDivid.png) no-repeat center;
@@ -561,8 +574,9 @@ span.legendNB{
 	background:url(../Images/nb04_BG.png) no-repeat left 40px;	
 	width:50%;
 }
-#rules_part06 img{
-	margin:50px 15% 0;
+#rules_part06 p{
+	background:url(../Images/oppositeBlocks.png) no-repeat center bottom;
+	height:200px;
 }
 #rules_part07{
 	width:23%;
@@ -652,16 +666,15 @@ article#maps iframe{
 #about .wrap h2,#rules  h2.wrap{
 	color:#7b0000;
 	font-family:hallo_sans;
-	font-size:50px;
+	font-size:45px;
+	font-variant:small-caps;
 }
 article#about{
-	background:url(../images/CreatorBG.png) no-repeat 0 180px;
-	background-size:100%;
-	height:900px;
+	background:url(../images/CreatorBG.png) no-repeat 16% 180px;
 	max-width:1905px;
 	width:100%;
 }
-section#creator,section#project{
+article#about,section#project{
 	float:left;
 }
 #about article#creatorTXT{
@@ -676,6 +689,9 @@ section#creator,section#project{
 }
 #about article#creatorTXT p:nth-child(3){
 	margin-bottom:10px;
+}
+#about b{
+	font-weight:bold;
 }
 #creatorTXT p a{
 	color:#7b0000;
@@ -716,6 +732,7 @@ section#creator,section#project{
 	font-size:36px;
 	font-variant:normal;
 	height:45px;
+	line-height:45px;
 	margin-left:25px;
 	text-align:center;
 	width:45px;
@@ -801,25 +818,40 @@ footer a{
 	font-size:28px;
 	font-family:quantico;
 	font-variant:small-caps;
+	font-size-adjust:0.45;
 }
 footer a:hover{
 	color:#7b0000;
 }
 footer a.up{
+	background:url(../Images/Up_Arrow.png) no-repeat center right;
 	color:#DADADA;
 	float:right;
-	margin-top:-80px;
+	margin:-100px -20px 0 0;
+	padding-right:25px;
 }
-footer a.up:hover{
+footer a.up:hover,footer span a:hover{
 	color: white;
 	text-shadow: 1px 1px 1px red;
 }
+footer a.up:hover{
+	background:url(../Images/Up_Arrow_Hover.png) no-repeat center right;
+}
 footer p{
-	color:white;
+	color:#DADADA;
 	font-family:quantico;
+	font-size:24px;
+	font-size-adjust:0.45;
+	font-variant:small-caps;
+	margin-top:340px;
+	text-align:left;
+}
+footer span{
+	float:right;
+}
+footer span a{
+	color:#DADADA;
 	font-size:20px;
-	margin-top:300px;
-	text-align:center;
 }
 /* Footer Nav */
 footer nav ul{
@@ -833,19 +865,19 @@ footer nav li a{
 }
 /* Updates*/
 footer nav li:first-child a{
-	margin: -215px 0 0 240px;
+	margin: -245px 0 0 280px;
 }
 /* Rules */
 footer nav li:nth-child(2) a{
-	margin: -285px 0 0 27%;
+	margin: -325px 0 0 28.2%;
 }
 /* Maps */
 footer nav li:nth-child(3) a {
-	margin: -300px 0 0 47%;
+	margin: -340px 0 0 48.5%;
 }
 /* About */
 footer nav li:last-child a {
-	margin: -155px 0 0 61%;
+	margin: -195px 0 0 63%;
 }
 
 /******************************** FONT FIX FOR SAFARI **********************************/

@@ -254,3 +254,29 @@ img{
 	}
 }
 
+@media all and (max-width: 600px){
+	.device,.swiper-container,.swiper-wrapper{
+		height:280px;
+	}
+	.device .arrow-left, .device .arrow-right{
+	height:83px;
+		width:23px;
+		top:30%;
+		z-index:10;
+	}
+	.device .arrow-left {
+		background: url(../Images/L_Arrow_mobile.png) no-repeat left top;
+		left: 4%;
+	}
+	.device .arrow-right {
+		background: url(../Images/R_Arrow_mobile.png) no-repeat right top;
+		right: 4%;
+	}
+	.device .arrow-left:hover {
+		background: url(../Images/L_Arrow_Hover_mobile.png) no-repeat left top;
+	}
+	.device .arrow-right:hover {
+		background: url(../Images/R_Arrow_Hover_mobile.png) no-repeat right top;
+	}
+}
+
