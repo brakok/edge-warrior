@@ -35,21 +35,17 @@
 	// NEWS
 	//---------------------------------------------------------
 	// article 01 //
-	define('TXT_NEWS_ARTICLE01', "	<h2>New website launched</h2> 
-									<i>may 01, 2014</i>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend. Quisque ultricies vulputate tortor sed sollicitudin.</p>
-									<a href='#' >read all [ + ]</a>");
+	define('TXT_NEWS_ARTICLE01', "	<h2>Game Launch</h2> 
+									<i>May 22, 2014</i>
+									<p>Great step done! The game is officially out, however much of the work remains to be done, then I roll up my sleeves and I prepare myself to deliver some new content. Come back often to see this game evolve in something bigger, faster, bolder!</p>");
 	// article 02 //
-	define('TXT_NEWS_ARTICLE02',"	<h2>New skills blocks available</h2> 
-									<i>may 05, 2014</i>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. </p>
-									<p>Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. </p>
-									<a href='#rules'>see the new block [ + ]</a>");
+	define('TXT_NEWS_ARTICLE02',"	<h2>New website</h2> 
+									<i>May 22, 2014</i>
+									<p>With the game launch, a gorgeous website has been developped to give you more informations about the game, about me and about my project. Hopefully one day I can add content on this website speaking of 'us' instead of 'I'. Do not hesitate to share any comment with me by writting to the email hidden in this website.</p>");
 	// article 03 //
-	define('TXT_NEWS_ARTICLE03',"	<h2>New map event created</h2> 
-									<i>may 11, 2014</i>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend.</p>
-									<a href='#maps'>see the new map event [ + ]</a>");
+	define('TXT_NEWS_ARTICLE03',"	<h2>Buried rainbow</h2> 
+									<i>May 22, 2014</i>
+									<p>Our four fighters sank into dark and ruthless places, crushing one another in their only way out! You, come help them! Click on the link above and give yourself a way to save at least one. Come on, click on it I said! I am there to give you pleasure, I only need a boost.</p>");
 	
 	//---------------------------------------------------------
 	// RULES
@@ -122,7 +118,7 @@
 	define('TXT_NAV_TOP','Top');
 	
 	/* Copyright */
-	define('TXT_FOOTER_COPYRIGHT','Copyright © Crushed Dream 2014  . All Rights Reserved.');
+	define('TXT_FOOTER_COPYRIGHT','Copyright © Another Piece Studio 2014  . All Rights Reserved.');
 	define('TXT_FOOTER_DESIGN_BY','Website design by: ');
 	
 	//---------------------------------------------------------

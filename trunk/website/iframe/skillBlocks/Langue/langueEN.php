@@ -11,7 +11,7 @@
 	define('TXT_JAW_FALL_DESCRIPTION',"Launch a carnivorous block that destroys other block on contact. Kill players too.");
 	/* Eclipse */
 	define('TXT_ECLIPSE',"Eclipse");
-	define('TXT_ECLIPSE_DESCRIPTION',"When landing, create a black hiding everything behing it. Owner sees through it.");
+	define('TXT_ECLIPSE_DESCRIPTION',"When landing, create a black circle hiding everything behing it. Owner sees through it.");
 	/* Pesky Box */
 	define('TXT_PESKY_BOX',"Pesky Box");
 	define('TXT_PESKY_BOX_DESCRIPTION',"When landing, create an annoying character that follows his target for short duration. Player loses all speed upon contact.");

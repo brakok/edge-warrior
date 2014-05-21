@@ -18,7 +18,7 @@
 	//---------------------------------------------------------
 	// SLOGAN
 	//---------------------------------------------------------	
-	define('TXT_SLOGAN', "Préparez-vous au massacre");
+	define('TXT_SLOGAN', "Écrasement en vue");
 	
 	//---------------------------------------------------------
 	// CHARACTERS SLIDESHOW
@@ -34,18 +34,15 @@
 	//---------------------------------------------------------
 	// NEWS
 	//---------------------------------------------------------
-	define('TXT_NEWS_ARTICLE01', "	<h2>Nouveau site web </h2> 
-									<i>01 mai, 2014</i>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend. Quisque ultricies vulputate tortor sed sollicitudin.</p>
-									<a href='#' >Tout lire [ + ]</a>");
-	define('TXT_NEWS_ARTICLE02', "	<h2>Nouvelle bloc de compétences</h2> 
-									<i>05 mai, 2014</i>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend. Quisque ultricies vulputate tortor sed sollicitudin.</p>
-									<a href='#' >Voir le nouveau bloc [ + ]</a>");
-	define('TXT_NEWS_ARTICLE03', "	<h2>Nouvel évènement créé</h2> 
-									<i>11 mai, 2014</i>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sapien orci, elementum fringilla metus id, consectetur lacinia neque. Duis semper tortor arcu, nec ornare dolor volutpat lacinia. Suspendisse mollis sapien lectus, sed porttitor neque tincidunt vel. Praesent ullamcorper mi id facilisis eleifend.</p>
-									<a href='#maps'>Voir le nouvel évènement [ + ]</a>");
+	define('TXT_NEWS_ARTICLE01', "	<h2>Lancement du jeu</h2> 
+									<i>22 mai, 2014</i>
+									<p>Une bonne étape de faite! Le jeu est officiellement sortie, néamoins une bonne partie du travail reste à faire, alors je retrousse mes manches et je me  prépare à livrer du nouveaux contenus. </p><p>Revenez régulièrement pour voir ce jeu évoluer en quelque chose de plus gros, plus rapide et plus gras! </p>");
+	define('TXT_NEWS_ARTICLE02', "	<h2>Nouveau site web</h2> 
+									<i>22 mai, 2014</i>
+									<p>Avec le lancement du jeu, un magnifique site web a été développé pour vous donner plus d'information sur le jeu, sur moi et sur mon projet. Espérons un jour que je pourrai rajouter du contenu sur ce site en parlant au 'nous' au lieu du 'je'. N'hésitez pas à me faire part de vos commentaires à l'adresse courriel caché dans ce site.</p>");
+	define('TXT_NEWS_ARTICLE03', "<h2> Un arc-en-ciel sous terre</h2> 
+									<i>22 mai, 2014</i>
+									<p>Nos quatres combattants ont sombré dans des lieux glauques et cruels, ayant pour seul moyen de sortir de s'écraser les uns les autres! Toi, viens les aidez! Cliques sur le lien en haut à gauche et donnes toi le moyen d'en réchapper au moins un. Envoye, cliques je te dis! Je suis là pour te procurer du plaisir, faut seulement tu me donnes un coup de pouce. </p>");
 									
 	//---------------------------------------------------------
 	// RULES
@@ -62,18 +59,18 @@
 	define('TXT_INVENTORY_02','Inventaire #02');
 	/* Basic rules */
 	define('TXT_BASIC_RULES','Règles de base');
-	define('TXT_RULES_01',"Le but du jeu est d'atteindre la sphère maudite dans le ciel en écrasant tes adversaires.");
-	define('TXT_RULES_02',"Une fois qu'un des joueurs a atteint le but, il peut utiliser le maître pour détruire le reste de ses ennemies. Il détient environ 10 sec pour tous les détruire. Il aura des points supplémentaire s'il les élimine tous dans le temps imparti.");
+	define('TXT_RULES_01',"Le but du jeu est d'atteindre l'objectif de fin et puis d'écraser ses adversaires.");
+	define('TXT_RULES_02',"Une fois qu'un des joueurs a atteint le but, il peut ensuite s'incarner en l'objectif pour détruire le reste de ses ennemies. Il détient environ 10 sec pour tous les détruire. Il aura des points supplémentaire s'il les élimine tous dans le temps imparti.");
 	define('TXT_RULES_03',"3 blocs, ou plus, de la même couleur, se touchant disparaiteront.");
-	define('TXT_RULES_04'," 2 blocs complémentaires qui se touche disparaiteront.");
+	define('TXT_RULES_04'," 2 blocs complémentaires se touchant s'annuleront.");
 	define('TXT_RULES_04_CHROMATIC_CIRCLE',"Tu ne te souviens plus du cercle chromatique ?");
 	define('TXT_RULES_04_CLICK_HERE',"Clique ici");
 	define('TXT_RULES_05',"Afin d'obtenir des blocs complémentaires, tu dois écraser un autre joueur à l'aide de tes blocs. Cela tournera tes blocs en bloc complémentaires. Donc si Yellow tue Blue, tous les blocs de Yellow se changeront en bloc orange. ");
 	define('TXT_RULES_06',"Les blocs gris sont neutres. Destructible seulement par un bloc de compétences ou une pioche.");
 	define('TXT_RULES_07',"Les pioches détruisent tous les types de blocs. Il apparaissent à 10 secondes d'intervalle. Maximum de 2 pioches disponible en même temps.");
-	define('TXT_RULES_08',"Pour atteindre votre but plus facilement, vous devez écraser vos adversaires. Cela te donnera un bloc d'apparition et te permettera de faire apparaître ta victime où bon te semble. Marche autant sur les meutres multiples.");
+	define('TXT_RULES_08',"Pour atteindre votre but plus facilement, tu dois écraser tes adversaires. Cela te donnera un bloc d'apparition et te permettera de faire revivre tes victimes où bon te semble. Marche autant sur les meutres multiples.");
 	/* Skill Blocks*/
-	define('TXT_SKILL_BLOCKS_RULES',"Pour avoir des blocs de compétences durant le jeu, tu dois, avant de joindre le lobby, aller dans le <b>menu de compétences</b> et sélectionner les blocs de compétences que tu désires avoir pour la partie. Autrement tu joueras sans aucun bloc spécial. Il y a un maximum de <b>4</b> compétences par partie. ");
+	define('TXT_SKILL_BLOCKS_RULES',"Pour avoir des blocs de compétences durant le jeu, tu dois, avant de joindre le lobby, aller dans le <b>menu de compétences</b> et sélectionner les blocs de compétences que tu désires avoir pour la partie. Il y a un maximum de <b>4</b> compétences par partie. ");
 	/* Units */
 	define('TXT_UNITS',"Unités");
 	define('TXT_UNITS_DESCRIPTION',"Vous pouvez acheter plus d'un blocs de compétences durant le jeux. Pour se faire, vous avez besoin d'unités. Comment en avoir ? En fait, vous en obtenez <b>tout au long de la partie</b>. Il y a une simple règle à retenir:");
@@ -96,8 +93,8 @@
 	
 	/* The project */
 	define('TXT_ABOUT_PROJECT_TITLE',"Le projet");
-	define('TXT_ABOUT_PROJECT_01',"Crushed Dream est ma première création que j'ai développé en grande partie comme un loup solitaire. Le principe est simple: les joueurs doivent s'écraser les uns les autres dans une ascension frénétique vers l'objectif de fin. Lorsqu'il est atteint, le gagnant se doit d'éléminer le reste des survivants pour démontrer sa suprématie."); 
-	define('TXT_ABOUT_PROJECT_02',"Certaines personnes m'ont aidées au fil du développement pour certains aspects et je les remercie tous dans les crédits du jeu. Ce premier jeu est mon fer de lance pour montrer à mes futurs coéquipiers le style de jeux que j'aime conceptualiser et aussi une opportunité pour la communauté des joueurs de ce monde de découvrir de nouvelles manières de jouer des styles existants depuis longtemps, mais avec une autre vision.");
+	define('TXT_ABOUT_PROJECT_01',"Crushed Dream est ma première création que j'ai développé en grande partie comme un loup solitaire. Le principe est simple: les joueurs doivent s'écraser les uns les autres dans une ascension frénétique vers l'objectif de fin. Lorsqu'il est atteint, le gagnant se doit d'éliminer le reste des survivants pour démontrer sa suprématie."); 
+	define('TXT_ABOUT_PROJECT_02',"Certaines personnes m'ont aidé au fil du développement pour certains aspects et je les remercie tous dans les crédits du jeu. Ce premier jeu est mon fer de lance pour montrer à mes futurs coéquipiers le style de jeux que j'aime conceptualiser et aussi une opportunité pour la communauté des joueurs de ce monde de découvrir de nouvelles manières de jouer des styles existants depuis longtemps, mais avec une autre vision.");
 	define('TXT_ABOUT_PROJECT_03',"J'aimerais bâtir une communauté autour de ce jeu en ajoutant périodiquement du nouveaux contenus, ainsi incitant les joueurs à revenir souvent pour essayer les nouvelles fonctionnalités/habiletés introduites. Je n'ai pas opté pour le modèle le plus payant pour ce jeu et j'aurais bien aimé pouvoir l'offrir gratuitement, mais je vise à réinvestir les profits dans les serveurs et, si le jeu grossit beaucoup, dans un futur projet où il n'y aurait pas qu'un seul développeur. Je ne souhaite pas m'enrichir sur les joueurs avec des modèles qui nuisent à l'expérience de jeux, étant moi-même un joueur et n'aimant pas particulièrement certains moyens de prendre les gens pour des vaches à lait. Le coût de ce jeu risque de monter progressivement au fil du temps, pour compenser avec les nouvelles choses intégrées, mais le jeu risque de toujours rester abordable, car un coût excessif ne serait pas justifié pour un jeu de cette envergure. Il serait possible que dans un futur rapproché, j'accepte les requêtes des joueurs pour du nouveaux contenus qu'ils auront déterminés, mais pour l'instant, j'ai la  tête remplie d'idées non développées.");
 	define('TXT_ABOUT_PROJECT_04',"Voici ce que j'aimerais intégrer dans le futur: ");
 	define('TXT_ABOUT_PROJECT_LIST_01',"Des événements dans les cartes ;");
@@ -118,13 +115,13 @@
 	define('TXT_NAV_TOP','Haut');
 	
 	/* Copyright */
-	define('TXT_FOOTER_COPYRIGHT','Copyright © Crushed Dream 2014. Tous droits réservés.');
+	define('TXT_FOOTER_COPYRIGHT','Copyright © Another Piece Studio 2014. Tous droits réservés.');
 	define('TXT_FOOTER_DESIGN_BY','Conception et design par: ');
 	
 	//---------------------------------------------------------
 	// ADAPTATIV CSS ACCORDING TO LANGUAGE
 	//---------------------------------------------------------
-	define('SLOGAN_WIDTH',"560px");
+	define('SLOGAN_WIDTH',"440px");
 	define('NEWS_WIDTH',"220px");
 	define('RULES_WIDTH',"210px");
 	define('MAPS_WIDTH',"160px");

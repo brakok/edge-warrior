@@ -117,6 +117,7 @@ img{
 }
 
 .swiper-container {
+	height:600px;
 	width: 90%;
 }
 /* FONT */
@@ -194,7 +195,7 @@ img{
 
 /******************************** 1263px **********************************/
 
-@media all and (min-width: 1263px){
+@media all and (max-width: 1263px){
 	.device{
 		height:425px;
 	}
