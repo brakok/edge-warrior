@@ -9,14 +9,14 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.setAnchorPoint(new cc.Point(0.5,0.5));
 
 		this._zOrder = Constants.Menu.LobbyScreen.Z_INDEX;
-		
+				
 		//Create background.
 		this.background = cc.Sprite.create(assetsMenuDir + 'lobby_background.png');
 		this.background.setPosition(new cc.Point(this.width*0.5, this.height*0.5));
 		this.background._zOrder = Constants.Menu.BACKGROUND_Z_INDEX;
 		
 		this.slots = [];
-		this.isRenaming = false;
+		this.mayRename = false;
 		this.startLaunching = null;
 		
 		//Add label indicating if lobby is online.
@@ -32,10 +32,10 @@ var LobbyScreen = cc.LayerColor.extend({
 		//Lobby name.
 		this.txtName = document.getElementById('lobbyName');
 		
-		this.cmdRename = new cc.MenuItemFont.create("RENAME", this.rename, this);
+		this.cmdRename = new cc.MenuItemFont.create("APPLY", this.rename, this);
 		this.cmdRename.setPosition(new cc.Point(this.width*0.52, this.height*0.88));
-		this.cmdRename.setEnabled(false);
-		
+		this.cmdRename.setVisible(false);
+
 		this.renameMenu = new cc.Menu.create(this.cmdRename);
 		this.renameMenu.setPosition(new cc.Point(0,0));
 		this.renameMenu.setColor(new cc.Color3B(0,0,0));
@@ -108,10 +108,21 @@ var LobbyScreen = cc.LayerColor.extend({
 			
 			if(Client.isHost)
 			{
-				this.cmdRename.setEnabled(true);
 				this.cmdRename.setColor(new cc.Color3B(0,0,0));
-				
 				this.cmdLaunch.setVisible(true);
+				this.txtName.readOnly = false;
+				
+				var that = this;
+				
+				this.txtName.onkeydown = function(){
+					that.mayRename = true;
+					that.cmdRename.setVisible(true);
+				};
+				
+				this.txtName.onkeypress = function(){
+					if(that.mayRename && event.keyCode == 13)
+						that.rename();
+				};
 			}
 		}
 		else
@@ -179,12 +190,19 @@ var LobbyScreen = cc.LayerColor.extend({
 				
 		Chat.clear();
 		Chat.hide();
+		
+		Client.isHost = false;
+		this.cmdLaunch.setVisible(false);
+		
+		this.txtName.onkeydown = null;
+		this.txtName.onkeypress = null;
+		this.txtName.readOnly = true;
 	},
 	rename: function(){
 	
 		AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
 	
-		if(this.isRenaming)
+		if(this.mayRename)
 		{
 			if(!this.txtName.value || this.txtName.value.length < 6)
 			{
@@ -195,15 +213,8 @@ var LobbyScreen = cc.LayerColor.extend({
 			this.pushUpdates();
 			HtmlHelper.showMessage('Lobby has been renamed.');
 			
-			this.cmdRename._label.setString("RENAME");
-			this.txtName.readOnly = true;			
-			this.isRenaming = false;
-		}
-		else
-		{
-			this.txtName.readOnly = false;
-			this.cmdRename._label.setString("APPLY");
-			this.isRenaming = true;
+			this.mayRename = false;
+			this.cmdRename.setVisible(false);
 		}
 		
 		this.cmdRename.setColor(new cc.Color3B(0,0,0));

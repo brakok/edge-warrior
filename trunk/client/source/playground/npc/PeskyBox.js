@@ -37,6 +37,8 @@ var PeskyBox = function(x, y, facing, target){
 	
 	Client.game.layer.addChild(this.currentAnimation);
 	
+	Smoothering.init(this, this.x, this.y);
+	
 	//Start effects.
 	AudioManager.playEffect(Constants.Sound.File.PeskyBox.SPAWN, false);
 	this.audioId = AudioManager.playEffect(Constants.Sound.File.Common.FLOATING, true);
@@ -68,7 +70,11 @@ PeskyBox.prototype.render = function(){
 };
 
 PeskyBox.prototype.update = function(dt){
+	//Update position.
+	var newPos = Smoothering.pop(this);
 	
+	if(newPos.x != this.x || newPos.y != this.y)
+		this.setPosition(newPos.x, newPos.y);
 };
 
 PeskyBox.prototype.explode = function(){
@@ -89,7 +95,6 @@ PeskyBox.prototype.setPosition = function(x, y){
 };
 
 PeskyBox.prototype.fromServer = function(remoteNpc){
-	
 	this.facing = remoteNpc.facing;
-	this.setPosition(remoteNpc.x, remoteNpc.y);
+	Smoothering.push(this, remoteNpc.x, remoteNpc.y);
 };
