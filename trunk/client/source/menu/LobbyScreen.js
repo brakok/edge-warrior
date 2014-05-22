@@ -47,6 +47,9 @@ var LobbyScreen = cc.LayerColor.extend({
 		this.cmdLaunch.setPosition(new cc.Point(this.width*0.8, this.height*0.05));
 		this.cmdBack.setPosition(new cc.Point(this.width*0.9, this.height*0.05));
 		
+		//Only host may launch.
+		this.cmdLaunch.setVisible(false);
+		
 		this.menu = new cc.Menu.create(this.cmdLaunch, this.cmdBack);
 		this.menu.setPosition(new cc.Point(0,0));
 
@@ -107,6 +110,8 @@ var LobbyScreen = cc.LayerColor.extend({
 			{
 				this.cmdRename.setEnabled(true);
 				this.cmdRename.setColor(new cc.Color3B(0,0,0));
+				
+				this.cmdLaunch.setVisible(true);
 			}
 		}
 		else
