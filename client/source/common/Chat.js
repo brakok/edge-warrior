@@ -10,6 +10,7 @@ var Chat = new function(){
 	this.isAbsolute = true;
 	
 	this.isVisible = false;
+	this.isTyping = false;
 	this.fadeTimer = null;
 	this.intervalId = null;
 	
@@ -37,6 +38,8 @@ var Chat = new function(){
 	
 	this.txt.addEventListener('blur', function(){
 	
+		that.isTyping = false;
+	
 		if(Client.game != null && (that.txt.value == null || that.txt.value == ''))
 			that.poke();
 	
@@ -48,7 +51,7 @@ var Chat = new function(){
 	
 	this.addLine = function(username, value){
 		
-		var needToScroll = !this.isAbsolute && this.divParent.scrollTop >= this.divParent.scrollHeight - this.divParent.offsetHeight;
+		var needToScroll = !this.isAbsolute && (this.divParent.scrollTop + 25) >= this.divParent.scrollHeight - this.divParent.offsetHeight;
 		
 		//Randomize player color for chat.
 		if(this.playerColors[username] == null)
@@ -95,6 +98,10 @@ var Chat = new function(){
 		this.divContent.innerHTML = '';
 		this.txt.value = '';
 		this.playerColors = {};
+		
+		this.divContent.style.position = 'absolute';
+		this.isAbsolute = true;
+		this.isTyping = false;
 	};
 
 	this.setColor = function(background, text){
@@ -116,6 +123,9 @@ var Chat = new function(){
 	};
 
 	this.poke = function(){
+
+		if(this.isTyping)
+			return;
 		
 		this.isVisible = true;
 		this.div.style.opacity = '1';
@@ -132,11 +142,12 @@ var Chat = new function(){
 		this.hide(true);
 	};
 	
-	this.show = function(showTxt){
+	this.show = function(){
 		
 		Client.initKeys();
 		
 		this.isVisible = true;
+		this.isTyping = true;
 		this.div.style.opacity = '1';
 		
 		//Must be hidden after delay.
