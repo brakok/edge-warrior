@@ -33,7 +33,7 @@
         <header>    
 			<!-- Play the game Button -->
 			<span id="PlayGame_BT">
-				<a href="#">
+				<a href="https://chrome.google.com/webstore/detail/crushed-dream/ndgflpkljijaijbgplobeekebdfocelc">
 					<?php echo TXT_PLAY_BUTTON ?>
 				</a>
 			</span>
@@ -270,7 +270,7 @@
 						</section>
 					</div>
 					<!-- Link for downloading the game -->
-					<a id="download" href="#"><?php echo TXT_DOWNLOAD_BOTTOM ?></a>
+					<a id="download" href="https://chrome.google.com/webstore/detail/crushed-dream/ndgflpkljijaijbgplobeekebdfocelc"><?php echo TXT_DOWNLOAD_BOTTOM ?></a>
 				</article>
 			</section>
 			<div id="push"></div>
