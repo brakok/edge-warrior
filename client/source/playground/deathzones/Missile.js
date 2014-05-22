@@ -6,15 +6,15 @@ var Missile = function(x, y, type, vel){
 	this.type = type
 	this.currentAnimation = null;
 	this.sprite = null;
-	
-	this.facing = (this.vel.x < 0 ? Enum.Facing.LEFT : Enum.Facing.RIGHT);
-	
-	this.audioId = null;
-	
+
 	this.init();	
 };
 
 Missile.prototype.init = function(){
+
+	Smoothering.init(this, this.x, this.y);
+	this.facing = (this.vel.x < 0 ? Enum.Facing.LEFT : Enum.Facing.RIGHT);
+	this.audioId = null;
 
 	switch(this.type){
 		case Enum.DeathZone.Type.FIREBALL:
@@ -76,11 +76,15 @@ Missile.prototype.render = function(){
 };
 
 Missile.prototype.update = function(){
-
+	//Update position.
+	var newPos = Smoothering.pop(this);
+	
+	if(newPos.x != this.x || newPos.y != this.y)
+		this.setPosition(newPos.x, newPos.y);
 };
 
 Missile.prototype.fromServer = function(remoteMissile){	
-	this.setPosition(remoteMissile.x, remoteMissile.y);
+	Smoothering.push(this, remoteMissile.x, remoteMissile.y);
 };
 
 Missile.prototype.explode = function(){

@@ -109,10 +109,7 @@ Block.prototype.update = function(dt){
 	var newPos = Smoothering.pop(this);
 	
 	if(newPos.x != this.x || newPos.y != this.y)
-	{
-		this.x = newPos.x;
-		this.y = newPos.y;
-	}
+		this.setPosition(newPos.x, newPos.y);
 
 	//Trigger landing animation if needed.
 	if(!this.hasDoneLandingAnimation)

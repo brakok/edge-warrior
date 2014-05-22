@@ -44,6 +44,7 @@ var ServerList = cc.LayerColor.extend({
 	onLeaving: function(){
 		this.list.selectedValue = null;
 		this.list.setVisible(false);
+		this.list.clear();
 	},
 	join: function(){
 		if(this.list.selectedValue != null)
