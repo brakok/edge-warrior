@@ -9,6 +9,7 @@ WorldInfo.Church = function(width, height, game){
 	
 	this.goalStartPosition = (this.height + Constants.World.Church.GOAL_OFFSET_Y)*(1 - (Constants.Game.MAX_PLAYERS - this.currentGame.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR);
 	this.spawnZones = [];
+
 };
 
 WorldInfo.Church.prototype.load = function(){
@@ -35,4 +36,8 @@ WorldInfo.Church.prototype.load = function(){
 	this.currentGame.space.addShape(ground);
 	this.currentGame.space.addShape(leftWall);
 	this.currentGame.space.addShape(rightWall);	
+};
+
+WorldInfo.Church.prototype.update = function(){
+
 };

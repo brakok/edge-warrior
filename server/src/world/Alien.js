@@ -36,3 +36,8 @@ WorldInfo.Alien.prototype.load = function(){
 	this.currentGame.space.addShape(leftWall);
 	this.currentGame.space.addShape(rightWall);	
 };
+
+
+WorldInfo.Alien.prototype.update = function(){
+
+};

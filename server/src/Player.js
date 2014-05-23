@@ -8,6 +8,8 @@ var Player = function(id, username, x, y, color, game){
 	this.x = x;
 	this.y = y;
 		
+	this.mass = Constants.Physic.MASS_PLAYER;
+		
 	this.pickAxeCount = 0;
 	this.pickAxeTimer = Constants.Player.PickAxe.TIMER + Constants.Warmup.PHASE_TIME;
 	this.pickAxePressed = false;
@@ -462,15 +464,20 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 	}
 };
 
+Player.prototype.changeMass = function(factor){
+	this.mass *= factor;
+	this.body.setMass(this.mass);
+};
+
 //Init the physical part of the player.
-Player.prototype.initBody = function(space){
+Player.prototype.initBody = function(){
 	
 	var groundSensorHalfWidth = Constants.Player.WIDTH*0.25;
 	var playerHalfHeight = Constants.Player.HEIGHT*0.5;
 	var groundSensorHeight = 2;
 
 	//Body creation.
-	this.body = this.currentGame.space.addBody(new chipmunk.Body(Constants.Physic.MASS_PLAYER, Infinity));
+	this.body = this.currentGame.space.addBody(new chipmunk.Body(this.mass, Infinity));
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 						
 	//Assign custom data to body.
