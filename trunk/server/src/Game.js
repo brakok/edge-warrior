@@ -27,34 +27,14 @@ var Game = function(settings){
 	this.winningPhaseTimer = Constants.WinningGoal.PHASE_TIME;
 	
 	this.spawnY = Constants.Player.INITIAL_SPAWN_Y;
-	
-	//World information.
-	this.width = settings.width;
-	this.height = settings.height;
-	this.worldType = settings.worldType;
-	
-	this.goalStartPosition = null;
-	
-	//Special case when winning goals are too far.
-	switch(this.worldType){
-		case Enum.World.Type.CHURCH:
-			this.goalStartPosition = this.height + Constants.World.Church.GOAL_OFFSET_Y;
-			break;
-		case Enum.World.Type.ALIEN:
-			this.goalStartPosition = this.height + Constants.World.Alien.GOAL_OFFSET_Y;
-			break;
-		default:
-			this.goalStartPosition = this.height;
-			break;
-	}
-	
-	//Lower winning goal if they are less player than max intended.
-	this.goalStartPosition *= 1 - (Constants.Game.MAX_PLAYERS - settings.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR;
+	this.maxPlayers = settings.maxPlayers;
 	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
 	
-	this.maxPlayers = settings.maxPlayers;
+	//Create world.
+	this.world = WorldInfo.create(settings.worldType, settings.width, settings.height, this);
+	
 	this.state = false;
 	this.space = null;
 	
@@ -84,35 +64,15 @@ Game.prototype.createWorld = function(){
 		this.space.sleepTimeThreshold = Constants.Physic.SLEEP_TIME_THRESHOLD;
 		this.space.collisionBias = 0;
 		
-		//Create floor and walls.
-		var ground = new chipmunk.SegmentShape(this.space.staticBody,
-												new chipmunk.Vect(0, 0),
-												new chipmunk.Vect(this.width, 0),
-												10);
-		
-		var leftWall = new chipmunk.SegmentShape(this.space.staticBody,
-												new chipmunk.Vect(-5, 0),
-												new chipmunk.Vect(-5, this.height*3),
-												10);
-												
-		var rightWall = new chipmunk.SegmentShape(this.space.staticBody,
-													new chipmunk.Vect(this.width + 5, 0),
-													new chipmunk.Vect(this.width + 5, this.height*3),
-													10);																
-		
-		//Set friction on ground.
-		ground.setFriction(Constants.Physic.FRICTION);
-		
-		this.space.addShape(ground);
-		this.space.addShape(leftWall);
-		this.space.addShape(rightWall);			
+		//Load world space elements.
+		this.world.load();
 			
 		//Init players' bodies.
 		for(var i in this.players)
 			this.players[i].initBody();
-			
+		
 		//Add the goal. TODO: Random between multiples goals.
-		this.goal = new FloatingBall(this.width*0.5, this.goalStartPosition, this);
+		this.goal = new FloatingBall(this.world.width*0.5, this.world.goalStartPosition, this);
 	}
 };
 

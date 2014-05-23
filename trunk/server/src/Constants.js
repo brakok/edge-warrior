@@ -64,6 +64,9 @@ var Constants = {
 		},
 		Alien: {
 			GOAL_OFFSET_Y: -150
+		},
+		Pit: {
+			GOAL_OFFSET_Y: 0
 		}
 	},
 	NPC: {

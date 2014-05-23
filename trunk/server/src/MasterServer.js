@@ -20,8 +20,6 @@ var MasterServer = new function(){
 	this.gameSequenceId = 1;
 	
 	this.closeLobby = function(socket){
-		console.log('Lobby closed (' + socket.userdata.gameId + ')');
-						
 		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.CLOSE_LOBBY, socket.userdata.gameId);
 		
 		//Disconnect all players from game room.
@@ -47,9 +45,7 @@ var MasterServer = new function(){
 		
 	this.disconnectPlayer = function(socket){
 		if(socket.userdata.gameId != null)
-		{
-			console.log(socket.userdata.username + ' left lobby (' + socket.userdata.gameId + ')');
-			
+		{			
 			//Remove player from lobby.
 			this.lobbies[socket.userdata.gameId].settings.removePlayer(socket.userdata.username);
 			this.lobbies[socket.userdata.gameId].connectedPlayers--;
@@ -85,12 +81,8 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	socket.set("heartbeat interval", 20);
 	socket.set("heartbeat timeout", 60);
 
-	console.log('Connection to client established - Master');
-
 	//Authenticate.
 	socket.on(Constants.Message.LOGIN, function(profile){
-		
-		console.log('Player connecting : ' + profile.username);
 		
 		Account.authenticate(profile, function(errors){
 			
@@ -125,8 +117,6 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	//Create an account.
 	socket.on(Constants.Message.CREATE_ACCOUNT, function(profile){
-		
-		console.log('Creating account : ' + profile.username);
 			
 		Account.create(profile, function(errors){
 			socket.emit(Constants.Message.CREATE_ACCOUNT, errors);
@@ -135,9 +125,7 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	//Change password.
 	socket.on(Constants.Message.CHANGE_PASSWORD, function(data){
-	
-		console.log('Change password : ' + data.profile.username);
-		
+			
 		Account.changePassword(data.profile, data.oldPassword, data.newPassword, data.confirmation, function(errors){
 			socket.emit(Constants.Message.CHANGE_PASSWORD, errors);
 		});
@@ -145,8 +133,6 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	//Reset password.
 	socket.on(Constants.Message.RESET_PASSWORD, function(data){
-	
-		console.log('Reset password : ' + data.profile.username);
 		
 		Account.resetPassword(data.profile, data.email, function(errors){
 			socket.emit(Constants.Message.RESET_PASSWORD, errors);
@@ -202,8 +188,6 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		if(MasterServer.lobbies[data.gameId].connectedPlayers < Constants.Game.MAX_PLAYERS)
 		{
-			console.log('Lobby joined (' + data.gameId + ') :' + data.username);
-
 			MasterServer.lobbies[data.gameId].connectedPlayers++;
 			MasterServer.lobbies[data.gameId].settings.addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
 			

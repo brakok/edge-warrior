@@ -32,8 +32,8 @@ Overlord.prototype.launch = function(blockType){
 		//Spawn block falls from the sky.
 		if(!this.hasActiveSpawnBlock)
 		{
-			var spawnY = this.currentGame.height + 100;
-			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(this.currentGame.width-Constants.Block.WIDTH));
+			var spawnY = this.currentGame.world.height + 100;
+			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(this.currentGame.world.width-Constants.Block.WIDTH));
 			
 			//Create a block and launch it.
 			this.currentGame.managers.BlockManager.launch(new Block(spawnX, 
