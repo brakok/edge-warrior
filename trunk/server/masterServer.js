@@ -3910,7 +3910,7 @@ SandSpirit.prototype.update = function(){
 		//Find target.
 		for(var i in this.currentGame.players)
 		{
-			if((minY == null || minY > this.currentGame.players[i].y) && this.y <= this.currentGame.players[i].y && !this.target.isRemoved)
+			if((minY == null || minY > this.currentGame.players[i].y) && this.y <= this.currentGame.players[i].y && !this.currentGame.players[i].isRemoved)
 			{
 				this.target = this.currentGame.players[i];
 				minY = this.target.y;
