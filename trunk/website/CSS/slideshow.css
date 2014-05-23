@@ -92,5 +92,11 @@
 	border: 2px solid #611212;
 }
 
+@media all and (max-width: 600px){
+	.pagination {
+		bottom: 40px;
+	}
+}
+
 
 

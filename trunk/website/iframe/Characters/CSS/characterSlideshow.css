@@ -1,0 +1,380 @@
+/*
+ * Swiper - Mobile Touch Slider CSS
+ * http://www.idangero.us/sliders/swiper
+ *
+ * Vladimir Kharlampidi, The iDangero.us
+ * http://www.idangero.us/
+ * 
+ * Copyright 2012-2013, Vladimir Kharlampidi
+ * The iDangero.us
+ * http://www.idangero.us
+ *
+ * Licensed under GPL & MIT
+ *
+*/
+
+/* ===============================================================
+Basic Swiper Styles 
+================================================================*/
+.swiper-container {
+	margin:0 auto;
+	position:relative;
+	overflow:hidden;
+	-webkit-backface-visibility:hidden;
+	-moz-backface-visibility:hidden;
+	-ms-backface-visibility:hidden;
+	-o-backface-visibility:hidden;
+	backface-visibility:hidden;
+	/* Fix of Webkit flickering */
+	z-index:1;
+}
+.swiper-wrapper {
+	position:relative;
+	width:100%;
+	-webkit-transition-property:-webkit-transform, left, top;
+	-webkit-transition-duration:0s;
+	-webkit-transform:translate3d(0px,0,0);
+	-webkit-transition-timing-function:ease;
+	
+	-moz-transition-property:-moz-transform, left, top;
+	-moz-transition-duration:0s;
+	-moz-transform:translate3d(0px,0,0);
+	-moz-transition-timing-function:ease;
+	
+	-o-transition-property:-o-transform, left, top;
+	-o-transition-duration:0s;
+	-o-transform:translate3d(0px,0,0);
+	-o-transition-timing-function:ease;
+	-o-transform:translate(0px,0px);
+	
+	-ms-transition-property:-ms-transform, left, top;
+	-ms-transition-duration:0s;
+	-ms-transform:translate3d(0px,0,0);
+	-ms-transition-timing-function:ease;
+	
+	transition-property:transform, left, top;
+	transition-duration:0s;
+	transform:translate3d(0px,0,0);
+	transition-timing-function:ease;
+}
+.swiper-free-mode > .swiper-wrapper {
+	-webkit-transition-timing-function: ease-out;
+	-moz-transition-timing-function: ease-out;
+	-ms-transition-timing-function: ease-out;
+	-o-transition-timing-function: ease-out;
+	transition-timing-function: ease-out;
+	margin: 0 auto;
+}
+.swiper-slide {
+	float: left;
+}
+
+/* IE10 Windows Phone 8 Fixes */
+.swiper-wp8-horizontal {
+	-ms-touch-action: pan-y;
+}
+.swiper-wp8-vertical {
+	-ms-touch-action: pan-x;
+}
+
+/* Personalize style for the slideshow */
+
+* {
+	margin:0;
+	padding:o;
+}
+img{
+	width:100%;
+}
+.device {
+	margin:0;
+	position: relative;
+}
+
+.device .arrow-left, .device .arrow-right{	
+	height: 123px;
+	top: 25%;
+	position: absolute;
+	width: 49px;
+}
+
+.device .arrow-left {
+  background: url(../Images/L_Arrow.png) no-repeat left top;
+  left: 10px;
+}
+.device .arrow-right {
+  background: url(../Images/R_Arrow.png) no-repeat right bottom;
+  right: 10px;
+}
+
+.device .arrow-left:hover {
+  background: url(../Images/L_Arrow_Hover.png) no-repeat left top;
+}
+.device .arrow-right:hover {
+  background: url(../Images/R_Arrow_Hover.png) no-repeat right bottom;
+}
+
+.swiper-container {
+	width: 90%;
+}
+/* FONT */
+/* Quantico */
+/* Regular */
+@font-face {
+    font-family: quantico;
+    src: url('../Font/Quantico/quantico_r.eot');
+    src: url('../Font/Quantico/quantico_r.eot?#iefix') format('embedded-opentype'),
+         url('../Font/Quantico/quantico_r.woff') format('woff'),
+         url('../Font/Quantico/quantico_r.ttf') format('truetype'),
+         url('../Font/Quantico/quantico_r.svg#quanticobold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Hallo Sans */
+/* Light */
+@font-face {
+    font-family: hallo_sansLight;
+    src: url('../Font/HalloSans/hallosans_l.eot');
+    src: url('../Font/HalloSans/hallosans_l.eot?#iefix') format('embedded-opentype'),
+         url('../Font/HalloSans/hallosans_l.woff') format('woff'),
+         url('../Font/HalloSans/hallosans_l.ttf') format('truetype'),
+         url('../Font/HalloSans/hallosans_l.svg#hallo_sansLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.pagination {
+  display:none;
+}
+
+.swiper-pagination-switch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background: #999;
+  box-shadow: 0px 1px 2px #555 inset;
+  margin: 0 3px;
+  cursor: pointer;
+}
+.swiper-active-switch {
+  background: #fff;
+}
+
+/* Skill block CSS */
+.swiper-slide:hover{
+	transition:0.4s;
+}
+.swiper-slide p{
+	display:none;
+}
+/* Red */
+#red.swiper-slide{
+	background: url(../Images/Red_Front.png) no-repeat;
+	height:344px;
+}
+#red.swiper-slide:hover{
+	background: url(../Images/Red_Back.png) no-repeat;
+	height:344px;
+}
+#red.swiper-slide:hover p,#yellow.swiper-slide:hover p,#blue.swiper-slide:hover p,#white.swiper-slide:hover p{
+	display:block;
+	font-family: hallo_sansLight;
+	font-size: 20px;
+	text-align: left;
+	width: 199px;
+	padding: 70px 0 0 200px;
+	font-variant: normal;
+}
+/* Yellow */
+#yellow.swiper-slide{
+	background: url(../Images/Yellow_Front.png) no-repeat;
+	height:350px;
+}
+#yellow.swiper-slide:hover{
+	background: url(../Images/Yellow_Back.png) no-repeat;
+}
+/* Blue */
+#blue.swiper-slide{
+	background: url(../Images/Blue_Front.png) no-repeat;
+	height:366px;
+}
+#blue.swiper-slide:hover{
+	background: url(../Images/Blue_Back.png) no-repeat;
+}
+
+#blue.swiper-slide:hover p{
+	padding: 90px 0 0 160px;
+}
+/* White */
+#white.swiper-slide{
+	background: url(../Images/White_Front.png) no-repeat;
+	height:351px;
+}
+#white.swiper-slide:hover{
+	background: url(../Images/White_Back.png) no-repeat;
+}
+/* Adjust the padding according to the media query */
+@media all and (max-width: 1370px){
+		.swiper-wrapper{
+			padding:0 5% !important;
+		}
+}
+@media all and (max-width: 1045px){
+		.swiper-wrapper{
+			padding:0 2% !important;
+		}
+}
+@media all and (max-width: 950px){
+		.swiper-wrapper{
+			padding:0 25% !important;
+		}
+}
+@media all and (max-width: 750px){
+		.swiper-wrapper{
+			padding:0 15% !important;
+		}
+}
+@media all and (max-width: 600px){
+		.swiper-slide:hover{
+			transition:0.2s;
+		}
+		.swiper-wrapper{
+			padding:0 3.5% !important;
+		}
+		.swiper-container{
+			height:350px;
+		}
+		.device {
+			position:initial;
+		}
+		.device .arrow-left, .device .arrow-right {
+			height: 70px;
+			width: 57px;
+		}
+		.device .arrow-left {
+			background: url(../Images/L_Arrow.png) no-repeat left top;
+			background-size:50%;
+			left: 4%;
+			z-index:100;
+		}
+		.device .arrow-right {
+			background: url(../Images/R_Arrow.png) no-repeat right top;
+			background-size:50%;
+			right: 4%;
+			z-index:100;
+		}
+		.device .arrow-left:hover {
+			background: url(../Images/L_Arrow_Hover.png) no-repeat left top;
+			background-size:50%;
+		}
+		.device .arrow-right:hover {
+			background: url(../Images/R_Arrow_Hover.png) no-repeat right top;
+			background-size:50%;
+		}	
+		.text{
+			margin-left:15px;
+		}
+		/* Yellow */
+		#yellow.swiper-slide{
+			background:url(../Images/Yellow_front_mobile.png) no-repeat;
+		}
+		#yellow.swiper-slide:hover{
+			background:url(../Images/Yellow_back_mobile.png) no-repeat;
+		}
+		/* Blue*/
+		#blue.swiper-slide{
+			background:url(../Images/Blue_front_mobile.png) no-repeat;
+		}
+		#blue.swiper-slide:hover{
+			background:url(../Images/Blue_back_mobile.png) no-repeat;
+		}
+		/* Red */
+		#red.swiper-slide{
+			background:url(../Images/Red_front_mobile.png) no-repeat;
+		}
+		#red.swiper-slide:hover{
+			background:url(../Images/Red_back_mobile.png) no-repeat;
+		}
+		/* White */
+		#white.swiper-slide{
+			background:url(../Images/White_front_mobile.png) no-repeat;
+		}
+		#white.swiper-slide:hover{
+			background:url(../Images/White_back_mobile.png) no-repeat;
+		}
+		/* YELLOW AND GENERAL TEXT HOVER*/
+		#yellow.swiper-slide:hover p, #blue.swiper-slide:hover p, #white.swiper-slide:hover p ,#red.swiper-slide:hover p{
+			font-size: 4vw;
+			width: 82%;
+			margin-top: 180px;
+			padding:15px;
+		}
+		/* YELLOW TEXT HOVER */
+		#yellow.swiper-slide:hover p{
+			background:rgba(255,255,255,0.8) url(../Images/BlockYellow.png) no-repeat 95% 90%;
+			background-size:60px;
+			border: 1px solid #f8ea2b;
+			padding-bottom: 30px;
+		}
+
+		/* RED TEXT HOVER */
+		#red.swiper-slide:hover p{
+			background:rgba(255,255,255,0.8) url(../Images/BlockRed.png) no-repeat 95% 90%;
+			background-size:60px;
+			border: 1px solid #561111;
+		}
+		/* BLUE TEXT HOVER */
+		#blue.swiper-slide:hover p{
+			background:rgba(255,255,255,0.8) url(../Images/BlockBlue.png) no-repeat 95% 90%;
+			background-size:60px;
+			border: 1px solid #4a94cb;
+			padding-bottom: 30px;
+		}
+		/* WHITE TEXT HOVER */
+		#white.swiper-slide:hover p{
+			background:rgba(255,255,255,0.8) url(../Images/BlockWhite.png) no-repeat 95% 90%;
+			background-size:60px;
+			border: 1px solid #808080;
+		}
+}
+@media all and (max-width: 518px){
+		.swiper-wrapper{
+			padding:0 !important;
+		}
+}
+@media all and (max-width: 500px){
+	#red.swiper-slide:hover p{
+		padding-bottom:40px ;
+	}
+}
+@media all and (max-width: 480px){
+	.swiper-container {
+		height:320px;
+	}
+	.text{
+		margin-left:8%;
+	}
+		/* Yellow */
+		#yellow.swiper-slide,#blue.swiper-slide,#red.swiper-slide,#white.swiper-slide{
+			background-position: 50% 10px;
+			background-size:120%;
+		}
+		#yellow.swiper-slide:hover,#blue.swiper-slide:hover,#red.swiper-slide:hover,#white.swiper-slide:hover{
+			background-position: 50% 10px;	
+			background-size:120%;
+		}
+		#red.swiper-slide:hover p, #yellow.swiper-slide:hover p, #blue.swiper-slide:hover p, #white.swiper-slide:hover p, #red.swiper-slide:hover p{
+			font-size:4.9vw;
+			margin-top:160px;
+		}
+		/* BLUE TEXT HOVER */
+		#blue.swiper-slide:hover p{
+			background-position:95% 95%;
+		}
+}
+
+
+

@@ -2,8 +2,7 @@ var mySwiper = new Swiper('.swiper-container',{
     pagination: '.pagination',
 	slidesPerView: 3,
     grabCursor: true,
-    paginationClickable: true,
-	loop:true
+    paginationClickable: true
   });
   
   var mySwiper = $('.swiper-container').swiper({

@@ -87,13 +87,15 @@ img{
 	width:100%;
 }
 .device {
+	background: black;
 	margin:0;
 	position: relative;
 }
 
 .device .arrow-left, .device .arrow-right{	
 	height: 123px;
-	top: 15%;
+	margin-top: -15px;
+	top: 40%;
 	position: absolute;
 	width: 49px;
 }
@@ -115,6 +117,7 @@ img{
 }
 
 .swiper-container {
+	height:600px;
 	width: 90%;
 }
 /* FONT */
@@ -131,22 +134,48 @@ img{
     font-style: normal;
 }
 
-/* Hallo Sans */
-/* Light */
-@font-face {
-    font-family: hallo_sansLight;
-    src: url('../Font/HalloSans/hallosans_l.eot');
-    src: url('../Font/HalloSans/hallosans_l.eot?#iefix') format('embedded-opentype'),
-         url('../Font/HalloSans/hallosans_l.woff') format('woff'),
-         url('../Font/HalloSans/hallosans_l.ttf') format('truetype'),
-         url('../Font/HalloSans/hallosans_l.svg#hallo_sansLight') format('svg');
-    font-weight: normal;
-    font-style: normal;
+/* Slideshow Text */
+.textBG{
+	background:rgba(0,0,0,0.4);
+	bottom:0;
+	height:35%;
+	position:absolute;
+	width:100%;
+}
+.mapsTXT{
+	margin:0 auto;
+	width:400px;
+}
+.swiper-slide span{
+	float:left;
+	font-size:25px;
+	margin-bottom:40px;
+	text-transform:uppercase;
+	width:60px;
+}
+.swiper-slide span,.swiper-slide p{
+	bottom:7.5%;
+	color:white;
+	font-variant:small-caps;
+	position:absolute;
+	font-family: quantico;
+	display:inline;
+}
+.swiper-slide p{
+	font-size:60px;
+	margin-left:60px;
+}
+.title {
+  font-size: 25px;
+  margin-bottom: 10px;
 }
 
-
 .pagination {
-  display:none;
+  position: absolute;
+  left: 0;
+  text-align: center;
+  bottom:5px;
+  width: 100%;
 }
 
 .swiper-pagination-switch {
@@ -163,86 +192,10 @@ img{
   background: #fff;
 }
 
-/* Skill block CSS */
-
-.skillBlocks{
-	border-radius:10px;
-	border: 6px solid #c9c9c9; 
-	height:240px;
-	margin:0 auto;
-	width:240px;
-}
-.skillBlocks p{
-	display:none;
-}
-.skillBlocks:hover p{
-	color:#434343;
-	display:block;
-	font-family:hallo_sansLight;
-	font-size:25px;
-	padding: 20px 10px 0;
-	text-align:left;
-	width:220px;
-}
-.skillBlocks h3{
-	color:#fff;
-	font-family:quantico;
-	font-size:30px;
-	font-variant:small-caps;
-	margin-top:20px;
-	text-align:center;
-}
-.skillBlocks:hover h3{
-	display:none;
-}
-/* Fire Pulse */
-#firePulse.skillBlocks{
-	background:#000 url(../Images/firePulse_Front.png) no-repeat center 90px;
-}
-#firePulse.skillBlocks:hover{
-	background:#fff url(../Images/firePulse_Back.png) no-repeat center 180px;
-}
-/* Jaw Fall */
-#jawFall.skillBlocks{
-	background:#000 url(../Images/jawFall_Front.png) no-repeat center 90px;
-}
-#jawFall.skillBlocks:hover{
-	background:#fff url(../Images/jawFall_Back.png) no-repeat center 180px;
-}
-/* Eclipse */
-#eclipse.skillBlocks{
-	background:#000 url(../Images/eclipse_Front.png) no-repeat center 70px;
-}
-#eclipse.skillBlocks:hover{
-	background:#fff url(../Images/eclipse_Back.png) no-repeat center 180px;
-}
-/* Pisky Box */
-#peskyBox.skillBlocks{
-	background:#000 url(../Images/peskyBox_Front.png) no-repeat center 70px;
-}
-#peskyBox.skillBlocks:hover{
-	background:#fff url(../Images/peskyBox_Back.png) no-repeat center 180px;
-}
-/* Deflector */
-#deflector.skillBlocks{
-	background:#000 url(../Images/deflector_Front.png) no-repeat center 75px;
-}
-#deflector.skillBlocks:hover{
-	background:#fff url(../Images/deflector_Back.png) no-repeat center 180px;
-}
-/* Time Zone */
-#timeZone.skillBlocks{
-	background:#000 url(../Images/timeZone_Front.png) no-repeat center 75px;
-}
-#timeZone.skillBlocks:hover{
-	background:#fff url(../Images/timeZone_Back.png) no-repeat center 200px;
-}
-
-
 
 /******************************** 1263px **********************************/
 
-@media all and (min-width: 1263px){
+@media all and (max-width: 1263px){
 	.device{
 		height:425px;
 	}
@@ -253,30 +206,66 @@ img{
 		background-size:80%;
 	}
 }
-
 @media all and (max-width: 600px){
-	.device,.swiper-container,.swiper-wrapper{
-		height:250px;
+	.device{
+		height:160px;
 	}
-	.device .arrow-left, .device .arrow-right{
-	height:83px;
-		width:23px;
-		top:30%;
-		z-index:10;
+	.swiper-container{
+		height:160px;
 	}
-	.device .arrow-left {
-		background: url(../Images/L_Arrow_mobile.png) no-repeat left top;
-		left: 4%;
+	.device .arrow-left ,.device .arrow-left:hover,.device .arrow-right,.device .arrow-right:hover{
+		background-size:40%;
+		top:45%;
 	}
-	.device .arrow-right {
-		background: url(../Images/R_Arrow_mobile.png) no-repeat right top;
-		right: 4%;
+	.device .arrow-right,.device .arrow-right:hover{
+		background-position: right top;
 	}
-	.device .arrow-left:hover {
-		background: url(../Images/L_Arrow_Hover_mobile.png) no-repeat left top;
+
+	.swiper-slide p{
+		font-size:8vw;
+		margin-left:4.5%;
 	}
-	.device .arrow-right:hover {
-		background: url(../Images/R_Arrow_Hover_mobile.png) no-repeat right top;
+	.swiper-slide span, .swiper-slide p{
+		bottom:0.5%;
+	}
+	.swiper-slide span{
+		font-size:4vw;
+		margin:0 0 20px 2%;
 	}
 }
+@media all and (max-width: 495px){
+	.swiper-slide img{
+		width:428px;
+	}
+	.swiper-wrapper{
+		padding:0 -2.5% !important;
+	}
+	.device .arrow-left, .device .arrow-left:hover, .device .arrow-right, .device .arrow-right:hover{
+		background-size:30%;
+	}
+}
+@media all and (max-width: 470px){
+	.swiper-slide img{
+		width:103%;
+	}
+	.device{
+		height:140px;
+	}
+	.swiper-container{
+		height:140px;
+	}
+}
+
+@media all and (max-width: 420px){
+	.device{
+		height:120px;
+	}
+	.swiper-container{
+		height:120px;
+	}
+}
+
+
+
+
 

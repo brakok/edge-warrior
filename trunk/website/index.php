@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Crushed Dream - Website </title>
+        <title><?php echo TXT_TITLE ?></title>
         <link rel="stylesheet" type="text/css" href="CSS/style.css" />
 		<!-- Reset CSS stylesheet to increase broswer compatibility -->
 		<link rel="stylesheet" type="text/css" href="CSS/reset.css" />
@@ -12,8 +12,18 @@
 		<link rel="stylesheet" type="text/css" href="CSS/mobile.css" />
 		<!-- Stylesheet for slideshow -->
 		<link rel="stylesheet" type="text/css" href="CSS/slideshow.css" />
+		<!-- Meta -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="description" content="Crushed dream est un jeu basé sur le concept d'écraser ses adversaires avec des blocs diversifiés" />
+		<meta name="keywords" content="crushed dream,jeu,bloc, écraser, pascal thibault larouche, google chrome, chrome store, indie game, plateformer." />
+		<!-- meta for facebook -->
+		<meta property="og:image" content="http://crusheddream.azurewebsites.net/Images/ProjectBG.png" />
+		<meta property="og:url" content="http://crusheddream.azurewebsites.net/" />
+		<meta property="og:description" content="Crushed dream est un jeu basé sur le concept d'écraser ses adversaires avec des blocs diversifiés/ Crushed Dream is a game based on crushing others by dropping generated blocks on them. ." />
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="http://crusheddream.azurewebsites.net/Images/CrushedDream_Favicon.ico" type="image/icon"> 
+		<link rel="icon" href="http://crusheddream.azurewebsites.net/Images/CrushedDream_Favicon.ico" type="image/icon">
 		<script src="Script/mobileScript.js"></script>
 		<!-- Script for responsive menu -->
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>

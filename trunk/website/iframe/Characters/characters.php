@@ -6,7 +6,7 @@
     <head>
         <title>Crushed Dream - Maps </title>
 		<!-- Stylesheet for slideshow -->
-		<link rel="stylesheet" href="CSS/slideshow.css">
+		<link rel="stylesheet" href="CSS/characterSlideshow.css">
 	</head>
 	<body>
 	<div class="device">

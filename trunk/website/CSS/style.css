@@ -210,7 +210,7 @@ header h1{
 	font-family:quantico_bold;
 	font-size: 121px;
 	height: 0;
-	padding-bottom: 19%;
+	padding-bottom: 17%;
 }
 #logo{
 	margin:0 auto 100px;
@@ -226,7 +226,7 @@ header h1{
 	font-variant: small-caps;
 	font-size-adjust: 0.39;
 	text-align: center;
-	margin: -35px auto;
+	margin: -25px auto;
 	width: 360px;
 }
 #logo span{
