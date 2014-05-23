@@ -236,7 +236,8 @@ var Constants = {
 		CHAT: 'chat',
 		NEW_TRIGGER: 'newTrigger',
 		DELETE_TRIGGER: 'deleteTrigger',
-		ACTION_TRIGGER: 'actionTrigger'
+		ACTION_TRIGGER: 'actionTrigger',
+		ACTION_NPC: 'actionNpc'
 	},
 	Effect: {
 		Z_INDEX: 50,

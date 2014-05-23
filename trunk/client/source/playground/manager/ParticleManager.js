@@ -7,7 +7,10 @@ var ParticleManager = {
 		
 		switch(type){
 			case Enum.Particles.SMOKE:
-				emitter = new ParticleEmitter(15, x, y, 3, 0, 0, 0, 0, 0, 0.75, 0, 45, 0, 5, 0, assetsParticles + 'smoke.png', layer);
+				emitter = new ParticleEmitter(15, x, y, 3, 0, 0, 0, 0, 0, 0.75, 0, 45, 0, 5, 0, 0, 0, Constants.Particles.Z_ORDER, assetsParticles + 'smoke.png', layer);
+				break;
+			case Enum.Particles.SAND:
+				emitter = new ParticleEmitter(35, x, y + 20, 40, 30, 0, -5, 1, 1, 1.5, 0.75, 70, 10, 180, 20, 0, 1, Constants.NPC.Z_ORDER + 1, assetsParticles + 'sand.png', layer);
 				break;
 		}
 		

@@ -115,6 +115,12 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('TimeZone_disappearing.0006.png');
 			this.animation = AnimationManager.create('TimeZone_disappearing', 6, 12, 24);
 			break;
+		case Enum.Effect.Type.SAND_SPIRIT_DISAPPEARING:
+		
+			//Effect created when time zone ends.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('SandSpirit_disappearing.0000.png');
+			this.animation = AnimationManager.create('SandSpirit_disappearing', 0, 12, 24);
+			break;
 	}
 	
 	this.sprite.setZOrder(Constants.Effect.Z_INDEX);

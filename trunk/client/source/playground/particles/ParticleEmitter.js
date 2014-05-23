@@ -1,6 +1,6 @@
 
 //EmitRate = how many for one second.
-var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSpeedX, varSpeedY, life, varLife, startSize, varStartSize, endSize, varEndSize, spritePath, layer){
+var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSpeedX, varSpeedY, life, varLife, startSize, varStartSize, endSize, varEndSize, rotationSpeed, varRotationSpeed, zOrder, spritePath, layer){
 
 	this.emitRate = 1/emitRate;
 	this.hasStopped = false;
@@ -11,16 +11,18 @@ var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSp
 	this.y = y;
 	this.speed = {
 		x: speedX,
-		y: speedY
+		y: speedY,
+		rotation: rotationSpeed
 	};
 	
 	this.particles = [];
 	this.timeElapsed = 0;
 	this.nextStep = 0;
 	
+	this.zOrder = zOrder;
 	this.life = life;
 	this.startSize = startSize;
-	this.endSize = endSize;
+	this.endSize = endSize;	
 	this.spritePath = spritePath;
 	this.layer = layer;
 	
@@ -29,7 +31,8 @@ var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSp
 		y: varY,
 		speed: {
 			x: varSpeedX,
-			y: varSpeedY
+			y: varSpeedY,
+			rotation: varRotationSpeed
 		},
 		life: varLife,
 		startSize: varStartSize,

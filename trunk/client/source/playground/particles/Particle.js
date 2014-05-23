@@ -5,9 +5,11 @@ var Particle = function(x, y, emitter){
 	this.y = y + Math.random()*emitter.variation.y*(Math.random() < 0.5 ? -1 : 1);
 	this.speed = {
 		x: emitter.speed.x + Math.random()*emitter.variation.speed.x*(Math.random() < 0.5 ? -1 : 1),
-		y: emitter.speed.y + Math.random()*emitter.variation.speed.y*(Math.random() < 0.5 ? -1 : 1)
+		y: emitter.speed.y + Math.random()*emitter.variation.speed.y*(Math.random() < 0.5 ? -1 : 1),
+		rotation: emitter.speed.rotation + Math.random()*emitter.variation.speed.rotation*(Math.random() < 0.5 ? -1 : 1)
 	};
 
+	this.angle = 0;
 	this.mustBeDestroyed = false;
 	
 	//Life.
@@ -17,12 +19,9 @@ var Particle = function(x, y, emitter){
 	this.startSize = emitter.startSize + Math.random()*emitter.variation.startSize*(Math.random() < 0.5 ? -1 : 1);
 	this.endSize = emitter.endSize + Math.random()*emitter.variation.endSize*(Math.random() < 0.5 ? -1 : 1);
 	
-	if(this.endSize > this.startSize)
-		this.endSize = this.startSize;
-	
 	//Set sprite size.
 	this.sprite = cc.Sprite.create(emitter.spritePath);	
-	this.sprite._zOrder = Constants.Particles.Z_ORDER;
+	this.sprite._zOrder = emitter.zOrder;
 
 	this.layer = emitter.layer;
 	this.layer.addChild(this.sprite);
@@ -61,7 +60,10 @@ Particle.prototype.update = function(dt){
 		this.x += this.speed.x;
 	if(this.speed.y != 0)
 		this.y += this.speed.y;
+	if(this.speed.rotation != 0)
+		this.angle += this.speed.rotation;
 
+	this.sprite.setRotation(this.angle);
 	this.sprite.setOpacity(this.life/this.originalLife*255);
 	this.life -= dt;
 };
