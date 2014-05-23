@@ -1,5 +1,9 @@
  <?php
 	header( 'content-type: text/html; charset=utf-8' );
+	//---------------------------------------------------------
+	// WEBSITE TITLE
+	//---------------------------------------------------------
+	define('TXT_TITLE','Crushed Dream');
 	
 	//---------------------------------------------------------
 	// PLAY THE GAME BUTTON
@@ -121,7 +125,7 @@
 	//---------------------------------------------------------
 	// ADAPTATIV CSS ACCORDING TO LANGUAGE
 	//---------------------------------------------------------
-	define('SLOGAN_WIDTH',"440px");
+	define('SLOGAN_WIDTH',"390px");
 	define('NEWS_WIDTH',"220px");
 	define('RULES_WIDTH',"210px");
 	define('MAPS_WIDTH',"160px");
