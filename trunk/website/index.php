@@ -18,6 +18,7 @@
 		<meta name="description" content="Crushed dream est un jeu basé sur le concept d'écraser ses adversaires avec des blocs diversifiés" />
 		<meta name="keywords" content="crushed dream,jeu,bloc, écraser, pascal thibault larouche, google chrome, chrome store, indie game, plateformer." />
 		<!-- meta for facebook -->
+		<meta property="og:title" content="Crushed Dream" />
 		<meta property="og:image" content="http://crusheddream.azurewebsites.net/Images/ProjectBG.png" />
 		<meta property="og:url" content="http://crusheddream.azurewebsites.net/" />
 		<meta property="og:description" content="Crushed dream est un jeu basé sur le concept d'écraser ses adversaires avec des blocs diversifiés/ Crushed Dream is a game based on crushing others by dropping generated blocks on them. ." />
