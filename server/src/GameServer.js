@@ -72,9 +72,7 @@ var Server = new function(){
 				
 		//Lobby to game.
 		socket.on(Constants.Message.START_GAME, function(settings){
-		
-			console.log('Creating game... ' + Server.address);
-			
+					
 			var data = {
 				gameId: settings.id,
 				address: Server.address
@@ -90,7 +88,6 @@ var Server = new function(){
 	
 	//Disconnect player.
 	this.disconnectPlayer = function(socket){
-		console.log('Player left (' + socket.userdata.gameId + ') : ' + socket.userdata.username);
 		
 		var game = this.gameList[socket.userdata.gameId];
 		var index = null;
@@ -140,12 +137,9 @@ var Server = new function(){
 io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	socket.set("heartbeat interval", 20);
 	socket.set("heartbeat timeout", 60);
-
-	console.log('Connection to client established');
 		
 	//Socket disconnected.
 	socket.on(Constants.Message.DISCONNECT, function(){
-		console.log('Disconnect : ' + socket.userdata.gameId);
 		if(socket.userdata != null && socket.userdata.gameId != null && Server.gameList[socket.userdata.gameId] != null)
 			Server.disconnectPlayer(socket);
 	});
@@ -153,7 +147,6 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Send information about enemies to the connecting player.
 	socket.on(Constants.Message.JOIN_GAME, function(data){
 	
-		console.log('Connecting player... (' + data.gameId + ') : ' + data.username);
 		socket.join(data.gameId);
 		
 		socket.userdata = {
@@ -178,7 +171,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		//Create connecting player.
 		var player = new Player(socket.id, 
 								data.username,
-								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
+								Server.gameList[data.gameId].world.width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
 								Server.gameList[data.gameId].spawnY, 
 								color,
 								Server.gameList[data.gameId]);
@@ -210,40 +203,31 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//When player ready, refresh information of his opponents about his existence.
 	socket.on(Constants.Message.PLAYER_READY, function(){
 		var gameId = socket.userdata.gameId;
-		
-		console.log('Player ready! (' + gameId + ')');
-		
+				
 		Server.gameList[gameId].connectedPlayers++;		
 		
 		var player = Server.gameList[gameId].players[socket.id].toClient();
 		player.username = Server.gameList[gameId].players[socket.id].username;
 				
 		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
-		{
-			console.log('Game launching...');
-			
+		{			
 			//Init physic world.
 			Server.gameList[gameId].createWorld();
 			Server.gameList[gameId].launch();
 		
 			var data = {
 				goal: Server.gameList[gameId].goal.toClient(),
-				width: Server.gameList[gameId].width,
-				height: Server.gameList[gameId].height,
-				worldType: Server.gameList[gameId].worldType
+				width: Server.gameList[gameId].world.width,
+				height: Server.gameList[gameId].world.height,
+				worldType: Server.gameList[gameId].world.type
 			};
 			
 			data.goal.type = Server.gameList[gameId].goal.type;
-			
-			console.log('Game launched!');
 			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
 			
 			//Launch warmup!
-			console.log('WARMUP');
 			(function(gameId){
-				console.log('...');
 				setTimeout(function(){ 
-					console.log('GO!');
 					io.sockets.in(gameId).emit(Constants.Message.GO); 
 				}, Constants.Warmup.PHASE_TIME*1000);
 			})(gameId);

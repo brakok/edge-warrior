@@ -1,4 +1,4 @@
-//Version 0.9.0.6
+//Version 0.9.0.7
 //Enums
 var Enum = {
 	Color: {
@@ -213,6 +213,9 @@ var Constants = {
 		},
 		Alien: {
 			GOAL_OFFSET_Y: -150
+		},
+		Pit: {
+			GOAL_OFFSET_Y: 0
 		}
 	},
 	NPC: {
@@ -1619,6 +1622,137 @@ SkillInfo.TimeZone = {
 		block.skill.count--;
 		block.mustTrigger = false;
 	}
+};
+var WorldInfo = {
+	create: function(type, width, height, game){
+	
+		var world = null;
+		
+		switch(type){
+			case Enum.World.Type.CHURCH:
+				world = new WorldInfo.Church(width, height, game);
+				break;
+			case Enum.World.Type.ALIEN:
+				world = new WorldInfo.Alien(width, height, game);
+				break;
+			case Enum.World.Type.PIT:
+				world = new WorldInfo.Pit(width, height, game);
+				break;
+		}
+		
+		return world;
+	}
+};
+WorldInfo.Alien = function(width, height, game){
+	
+	this.type = Enum.World.Type.ALIEN;
+	
+	this.width = width;
+	this.height = height;
+	this.currentGame = game;
+	
+	this.goalStartPosition = (this.height + Constants.World.Alien.GOAL_OFFSET_Y)*(1 - (Constants.Game.MAX_PLAYERS - this.currentGame.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR);
+	this.spawnZones = [];
+};
+
+WorldInfo.Alien.prototype.load = function(){
+	
+	//Create floor and walls.
+	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+											new chipmunk.Vect(0, 0),
+											new chipmunk.Vect(this.width, 0),
+											10);
+	
+	var leftWall = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+											new chipmunk.Vect(-5, 0),
+											new chipmunk.Vect(-5, this.height*3),
+											10);
+											
+	var rightWall = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+												new chipmunk.Vect(this.width + 5, 0),
+												new chipmunk.Vect(this.width + 5, this.height*3),
+												10);																
+	
+	//Set friction on ground.
+	ground.setFriction(Constants.Physic.FRICTION);
+	
+	this.currentGame.space.addShape(ground);
+	this.currentGame.space.addShape(leftWall);
+	this.currentGame.space.addShape(rightWall);	
+};
+WorldInfo.Church = function(width, height, game){
+	
+	this.type = Enum.World.Type.CHURCH;
+	
+	this.width = width;
+	this.height = height;
+	this.currentGame = game;
+	
+	this.goalStartPosition = (this.height + Constants.World.Church.GOAL_OFFSET_Y)*(1 - (Constants.Game.MAX_PLAYERS - this.currentGame.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR);
+	this.spawnZones = [];
+};
+
+WorldInfo.Church.prototype.load = function(){
+	
+	//Create floor and walls.
+	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+											new chipmunk.Vect(0, 0),
+											new chipmunk.Vect(this.width, 0),
+											10);
+	
+	var leftWall = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+											new chipmunk.Vect(-5, 0),
+											new chipmunk.Vect(-5, this.height*3),
+											10);
+											
+	var rightWall = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+												new chipmunk.Vect(this.width + 5, 0),
+												new chipmunk.Vect(this.width + 5, this.height*3),
+												10);																
+	
+	//Set friction on ground.
+	ground.setFriction(Constants.Physic.FRICTION);
+	
+	this.currentGame.space.addShape(ground);
+	this.currentGame.space.addShape(leftWall);
+	this.currentGame.space.addShape(rightWall);	
+};
+WorldInfo.Pit = function(width, height, game){
+	
+	this.type = Enum.World.Type.PIT;
+	
+	this.width = width;
+	this.height = height;
+	this.currentGame = game;
+	
+	this.goalStartPosition = (this.height + Constants.World.Pit.GOAL_OFFSET_Y)*(1 - (Constants.Game.MAX_PLAYERS - this.currentGame.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR);
+	this.spawnZones = [];
+};
+
+WorldInfo.Pit.prototype.load = function(){
+	
+	//Create floor and walls.
+	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+											new chipmunk.Vect(0, 0),
+											new chipmunk.Vect(this.width, 0),
+											10);
+	
+	var leftWall = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+											new chipmunk.Vect(-5, 0),
+											new chipmunk.Vect(-5, this.height*3),
+											10);
+											
+	var rightWall = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
+												new chipmunk.Vect(this.width + 5, 0),
+												new chipmunk.Vect(this.width + 5, this.height*3),
+												10);																
+	
+	//Set friction on ground.
+	ground.setFriction(Constants.Physic.FRICTION);
+	
+	this.currentGame.space.addShape(ground);
+	this.currentGame.space.addShape(leftWall);
+	this.currentGame.space.addShape(rightWall);	
 };//Server version of the player.
 var Player = function(id, username, x, y, color, game){
 
@@ -2061,7 +2195,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 
 	//Spawn a block if drop zone isn't obstructed.
 	if((this.obstruction == 0 || (checkDropzone != null && !checkDropzone)) 
-		&& this.y < this.currentGame.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
+		&& this.y < this.currentGame.world.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
 	{
 
 		var tmpX = (x != null ? x : this.getPosition().x);
@@ -2549,34 +2683,14 @@ var Game = function(settings){
 	this.winningPhaseTimer = Constants.WinningGoal.PHASE_TIME;
 	
 	this.spawnY = Constants.Player.INITIAL_SPAWN_Y;
-	
-	//World information.
-	this.width = settings.width;
-	this.height = settings.height;
-	this.worldType = settings.worldType;
-	
-	this.goalStartPosition = null;
-	
-	//Special case when winning goals are too far.
-	switch(this.worldType){
-		case Enum.World.Type.CHURCH:
-			this.goalStartPosition = this.height + Constants.World.Church.GOAL_OFFSET_Y;
-			break;
-		case Enum.World.Type.ALIEN:
-			this.goalStartPosition = this.height + Constants.World.Alien.GOAL_OFFSET_Y;
-			break;
-		default:
-			this.goalStartPosition = this.height;
-			break;
-	}
-	
-	//Lower winning goal if they are less player than max intended.
-	this.goalStartPosition *= 1 - (Constants.Game.MAX_PLAYERS - settings.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR;
+	this.maxPlayers = settings.maxPlayers;
 	
 	this.connectedPlayers = 0;
 	this.connectingPlayers = 0;
 	
-	this.maxPlayers = settings.maxPlayers;
+	//Create world.
+	this.world = WorldInfo.create(settings.worldType, settings.width, settings.height, this);
+	
 	this.state = false;
 	this.space = null;
 	
@@ -2606,35 +2720,15 @@ Game.prototype.createWorld = function(){
 		this.space.sleepTimeThreshold = Constants.Physic.SLEEP_TIME_THRESHOLD;
 		this.space.collisionBias = 0;
 		
-		//Create floor and walls.
-		var ground = new chipmunk.SegmentShape(this.space.staticBody,
-												new chipmunk.Vect(0, 0),
-												new chipmunk.Vect(this.width, 0),
-												10);
-		
-		var leftWall = new chipmunk.SegmentShape(this.space.staticBody,
-												new chipmunk.Vect(-5, 0),
-												new chipmunk.Vect(-5, this.height*3),
-												10);
-												
-		var rightWall = new chipmunk.SegmentShape(this.space.staticBody,
-													new chipmunk.Vect(this.width + 5, 0),
-													new chipmunk.Vect(this.width + 5, this.height*3),
-													10);																
-		
-		//Set friction on ground.
-		ground.setFriction(Constants.Physic.FRICTION);
-		
-		this.space.addShape(ground);
-		this.space.addShape(leftWall);
-		this.space.addShape(rightWall);			
+		//Load world space elements.
+		this.world.load();
 			
 		//Init players' bodies.
 		for(var i in this.players)
 			this.players[i].initBody();
-			
+		
 		//Add the goal. TODO: Random between multiples goals.
-		this.goal = new FloatingBall(this.width*0.5, this.goalStartPosition, this);
+		this.goal = new FloatingBall(this.world.width*0.5, this.world.goalStartPosition, this);
 	}
 };
 
@@ -2936,8 +3030,8 @@ Overlord.prototype.launch = function(blockType){
 		//Spawn block falls from the sky.
 		if(!this.hasActiveSpawnBlock)
 		{
-			var spawnY = this.currentGame.height + 100;
-			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(this.currentGame.width-Constants.Block.WIDTH));
+			var spawnY = this.currentGame.world.height + 100;
+			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(this.currentGame.world.width-Constants.Block.WIDTH));
 			
 			//Create a block and launch it.
 			this.currentGame.managers.BlockManager.launch(new Block(spawnX, 
@@ -3035,9 +3129,7 @@ var Server = new function(){
 				
 		//Lobby to game.
 		socket.on(Constants.Message.START_GAME, function(settings){
-		
-			console.log('Creating game... ' + Server.address);
-			
+					
 			var data = {
 				gameId: settings.id,
 				address: Server.address
@@ -3053,7 +3145,6 @@ var Server = new function(){
 	
 	//Disconnect player.
 	this.disconnectPlayer = function(socket){
-		console.log('Player left (' + socket.userdata.gameId + ') : ' + socket.userdata.username);
 		
 		var game = this.gameList[socket.userdata.gameId];
 		var index = null;
@@ -3103,12 +3194,9 @@ var Server = new function(){
 io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	socket.set("heartbeat interval", 20);
 	socket.set("heartbeat timeout", 60);
-
-	console.log('Connection to client established');
 		
 	//Socket disconnected.
 	socket.on(Constants.Message.DISCONNECT, function(){
-		console.log('Disconnect : ' + socket.userdata.gameId);
 		if(socket.userdata != null && socket.userdata.gameId != null && Server.gameList[socket.userdata.gameId] != null)
 			Server.disconnectPlayer(socket);
 	});
@@ -3116,7 +3204,6 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Send information about enemies to the connecting player.
 	socket.on(Constants.Message.JOIN_GAME, function(data){
 	
-		console.log('Connecting player... (' + data.gameId + ') : ' + data.username);
 		socket.join(data.gameId);
 		
 		socket.userdata = {
@@ -3141,7 +3228,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 		//Create connecting player.
 		var player = new Player(socket.id, 
 								data.username,
-								Server.gameList[data.gameId].width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
+								Server.gameList[data.gameId].world.width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
 								Server.gameList[data.gameId].spawnY, 
 								color,
 								Server.gameList[data.gameId]);
@@ -3173,40 +3260,31 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//When player ready, refresh information of his opponents about his existence.
 	socket.on(Constants.Message.PLAYER_READY, function(){
 		var gameId = socket.userdata.gameId;
-		
-		console.log('Player ready! (' + gameId + ')');
-		
+				
 		Server.gameList[gameId].connectedPlayers++;		
 		
 		var player = Server.gameList[gameId].players[socket.id].toClient();
 		player.username = Server.gameList[gameId].players[socket.id].username;
 				
 		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
-		{
-			console.log('Game launching...');
-			
+		{			
 			//Init physic world.
 			Server.gameList[gameId].createWorld();
 			Server.gameList[gameId].launch();
 		
 			var data = {
 				goal: Server.gameList[gameId].goal.toClient(),
-				width: Server.gameList[gameId].width,
-				height: Server.gameList[gameId].height,
-				worldType: Server.gameList[gameId].worldType
+				width: Server.gameList[gameId].world.width,
+				height: Server.gameList[gameId].world.height,
+				worldType: Server.gameList[gameId].world.type
 			};
 			
 			data.goal.type = Server.gameList[gameId].goal.type;
-			
-			console.log('Game launched!');
 			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
 			
 			//Launch warmup!
-			console.log('WARMUP');
 			(function(gameId){
-				console.log('...');
 				setTimeout(function(){ 
-					console.log('GO!');
 					io.sockets.in(gameId).emit(Constants.Message.GO); 
 				}, Constants.Warmup.PHASE_TIME*1000);
 			})(gameId);
