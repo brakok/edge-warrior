@@ -19,7 +19,7 @@ Overlord.prototype.assignKill = function(killed, keepList){
 		return;
 	}
 	
-	var killerIndex = (otherPlayers.length == 1 ? 0 : Math.round((Math.random()*(otherPlayers.length-1))-0.5));
+	var killerIndex = (otherPlayers.length == 1 ? 0 : Math.floor(Math.random()*otherPlayers.length));
 			
 	//Assign the kill.
 	otherPlayers[killerIndex].kill(killed, Enum.Block.Type.NEUTRAL, (keepList == null || !keepList));
@@ -32,8 +32,17 @@ Overlord.prototype.launch = function(blockType){
 		//Spawn block falls from the sky.
 		if(!this.hasActiveSpawnBlock)
 		{
-			var spawnY = this.currentGame.world.height + 100;
-			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(this.currentGame.world.width-Constants.Block.WIDTH));
+			var spawnY = this.currentGame.world.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS;
+			var spawnX = Constants.Block.WIDTH*0.75 + (Math.random()*(this.currentGame.world.width - Constants.Block.WIDTH*1.5));
+			
+			//Randomize into spawn zones if there's some.
+			if(this.currentGame.world.spawnZones.length > 0)
+			{
+				var spawnZone = this.currentGame.world.spawnZones[Math.floor(Math.random()*this.currentGame.world.spawnZones.length)];
+				
+				spawnY = spawnZone.height*0.5 + spawnZone.y - Constants.Block.HEIGHT*0.5;
+				spawnX = (spawnZone.x - spawnZone.width*0.75) + Constants.Block.WIDTH*0.5 + (Math.random()*(spawnZone.width - Constants.Block.WIDTH*1.5));
+			}
 			
 			//Create a block and launch it.
 			this.currentGame.managers.BlockManager.launch(new Block(spawnX, 
