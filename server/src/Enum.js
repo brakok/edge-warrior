@@ -72,6 +72,11 @@ var Enum = {
 		}
 	},
 	NPC: {
+		Action: {
+			Type: {
+				COMMON: 0
+			}
+		},
 		Type: {
 			PESKY_BOX: 0,
 			SAND_SPIRIT: 1

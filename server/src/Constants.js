@@ -233,7 +233,8 @@ var Constants = {
 		CHAT: 'chat',
 		NEW_TRIGGER: 'newTrigger',
 		DELETE_TRIGGER: 'deleteTrigger',
-		ACTION_TRIGGER: 'actionTrigger'
+		ACTION_TRIGGER: 'actionTrigger',
+		ACTION_NPC: 'actionNpc'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'

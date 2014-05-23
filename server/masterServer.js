@@ -73,6 +73,11 @@ var Enum = {
 		}
 	},
 	NPC: {
+		Action: {
+			Type: {
+				COMMON: 0
+			}
+		},
 		Type: {
 			PESKY_BOX: 0,
 			SAND_SPIRIT: 1
@@ -386,7 +391,8 @@ var Constants = {
 		CHAT: 'chat',
 		NEW_TRIGGER: 'newTrigger',
 		DELETE_TRIGGER: 'deleteTrigger',
-		ACTION_TRIGGER: 'actionTrigger'
+		ACTION_TRIGGER: 'actionTrigger',
+		ACTION_NPC: 'actionNpc'
 	},
 	ErrorMessage: {
 		INVALID_LOBBY: 'Lobby is invalid. Full or game already started.'
@@ -3867,6 +3873,8 @@ SandSpirit.prototype.onBegin = function(player){
 		player.changeMass(Constants.NPC.SandSpirit.MASS_FACTOR);
 		
 		this.hasReached = true;
+		
+		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_NPC, { id: this.id, type: Enum.NPC.Action.Type.COMMON });
 	}
 };
 
@@ -3902,7 +3910,7 @@ SandSpirit.prototype.update = function(){
 		//Find target.
 		for(var i in this.currentGame.players)
 		{
-			if((minY == null || minY > this.currentGame.players[i].y) && this.y <= this.currentGame.players[i].y)
+			if((minY == null || minY > this.currentGame.players[i].y) && this.y <= this.currentGame.players[i].y && !this.target.isRemoved)
 			{
 				this.target = this.currentGame.players[i];
 				minY = this.target.y;
