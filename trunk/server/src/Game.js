@@ -90,6 +90,8 @@ Game.prototype.update = function(){
 		if(this.space != null)
 			this.space.step(Constants.Physic.TIME_STEP);
 			
+		this.world.update();
+			
 		//Update players.
 		for(var i in this.players)
 			this.players[i].update();
@@ -119,9 +121,7 @@ Game.prototype.update = function(){
 					delete this.npcs[i];
 				}
 			}
-			
-		
-			
+
 		//Update blocks.
 		for(var i in this.blocks)
 		{

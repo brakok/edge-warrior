@@ -31,7 +31,8 @@ var Enum = {
 			PICK_AXE: 7,
 			DEFLECTOR: 8,
 			TIME_ZONE: 9,
-			SPAWN_ZONE: 10
+			SPAWN_ZONE: 10,
+			SAND_SPIRIT: 11
 		}
 	},
 	Block: {
@@ -72,7 +73,8 @@ var Enum = {
 	},
 	NPC: {
 		Type: {
-			PESKY_BOX: 0
+			PESKY_BOX: 0,
+			SAND_SPIRIT: 1
 		}
 	},
 	Trigger: {

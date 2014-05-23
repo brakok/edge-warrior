@@ -60,13 +60,19 @@ var Constants = {
 	},
 	World: {
 		Church: {
-			GOAL_OFFSET_Y: -400
+			GOAL_OFFSET_Y: -400,
+			EVENT_TIMER_MIN: 5,
+			EVENT_TIMER_RANGE: 5
 		},
 		Alien: {
-			GOAL_OFFSET_Y: -150
+			GOAL_OFFSET_Y: -150,
+			EVENT_TIMER_MIN: 5,
+			EVENT_TIMER_RANGE: 5
 		},
 		Pit: {
-			GOAL_OFFSET_Y: 0
+			GOAL_OFFSET_Y: 0,
+			EVENT_TIMER_MIN: 25,
+			EVENT_TIMER_RANGE: 10
 		}
 	},
 	NPC: {
@@ -85,6 +91,16 @@ var Constants = {
 			PUSH_X_STEP: 25,
 			PUSH_Y: 1250,
 			PUSH_Y_STEP: 25
+		},
+		SandSpirit: {
+			WIDTH: 30,
+			HEIGHT: 30,
+			SPEED_X: 0.9,
+			SPEED_Y: 1,
+			DURATION: 5,
+			FRICTION_FACTOR: 0.95,
+			SLOWDOWN_DISTANCE_FACTOR: 100,
+			MASS_FACTOR: 3
 		}
 	},
 	Trigger: {

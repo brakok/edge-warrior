@@ -9,6 +9,9 @@ WorldInfo.Pit = function(width, height, game){
 	
 	this.goalStartPosition = (this.height + Constants.World.Pit.GOAL_OFFSET_Y)*(1 - (Constants.Game.MAX_PLAYERS - this.currentGame.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR);
 	this.spawnZones = [];
+	
+	//Event infos.
+	this.eventTimer = Constants.World.Pit.EVENT_TIMER_MIN + Math.random()*Constants.World.Pit.EVENT_TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
 WorldInfo.Pit.prototype.load = function(){
@@ -35,4 +38,28 @@ WorldInfo.Pit.prototype.load = function(){
 	this.currentGame.space.addShape(ground);
 	this.currentGame.space.addShape(leftWall);
 	this.currentGame.space.addShape(rightWall);	
+};
+
+WorldInfo.Pit.prototype.update = function(){
+	
+	this.eventTimer -= this.currentGame.dt;
+	
+	if(this.eventTimer <= 0)
+	{
+		this.triggerEvent();
+		this.eventTimer = Constants.World.Pit.EVENT_TIMER_MIN + Math.random()*Constants.World.Pit.EVENT_TIMER_RANGE;
+	}
+};
+
+WorldInfo.Pit.prototype.triggerEvent = function(){
+	
+	//Release a sand spirit.
+	this.currentGame.managers.NpcManager.add(new SandSpirit(Math.random()*this.width,
+														   -Constants.NPC.SandSpirit.HEIGHT*2,
+														   Constants.NPC.SandSpirit.WIDTH,
+														   Constants.NPC.SandSpirit.HEIGHT,
+														   Constants.NPC.SandSpirit.SPEED_X,
+														   Constants.NPC.SandSpirit.SPEED_Y,
+														   Constants.NPC.SandSpirit.DURATION,																   
+														   this.currentGame));
 };
