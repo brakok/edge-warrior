@@ -85,6 +85,7 @@ var assets = [
 	{type:"sound", src: soundDir + 'Bounce.mp3'},
 	{type:"sound", src: soundDir + 'timeZone_spawn.mp3'},
 	{type:"sound", src: soundDir + 'timeZone_disappearing.mp3'},
+	{type:"sound", src: soundDir + 'Sand.mp3'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill.mp3'},
@@ -111,6 +112,9 @@ var assets = [
 	{type:"sound", src: soundVoiceDir + 'white_idle01.mp3'},
 	{type:"sound", src: soundVoiceDir + 'white_idle02.mp3'},
 	{type:"sound", src: soundVoiceDir + 'white_idle03.mp3'},
+	
+	{type:"sound", src: soundVoiceDir + 'SandSpirit.mp3'},
+	{type:"sound", src: soundVoiceDir + 'SandSpirit_disappearing.mp3'},
 	
 	{type:"sound", src: soundVoiceDir + 'floatingBall_summon.mp3'},
 	

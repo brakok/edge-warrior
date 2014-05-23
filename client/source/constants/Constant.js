@@ -338,6 +338,10 @@ var Constants = {
 				SPAWN: 'timeZone_spawn',
 				DISAPPEARING: 'timeZone_disappearing'
 			},
+			SandSpirit: {
+				SPAWN: 'SandSpirit',
+				DISAPPEARING: 'SandSpirit_disappearing'
+			},
 			Music: {
 				MENU: 'menu'
 			},
@@ -347,7 +351,8 @@ var Constants = {
 				BUY: 'buy',
 				DENY_ACTION: 'deny_action',
 				EXPLOSION01: 'explosion01',
-				EXPLOSION02: 'explosion02'
+				EXPLOSION02: 'explosion02',
+				SAND: 'Sand'
 			}
 		},
 		VoiceTimer: {

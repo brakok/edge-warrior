@@ -21,8 +21,8 @@ var SandSpirit = function(x, y, facing){
 	Smoothering.init(this, this.x, this.y);
 	
 	//Start effects.
-	AudioManager.playEffect(Constants.Sound.File.PeskyBox.SPAWN, false);
-	this.audioId = AudioManager.playEffect(Constants.Sound.File.Common.FLOATING, true);
+	AudioManager.playVoice(Constants.Sound.File.SandSpirit.SPAWN, false);
+	this.audioId = AudioManager.playEffect(Constants.Sound.File.Common.SAND, true);
 	
 	this.trail = ParticleManager.create(Enum.Particles.SAND, this.x, this.y, Client.game.layer);
 	this.trail.run();
@@ -55,10 +55,13 @@ SandSpirit.prototype.explode = function(){
 	Client.game.layer.removeChild(this.currentAnimation);
 	this.trail.stop();
 	
-	AudioManager.stopEffect(this.audioId);
-	this.audioId = null;
+	if(this.audioId != null)
+	{
+		AudioManager.stopEffect(this.audioId);
+		this.audioId = null;
+	}
 	
-	AudioManager.playEffect(Constants.Sound.File.PeskyBox.DISAPPEARING, false);
+	AudioManager.playVoice(Constants.Sound.File.SandSpirit.DISAPPEARING, false);
 	EffectManager.create(Enum.Effect.Type.SAND_SPIRIT_DISAPPEARING, this.x, this.y - 30);
 };
 
