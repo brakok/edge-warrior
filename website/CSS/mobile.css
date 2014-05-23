@@ -586,10 +586,7 @@
 	.wrapper{
 		margin:0 auto -230px;
 	}
-	.wrap{
-		max-width:initial;
-		width:100%;
-	}
+	
 	#content {
 		float: none;
 		width: 100%;
@@ -1069,8 +1066,9 @@
 		border-bottom: none;
 	}
 	footer p{
+		font-size:18px;
 		margin: 150px auto 0;
-		width: 300px;
+		width: 340px;
 	}
 	.slicknav_menu .slicknav_menutxt {
 		text-align:left;
