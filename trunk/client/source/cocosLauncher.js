@@ -91,6 +91,7 @@
 				  'source/playground/triggers/TimeZone.js',
 				  
 				  'source/playground/npc/PeskyBox.js',
+				  'source/playground/npc/SandSpirit.js',
 				  
 				  'source/text/AppearingLabel.js',
 				  'source/text/FallingLabel.js',
