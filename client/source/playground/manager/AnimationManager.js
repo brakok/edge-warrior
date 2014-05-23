@@ -41,6 +41,12 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsNpcDir + 'Eyes.plist', 
 														  assetsNpcDir + 'Eyes.png');
 														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsNpcDir + 'SandSpirit.plist', 
+														  assetsNpcDir + 'SandSpirit.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsNpcDir + 'SandSpirit_disappearing.plist', 
+														  assetsNpcDir + 'SandSpirit_disappearing.png');
+														  
 		//Triggers
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'Deflector_spawn.plist', 
 														  assetsTriggerDir + 'Deflector_spawn.png');

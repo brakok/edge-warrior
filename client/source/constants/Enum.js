@@ -27,7 +27,8 @@ var Enum = {
 		}
 	},
 	Particles: {
-		SMOKE: 0
+		SMOKE: 0,
+		SAND: 1
 	},
 	World: {
 		Type: {
@@ -97,6 +98,11 @@ var Enum = {
 		}
 	},
 	NPC: {
+		Action: {
+			Type: {
+				COMMON: 0
+			}
+		},
 		Type: {
 			PESKY_BOX: 0,
 			SAND_SPIRIT: 1
@@ -141,7 +147,8 @@ var Enum = {
 			DEFLECTOR_DISAPPEARING: 12,
 			BOUNCE: 13,
 			TIME_ZONE_DISAPPEARING: 14,
-			TELEPORT: 15
+			TELEPORT: 15,
+			SAND_SPIRIT_DISAPPEARING: 16
 		}
 	},
 	Element: {

@@ -524,6 +524,12 @@ var Client = new function(){
 				Client.game.triggers[data.id].execute(data.type);
 		});
 		
+		//Action for NPCs.
+		socket.on(Constants.Message.ACTION_NPC, function(data){
+			if(Client.game.npcs[data.id] != null)
+				Client.game.npcs[data.id].execute(data.type);
+		});
+		
 		//Add new element.
 		socket.on(Constants.Message.NEW_ELEMENT, function(data){
 			Client.game.addElement(data);

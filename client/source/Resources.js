@@ -27,6 +27,7 @@ var assets = [
 	
 	//Particles
 	{type:'image', src: assetsParticles + 'smoke.png'},
+	{type:'image', src: assetsParticles + 'sand.png'},
 	{type:'image', src: assetsParticles + 'WhiteDot.png'},
 	
 	//Menu
@@ -143,10 +144,15 @@ var assets = [
 	{type:'image', src: assetsNpcDir + 'PeskyBox.png'},
 	{type:'image', src: assetsNpcDir + 'PeskyBoxDisappearing.png'},
 	{type:'image', src: assetsNpcDir + 'Eyes.png'},
+	{type:'image', src: assetsNpcDir + 'SandSpirit.png'},
+	{type:'image', src: assetsNpcDir + 'SandSpirit_disappearing.png'},
+	{type:'image', src: assetsNpcDir + 'SandSpirit_action.png'},
 	
 	{type:"plist", src: assetsNpcDir + 'PeskyBox.plist'},
 	{type:"plist", src: assetsNpcDir + 'PeskyBoxDisappearing.plist'},
 	{type:"plist", src: assetsNpcDir + 'Eyes.plist'},
+	{type:"plist", src: assetsNpcDir + 'SandSpirit.plist'},
+	{type:"plist", src: assetsNpcDir + 'SandSpirit_disappearing.plist'},
 	
 	//Triggers
 	{type:'image', src: assetsTriggerDir + 'Deflector_spawn.png'},
