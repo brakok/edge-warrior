@@ -1077,6 +1077,9 @@
 		width: 90%;
 		margin-left: 9%;
 	}
+	#rules #hud h2{
+		padding-top:60px;
+	}
 }
 
 @media all and (max-width: 420px){
