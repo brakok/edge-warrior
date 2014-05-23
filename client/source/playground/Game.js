@@ -578,6 +578,9 @@ Game.prototype.addNpc = function(remoteNpc){
 		case Enum.NPC.Type.PESKY_BOX:
 			npc = new PeskyBox(remoteNpc.x, remoteNpc.y, remoteNpc.facing, this.getPlayer(remoteNpc.target));
 			break;
+		case Enum.NPC.Type.SAND_SPIRIT:
+			npc = new SandSpirit(remoteNpc.x, remoteNpc.y, remoteNpc.facing);
+			break;
 	}
 
 	this.npcs[remoteNpc.id] = npc;

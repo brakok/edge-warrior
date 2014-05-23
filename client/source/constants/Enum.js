@@ -98,7 +98,8 @@ var Enum = {
 	},
 	NPC: {
 		Type: {
-			PESKY_BOX: 0
+			PESKY_BOX: 0,
+			SAND_SPIRIT: 1
 		}
 	},
 	Trigger: {
