@@ -31,7 +31,8 @@ var Enum = {
 			PESKY_BOX: 6,
 			PICK_AXE: 7,
 			DEFLECTOR: 8,
-			TIME_ZONE: 9
+			TIME_ZONE: 9,
+			SPAWN_ZONE: 10
 		}
 	},
 	Block: {
@@ -103,7 +104,8 @@ var Enum = {
 			DEATH_ZONE: 6,
 			SKILL: 7,
 			NPC: 8,
-			TRIGGER: 9
+			TRIGGER: 9,
+			SPAWN: 10
 		}
 	},
 	Facing: {
@@ -489,6 +491,13 @@ Listeners.prototype.registerHandlers = function(){
 	//Add drop zone listener callback.
 	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.DROP_SENSOR, 
 											   Enum.Collision.Type.STATIC, 
+											   function(arbiter, space){ currentListeners.DropListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
+											   
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.DROP_SENSOR, 
+											   Enum.Collision.Type.SPAWN, 
 											   function(arbiter, space){ currentListeners.DropListener.begin(arbiter, space);}, 
 											   null, 
 											   null, 
@@ -1525,7 +1534,7 @@ SkillInfo.JawFall = {
 		if(block.skill.count > 0)
 			block.currentGame.managers.DeathZoneManager.launch(new Jaw(block, 
 																	   0, 
-																	   (Constants.Block.HEIGHT*0.5 + Constants.DeathZone.Jaw.HEIGHT*0.5)*-1, 
+																	   (Constants.Block.HEIGHT*0.33 + Constants.DeathZone.Jaw.HEIGHT*0.5)*-1, 
 																	   Constants.DeathZone.Jaw.INITIAL_COUNT + Constants.DeathZone.Jaw.STEP*block.skill.power, 
 																	   Constants.DeathZone.Jaw.WIDTH, 
 																	   Constants.DeathZone.Jaw.HEIGHT, 
@@ -1624,6 +1633,30 @@ SkillInfo.TimeZone = {
 		block.skill.count--;
 		block.mustTrigger = false;
 	}
+};
+var SpawnZone = function(x, y, width, height, game){
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+	this.currentGame = game;
+};
+
+SpawnZone.prototype.init = function(){
+
+	this.body = new chipmunk.Body(Infinity, Infinity);
+	this.body.setPos(new chipmunk.Vect(this.x, this.y));
+		
+	//Assign custom data to body.
+	this.body.userdata = {
+		type: Enum.UserData.Type.SPAWN_ZONE,
+		object: this
+	};
+	
+	//Create a shape associated with the body.
+	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));
+	this.shape.setCollisionType(Enum.Collision.Type.SPAWN);
+	this.shape.sensor = true;
 };
 var WorldInfo = {
 	create: function(type, width, height, game){
@@ -3019,7 +3052,7 @@ Overlord.prototype.assignKill = function(killed, keepList){
 		return;
 	}
 	
-	var killerIndex = (otherPlayers.length == 1 ? 0 : Math.round((Math.random()*(otherPlayers.length-1))-0.5));
+	var killerIndex = (otherPlayers.length == 1 ? 0 : Math.floor(Math.random()*otherPlayers.length));
 			
 	//Assign the kill.
 	otherPlayers[killerIndex].kill(killed, Enum.Block.Type.NEUTRAL, (keepList == null || !keepList));
@@ -3032,8 +3065,17 @@ Overlord.prototype.launch = function(blockType){
 		//Spawn block falls from the sky.
 		if(!this.hasActiveSpawnBlock)
 		{
-			var spawnY = this.currentGame.world.height + 100;
-			var spawnX = Constants.Block.WIDTH*0.5 + (Math.random()*(this.currentGame.world.width-Constants.Block.WIDTH));
+			var spawnY = this.currentGame.world.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS;
+			var spawnX = Constants.Block.WIDTH*0.75 + (Math.random()*(this.currentGame.world.width - Constants.Block.WIDTH*1.5));
+			
+			//Randomize into spawn zones if there's some.
+			if(this.currentGame.world.spawnZones.length > 0)
+			{
+				var spawnZone = this.currentGame.world.spawnZones[Math.floor(Math.random()*this.currentGame.world.spawnZones.length)];
+				
+				spawnY = spawnZone.height*0.5 + spawnZone.y - Constants.Block.HEIGHT*0.5;
+				spawnX = (spawnZone.x - spawnZone.width*0.75) + Constants.Block.WIDTH*0.5 + (Math.random()*(spawnZone.width - Constants.Block.WIDTH*1.5));
+			}
 			
 			//Create a block and launch it.
 			this.currentGame.managers.BlockManager.launch(new Block(spawnX, 

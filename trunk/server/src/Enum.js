@@ -30,7 +30,8 @@ var Enum = {
 			PESKY_BOX: 6,
 			PICK_AXE: 7,
 			DEFLECTOR: 8,
-			TIME_ZONE: 9
+			TIME_ZONE: 9,
+			SPAWN_ZONE: 10
 		}
 	},
 	Block: {
@@ -102,7 +103,8 @@ var Enum = {
 			DEATH_ZONE: 6,
 			SKILL: 7,
 			NPC: 8,
-			TRIGGER: 9
+			TRIGGER: 9,
+			SPAWN: 10
 		}
 	},
 	Facing: {

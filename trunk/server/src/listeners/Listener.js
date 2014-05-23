@@ -112,4 +112,11 @@ Listeners.prototype.registerHandlers = function(){
 											   null, 
 											   null, 
 											   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
+											   
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.DROP_SENSOR, 
+											   Enum.Collision.Type.SPAWN, 
+											   function(arbiter, space){ currentListeners.DropListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
 };

@@ -11,7 +11,7 @@ SkillInfo.JawFall = {
 		if(block.skill.count > 0)
 			block.currentGame.managers.DeathZoneManager.launch(new Jaw(block, 
 																	   0, 
-																	   (Constants.Block.HEIGHT*0.5 + Constants.DeathZone.Jaw.HEIGHT*0.5)*-1, 
+																	   (Constants.Block.HEIGHT*0.33 + Constants.DeathZone.Jaw.HEIGHT*0.5)*-1, 
 																	   Constants.DeathZone.Jaw.INITIAL_COUNT + Constants.DeathZone.Jaw.STEP*block.skill.power, 
 																	   Constants.DeathZone.Jaw.WIDTH, 
 																	   Constants.DeathZone.Jaw.HEIGHT, 
