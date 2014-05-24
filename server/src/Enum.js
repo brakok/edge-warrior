@@ -32,7 +32,8 @@ var Enum = {
 			DEFLECTOR: 8,
 			TIME_ZONE: 9,
 			SPAWN_ZONE: 10,
-			SAND_SPIRIT: 11
+			SAND_SPIRIT: 11,
+			GRAVITY_BEAM: 12
 		}
 	},
 	Block: {
@@ -90,7 +91,8 @@ var Enum = {
 		},
 		Type: {
 			DEFLECTOR: 0,
-			TIME_ZONE: 1
+			TIME_ZONE: 1,
+			GRAVITY_BEAM: 2
 		}
 	},
 	Element: {

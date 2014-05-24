@@ -61,8 +61,8 @@ var Constants = {
 	World: {
 		Church: {
 			GOAL_OFFSET_Y: -400,
-			EVENT_TIMER_MIN: 5,
-			EVENT_TIMER_RANGE: 5
+			EVENT_TIMER_MIN: 15,
+			EVENT_TIMER_RANGE: 3
 		},
 		Alien: {
 			GOAL_OFFSET_Y: -150,
@@ -121,6 +121,15 @@ var Constants = {
 			DURATION_STEP: 1,
 			WIDTH: 250,
 			HEIGHT: 250
+		},
+		GravityBeam: {
+			WIDTH: 150,
+			HEIGHT: 1400,
+			DURATION: 8,
+			MAX_LIFT_HEIGHT: 150,
+			TIME_ALLOWED: 2.5,
+			IMPULSE: 150,
+			COOLDOWN: 2.5
 		}
 	},
 	WinningGoal: {
