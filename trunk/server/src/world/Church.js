@@ -54,7 +54,7 @@ WorldInfo.Church.prototype.update = function(){
 WorldInfo.Church.prototype.triggerEvent = function(){
 	
 	//Create a gravity beam.
-	this.currentGame.managers.TriggerManager.add(new GravityBeam(Constants.Trigger.GravityBeam.WIDTH*0.5 + (Math.random()*this.currentGame.world.width - Constants.Trigger.GravityBeam.WIDTH), 
+	this.currentGame.managers.TriggerManager.add(new GravityBeam(Constants.Trigger.GravityBeam.WIDTH*0.5 + Math.random()*(this.currentGame.world.width - Constants.Trigger.GravityBeam.WIDTH), 
 															     Constants.Trigger.GravityBeam.HEIGHT*0.5, 
 																 Constants.Trigger.GravityBeam.WIDTH,
 																 Constants.Trigger.GravityBeam.HEIGHT,
