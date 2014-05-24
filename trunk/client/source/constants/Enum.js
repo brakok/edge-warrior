@@ -28,7 +28,8 @@ var Enum = {
 	},
 	Particles: {
 		SMOKE: 0,
-		SAND: 1
+		SAND: 1,
+		LIL_BEAM: 2
 	},
 	World: {
 		Type: {

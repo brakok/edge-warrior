@@ -282,6 +282,9 @@ var Constants = {
 		Z_ORDER: 14,
 		TimeZone: {
 			EXEC_TIMER: 0.25
+		},
+		GravityBeam: {
+			SCALE_TIMER: 0.25
 		}
 	},
 	Sound: {
@@ -341,6 +344,9 @@ var Constants = {
 			SandSpirit: {
 				SPAWN: 'SandSpirit',
 				DISAPPEARING: 'SandSpirit_disappearing'
+			},
+			GravityBeam: {
+				SPAWN: 'GravityBeam'
 			},
 			Music: {
 				MENU: 'menu'
