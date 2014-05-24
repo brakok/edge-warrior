@@ -598,6 +598,9 @@ Game.prototype.addTrigger = function(remoteTrigger){
 		case Enum.Trigger.Type.TIME_ZONE:
 			trigger = new TimeZone(remoteTrigger.x, remoteTrigger.y);
 			break;
+		case Enum.Trigger.Type.GRAVITY_BEAM:
+			trigger = new GravityBeam(remoteTrigger.x, remoteTrigger.y);
+			break;
 	}
 
 	this.triggers[remoteTrigger.id] = trigger;

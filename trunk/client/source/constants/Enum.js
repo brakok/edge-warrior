@@ -116,7 +116,8 @@ var Enum = {
 		},
 		Type: {
 			DEFLECTOR: 0,
-			TIME_ZONE: 1
+			TIME_ZONE: 1,
+			GRAVITY_BEAM: 2
 		}
 	},
 	WinningGoal: {
