@@ -128,6 +128,7 @@ var Constants = {
 			DURATION: 8,
 			MAX_LIFT_HEIGHT: 150,
 			TIME_ALLOWED: 2.5,
+			MAX_VEL_Y: 75,
 			IMPULSE: 150,
 			COOLDOWN: 2.5
 		}
