@@ -28,6 +28,7 @@ var assets = [
 	//Particles
 	{type:'image', src: assetsParticles + 'smoke.png'},
 	{type:'image', src: assetsParticles + 'sand.png'},
+	{type:'image', src: assetsParticles + 'lilBeam.png'},
 	{type:'image', src: assetsParticles + 'WhiteDot.png'},
 	
 	//Menu
@@ -86,6 +87,7 @@ var assets = [
 	{type:"sound", src: soundDir + 'timeZone_spawn.mp3'},
 	{type:"sound", src: soundDir + 'timeZone_disappearing.mp3'},
 	{type:"sound", src: soundDir + 'Sand.mp3'},
+	{type:"sound", src: soundDir + 'GravityBeam.mp3'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill.mp3'},
@@ -164,6 +166,7 @@ var assets = [
 	{type:'image', src: assetsTriggerDir + 'Deflector_disappearing.png'},
 	{type:'image', src: assetsTriggerDir + 'TimeZone_spawn.png'},
 	{type:'image', src: assetsTriggerDir + 'TimeZone_disappearing.png'},
+	{type:'image', src: assetsTriggerDir + 'GravityBeam.png'},
 	
 	{type:"plist", src: assetsTriggerDir + 'Deflector_spawn.plist'},
 	{type:"plist", src: assetsTriggerDir + 'Deflector_idle.plist'},

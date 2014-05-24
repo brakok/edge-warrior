@@ -12,6 +12,9 @@ var ParticleManager = {
 			case Enum.Particles.SAND:
 				emitter = new ParticleEmitter(35, x, y + 20, 40, 30, 0, -5, 1, 1, 1.5, 0.75, 70, 10, 180, 20, 0, 1, Constants.NPC.Z_ORDER + 1, assetsParticles + 'sand.png', layer);
 				break;
+			case Enum.Particles.LIL_BEAM:
+				emitter = new ParticleEmitter(25, x, y, 35, 690, 0, 0, 0, 0, 0.35, 0.15, 6, 3, 6, 3, 0, 0, Constants.Trigger.Z_ORDER + 1, assetsParticles + 'lilBeam.png', layer);
+				break;
 		}
 		
 		if(emitter)
