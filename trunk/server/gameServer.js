@@ -33,7 +33,8 @@ var Enum = {
 			DEFLECTOR: 8,
 			TIME_ZONE: 9,
 			SPAWN_ZONE: 10,
-			SAND_SPIRIT: 11
+			SAND_SPIRIT: 11,
+			GRAVITY_BEAM: 12
 		}
 	},
 	Block: {
@@ -91,7 +92,8 @@ var Enum = {
 		},
 		Type: {
 			DEFLECTOR: 0,
-			TIME_ZONE: 1
+			TIME_ZONE: 1,
+			GRAVITY_BEAM: 2
 		}
 	},
 	Element: {
@@ -219,8 +221,8 @@ var Constants = {
 	World: {
 		Church: {
 			GOAL_OFFSET_Y: -400,
-			EVENT_TIMER_MIN: 5,
-			EVENT_TIMER_RANGE: 5
+			EVENT_TIMER_MIN: 15,
+			EVENT_TIMER_RANGE: 3
 		},
 		Alien: {
 			GOAL_OFFSET_Y: -150,
@@ -279,6 +281,15 @@ var Constants = {
 			DURATION_STEP: 1,
 			WIDTH: 250,
 			HEIGHT: 250
+		},
+		GravityBeam: {
+			WIDTH: 150,
+			HEIGHT: 1400,
+			DURATION: 8,
+			MAX_LIFT_HEIGHT: 150,
+			TIME_ALLOWED: 2.5,
+			IMPULSE: 150,
+			COOLDOWN: 2.5
 		}
 	},
 	WinningGoal: {
@@ -1753,6 +1764,8 @@ WorldInfo.Church = function(width, height, game){
 	this.goalStartPosition = (this.height + Constants.World.Church.GOAL_OFFSET_Y)*(1 - (Constants.Game.MAX_PLAYERS - this.currentGame.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR);
 	this.spawnZones = [];
 
+	//Event infos.
+	this.eventTimer = Constants.World.Church.EVENT_TIMER_MIN + Math.random()*Constants.World.Church.EVENT_TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
 WorldInfo.Church.prototype.load = function(){
@@ -1783,6 +1796,28 @@ WorldInfo.Church.prototype.load = function(){
 
 WorldInfo.Church.prototype.update = function(){
 
+	this.eventTimer -= this.currentGame.dt;
+	
+	if(this.eventTimer <= 0)
+	{
+		this.triggerEvent();
+		this.eventTimer = Constants.World.Church.EVENT_TIMER_MIN + Math.random()*Constants.World.Church.EVENT_TIMER_RANGE;
+	}
+};
+
+WorldInfo.Church.prototype.triggerEvent = function(){
+	
+	//Create a gravity beam.
+	this.currentGame.managers.TriggerManager.add(new GravityBeam(Constants.Trigger.GravityBeam.WIDTH*0.5 + (Math.random()*this.currentGame.world.width - Constants.Trigger.GravityBeam.WIDTH), 
+															     Constants.Trigger.GravityBeam.HEIGHT*0.5, 
+																 Constants.Trigger.GravityBeam.WIDTH,
+																 Constants.Trigger.GravityBeam.HEIGHT,
+																 Constants.Trigger.GravityBeam.DURATION,
+																 Constants.Trigger.GravityBeam.MAX_LIFT_HEIGHT,
+																 Constants.Trigger.GravityBeam.TIME_ALLOWED,
+																 Constants.Trigger.GravityBeam.IMPULSE,
+																 this.currentGame));
+	
 };
 WorldInfo.Pit = function(width, height, game){
 	
@@ -3912,4 +3947,4 @@ SandSpirit.prototype.explode = function(){
 	//Send info to client.
 	this.stillExists = false;
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_NPC, data);
-};var Deflector = function(x, y, duration, push, width, height, game){		this.id = -1;		this.type = Enum.Trigger.Type.DEFLECTOR;	this.x = x;	this.y = y;		this.players = {};		this.duration = duration;	this.push = push;		this.width = width;	this.height = height;		this.presenceTimer = Constants.Trigger.Deflector.PRESENCE_TIMER;		this.currentGame = game;	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.DEFLECTOR,		object: this	};		this.shape = null;};Deflector.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.Deflector.prototype.onBegin = function(player, block){	if(player == null)		return;	this.players[player.id] = player;	io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });};//Called when contact ends.Deflector.prototype.onEnd = function(player, block){	if(player == null)		return;	delete this.players[player.id];};Deflector.prototype.update = function(){		//Add presence after timer.	if(this.shape == null)	{		this.presenceTimer -= this.currentGame.dt;				if(this.presenceTimer <= 0)		{			//Create a shape associated with the body.			this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));			this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);			this.shape.sensor = true;		}	}		//Bump players touching Deflector.	for(var i in this.players)	{		var player = this.players[i];		var distX = player.x - this.x;		var distY = player.y - this.y;				var hypo = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));				var impulseX = 0;		var impulseY = distY/hypo*this.push;				if(impulseY > Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*this.push)		{			impulseY = Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*this.push;			impulseX = (distX < 0 ? -1 : 1)*(Math.sqrt(Math.pow(hypo,2)-Math.pow(Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*hypo,2))/hypo)*this.push;		}		else			impulseX = distX/hypo*this.push;				//Push and stun player.		player.body.setVel(new chipmunk.Vect(impulseX,impulseY));		player.stunTimer = Constants.Trigger.Deflector.STUN_TIME;	}		this.duration -= this.currentGame.dt;		if(this.duration <= 0)		this.stillExists = false;};Deflector.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};var TimeZone = function(x, y, blockId, ownerId, duration, width, height, game){		this.id = -1;		this.ownerId = ownerId;	this.blockId = blockId;		this.type = Enum.Trigger.Type.TIME_ZONE;	this.x = x;	this.y = y;		this.players = {};	this.blocks = {};		this.duration = duration;		this.width = width;	this.height = height;		this.currentGame = game;	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.TIME_ZONE,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};TimeZone.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.TimeZone.prototype.onBegin = function(player, block){	if(player != null && player.id != this.ownerId && this.players[player.id] == null)	{		this.players[player.id] = {			target: player,			x: player.x,			y: player.y		};		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}	if(block != null && block.id != this.blockId && block.type != Enum.Block.Type.SPAWN && !block.landed && this.blocks[block.id] == null)	{		this.blocks[block.id] = block;		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}};//Called when contact ends.TimeZone.prototype.onEnd = function(player, block){};TimeZone.prototype.update = function(){	this.duration -= this.currentGame.dt;		//Backtrack.	if(this.duration <= 0 && this.stillExists)	{		//Destroy blocks.		for(var i in this.blocks)			if(this.blocks[i] != null && !this.blocks[i].toBeDestroy && this.blocks[i].stillExists)				this.blocks[i].markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);				//Teleport players.		for(var i in this.players)			if(this.players[i].target.isAlive && !this.players[i].target.isRemoved)			{				//Send teleport effect to players.				io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, 														{ 															x: this.players[i].target.x, 															y: this.players[i].target.y, 															type: Enum.Element.Type.TELEPORT														});																		this.players[i].target.body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));			}				this.stillExists = false;	}};TimeZone.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};
+};var Deflector = function(x, y, duration, push, width, height, game){		this.id = -1;		this.type = Enum.Trigger.Type.DEFLECTOR;	this.x = x;	this.y = y;		this.players = {};		this.duration = duration;	this.push = push;		this.width = width;	this.height = height;		this.presenceTimer = Constants.Trigger.Deflector.PRESENCE_TIMER;		this.currentGame = game;	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.DEFLECTOR,		object: this	};		this.shape = null;};Deflector.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.Deflector.prototype.onBegin = function(player, block){	if(player == null)		return;	this.players[player.id] = player;	io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });};//Called when contact ends.Deflector.prototype.onEnd = function(player, block){	if(player == null)		return;	delete this.players[player.id];};Deflector.prototype.update = function(){		//Add presence after timer.	if(this.shape == null)	{		this.presenceTimer -= this.currentGame.dt;				if(this.presenceTimer <= 0)		{			//Create a shape associated with the body.			this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));			this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);			this.shape.sensor = true;		}	}		//Bump players touching Deflector.	for(var i in this.players)	{		var player = this.players[i];		var distX = player.x - this.x;		var distY = player.y - this.y;				var hypo = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));				var impulseX = 0;		var impulseY = distY/hypo*this.push;				if(impulseY > Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*this.push)		{			impulseY = Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*this.push;			impulseX = (distX < 0 ? -1 : 1)*(Math.sqrt(Math.pow(hypo,2)-Math.pow(Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*hypo,2))/hypo)*this.push;		}		else			impulseX = distX/hypo*this.push;				//Push and stun player.		player.body.setVel(new chipmunk.Vect(impulseX,impulseY));		player.stunTimer = Constants.Trigger.Deflector.STUN_TIME;	}		this.duration -= this.currentGame.dt;		if(this.duration <= 0)		this.stillExists = false;};Deflector.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};var TimeZone = function(x, y, blockId, ownerId, duration, width, height, game){		this.id = -1;		this.ownerId = ownerId;	this.blockId = blockId;		this.type = Enum.Trigger.Type.TIME_ZONE;	this.x = x;	this.y = y;		this.players = {};	this.blocks = {};		this.duration = duration;		this.width = width;	this.height = height;		this.currentGame = game;	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.TIME_ZONE,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};TimeZone.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.TimeZone.prototype.onBegin = function(player, block){	if(player != null && player.id != this.ownerId && this.players[player.id] == null)	{		this.players[player.id] = {			target: player,			x: player.x,			y: player.y		};		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}	if(block != null && block.id != this.blockId && block.type != Enum.Block.Type.SPAWN && !block.landed && this.blocks[block.id] == null)	{		this.blocks[block.id] = block;		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}};//Called when contact ends.TimeZone.prototype.onEnd = function(player, block){};TimeZone.prototype.update = function(){	this.duration -= this.currentGame.dt;		//Backtrack.	if(this.duration <= 0 && this.stillExists)	{		//Destroy blocks.		for(var i in this.blocks)			if(this.blocks[i] != null && !this.blocks[i].toBeDestroy && this.blocks[i].stillExists)				this.blocks[i].markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);				//Teleport players.		for(var i in this.players)			if(this.players[i].target.isAlive && !this.players[i].target.isRemoved)			{				//Send teleport effect to players.				io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, 														{ 															x: this.players[i].target.x, 															y: this.players[i].target.y, 															type: Enum.Element.Type.TELEPORT														});																		this.players[i].target.body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));			}				this.stillExists = false;	}};TimeZone.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};var GravityBeam = function(x, y, width, height, duration, maxLiftHeight, timeAllowed, impulse, game){		this.id = -1;		this.type = Enum.Trigger.Type.GRAVITY_BEAM;	this.x = x;	this.y = y;	this.width = width;	this.height = height;		this.duration = duration;	this.maxLiftHeight = maxLiftHeight;	this.timeAllowed = timeAllowed;		this.impulse = impulse;	this.currentGame = game;		this.players = {};	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.GRAVITY_BEAM,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};GravityBeam.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.GravityBeam.prototype.onBegin = function(player, block){	//Prevent player to abuse the gravity beam.	if(player != null && this.players[player.id] != null)	{		var currentTime = new Date();		var dt = (currentTime - this.players[player.id].cooldown)*0.001;				console.log(dt);		if(dt < Constants.Trigger.GravityBeam.COOLDOWN)		{			this.players[player.id].lift = true;			return;		}					delete this.players[player.id];	}	//Keep track.	if(player != null && this.players[player.id] == null)	{		this.players[player.id] = {			target: player,			x: player.x,			y: player.y,			timer: this.timeAllowed,			cooldown: new Date(),			lift: true		};				//io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}};//Called when contact ends.GravityBeam.prototype.onEnd = function(player, block){		if(player != null && this.players[player.id] != null)		this.players[player.id].lift = false;};GravityBeam.prototype.update = function(){	for(var i in this.players)		if(this.players[i] && this.players[i].lift)		{			//Continue if player is removed.			if(this.players[i].target.isRemoved)			{				delete this.players[i];				continue;			}					this.players[i].timer -= this.currentGame.dt;			var dt = this.players[i].target.y - this.players[i].y;									if(this.players[i].timer <= 0 || dt >= this.maxLiftHeight)			{				this.currentGame.overlord.assignKill(this.players[i].target);				delete this.players[i];			}			else				this.players[i].target.body.applyImpulse(new chipmunk.Vect(0, this.impulse), new chipmunk.Vect(0,0));		}	this.duration -= this.currentGame.dt;		if(this.duration <= 0)		this.stillExists = false;};GravityBeam.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};
