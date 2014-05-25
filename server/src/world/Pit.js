@@ -11,7 +11,7 @@ WorldInfo.Pit = function(width, height, game){
 	this.spawnZones = [];
 	
 	//Event infos.
-	this.eventTimer = Constants.World.Pit.EVENT_TIMER_MIN + Math.random()*Constants.World.Pit.EVENT_TIMER_RANGE + Constants.Warmup.PHASE_TIME;
+	this.eventTimer = Constants.World.Pit.Event.TIMER_MIN + Math.random()*Constants.World.Pit.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
 WorldInfo.Pit.prototype.load = function(){
@@ -47,7 +47,7 @@ WorldInfo.Pit.prototype.update = function(){
 	if(this.eventTimer <= 0)
 	{
 		this.triggerEvent();
-		this.eventTimer = Constants.World.Pit.EVENT_TIMER_MIN + Math.random()*Constants.World.Pit.EVENT_TIMER_RANGE;
+		this.eventTimer = Constants.World.Pit.Event.TIMER_MIN + Math.random()*Constants.World.Pit.Event.TIMER_RANGE;
 	}
 };
 

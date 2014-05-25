@@ -99,7 +99,9 @@ var Enum = {
 	Element: {
 		Type: {
 			ECLIPSE: 0,
-			TELEPORT: 1
+			TELEPORT: 1,
+			STUCK: 2,
+			ALIEN_EYES: 3
 		}
 	},
 	Collision: {
@@ -221,18 +223,27 @@ var Constants = {
 	World: {
 		Church: {
 			GOAL_OFFSET_Y: -400,
-			EVENT_TIMER_MIN: 15,
-			EVENT_TIMER_RANGE: 3
+			Event: {
+				TIMER_MIN: 15,
+				TIMER_RANGE: 3
+			}
 		},
 		Alien: {
 			GOAL_OFFSET_Y: -150,
-			EVENT_TIMER_MIN: 5,
-			EVENT_TIMER_RANGE: 5
+			Event: {
+				TIMER_MIN: 5,
+				TIMER_RANGE: 1,
+				EYES_TIMER: 7,
+				STUCK_DURATION: 4,
+				ALLOWED_SPEED: 5
+			}
 		},
 		Pit: {
 			GOAL_OFFSET_Y: 0,
-			EVENT_TIMER_MIN: 25,
-			EVENT_TIMER_RANGE: 10
+			Event: {
+				TIMER_MIN: 25,
+				TIMER_RANGE: 10
+			}
 		}
 	},
 	NPC: {
@@ -1722,6 +1733,11 @@ WorldInfo.Alien = function(width, height, game){
 	
 	this.goalStartPosition = (this.height + Constants.World.Alien.GOAL_OFFSET_Y)*(1 - (Constants.Game.MAX_PLAYERS - this.currentGame.maxPlayers)*Constants.WinningGoal.LOWER_GOAL_FACTOR);
 	this.spawnZones = [];
+	
+		//Event infos.
+	this.eventTimer = Constants.World.Alien.Event.TIMER_MIN + Math.random()*Constants.World.Alien.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
+	this.eyesTimer = Constants.World.Alien.Event.EYES_TIMER;
+	this.eventRunning = false;
 };
 
 WorldInfo.Alien.prototype.load = function(){
@@ -1753,6 +1769,60 @@ WorldInfo.Alien.prototype.load = function(){
 
 WorldInfo.Alien.prototype.update = function(){
 
+	this.eventTimer -= this.currentGame.dt;
+	
+	if(this.eventRunning)
+		this.eyesTimer -= this.currentGame.dt;
+	
+	//Trigger gazing eyes event.
+	if(this.eventTimer <= 0)
+	{
+		this.triggerEvent();
+		
+		//Send eyes instruction.
+		var data = {
+			x: this.width*0.5,
+			y: this.width*0.5,
+			type: Enum.Element.Type.ALIEN_EYES,
+			duration: Constants.World.Alien.Event.EYES_TIMER
+		};
+		
+		io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, data);
+		
+		this.eventTimer = Constants.World.Alien.Event.TIMER_MIN + Math.random()*Constants.World.Alien.Event.TIMER_RANGE + Constants.World.Alien.Event.EYES_TIMER;
+		this.eyesTimer = Constants.World.Alien.Event.EYES_TIMER;
+	}
+	
+	//Trigger stun from eyes.
+	if(this.eventRunning && this.eyesTimer <= 0)
+	{
+		for(var i in this.currentGame.players)
+		{
+			var vel = this.currentGame.players[i].body.getVel();
+			var dt = Math.sqrt(Math.pow(vel.x, 2) + Math.pow(vel.y, 2));
+			
+			if(dt > Constants.World.Alien.Event.ALLOWED_SPEED)
+			{
+				this.currentGame.players[i].stuckTimer = Constants.World.Alien.Event.STUCK_DURATION;
+			
+				//Send stuck effect.
+				var data = {
+					x: this.currentGame.players[i].x,
+					y: this.currentGame.players[i].y,
+					type: Enum.Element.Type.STUCK,
+					duration: Constants.World.Alien.Event.STUCK_DURATION
+				};
+				
+				io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, data);
+			}
+		}
+		
+		this.eventRunning = false;
+	}
+};
+
+WorldInfo.Alien.prototype.triggerEvent = function(){
+	this.eventRunning = true;
 };
 WorldInfo.Church = function(width, height, game){
 	
@@ -1766,7 +1836,7 @@ WorldInfo.Church = function(width, height, game){
 	this.spawnZones = [];
 
 	//Event infos.
-	this.eventTimer = Constants.World.Church.EVENT_TIMER_MIN + Math.random()*Constants.World.Church.EVENT_TIMER_RANGE + Constants.Warmup.PHASE_TIME;
+	this.eventTimer = Constants.World.Church.Event.TIMER_MIN + Math.random()*Constants.World.Church.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
 WorldInfo.Church.prototype.load = function(){
@@ -1802,7 +1872,7 @@ WorldInfo.Church.prototype.update = function(){
 	if(this.eventTimer <= 0)
 	{
 		this.triggerEvent();
-		this.eventTimer = Constants.World.Church.EVENT_TIMER_MIN + Math.random()*Constants.World.Church.EVENT_TIMER_RANGE;
+		this.eventTimer = Constants.World.Church.Event.TIMER_MIN + Math.random()*Constants.World.Church.Event.TIMER_RANGE;
 	}
 };
 
@@ -1832,7 +1902,7 @@ WorldInfo.Pit = function(width, height, game){
 	this.spawnZones = [];
 	
 	//Event infos.
-	this.eventTimer = Constants.World.Pit.EVENT_TIMER_MIN + Math.random()*Constants.World.Pit.EVENT_TIMER_RANGE + Constants.Warmup.PHASE_TIME;
+	this.eventTimer = Constants.World.Pit.Event.TIMER_MIN + Math.random()*Constants.World.Pit.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
 WorldInfo.Pit.prototype.load = function(){
@@ -1868,7 +1938,7 @@ WorldInfo.Pit.prototype.update = function(){
 	if(this.eventTimer <= 0)
 	{
 		this.triggerEvent();
-		this.eventTimer = Constants.World.Pit.EVENT_TIMER_MIN + Math.random()*Constants.World.Pit.EVENT_TIMER_RANGE;
+		this.eventTimer = Constants.World.Pit.Event.TIMER_MIN + Math.random()*Constants.World.Pit.Event.TIMER_RANGE;
 	}
 };
 
@@ -1900,6 +1970,7 @@ var Player = function(id, username, x, y, color, game){
 	this.pickAxePressed = false;
 		
 	this.stunTimer = 0;
+	this.stuckTimer = 0;
 		
 	this.isAlive = true;
 	this.toBeDestroy = false;
@@ -2144,7 +2215,7 @@ Player.prototype.update = function(){
 		}
 		
 		//If not stunned.
-		if(this.stunTimer <= 0)
+		if(this.stunTimer <= 0 && this.stuckTimer <= 0)
 		{
 			var impulse = 0;
 		
@@ -2190,36 +2261,47 @@ Player.prototype.update = function(){
 		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
 			this.doubleJumpEnabled = true;
 				
-		if(nextX != 0)
+		if(this.stuckTimer <= 0)
 		{
-			var lastFacing = this.facing;
-			
-			//Turn only if one of movement keys is pressed.
-			if((this.keys.right && !this.keys.left) || (!this.keys.right && this.keys.left))
+			if(nextX != 0)
 			{
-				this.facing = (this.keys.right ? Enum.Facing.RIGHT : Enum.Facing.LEFT);
+				var lastFacing = this.facing;
 				
-				if(lastFacing != this.facing)
-					this.turn();
-			}
+				//Turn only if one of movement keys is pressed.
+				if((this.keys.right && !this.keys.left) || (!this.keys.right && this.keys.left))
+				{
+					this.facing = (this.keys.right ? Enum.Facing.RIGHT : Enum.Facing.LEFT);
+					
+					if(lastFacing != this.facing)
+						this.turn();
+				}
 
-			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
-			
-			//Switch current action to running if player is on the ground.
-			if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.RUNNING && this.currentAction != Enum.Action.Type.JUMPING)
-				this.execute(Enum.Action.Type.RUNNING);	
+				this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
+				
+				//Switch current action to running if player is on the ground.
+				if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.RUNNING && this.currentAction != Enum.Action.Type.JUMPING)
+					this.execute(Enum.Action.Type.RUNNING);	
+			}
+			else
+			{
+				//Artificial friction for players when on ground and pressing no key.
+				if(this.groundContact > 0)
+				{
+					this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
+					
+					//Stand if no movement keys are pressed.
+					if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING && this.keys.right == this.keys.left)
+						this.execute(Enum.Action.Type.STANDING);					
+				}
+			}
 		}
 		else
 		{
-			//Artificial friction for players when on ground and pressing no key.
-			if(this.groundContact > 0)
-			{
-				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
-				
-				//Stand if no movement keys are pressed.
-				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING && this.keys.right == this.keys.left)
-					this.execute(Enum.Action.Type.STANDING);					
-			}
+			//Stand if no movement keys are pressed.
+			if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING)
+				this.execute(Enum.Action.Type.STANDING);
+
+			this.body.setVel(new chipmunk.Vect(0, 0));	
 		}
 	}
 	
@@ -2229,6 +2311,10 @@ Player.prototype.update = function(){
 	//Reduce stun timer.
 	if(this.stunTimer > 0)
 		this.stunTimer -= this.currentGame.dt;
+		
+	//Reduce stuck timer.
+	if(this.stuckTimer > 0)
+		this.stuckTimer -= this.currentGame.dt;
 		
 	//Check timers related to player and trigger actions associated.
 	if(!this.hasWon)
@@ -2330,7 +2416,8 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		&& this.y < this.currentGame.world.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
 	{
 
-		var tmpX = (x != null ? x : this.getPosition().x);
+		//minor adjust from smoothering.
+		var tmpX = (x != null ? x : this.getPosition().x - this.body.getVel().x*0.05);
 		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
