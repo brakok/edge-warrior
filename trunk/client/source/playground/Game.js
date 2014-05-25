@@ -564,6 +564,15 @@ Game.prototype.addElement = function(remoteElement){
 		case Enum.Element.Type.TELEPORT:
 			EffectManager.create(Enum.Effect.Type.TELEPORT, remoteElement.x, remoteElement.y);
 			return;
+		case Enum.Element.Type.STUCK:
+		
+			var emitter = ParticleManager.create(Enum.Particles.STUCK, remoteElement.x, remoteElement.y, Client.game.layer, remoteElement.duration);
+			emitter.run();
+			
+			return;
+		case Enum.Element.Type.ALIEN_EYES:
+			//TODO
+			return;
 	}
 	
 	ElementManager.launch(element);

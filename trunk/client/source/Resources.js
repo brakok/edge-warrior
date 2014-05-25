@@ -30,6 +30,7 @@ var assets = [
 	{type:'image', src: assetsParticles + 'sand.png'},
 	{type:'image', src: assetsParticles + 'lilBeam.png'},
 	{type:'image', src: assetsParticles + 'WhiteDot.png'},
+	{type:'image', src: assetsParticles + 'stuck.png'},
 	
 	//Menu
 	{type:'image', src: assetsMenuDir + '0.png'},

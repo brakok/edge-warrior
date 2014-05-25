@@ -1,6 +1,6 @@
 
 //EmitRate = how many for one second.
-var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSpeedX, varSpeedY, life, varLife, startSize, varStartSize, endSize, varEndSize, rotationSpeed, varRotationSpeed, zOrder, spritePath, layer){
+var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSpeedX, varSpeedY, life, varLife, startSize, varStartSize, endSize, varEndSize, rotationSpeed, varRotationSpeed, zOrder, spritePath, layer, emitterLife){
 
 	this.emitRate = 1/emitRate;
 	this.hasStopped = false;
@@ -25,6 +25,8 @@ var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSp
 	this.endSize = endSize;	
 	this.spritePath = spritePath;
 	this.layer = layer;
+	
+	this.emitterLife = emitterLife;
 	
 	this.variation = {
 		x: varX,
@@ -67,6 +69,15 @@ ParticleEmitter.prototype.update = function(dt){
 		
 	if(this.isRunning)
 	{
+		//Check emitter life.
+		if(this.emitterLife != null && !this.hasStopped)
+		{
+			this.emitterLife -= dt;
+			
+			if(this.emitterLife <= 0)
+				this.stop();
+		}
+		
 		this.timeElapsed += dt;
 		
 		//Create a new particle if step is reached.
