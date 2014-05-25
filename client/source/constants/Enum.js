@@ -29,7 +29,8 @@ var Enum = {
 	Particles: {
 		SMOKE: 0,
 		SAND: 1,
-		LIL_BEAM: 2
+		LIL_BEAM: 2,
+		STUCK: 3
 	},
 	World: {
 		Type: {
@@ -156,7 +157,9 @@ var Enum = {
 	Element: {
 		Type: {
 			ECLIPSE: 0,
-			TELEPORT: 1
+			TELEPORT: 1,
+			STUCK: 2,
+			ALIEN_EYES: 3
 		}
 	},
 	Voice: {
