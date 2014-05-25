@@ -11,7 +11,7 @@ WorldInfo.Church = function(width, height, game){
 	this.spawnZones = [];
 
 	//Event infos.
-	this.eventTimer = Constants.World.Church.EVENT_TIMER_MIN + Math.random()*Constants.World.Church.EVENT_TIMER_RANGE + Constants.Warmup.PHASE_TIME;
+	this.eventTimer = Constants.World.Church.Event.TIMER_MIN + Math.random()*Constants.World.Church.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
 WorldInfo.Church.prototype.load = function(){
@@ -47,7 +47,7 @@ WorldInfo.Church.prototype.update = function(){
 	if(this.eventTimer <= 0)
 	{
 		this.triggerEvent();
-		this.eventTimer = Constants.World.Church.EVENT_TIMER_MIN + Math.random()*Constants.World.Church.EVENT_TIMER_RANGE;
+		this.eventTimer = Constants.World.Church.Event.TIMER_MIN + Math.random()*Constants.World.Church.Event.TIMER_RANGE;
 	}
 };
 

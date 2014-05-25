@@ -15,6 +15,7 @@ var Player = function(id, username, x, y, color, game){
 	this.pickAxePressed = false;
 		
 	this.stunTimer = 0;
+	this.stuckTimer = 0;
 		
 	this.isAlive = true;
 	this.toBeDestroy = false;
@@ -259,7 +260,7 @@ Player.prototype.update = function(){
 		}
 		
 		//If not stunned.
-		if(this.stunTimer <= 0)
+		if(this.stunTimer <= 0 && this.stuckTimer <= 0)
 		{
 			var impulse = 0;
 		
@@ -305,36 +306,47 @@ Player.prototype.update = function(){
 		if(!this.keys.jump && this.groundContact == 0 && !this.doubleJumpUsed)
 			this.doubleJumpEnabled = true;
 				
-		if(nextX != 0)
+		if(this.stuckTimer <= 0)
 		{
-			var lastFacing = this.facing;
-			
-			//Turn only if one of movement keys is pressed.
-			if((this.keys.right && !this.keys.left) || (!this.keys.right && this.keys.left))
+			if(nextX != 0)
 			{
-				this.facing = (this.keys.right ? Enum.Facing.RIGHT : Enum.Facing.LEFT);
+				var lastFacing = this.facing;
 				
-				if(lastFacing != this.facing)
-					this.turn();
-			}
+				//Turn only if one of movement keys is pressed.
+				if((this.keys.right && !this.keys.left) || (!this.keys.right && this.keys.left))
+				{
+					this.facing = (this.keys.right ? Enum.Facing.RIGHT : Enum.Facing.LEFT);
+					
+					if(lastFacing != this.facing)
+						this.turn();
+				}
 
-			this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
-			
-			//Switch current action to running if player is on the ground.
-			if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.RUNNING && this.currentAction != Enum.Action.Type.JUMPING)
-				this.execute(Enum.Action.Type.RUNNING);	
+				this.body.applyImpulse(new chipmunk.Vect(nextX, 0), new chipmunk.Vect(0,0));
+				
+				//Switch current action to running if player is on the ground.
+				if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.RUNNING && this.currentAction != Enum.Action.Type.JUMPING)
+					this.execute(Enum.Action.Type.RUNNING);	
+			}
+			else
+			{
+				//Artificial friction for players when on ground and pressing no key.
+				if(this.groundContact > 0)
+				{
+					this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
+					
+					//Stand if no movement keys are pressed.
+					if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING && this.keys.right == this.keys.left)
+						this.execute(Enum.Action.Type.STANDING);					
+				}
+			}
 		}
 		else
 		{
-			//Artificial friction for players when on ground and pressing no key.
-			if(this.groundContact > 0)
-			{
-				this.body.setVel(new chipmunk.Vect(this.body.getVel().x*Constants.Physic.FRICTION_FACTOR_ONGROUND, this.body.getVel().y));
-				
-				//Stand if no movement keys are pressed.
-				if(this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING && this.keys.right == this.keys.left)
-					this.execute(Enum.Action.Type.STANDING);					
-			}
+			//Stand if no movement keys are pressed.
+			if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING)
+				this.execute(Enum.Action.Type.STANDING);
+
+			this.body.setVel(new chipmunk.Vect(0, 0));	
 		}
 	}
 	
@@ -344,6 +356,10 @@ Player.prototype.update = function(){
 	//Reduce stun timer.
 	if(this.stunTimer > 0)
 		this.stunTimer -= this.currentGame.dt;
+		
+	//Reduce stuck timer.
+	if(this.stuckTimer > 0)
+		this.stuckTimer -= this.currentGame.dt;
 		
 	//Check timers related to player and trigger actions associated.
 	if(!this.hasWon)
@@ -445,7 +461,8 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		&& this.y < this.currentGame.world.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
 	{
 
-		var tmpX = (x != null ? x : this.getPosition().x);
+		//minor adjust from smoothering.
+		var tmpX = (x != null ? x : this.getPosition().x - this.body.getVel().x*0.05);
 		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.

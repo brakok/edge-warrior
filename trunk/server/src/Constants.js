@@ -61,18 +61,27 @@ var Constants = {
 	World: {
 		Church: {
 			GOAL_OFFSET_Y: -400,
-			EVENT_TIMER_MIN: 15,
-			EVENT_TIMER_RANGE: 3
+			Event: {
+				TIMER_MIN: 15,
+				TIMER_RANGE: 3
+			}
 		},
 		Alien: {
 			GOAL_OFFSET_Y: -150,
-			EVENT_TIMER_MIN: 5,
-			EVENT_TIMER_RANGE: 5
+			Event: {
+				TIMER_MIN: 5,
+				TIMER_RANGE: 1,
+				EYES_TIMER: 7,
+				STUCK_DURATION: 4,
+				ALLOWED_SPEED: 5
+			}
 		},
 		Pit: {
 			GOAL_OFFSET_Y: 0,
-			EVENT_TIMER_MIN: 25,
-			EVENT_TIMER_RANGE: 10
+			Event: {
+				TIMER_MIN: 25,
+				TIMER_RANGE: 10
+			}
 		}
 	},
 	NPC: {
