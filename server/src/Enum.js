@@ -33,7 +33,9 @@ var Enum = {
 			TIME_ZONE: 9,
 			SPAWN_ZONE: 10,
 			SAND_SPIRIT: 11,
-			GRAVITY_BEAM: 12
+			GRAVITY_BEAM: 12,
+			VENOM_BALL: 13,
+			VENOM_WAVE: 14
 		}
 	},
 	Block: {
@@ -92,15 +94,16 @@ var Enum = {
 		Type: {
 			DEFLECTOR: 0,
 			TIME_ZONE: 1,
-			GRAVITY_BEAM: 2
+			GRAVITY_BEAM: 2,
+			VENOM_BALL: 3,
+			VENOM_WAVE: 4
 		}
 	},
 	Element: {
 		Type: {
 			ECLIPSE: 0,
 			TELEPORT: 1,
-			STUCK: 2,
-			ALIEN_EYES: 3
+			STUCK: 2
 		}
 	},
 	Collision: {

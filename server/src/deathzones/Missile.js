@@ -90,7 +90,7 @@ Missile.prototype.update = function(){
 
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 	
-	//Destroy pick axe if it reaches his maximum distance.
+	//Destroyed if it reaches his maximum distance.
 	if(this.x == this.finalX && this.y == this.finalY)
 		this.stillExists = false;
 };

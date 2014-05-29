@@ -69,6 +69,13 @@ Listeners.prototype.registerHandlers = function(){
 											   null, 
 											   null, 
 											   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
+											   
+	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.TRIGGER, 
+											   Enum.Collision.Type.STATIC, 
+											   function(arbiter, space){ currentListeners.TriggerListener.begin(arbiter, space);}, 
+											   null, 
+											   null, 
+											   function(arbiter, space){ currentListeners.TriggerListener.separate(arbiter, space);});
 	
 	//Add ground sensor callback.
 	this.currentGame.space.addCollisionHandler(Enum.Collision.Type.GROUND_SENSOR, 

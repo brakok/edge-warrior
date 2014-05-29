@@ -69,11 +69,8 @@ var Constants = {
 		Alien: {
 			GOAL_OFFSET_Y: -150,
 			Event: {
-				TIMER_MIN: 5,
-				TIMER_RANGE: 1,
-				EYES_TIMER: 7,
-				STUCK_DURATION: 4,
-				ALLOWED_SPEED: 5
+				TIMER_MIN: 35,
+				TIMER_RANGE: 15
 			}
 		},
 		Pit: {
@@ -140,6 +137,25 @@ var Constants = {
 			MAX_VEL_Y: 75,
 			IMPULSE: 150,
 			COOLDOWN: 2.5
+		},
+		VenomBall: {
+			WIDTH: 30,
+			HEIGHT: 30,
+			STUCK_TIME: 3,
+			GRAVITY: 0.4
+		},
+		VenomWave: {
+			WIDTH: 40,
+			HEIGHT: 120,
+			SPEED_X: 0,
+			SPEED_Y: -8,
+			COOLDOWN: 0.33,
+			VAR_COOLDOWN: 0.17,
+			VEL_MIN_X: 1,
+			VEL_MIN_Y: 3,
+			VEL_RANGE_X: 14,
+			VEL_RANGE_Y: 3,
+			STUCK_TIME: 4
 		}
 	},
 	WinningGoal: {
