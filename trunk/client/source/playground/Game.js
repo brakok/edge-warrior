@@ -489,7 +489,7 @@ Game.prototype.changeStep = function(stepReached){
 };
 
 //Update positions from server ones.
-Game.prototype.updateFromServer = function(remotePlayers, remoteBlocks, remoteGoal, remoteDeathZones, remoteNPCs){
+Game.prototype.updateFromServer = function(remotePlayers, remoteBlocks, remoteGoal, remoteDeathZones, remoteNPCs, remoteTriggers){
 	
 	//Update players.
 	for(var i in remotePlayers)
@@ -509,6 +509,11 @@ Game.prototype.updateFromServer = function(remotePlayers, remoteBlocks, remoteGo
 	for(var i in remoteNPCs)
 		if(this.npcs[remoteNPCs[i].id] != null)
 			this.npcs[remoteNPCs[i].id].fromServer(remoteNPCs[i]);		
+			
+	//Update triggers.
+	for(var i in remoteTriggers)
+		if(this.triggers[remoteTriggers[i].id] != null)
+			this.triggers[remoteTriggers[i].id].fromServer(remoteTriggers[i]);	
 		
 	//Update goal.
 	this.goal.fromServer(remoteGoal);
@@ -609,6 +614,12 @@ Game.prototype.addTrigger = function(remoteTrigger){
 			break;
 		case Enum.Trigger.Type.GRAVITY_BEAM:
 			trigger = new GravityBeam(remoteTrigger.x, remoteTrigger.y);
+			break;
+		case Enum.Trigger.Type.VENOM_BALL:
+			trigger = new VenomBall(remoteTrigger.x, remoteTrigger.y);
+			break;
+		case Enum.Trigger.Type.VENOM_WAVE:
+			trigger = new VenomWave(remoteTrigger.x, remoteTrigger.y);
 			break;
 	}
 

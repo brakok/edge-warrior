@@ -371,9 +371,22 @@ Player.prototype.execute = function(action){
 		case Enum.Action.Type.DOUBLE_JUMPING:
 			this.swapAnimation(Enum.Anim.Type.JUMPING);
 			
+			//Fix drop zone appearing at the wrong place.
+			Smoothering.reset(this);	
+			var newPos = Smoothering.pop(this);
+	
+			if(newPos.x != this.x || newPos.y != this.y)
+			{
+				this.x = newPos.x;
+				this.y = newPos.y;
+			}
+			
 			//Trigger double jump effect.
 			EffectManager.create(Enum.Effect.Type.DOUBLE_JUMP, this.x, this.y - Constants.Effect.DoubleJump.OFFSET);
 			AudioManager.playEffect(Constants.Sound.File.Player.DOUBLE_JUMP);
+			
+			
+			
 			break;
 		case Enum.Action.Type.FALLING:
 			

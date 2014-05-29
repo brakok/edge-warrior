@@ -119,7 +119,9 @@ var Enum = {
 		Type: {
 			DEFLECTOR: 0,
 			TIME_ZONE: 1,
-			GRAVITY_BEAM: 2
+			GRAVITY_BEAM: 2,
+			VENOM_BALL: 3,
+			VENOM_WAVE: 4
 		}
 	},
 	WinningGoal: {
@@ -158,8 +160,7 @@ var Enum = {
 		Type: {
 			ECLIPSE: 0,
 			TELEPORT: 1,
-			STUCK: 2,
-			ALIEN_EYES: 3
+			STUCK: 2
 		}
 	},
 	Voice: {
