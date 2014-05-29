@@ -462,7 +462,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 	{
 
 		//minor adjust from smoothering.
-		var tmpX = (x != null ? x : this.getPosition().x - this.body.getVel().x*0.05);
+		var tmpX = (x != null ? x : this.getPosition().x);
 		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
 	
 		//Create a block and launch it.
