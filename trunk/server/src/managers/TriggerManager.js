@@ -18,6 +18,9 @@ TriggerManager.prototype.add = function(trigger){
 		x: trigger.x,
 		y: trigger.y
 	};
+	
+	if(trigger.sendVel != null && trigger.sendVel)
+		data.vel = trigger.body.getVel();
 		
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_TRIGGER, data);
 };

@@ -12,7 +12,6 @@ WorldInfo.Alien = function(width, height, game){
 	
 		//Event infos.
 	this.eventTimer = Constants.World.Alien.Event.TIMER_MIN + Math.random()*Constants.World.Alien.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
-	this.eyesTimer = Constants.World.Alien.Event.EYES_TIMER;
 	this.eventRunning = false;
 };
 
@@ -47,56 +46,44 @@ WorldInfo.Alien.prototype.update = function(){
 
 	this.eventTimer -= this.currentGame.dt;
 	
-	if(this.eventRunning)
-		this.eyesTimer -= this.currentGame.dt;
-	
-	//Trigger gazing eyes event.
 	if(this.eventTimer <= 0)
 	{
 		this.triggerEvent();
-		
-		//Send eyes instruction.
-		var data = {
-			x: this.width*0.5,
-			y: this.width*0.5,
-			type: Enum.Element.Type.ALIEN_EYES,
-			duration: Constants.World.Alien.Event.EYES_TIMER
-		};
-		
-		io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, data);
-		
-		this.eventTimer = Constants.World.Alien.Event.TIMER_MIN + Math.random()*Constants.World.Alien.Event.TIMER_RANGE + Constants.World.Alien.Event.EYES_TIMER;
-		this.eyesTimer = Constants.World.Alien.Event.EYES_TIMER;
-	}
-	
-	//Trigger stun from eyes.
-	if(this.eventRunning && this.eyesTimer <= 0)
-	{
-		for(var i in this.currentGame.players)
-		{
-			var vel = this.currentGame.players[i].body.getVel();
-			var dt = Math.sqrt(Math.pow(vel.x, 2) + Math.pow(vel.y, 2));
-			
-			if(dt > Constants.World.Alien.Event.ALLOWED_SPEED)
-			{
-				this.currentGame.players[i].stuckTimer = Constants.World.Alien.Event.STUCK_DURATION;
-			
-				//Send stuck effect.
-				var data = {
-					x: this.currentGame.players[i].x,
-					y: this.currentGame.players[i].y,
-					type: Enum.Element.Type.STUCK,
-					duration: Constants.World.Alien.Event.STUCK_DURATION
-				};
-				
-				io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, data);
-			}
-		}
-		
-		this.eventRunning = false;
+		this.eventTimer = Constants.World.Alien.Event.TIMER_MIN + Math.random()*Constants.World.Alien.Event.TIMER_RANGE;
 	}
 };
 
 WorldInfo.Alien.prototype.triggerEvent = function(){
-	this.eventRunning = true;
+	
+	//Create two venom waves.
+	this.currentGame.managers.TriggerManager.add(new VenomWave(0, 
+															   this.height, 
+															   Constants.Trigger.VenomWave.SPEED_X, 
+															   Constants.Trigger.VenomWave.SPEED_Y, 
+															   this.height, 
+															   Constants.Trigger.VenomWave.COOLDOWN, 
+															   Constants.Trigger.VenomWave.VAR_COOLDOWN,
+															   Constants.Trigger.VenomWave.VEL_MIN_X, 
+															   Constants.Trigger.VenomWave.VEL_RANGE_X, 
+															   Constants.Trigger.VenomWave.VEL_MIN_Y, 
+															   Constants.Trigger.VenomWave.VEL_RANGE_Y,
+															   Constants.Trigger.VenomWave.WIDTH, 
+															   Constants.Trigger.VenomWave.HEIGHT,
+															   this.currentGame));
+
+	this.currentGame.managers.TriggerManager.add(new VenomWave(this.width, 
+															   this.height, 
+															   Constants.Trigger.VenomWave.SPEED_X, 
+															   Constants.Trigger.VenomWave.SPEED_Y, 
+															   this.height, 
+															   Constants.Trigger.VenomWave.COOLDOWN, 
+															   Constants.Trigger.VenomWave.VAR_COOLDOWN,
+															   -Constants.Trigger.VenomWave.VEL_MIN_X, 
+															   -Constants.Trigger.VenomWave.VEL_RANGE_X, 
+															   Constants.Trigger.VenomWave.VEL_MIN_Y, 
+															   Constants.Trigger.VenomWave.VEL_RANGE_Y,
+															   Constants.Trigger.VenomWave.WIDTH, 
+															   Constants.Trigger.VenomWave.HEIGHT,
+															   this.currentGame));
+	
 };
