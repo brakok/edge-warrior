@@ -90,6 +90,8 @@
 				  'source/playground/triggers/Deflector.js',
 				  'source/playground/triggers/TimeZone.js',
 				  'source/playground/triggers/GravityBeam.js',
+				  'source/playground/triggers/VenomWave.js',
+				  'source/playground/triggers/VenomBall.js',
 				  
 				  'source/playground/npc/PeskyBox.js',
 				  'source/playground/npc/SandSpirit.js',
