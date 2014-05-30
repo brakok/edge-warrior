@@ -349,6 +349,10 @@ var Constants = {
 			GravityBeam: {
 				SPAWN: 'GravityBeam'
 			},
+			VenomBall: {
+				END: 'VenomBall_end',
+				THROW: 'VenomBall_throw'
+			},
 			Music: {
 				MENU: 'menu'
 			},

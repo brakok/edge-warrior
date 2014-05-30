@@ -93,16 +93,11 @@ Block.prototype.update = function(dt){
 		this.updatedOnce = true;
 	}
 
-	if(this.trail)
+	if(this.trail && !this.trail.toBeDestroyed)
 	{
-		if(!this.trail.toBeDestroyed)
-		{
-			//Update position.
-			this.trail.x = this.x;
-			this.trail.y = this.y;	
-		}
-		else
-			delete this.trail;
+		//Update position.
+		this.trail.x = this.x;
+		this.trail.y = this.y;	
 	}
 
 	//Update position.
