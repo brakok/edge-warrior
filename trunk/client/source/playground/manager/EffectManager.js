@@ -1,9 +1,9 @@
 //Manage all effects.
 var EffectManager = {
 	currentEffects: [],
-	create: function(type, x, y){
+	create: function(type, x, y, degree){
 		
-		var effect = new Effect(type, x, y);
+		var effect = new Effect(type, x, y, degree);
 		this.currentEffects.push(effect);
 		effect.launch();
 	},

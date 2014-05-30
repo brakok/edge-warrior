@@ -1,10 +1,11 @@
 
-var Effect = function(type, x, y){
+var Effect = function(type, x, y, degree){
 	
 	this.type = type;
 	this.x = x;
 	this.y = y;
 	
+	this.degree = degree;
 	this.hasEnded = false;
 	
 	this.init();
@@ -121,9 +122,34 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('SandSpirit_disappearing.0000.png');
 			this.animation = AnimationManager.create('SandSpirit_disappearing', 0, 12, 24);
 			break;
+			
+		case Enum.Effect.Type.VENOM_WAVE_END:
+		
+			//Effect created when time zone ends.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('VenomWave_end.0012.png');
+			this.animation = AnimationManager.create('VenomWave_end', 12, 18, 24);
+			break;
+			
+		case Enum.Effect.Type.VENOM_BALL_THROW:
+		
+			//Effect created when time zone ends.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('VenomBall_throw.0000.png');
+			this.animation = AnimationManager.create('VenomBall_throw', 0, 12, 24);
+			break;
+			
+		case Enum.Effect.Type.VENOM_BALL_END:
+		
+			//Effect created when time zone ends.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('VenomBall_end.0006.png');
+			this.animation = AnimationManager.create('VenomBall_end', 0, 6, 24);
+			break;
 	}
 	
 	this.sprite.setZOrder(Constants.Effect.Z_INDEX);
+
+	if(this.degree != null)
+		this.sprite.setRotation(this.degree);
+	
 	this.callback = cc.CallFunc.create(function(node){
 								Client.game.layer.removeChild(node);
 								this.hasEnded = true;
