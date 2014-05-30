@@ -16,12 +16,16 @@ var Player = function (x, y, color, isControlled, username) {
 	
 	Smoothering.init(this, x, y);
 	
+	this.updatedOnce = false;
 	this.isControlled = isControlled;
 	this.audioId = null;
 	
 	this.blockTypeAvailable = [];
 	this.blockTypeAvailable.push(new BlockOption(Enum.Block.Type.NEUTRAL, Constants.Block.Percent.STARTING_NEUTRAL));
 	
+	this.stuckTimer = 0;
+	this.stuckEmitter = null;
+	 
 	this.voices = null;
 	
 	this.maySpeak = false;
@@ -296,6 +300,25 @@ Player.prototype.update = function(dt){
 		this.x = newPos.x;
 		this.y = newPos.y;
 	}
+
+	//Create things that need a game running.
+	if(!this.updatedOnce)
+	{
+		this.stuckEmitter = ParticleManager.create(Enum.Particles.STUCK, this.x, this.y, Client.game.layer);
+		this.updatedOnce = true;
+	}
+	
+	//Stuck effect.
+	if(this.isAlive)
+	{
+		this.stuckEmitter.x = this.x - 18;
+		this.stuckEmitter.y = this.y;
+	
+		if(this.stuckTimer > 0 && !this.stuckEmitter.isRunning)
+			this.stuckEmitter.run();
+		else if(this.stuckTimer <= 0 && this.stuckEmitter.isRunning)
+			this.stuckEmitter.stop(false);
+	}
 	
 	//Block inputs during warmup phase.
 	if(this.isControlled && Client.game.currentPhase != Enum.Game.Phase.WARMUP)
@@ -430,6 +453,7 @@ Player.prototype.fromServer = function(data){
 	Smoothering.push(this, data.x, data.y);	
 		
 	this.pickAxeCount = data.pickAxeCount;
+	this.stuckTimer = data.stuckTimer;
 	
 	if(data.facing != this.facing)
 	{
@@ -447,6 +471,9 @@ Player.prototype.die = function() {
 	
 	if(this.lastVoice != null)
 		AudioManager.stopVoice(this.lastVoice);
+	
+	if(this.stuckEmitter.isRunning)
+		this.stuckEmitter.stop(false);
 	
 	this.isAlive = false;
 	this.maySpeak = false;

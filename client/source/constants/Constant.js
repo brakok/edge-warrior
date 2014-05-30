@@ -282,6 +282,10 @@ var Constants = {
 		},
 		GravityBeam: {
 			SCALE_TIMER: 0.25
+		},
+		VenomBall: {
+			THROW_OFFSET: 50,
+			END_OFFSET: 15
 		}
 	},
 	Sound: {

@@ -153,14 +153,16 @@ var Enum = {
 			BOUNCE: 13,
 			TIME_ZONE_DISAPPEARING: 14,
 			TELEPORT: 15,
-			SAND_SPIRIT_DISAPPEARING: 16
+			SAND_SPIRIT_DISAPPEARING: 16,
+			VENOM_WAVE_END: 17,
+			VENOM_BALL_THROW: 18,
+			VENOM_BALL_END: 19
 		}
 	},
 	Element: {
 		Type: {
 			ECLIPSE: 0,
-			TELEPORT: 1,
-			STUCK: 2
+			TELEPORT: 1
 		}
 	},
 	Voice: {

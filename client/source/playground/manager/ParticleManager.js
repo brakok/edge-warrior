@@ -29,13 +29,10 @@ var ParticleManager = {
 		
 		for(var i = 0; i < this.emitters.length; ++i){
 		
-			if(!this.emitters[i].hasStopped || this.emitters[i].getParticleCount() > 0)
+			if(this.emitters[i].isRunning || this.emitters[i].getParticleCount() > 0)
 				this.emitters[i].update(dt);
-			else
-			{
-				this.emitters[i].trash();
+			else if(this.emitters[i].toBeDestroyed)
 				this.emitters.splice(i, 1);
-			}
 		}
 	},
 	render: function(){

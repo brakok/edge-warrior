@@ -3,7 +3,6 @@
 var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSpeedX, varSpeedY, life, varLife, startSize, varStartSize, endSize, varEndSize, rotationSpeed, varRotationSpeed, zOrder, spritePath, layer, emitterLife){
 
 	this.emitRate = 1/emitRate;
-	this.hasStopped = false;
 	this.toBeDestroyed = false;
 	this.isRunning = false;
 	
@@ -42,8 +41,11 @@ var ParticleEmitter = function(emitRate, x, y, varX, varY, speedX, speedY, varSp
 	};
 };
 
-ParticleEmitter.prototype.stop = function(){
-	this.hasStopped = true;
+ParticleEmitter.prototype.stop = function(mustTrash){
+	this.isRunning = false;
+	
+	if(mustTrash == null || mustTrash)
+		this.trash();
 };
 
 ParticleEmitter.prototype.run = function(){
@@ -67,10 +69,10 @@ ParticleEmitter.prototype.render = function(){
 
 ParticleEmitter.prototype.update = function(dt){
 		
-	if(this.isRunning)
+	if(this.isRunning || this.getParticleCount() > 0)
 	{
 		//Check emitter life.
-		if(this.emitterLife != null && !this.hasStopped)
+		if(this.emitterLife != null && this.isRunning)
 		{
 			this.emitterLife -= dt;
 			
@@ -81,7 +83,7 @@ ParticleEmitter.prototype.update = function(dt){
 		this.timeElapsed += dt;
 		
 		//Create a new particle if step is reached.
-		if(this.nextStep < this.timeElapsed && !this.hasStopped)
+		if(this.nextStep < this.timeElapsed && this.isRunning)
 		{
 			this.particles.push(new Particle(this.x, this.y, this));
 			this.nextStep = Math.floor(this.timeElapsed/this.emitRate)*this.emitRate + this.emitRate;

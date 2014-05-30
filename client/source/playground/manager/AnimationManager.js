@@ -62,6 +62,24 @@ var AnimationManager = {
 														  
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'TimeZone_disappearing.plist', 
 														  assetsTriggerDir + 'TimeZone_disappearing.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'VenomWave_spawn.plist', 
+														  assetsTriggerDir + 'VenomWave_spawn.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'VenomWave_idle.plist', 
+														  assetsTriggerDir + 'VenomWave_idle.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'VenomWave_end.plist', 
+														  assetsTriggerDir + 'VenomWave_end.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'VenomBall_throw.plist', 
+														  assetsTriggerDir + 'VenomBall_throw.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'VenomBall_idle.plist', 
+														  assetsTriggerDir + 'VenomBall_idle.png');
+														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsTriggerDir + 'VenomBall_end.plist', 
+														  assetsTriggerDir + 'VenomBall_end.png');
 		
 		//Effects.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Bounce.plist', 
