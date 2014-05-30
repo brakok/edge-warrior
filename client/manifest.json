@@ -1,6 +1,6 @@
 {
 	"name": "Crushed Dream",
-	"version": "0.9.0.8",
+	"version": "0.9.0.9",
 	"manifest_version" : 2,
 	"description": "A competitive game based on players crushing others by dropping blocks on their head. The goal is to climb to the 'Winning Goal'.",
 	"icons": {
