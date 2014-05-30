@@ -151,6 +151,8 @@ Player.prototype.die = function(){
 	this.hasGivenBlock = false;
 		
 	this.groundContact = 0;
+	this.stuckTimer = 0;
+	this.stunTimer = 0;
 	
 	var killer = null;
 	
@@ -545,6 +547,7 @@ Player.prototype.toClient = function(){
 		y: this.getPosition().y,
 		color: this.color,
 		facing: this.facing,
-		pickAxeCount: this.pickAxeCount
+		pickAxeCount: this.pickAxeCount,
+		stuckTimer: this.stuckTimer
 	};
 };
