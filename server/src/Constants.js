@@ -149,12 +149,12 @@ var Constants = {
 			HEIGHT: 120,
 			SPEED_X: 0,
 			SPEED_Y: -8,
-			COOLDOWN: 0.33,
-			VAR_COOLDOWN: 0.17,
-			VEL_MIN_X: 1,
-			VEL_MIN_Y: 3,
-			VEL_RANGE_X: 14,
-			VEL_RANGE_Y: 3,
+			COOLDOWN: 0.26,
+			VAR_COOLDOWN: 0.15,
+			VEL_MIN_X: 3,
+			VEL_MIN_Y: 1,
+			VEL_RANGE_X: 11,
+			VEL_RANGE_Y: 7,
 			STUCK_TIME: 4
 		}
 	},
