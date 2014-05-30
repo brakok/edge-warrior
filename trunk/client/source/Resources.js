@@ -89,6 +89,8 @@ var assets = [
 	{type:"sound", src: soundDir + 'timeZone_disappearing.mp3'},
 	{type:"sound", src: soundDir + 'Sand.mp3'},
 	{type:"sound", src: soundDir + 'GravityBeam.mp3'},
+	{type:"sound", src: soundDir + 'VenomBall_end.mp3'},
+	{type:"sound", src: soundDir + 'VenomBall_throw.mp3'},
 	
 	//Voices
 	{type:"sound", src: soundVoiceDir + 'red_kill.mp3'},
