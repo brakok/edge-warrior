@@ -586,6 +586,10 @@
 	.wrapper{
 		margin:0 auto -230px;
 	}
+	.wrap{
+		max-width:600px;
+		width:100%;
+	}
 	
 	#content {
 		float: none;

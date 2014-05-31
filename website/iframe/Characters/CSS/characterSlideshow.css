@@ -184,8 +184,8 @@ img{
 	font-family: hallo_sansLight;
 	font-size: 20px;
 	text-align: left;
-	width: 199px;
-	padding: 70px 0 0 200px;
+	width: 200px;
+	padding: 70px 0 0 195px;
 	font-variant: normal;
 }
 /* Yellow */
@@ -349,6 +349,7 @@ img{
 	#red.swiper-slide:hover p{
 		padding-bottom:40px ;
 	}
+	
 }
 @media all and (max-width: 480px){
 	.swiper-container {
@@ -367,7 +368,7 @@ img{
 			background-size:120%;
 		}
 		#red.swiper-slide:hover p, #yellow.swiper-slide:hover p, #blue.swiper-slide:hover p, #white.swiper-slide:hover p, #red.swiper-slide:hover p{
-			font-size:4.9vw;
+			font-size:4.5vw;
 			margin-top:160px;
 		}
 		/* BLUE TEXT HOVER */
