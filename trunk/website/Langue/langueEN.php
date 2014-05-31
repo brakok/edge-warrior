@@ -18,7 +18,7 @@
 	define('TXT_NAV_RULES', 'Rules');
 	define('TXT_NAV_MAPS', 'Maps');
 	define('TXT_NAV_ABOUT', 'About');
-	define('TXT_NAV_LANGUE', "<a href='?lang=fr'> French </a>");
+	define('TXT_NAV_LANGUE', "<a href='?lang=fr'> Français </a>");
 	
 	//---------------------------------------------------------
 	// SLOGAN
