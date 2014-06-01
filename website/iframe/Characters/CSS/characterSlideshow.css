@@ -89,6 +89,7 @@ img{
 .device {
 	margin:0;
 	position: relative;
+	cursor: -webkit-grab;
 }
 
 .device .arrow-left, .device .arrow-right{	

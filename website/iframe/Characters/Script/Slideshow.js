@@ -1,12 +1,7 @@
-var mySwiper = new Swiper('.swiper-container',{
-    pagination: '.pagination',
-	slidesPerView: 3,
-    grabCursor: true,
-    paginationClickable: true
-  });
-  
-  var mySwiper = $('.swiper-container').swiper({
-  slidesPerView:3
+var mySwiper = $('.swiper-container').swiper({
+   grabCursor: true,
+    paginationClickable: true,
+	loop:true,
 })
 $(window).resize(function(){
   var ww = $(window).width()
@@ -17,8 +12,6 @@ $(window).resize(function(){
 })
 $(window).trigger('resize');
   
-  
-  
   $('.arrow-left').on('click', function(e){
     e.preventDefault()
     mySwiper.swipePrev()
@@ -27,3 +20,5 @@ $(window).trigger('resize');
     e.preventDefault()
     mySwiper.swipeNext()
   })
+  
+  
