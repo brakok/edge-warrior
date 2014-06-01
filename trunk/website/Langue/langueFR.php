@@ -28,7 +28,7 @@
 	// CHARACTERS SLIDESHOW
 	//---------------------------------------------------------
 	define('TXT_PLAYERS', "Les personnages");
-	define('TXT_CHOOSE', "choisissez le vôtre");
+	define('TXT_CHOOSE', "Choisis le tiens");
 	define('TXT_IFRAME_LANGUE', "fr");
 	define('TXT_RED', "Être profondément narcissique qui ne peut cesser de s'enlacer à tout moment. Côtoie les lieux malsains et glauques de ce monde, où il vit ouvertement ses vices et pulsions.");
 	define('TXT_YELLOW', "Créature timide ayant peu d'assurance. Se cache dans son précieux coquillage, afin de survivre dans ce monde un peu trop cruel pour elle.");
@@ -38,15 +38,22 @@
 	//---------------------------------------------------------
 	// NEWS
 	//---------------------------------------------------------
-	define('TXT_NEWS_ARTICLE01', "	<h2>Lancement du jeu</h2> 
+	// article 01 //
+	define('TXT_NEWS_ARTICLE01', "	<h2>Évènements de carte<span class='newUpdate'>Nouveau</span></h2> 
+									<i>01 juin, 2014</i>
+									<p>Et oui! Voici une preuve que lorsque vous jouez, je me prépare déjà à vous donner de nouvelles choses. Les cartes existantes ont maintenant un événement qui leur est propre pour les rendre distinctives. Essayez les et utilisez les à votre avantage pour mettre vos ennemis hors d'état de nuire!</p>");
+	// article 02 //
+	define('TXT_NEWS_ARTICLE02', "	<h2>Lancement du jeu</h2> 
 									<i>22 mai, 2014</i>
 									<p>Une bonne étape de faite! Le jeu est officiellement sorti, néanmoins une bonne partie du travail reste à faire, alors je retrousse mes manches et je me  prépare à livrer du nouveau contenu. </p><p>Revenez régulièrement pour voir ce jeu évoluer en quelque chose de plus gros, plus rapide et plus gras! </p>");
-	define('TXT_NEWS_ARTICLE02', "	<h2>Nouveau site web</h2> 
+	// article 03 //
+	define('TXT_NEWS_ARTICLE03', "	<h2>Nouveau site web</h2> 
 									<i>22 mai, 2014</i>
 									<p>Avec le lancement du jeu, un magnifique site web a été développé pour vous donner plus d'information sur le jeu, sur moi et sur mon projet. Espérons un jour que je pourrai ajouter du contenu sur ce site en parlant au 'nous' au lieu du 'je'. N'hésitez pas à me faire part de vos commentaires à l'adresse courriel cachée dans ce site.</p>");
-	define('TXT_NEWS_ARTICLE03', "<h2> Un arc-en-ciel sous terre</h2> 
+	// article 04 //
+	define('TXT_NEWS_ARTICLE04', "<h2> Un arc-en-ciel sous terre</h2> 
 									<i>22 mai, 2014</i>
-									<p>Nos quatre combattants ont sombré dans des lieux glauques et cruels, ayant pour seul moyen de sortir de s'écraser les uns les autres! Toi, viens les aider! Clique sur le lien en haut à gauche et donnes toi le moyen d'en réchapper au moins un. Envoye, clique je te dis! Je suis là pour te procurer du plaisir, faut seulement tu me donnes un coup de pouce. </p>");
+									<p>Nos quatre combattants ont sombré dans des lieux glauques et cruels, ayant pour seul moyen de sortir de s'écraser les uns les autres! Toi, viens les aider! Clique sur le lien en haut à gauche et donne-toi le moyen d'en réchapper au moins un. Envoye, clique je te dis! Je suis là pour te procurer du plaisir, faut seulement tu me donnes un coup de pouce. </p>");
 									
 	//---------------------------------------------------------
 	// RULES
@@ -69,15 +76,15 @@
 	define('TXT_RULES_04'," 2 blocs complémentaires se touchant s'annuleront.");
 	define('TXT_RULES_04_CHROMATIC_CIRCLE',"Tu ne te souviens plus du cercle chromatique ?");
 	define('TXT_RULES_04_CLICK_HERE',"Clique ici");
-	define('TXT_RULES_05',"Afin d'obtenir des blocs complémentaires, tu dois écraser un autre joueur à l'aide de tes blocs. Cela tournera tes blocs en bloc complémentaires. Donc si Yellow tue Blue, tous les blocs de Yellow se changeront en bloc orange. ");
+	define('TXT_RULES_05',"Afin d'obtenir des blocs complémentaires, tu dois écraser un autre joueur à l'aide de tes blocs. Cela tournera tes blocs en blocs complémentaires. Donc si Yellow tue Blue, tous les blocs de Yellow se changeront en bloc orange. ");
 	define('TXT_RULES_06',"Les blocs gris sont neutres. Destructibles seulement par un bloc de compétences ou une pioche.");
-	define('TXT_RULES_07',"Les pioches détruisent tous les types de blocs. Il apparaissent à 10 secondes d'intervalle. Maximum de 2 pioches disponibles en même temps.");
-	define('TXT_RULES_08',"Pour atteindre votre but plus facilement, tu dois écraser tes adversaires. Cela te donnera un bloc d'apparition et te permettera de faire revivre tes victimes où bon te semble. Marche autant sur les meurtres multiples.");
+	define('TXT_RULES_07',"Les pioches détruisent tous les types de blocs. Elles apparaissent à 15 secondes d'intervalle. Maximum de 2 pioches disponibles en même temps.");
+	define('TXT_RULES_08',"Pour atteindre ton but plus facilement, tu dois écraser tes adversaires. Cela te donnera un bloc d'apparition et te permettera de faire revivre tes victimes où bon te semble. Marche autant sur les meurtres multiples.");
 	/* Skill Blocks*/
 	define('TXT_SKILL_BLOCKS_RULES',"Pour avoir des blocs de compétences durant le jeu, tu dois, avant de joindre le lobby, aller dans le <b>menu de compétences</b> et sélectionner les blocs de compétences que tu désires avoir pour la partie. Il y a un maximum de <b>4</b> compétences par partie. ");
 	/* Units */
 	define('TXT_UNITS',"Unités");
-	define('TXT_UNITS_DESCRIPTION',"Vous pouvez acheter plus d'un blocs de compétences durant le jeu. Pour ce faire, vous avez besoin d'unités. Comment en avoir ? En fait, vous en obtenez <b>tout au long de la partie</b>. Il y a une simple règle à retenir:");
+	define('TXT_UNITS_DESCRIPTION',"Tu peux acheter plus d'un blocs de compétences durant le jeu. Pour ce faire, tu as besoin d'unités. Comment en avoir ? En fait, tu en obtiens<b>tout au long de la partie</b>. Il y a une simple règle à retenir:");
 	define('TXT_UNITS_RULES'," Un bloc de couleur génère des unités tant qu'il existe. Un bloc de votre couleur complémentaire, diminue vos unités. ");
 	define('TXT_UNITS_BUY_MODE'," Aussi, il y a deux méthodes différentes pour acheter vos compétences, durant la partie: ");
 	define('TXT_UNITS_POWER_MODE_01',"Mode puissance");
@@ -91,7 +98,7 @@
 	/* The creator */
 	define('TXT_ABOUT_CREATOR_TITLE',"Le créateur ");
 	define('TXT_ABOUT_CREATOR_01',"Salut, je suis un joueur ayant une passion pour les jeux originaux et qui tente de faire sa part dans une industrie déjà immense en voulant amener des concepts nouveaux et intéressants. L'originalité sans la qualité et le plaisir ne vaut pas la peine, alors je cherche à créer des jeux aux mécaniques différentes et amusantes pour combler ma propre soif de diversité. ");
-	define('TXT_ABOUT_CREATOR_02',"J'oeuvre dans la ville de Québec (Canada) comme seul développeur du studio <b>Another Piece</b> et je suis ouvert aux candidatures ponctuelles pour assembler une équipe de gens aux idées originales et aux envies de divergence flagrantes.");
+	define('TXT_ABOUT_CREATOR_02',"J'oeuvre dans la ville de Québec (Canada) comme seul développeur du studio <b>Another Piece</b> et je suis ouvert aux candidatures ponctuelles pour assembler une équipe de gens aux idées originales et aux envies de divergences flagrantes.");
 	define('TXT_ABOUT_CREATOR_03',"Vous pouvez me contacter sur ce courriel pour me faire part d'un quelconque intérêt : ");
 	define('TXT_ABOUT_CREATOR_04',". Cependant, pour l'instant, je n'ai pas encore de fonds pour assurer un emploi (ni même le mien), mais le moindre profit sera réinvesti dans le studio en équipement et personnel.");
 	

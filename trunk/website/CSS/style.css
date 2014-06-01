@@ -455,6 +455,20 @@ article{
 	text-align: left;
 	width:100%;
 }
+h2 span.newUpdate{
+	background: #DA0000;
+	border-radius: 4px;
+	box-shadow: 2px 2px 0px #7b0000;
+	color: #fff;
+	font-size: 16px;
+	height: 30px;
+	margin-left: 20px;
+	padding: 2px 8px;
+	text-shadow: 1px 1px 1px #860000;
+	text-transform: uppercase;
+	width: 30px;
+}
+
 
 /* RULES */
 /* the hud */

@@ -1,10 +1,7 @@
 var mySwiper = new Swiper('.swiper-container',{
     pagination: '.pagination',
-	slidesPerView: 3,
     grabCursor: true,
-    paginationClickable: true,
-	loop:true,
-
+	loop:true
   });
   	
 $(window).resize(function(){
@@ -15,10 +12,6 @@ $(window).resize(function(){
   mySwiper.reInit()
 })
 $(window).trigger('resize');
-  
-  $(".thumb").on('click', 'div', function(){
-        mySwiper.swipeTo($(this).index(), 500);
-    });
   
   
   

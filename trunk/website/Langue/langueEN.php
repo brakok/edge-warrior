@@ -40,15 +40,19 @@
 	// NEWS
 	//---------------------------------------------------------
 	// article 01 //
-	define('TXT_NEWS_ARTICLE01', "	<h2>Game Launch</h2> 
+	define('TXT_NEWS_ARTICLE01', "	<h2>Map events<span class='newUpdate'>New</span></h2> 
+									<i>June 01, 2014</i>
+									<p>Yes, there it is! Here is a proof that when you are playing, I am already planning new things. Now, current maps have their own event to make them unique. Try them and use them to your own advantage in order to put out of harm's your opponents.</p>");
+	// article 02 //
+	define('TXT_NEWS_ARTICLE02', "	<h2>Game Launch</h2> 
 									<i>May 22, 2014</i>
 									<p>Great step done! The game is officially out, however much of the work remains to be done, then I roll up my sleeves and I prepare myself to deliver some new content. Come back often to see this game evolve in something bigger, faster, bolder!</p>");
-	// article 02 //
-	define('TXT_NEWS_ARTICLE02',"	<h2>New website</h2> 
+	// article 03 //
+	define('TXT_NEWS_ARTICLE03',"	<h2>New website</h2> 
 									<i>May 22, 2014</i>
 									<p>With the game launch, a gorgeous website has been developped to give you more informations about the game, about me and about my project. Hopefully one day I can add content on this website speaking of 'us' instead of 'I'. Do not hesitate to share any comment with me by writting to the email hidden in this website.</p>");
-	// article 03 //
-	define('TXT_NEWS_ARTICLE03',"	<h2>Buried rainbow</h2> 
+	// article 04 //
+	define('TXT_NEWS_ARTICLE04',"	<h2>Buried rainbow</h2> 
 									<i>May 22, 2014</i>
 									<p>Our four fighters sank into dark and ruthless places, crushing one another in their only way out! You, come help them! Click on the link above and give yourself a way to save at least one. Come on, click on it I said! I am there to give you pleasure, I only need a boost.</p>");
 	

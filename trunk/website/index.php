@@ -133,6 +133,12 @@
 									<?php echo TXT_NEWS_ARTICLE03 ?>
 								</article>
 							</div>
+							<!-- Article #4 -->
+							<div class="swiper-slide news4">
+								<article>
+									<?php echo TXT_NEWS_ARTICLE04 ?>
+								</article>
+							</div>
 						</div>
 						<div class="pagination"></div>
 					</div>
