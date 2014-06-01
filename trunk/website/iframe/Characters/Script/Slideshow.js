@@ -1,7 +1,11 @@
-var mySwiper = $('.swiper-container').swiper({
-   grabCursor: true,
+var mySwiper = new Swiper('.swiper-container',{
+    grabCursor: true,
     paginationClickable: true,
-	loop:true,
+	loop:true
+  });
+  
+  var mySwiper = $('.swiper-container').swiper({
+  slidesPerView:3
 })
 $(window).resize(function(){
   var ww = $(window).width()

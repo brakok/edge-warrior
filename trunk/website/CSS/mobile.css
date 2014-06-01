@@ -841,6 +841,12 @@
 		width: 16px;
 	}
 	/* RULES */
+	#rules #hud{
+		padding-top:0px;
+	}
+	article#rules>span.clicked{
+		margin-bottom:30px;
+	}
 	#rules{
 		margin-bottom:40px;
 	}
@@ -855,6 +861,7 @@
 		font-size:7vw;
 		text-align:center;
 	}
+	
 	article.legendTXT p{
 		font-size:24px;
 	}

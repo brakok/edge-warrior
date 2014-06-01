@@ -76,6 +76,7 @@
 	define('TXT_RULES_03',"3 or more same colored blocks in contact will vanished.");
 	define('TXT_RULES_04',"2 complementary blocks in contact will vanished.");
 	define('TXT_RULES_04_CHROMATIC_CIRCLE',"You don’t remember your chromatic circle ?");
+	define('TXT_RULES_04_CLICK_HERE_LINK',"http://en.wikipedia.org/wiki/Complementary_colors");
 	define('TXT_RULES_04_CLICK_HERE',"Click here");
 	define('TXT_RULES_05',"To get complementary blocks, you need to drop your block on another player. By doing that, all your blocks will turn into complementary blocks. So if yellow Kills blue, all yellow’s blocks will turn into orange block. ");
 	define('TXT_RULES_06',"Gray block are neutral. Can only be destroyed by skills block or pickaxe.");
