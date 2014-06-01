@@ -75,6 +75,7 @@
 	define('TXT_RULES_03',"3 blocs, ou plus, de la même couleur, se touchant disparaiteront.");
 	define('TXT_RULES_04'," 2 blocs complémentaires se touchant s'annuleront.");
 	define('TXT_RULES_04_CHROMATIC_CIRCLE',"Tu ne te souviens plus du cercle chromatique ?");
+	define('TXT_RULES_04_CLICK_HERE_LINK',"http://fr.wikipedia.org/wiki/Cercle_chromatique");
 	define('TXT_RULES_04_CLICK_HERE',"Clique ici");
 	define('TXT_RULES_05',"Afin d'obtenir des blocs complémentaires, tu dois écraser un autre joueur à l'aide de tes blocs. Cela tournera tes blocs en blocs complémentaires. Donc si Yellow tue Blue, tous les blocs de Yellow se changeront en bloc orange. ");
 	define('TXT_RULES_06',"Les blocs gris sont neutres. Destructibles seulement par un bloc de compétences ou une pioche.");

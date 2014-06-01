@@ -197,7 +197,7 @@
 										</div> 
 										<!-- Rule #03 -->
 										<div id="rules_part05"> 
-											<p><?php echo TXT_RULES_04 ?><i> [ <?php echo TXT_RULES_04_CHROMATIC_CIRCLE ?> ]</i><a href="http://fr.wikipedia.org/wiki/Cercle_chromatique" target="_blank"><?php echo TXT_RULES_04_CLICK_HERE ?></a></p>
+											<p><?php echo TXT_RULES_04 ?><i> [ <?php echo TXT_RULES_04_CHROMATIC_CIRCLE ?> ]</i><a href="<?php echo TXT_RULES_04_CLICK_HERE_LINK ?>" target="_blank"><?php echo TXT_RULES_04_CLICK_HERE ?></a></p>
 										</div> 
 										<!-- Rule #04 -->
 										<div id="rules_part06"> 
