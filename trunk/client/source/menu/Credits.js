@@ -67,7 +67,7 @@ var Credits = cc.LayerColor.extend({
 		
 		this.lblPascalTL01.setPosition(new cc.Point(this.width*0.23,this.height*0.75));
 		this.lblPascalTL02.setPosition(new cc.Point(this.width*0.79,this.height*0.7));
-		this.lblPascalTL03.setPosition(new cc.Point(this.width*0.48,this.height*0.58));
+		this.lblPascalTL03.setPosition(new cc.Point(this.width*0.49,this.height*0.58));
 		this.lblSimonD01.setPosition(new cc.Point(this.width*0.53,this.height*0.53));
 		this.lblSimonD02.setPosition(new cc.Point(this.width*0.74,this.height*0.65));
 		this.lblAchrafL.setPosition(new cc.Point(this.width*0.8,this.height*0.6));
