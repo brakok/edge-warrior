@@ -184,10 +184,9 @@ var Constants = {
 	},
 	Spawn: {
 		Limit: {
-			OFFSET: 130,
-			ON_RELEASE: 100
+			OFFSET: 130
 		},
-		MAXLAUNCHING_Y: 950,
+		MAXLAUNCHING_Y: 1150,
 		MAXLAUNCHING_X: 2650,
 		STUN_TIMER: 0.4
 	},
@@ -1961,7 +1960,7 @@ var Player = function(id, username, x, y, color, game){
 	this.y = y;
 		
 	this.mass = Constants.Physic.MASS_PLAYER;
-		
+	
 	this.pickAxeCount = 0;
 	this.pickAxeTimer = Constants.Player.PickAxe.TIMER + Constants.Warmup.PHASE_TIME;
 	this.pickAxePressed = false;

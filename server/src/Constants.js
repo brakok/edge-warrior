@@ -20,10 +20,9 @@ var Constants = {
 	},
 	Spawn: {
 		Limit: {
-			OFFSET: 130,
-			ON_RELEASE: 100
+			OFFSET: 130
 		},
-		MAXLAUNCHING_Y: 950,
+		MAXLAUNCHING_Y: 1150,
 		MAXLAUNCHING_X: 2650,
 		STUN_TIMER: 0.4
 	},
