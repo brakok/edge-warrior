@@ -88,7 +88,13 @@ Block.prototype.update = function(dt){
 		this.trail.y = this.y;
 		
 		if(!this.isBlockAdded)
+		{
 			Client.game.layer.addChild(this.sprite);
+			
+			//Trigger block creation effect.
+			EffectManager.create(Enum.Effect.Type.DOUBLE_JUMP, this.x, this.y);
+			AudioManager.playEffect(Constants.Sound.File.Player.DOUBLE_JUMP);
+		}
 		
 		this.updatedOnce = true;
 	}
@@ -112,6 +118,9 @@ Block.prototype.update = function(dt){
 		if(this.landingCountdown < 0)
 		{
 			this.hasDoneLandingAnimation = true;
+			
+			if(this.trail && this.trail.isRunning)
+				this.trail.stop();
 			
 			//Create effect.
 			EffectManager.create(Enum.Effect.Type.BLOCK_LANDING, this.x, this.y - (this.sprite.getTextureRect().height*0.5 - Constants.Effect.BlockLanding.OFFSET));
