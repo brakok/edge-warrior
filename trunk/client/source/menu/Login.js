@@ -139,7 +139,7 @@ var Login = cc.LayerColor.extend({
 		this.loginDiv.style.left = (this.width*0.5-(HtmlHelper.computeWidth(this.loginDiv)*0.5)) + 'px';
 		this.loginDiv.style.top = this.height*0.55 + 'px';
 
-		this.loginFooter.style.top = this.height*0.85 + 'px';
+		this.loginFooter.style.top = this.height*0.9 + 'px';
 	}
 });
 
