@@ -94,26 +94,16 @@ BlockListener.prototype.begin = function(arbiter, space){
 	{
 		var killingBlock = (block1 != null ? block1 : block2);
 			
-		if(killingBlock != null && !killingBlock.landed && killingBlock.ownerId != player.id)
+		if(killingBlock != null && !killingBlock.landed && (!killingBlock.owner || killingBlock.owner.id != player.id))
 		{
-			if(killingBlock.ownerId == null)
+			if(killingBlock.owner == null)
 			{
 				this.currentGame.overlord.kill(player, killingBlock.type);
 			}
 			else
 			{
-				//Find killing player.
-				var killingPlayer = null;
-				
-				for(var i in this.currentGame.players)
-				{
-					if(this.currentGame.players[i].id == killingBlock.ownerId)
-						killingPlayer = this.currentGame.players[i];
-				}
-
-				//If found, mark the player to be inserted in the next update in the killer blocks list.
-				if(killingPlayer != null)
-					killingPlayer.kill(player, killingBlock.type);
+				//Mark the player to be inserted in the next update in the killer blocks list.
+				killingBlock.owner.kill(player, killingBlock.type);
 			}
 		}
 		

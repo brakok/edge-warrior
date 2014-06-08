@@ -16,6 +16,7 @@ var Player = function(id, username, x, y, color, game){
 		
 	this.stunTimer = 0;
 	this.stuckTimer = 0;
+	this.isStuck = false;
 		
 	this.isAlive = true;
 	this.toBeDestroy = false;
@@ -310,6 +311,9 @@ Player.prototype.update = function(){
 				
 		if(this.stuckTimer <= 0)
 		{
+			if(this.isStuck)
+				this.unstuck();
+		
 			if(nextX != 0)
 			{
 				var lastFacing = this.facing;
@@ -343,7 +347,7 @@ Player.prototype.update = function(){
 			}
 		}
 		else
-		{
+		{		
 			//Stand if no movement keys are pressed.
 			if(this.groundContact > 0 && this.currentAction != Enum.Action.Type.STANDING && this.currentAction != Enum.Action.Type.JUMPING)
 				this.execute(Enum.Action.Type.STANDING);
@@ -472,7 +476,7 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 															  tmpY, 
 															  this.currentBlock.type, 
 															  this.color,
-															  this.id,
+															  this,
 															  this.currentGame,
 															  this.currentBlock.skill));
 		
@@ -538,6 +542,26 @@ Player.prototype.execute = function(action){
 	};
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_ACTION, data);
+};
+
+Player.prototype.stuck = function(time){
+	this.stuckTimer = time;
+	
+	if(!this.isStuck)
+	{
+		this.isStuck = true;
+		this.changeMass(Constants.Player.STUCK_MASS_FACTOR);
+	}
+};
+
+Player.prototype.unstuck = function(){
+	this.stuckTimer = 0;
+	
+	if(this.isStuck)
+	{
+		this.isStuck = false;
+		this.changeMass(1/Constants.Player.STUCK_MASS_FACTOR);
+	}
 };
 
 //Format for client.

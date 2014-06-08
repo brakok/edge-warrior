@@ -8,19 +8,10 @@ SkillInfo.Eclipse = {
 		//Send client info to create an eclipse.
 		if(block.skill.count > 0)
 		{
-			var owner = null;
-			
-			for(var i in block.currentGame.players)
-				if(i == block.ownerId)
-				{
-					owner = block.currentGame.players[i];
-					break;
-				}
-
-			if(owner)
+			if(block.owner)
 			{
 				var data = {
-					username: owner.username,
+					username: block.owner.username,
 					power: block.skill.power,
 					x: block.x,
 					y: block.y,
