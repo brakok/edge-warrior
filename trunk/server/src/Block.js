@@ -1,11 +1,11 @@
 //Server version of the block.
-var Block = function(x, y, type, color, ownerId, game, skill){
+var Block = function(x, y, type, color, owner, game, skill){
 	
 	this.currentGame = game;
 	
 	this.id = -1;
 	this.linkedBlockId = null;
-	this.ownerId = ownerId;
+	this.owner = owner;
 	
 	this.width = Constants.Block.WIDTH;
 	this.height = Constants.Block.HEIGHT;
@@ -209,26 +209,29 @@ Block.prototype.trigger = function(){
 
 Block.prototype.spawn = function(){
 
-	var killerId = this.ownerId;
-	var posY = Constants.Player.HEIGHT;
+	var killerId = this.owner ? this.owner.id : null;
+	var posY = Constants.Player.HEIGHT*0.75;
+	var pos = this.body.getPos();
 	
 	//Respawn dead players.
 	for(var i in this.currentGame.players)
 	{
-		var factor = Math.PI*(Math.random()*2);
-		
-		var launchPowerX = Constants.Spawn.MAXLAUNCHING_X*Math.sin(factor);
-		var launchPowerY = Math.abs(Constants.Spawn.MAXLAUNCHING_Y*Math.cos(factor));
-		
-		//Prevent block to spawn player on the world edges.
-		if((this.body.getPos().x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
-		|| (this.body.getPos().x > this.currentGame.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
-			launchPowerX *= -1;
-	
 		if(!this.currentGame.players[i].isAlive && this.currentGame.players[i].killerId == killerId)
 		{
+			var factor = Math.PI*Math.random()*2;
+			
+			var launchPowerX = Constants.Spawn.MAXLAUNCHING_X*Math.sin(factor);
+			var launchPowerY = Math.abs(Constants.Spawn.MAXLAUNCHING_Y*Math.cos(factor));
+			
+			//Prevent block to spawn player on the world edges.
+			if((pos.x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
+			|| (pos.x > this.currentGame.world.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
+				launchPowerX *= -1;
+	
+			var varX = (Constants.Block.WIDTH*0.5 - Constants.Player.WIDTH*0.5) * (launchPowerX < 0 ? -1 : 1);
+					
 			//Spawn the player.
-			this.currentGame.players[i].spawn(this.body.getPos().x +(launchPowerX*0.03), this.body.getPos().y + posY);
+			this.currentGame.players[i].spawn(pos.x + varX, pos.y + posY);
 			
 			//Launch the player to random position.
 			this.currentGame.players[i].body.setVel(new chipmunk.Vect(0,0));
@@ -237,7 +240,7 @@ Block.prototype.spawn = function(){
 	}
 	
 	//Check if spawn block is overlord's one.
-	if(this.ownerId == null)
+	if(this.owner == null)
 		this.currentGame.overlord.hasActiveSpawnBlock = false;
 	
 	this.explode(Enum.Block.Destruction.SPAWN);

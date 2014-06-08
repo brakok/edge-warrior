@@ -11,15 +11,15 @@ SkillInfo.PeskyBox = {
 			var targetBlock = block.currentGame.blocks[block.linkedBlockId];
 			var targetPlayer = null;
 			
-			if(targetBlock && targetBlock.ownerId != block.ownerId)
-				targetPlayer = block.currentGame.players[targetBlock.ownerId];
+			if(targetBlock && targetBlock.owner.id != block.owner.id)
+				targetPlayer = targetBlock.owner;
 			
 			//If no target found, randomize.
 			if(!targetPlayer)
 			{
 				var enemies = [];
 				for(var i in block.currentGame.players)
-					if(i != block.ownerId)
+					if(i != block.owner.id)
 						enemies.push(block.currentGame.players[i]);
 						
 				if(enemies.length > 0)

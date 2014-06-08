@@ -20,10 +20,11 @@ var Constants = {
 	},
 	Spawn: {
 		Limit: {
-			OFFSET: 150
+			OFFSET: 130,
+			ON_RELEASE: 100
 		},
-		MAXLAUNCHING_Y: 850,
-		MAXLAUNCHING_X: 2200,
+		MAXLAUNCHING_Y: 950,
+		MAXLAUNCHING_X: 2650,
 		STUN_TIMER: 0.4
 	},
 	Player: {
@@ -35,6 +36,7 @@ var Constants = {
 		HEIGHT: 50,
 		MAX_SPEED_FACTOR: 245,
 		WRONG_SIDE_MINUS_FACTOR: 0.5,
+		STUCK_MASS_FACTOR: 100,
 		PickAxe:  {
 			TIMER: 15,
 			VEL_X: 6,
