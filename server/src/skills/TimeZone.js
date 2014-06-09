@@ -12,7 +12,7 @@ SkillInfo.TimeZone = {
 			block.currentGame.managers.TriggerManager.add(new TimeZone(block.x, 
 																	   block.y, 
 																	   block.id,
-																	   block.owner.id,
+																	   block.owner,
 																	   Constants.Trigger.TimeZone.DURATION + Constants.Trigger.TimeZone.DURATION_STEP*block.skill.power, 
 																	   Constants.Trigger.TimeZone.WIDTH,
 																	   Constants.Trigger.TimeZone.HEIGHT,
