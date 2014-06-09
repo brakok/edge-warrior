@@ -237,6 +237,15 @@ Block.prototype.spawn = function(){
 			this.currentGame.players[i].body.setVel(new chipmunk.Vect(0,0));
 			this.currentGame.players[i].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
 		}
+		else if(this.currentGame.players[i].isAlive && this.currentGame.players[i].id == killerId)
+		{
+			var player = this.currentGame.players[i];
+			var hypo = Math.sqrt(Math.pow(pos.x - player.x, 2) + Math.pow(pos.y - player.y, 2));
+			
+			//Prevent killer to get a double jump when releasing his victims.
+			if(hypo < Constants.Spawn.Limit.ON_RELEASE)
+				player.noGroundTimer = Constants.Spawn.NO_GROUND_FROM_PLAYER_TIMER;
+		}
 	}
 	
 	//Check if spawn block is overlord's one.
