@@ -64,16 +64,8 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 	{
 		if(deathZone != null)
 		{
-			//Find killing player.
-			var killingPlayer = null;
+			var killingPlayer = deathZone.owner;
 			
-			for(var i in this.currentGame.players)
-				if(this.currentGame.players[i].id == deathZone.ownerId)
-				{
-					killingPlayer = this.currentGame.players[i];
-					break;
-				}
-
 			//If found, mark the player to be inserted in the next update in the killer blocks list.
 			if(killingPlayer != null && killingPlayer.id != player.id)
 				killingPlayer.kill(player, Enum.Block.Type.SKILLED);

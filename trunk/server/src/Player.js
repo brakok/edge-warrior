@@ -386,7 +386,7 @@ Player.prototype.update = function(){
 Player.prototype.throwPickAxe = function(){
 
 	//Launch pickaxe.
-	this.currentGame.managers.DeathZoneManager.launch(new Missile(this.id,
+	this.currentGame.managers.DeathZoneManager.launch(new Missile(this,
 																  null,
 																  Enum.DeathZone.Type.PICK_AXE,
 																  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
