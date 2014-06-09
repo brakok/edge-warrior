@@ -16,6 +16,11 @@ var Player = function(id, username, x, y, color, game){
 		
 	this.stunTimer = 0;
 	this.stuckTimer = 0;
+	
+	//Timer that prevents player to land on each others.
+	this.noGroundTimer = 0;
+	this.playerContact = 0;
+	
 	this.isStuck = false;
 		
 	this.isAlive = true;
@@ -123,6 +128,8 @@ Player.prototype.spawn = function(x, y){
 	this.isRemoved = false;
 	
 	this.stunTimer = Constants.Spawn.STUN_TIMER;
+	this.noGroundTimer = Constants.Spawn.NO_GROUND_FROM_PLAYER_TIMER;
+	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
 };
 
@@ -366,6 +373,10 @@ Player.prototype.update = function(){
 	//Reduce stuck timer.
 	if(this.stuckTimer > 0)
 		this.stuckTimer -= this.currentGame.dt;
+		
+	//Reduce no ground timer.
+	if(this.noGroundTimer > 0 && this.playerContact <= 0)
+		this.noGroundTimer -= this.currentGame.dt;
 		
 	//Check timers related to player and trigger actions associated.
 	if(!this.hasWon)

@@ -184,11 +184,13 @@ var Constants = {
 	},
 	Spawn: {
 		Limit: {
-			OFFSET: 130
+			OFFSET: 130,
+			ON_RELEASE: 120
 		},
-		MAXLAUNCHING_Y: 1150,
-		MAXLAUNCHING_X: 2650,
-		STUN_TIMER: 0.4
+		MAXLAUNCHING_Y: 1250,
+		MAXLAUNCHING_X: 2850,
+		STUN_TIMER: 0.4,
+		NO_GROUND_FROM_PLAYER_TIMER: 0.3
 	},
 	Player: {
 		INITIAL_SPAWN_Y: 100,
@@ -977,7 +979,17 @@ GroundListener.prototype.begin = function(arbiter, space){
 		player = arbiter.body_b.userdata.object;
 	
 	if(player != null)
-		player.groundContact++;
+	{
+		//Increment player contact if both bodies are players.
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
+			player.playerContact++;
+		
+		if((arbiter.body_a.userdata == null || arbiter.body_a.userdata.type != Enum.UserData.Type.PLAYER || arbiter.body_b.userdata == null || arbiter.body_b.userdata.type != Enum.UserData.Type.PLAYER) && player.noGroundTimer > 0)
+			player.noGroundTimer = 0;
+		
+		if(player.noGroundTimer <= 0)
+			player.groundContact++;
+	}
 };
 
 GroundListener.prototype.separate = function(arbiter, space){
@@ -990,10 +1002,15 @@ GroundListener.prototype.separate = function(arbiter, space){
 	//Allow player to jump on other.
 	if(arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER && (player == null || sensorIsB))
 		player = arbiter.body_b.userdata.object;
-		
-	if(player != null){
-		player.groundContact--;
-		return;
+	
+	if(player != null)
+	{
+		//Decrement player contact if both bodies are players.
+		if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER && arbiter.body_b.userdata != null && arbiter.body_b.userdata.type == Enum.UserData.Type.PLAYER)
+			player.playerContact--;
+	
+		if(player.noGroundTimer <= 0)
+			player.groundContact--;	
 	}
 };
 var TriggerListener = function(game){
@@ -1967,6 +1984,11 @@ var Player = function(id, username, x, y, color, game){
 		
 	this.stunTimer = 0;
 	this.stuckTimer = 0;
+	
+	//Timer that prevents player to land on each others.
+	this.noGroundTimer = 0;
+	this.playerContact = 0;
+	
 	this.isStuck = false;
 		
 	this.isAlive = true;
@@ -2074,6 +2096,8 @@ Player.prototype.spawn = function(x, y){
 	this.isRemoved = false;
 	
 	this.stunTimer = Constants.Spawn.STUN_TIMER;
+	this.noGroundTimer = Constants.Spawn.NO_GROUND_FROM_PLAYER_TIMER;
+	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
 };
 
@@ -2317,6 +2341,10 @@ Player.prototype.update = function(){
 	//Reduce stuck timer.
 	if(this.stuckTimer > 0)
 		this.stuckTimer -= this.currentGame.dt;
+		
+	//Reduce no ground timer.
+	if(this.noGroundTimer > 0 && this.playerContact <= 0)
+		this.noGroundTimer -= this.currentGame.dt;
 		
 	//Check timers related to player and trigger actions associated.
 	if(!this.hasWon)
@@ -2786,6 +2814,15 @@ Block.prototype.spawn = function(){
 			//Launch the player to random position.
 			this.currentGame.players[i].body.setVel(new chipmunk.Vect(0,0));
 			this.currentGame.players[i].body.applyImpulse(new chipmunk.Vect(launchPowerX, launchPowerY), new chipmunk.Vect(0,0));
+		}
+		else if(this.currentGame.players[i].isAlive && this.currentGame.players[i].id == killerId)
+		{
+			var player = this.currentGame.players[i];
+			var hypo = Math.sqrt(Math.pow(pos.x - player.x, 2) + Math.pow(pos.y - player.y, 2));
+			
+			//Prevent killer to get a double jump when releasing his victims.
+			if(hypo < Constants.Spawn.Limit.ON_RELEASE)
+				player.noGroundTimer = Constants.Spawn.NO_GROUND_FROM_PLAYER_TIMER;
 		}
 	}
 	
