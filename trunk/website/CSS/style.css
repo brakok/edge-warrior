@@ -126,7 +126,7 @@ h2{
 
 /******************************** HEADER **********************************/
 header{
-	background: url(../Images/BG_header.png) repeat-x center top;
+	background: url(../Images/BG_header.png) repeat-x center -40px;
 	background-size: 100%;
 	height:650px;
 	max-width: 1906px;

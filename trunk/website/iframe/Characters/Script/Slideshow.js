@@ -4,9 +4,6 @@ var mySwiper = new Swiper('.swiper-container',{
 	loop:true
   });
   
-  var mySwiper = $('.swiper-container').swiper({
-  slidesPerView:3
-})
 $(window).resize(function(){
   var ww = $(window).width()
   if (ww>1370) mySwiper.params.slidesPerView = 3;
