@@ -3,9 +3,6 @@ var mySwiper = new Swiper('.swiper-container',{
     paginationClickable: true,
   });
   
-var mySwiper = $('.swiper-container').swiper({
-  slidesPerView:5
-})
 $(window).resize(function(){
   var ww = $(window).width()
   if (ww>1600) mySwiper.params.slidesPerView = 5;
