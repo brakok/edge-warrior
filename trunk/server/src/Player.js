@@ -473,15 +473,14 @@ Player.prototype.doubleJump = function(){
 
 Player.prototype.dropBlock = function(x, y, checkDropzone){
 
+	//minor adjust from smoothering.
+	var tmpX = (x != null ? x : this.getPosition().x);
+	var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
+
 	//Spawn a block if drop zone isn't obstructed.
 	if((this.obstruction == 0 || (checkDropzone != null && !checkDropzone)) 
 		&& this.y < this.currentGame.world.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
 	{
-
-		//minor adjust from smoothering.
-		var tmpX = (x != null ? x : this.getPosition().x);
-		var tmpY = (y != null ? y : this.getPosition().y - (Constants.Player.HEIGHT*0.5 + Constants.Block.HEIGHT*0.5) - 5);
-	
 		//Create a block and launch it.
 		this.currentGame.managers.BlockManager.launch(new Block(tmpX, 
 															  tmpY, 
@@ -495,6 +494,17 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		
 		//Ask for next block of current player.
 		io.sockets.sockets[this.id].emit(Constants.Message.NEXT_BLOCK);
+	}
+	else
+	{
+		//If player can't drop a block, create effect.
+		var data = {
+			x: tmpX,
+			y: tmpY,
+			type: Enum.Element.Type.CANCEL_DROP
+		};
+		
+		io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, data);
 	}
 };
 
@@ -583,6 +593,7 @@ Player.prototype.toClient = function(){
 		color: this.color,
 		facing: this.facing,
 		pickAxeCount: this.pickAxeCount,
-		stuckTimer: this.stuckTimer
+		stuckTimer: this.stuckTimer,
+		stunTimer: this.stunTimer
 	};
 };
