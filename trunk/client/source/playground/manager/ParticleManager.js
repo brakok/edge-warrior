@@ -18,6 +18,9 @@ var ParticleManager = {
 			case Enum.Particles.STUCK:
 				emitter = new ParticleEmitter(10, x - 18, y, 5, 20, 1.5, 0, 0.25, 0, 0.5, 0.1, 40, 5, 40, 5, 0, 0, Constants.Player.Z_ORDER + 1, assetsParticles + 'stuck.png', layer, life);
 				break;
+			case Enum.Particles.STUN:
+				emitter = new ParticleEmitter(4, x, y +  20, 20, 3, 0, 0.35, 0.25, 0.15, 0.75, 0.25, 15, 3, 15, 3, 0, 2, Constants.Player.Z_ORDER + 1, assetsParticles + 'stun.png', layer, life, true);
+				break;
 		}
 		
 		if(emitter)

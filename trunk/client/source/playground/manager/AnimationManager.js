@@ -115,6 +115,9 @@ var AnimationManager = {
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'Teleport.plist', 
 														  assetsEffectDir + 'Teleport.png');
 														  
+		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsEffectDir + 'CancelDrop.plist', 
+														  assetsEffectDir + 'CancelDrop.png');
+														  
 		//Player.
 		cc.SpriteFrameCache.getInstance().addSpriteFrames(assetsPlayerDir + 'yellow_idle.plist', 
 														  assetsPlayerDir + 'yellow_idle.png');	

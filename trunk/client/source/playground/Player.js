@@ -26,6 +26,9 @@ var Player = function (x, y, color, isControlled, username) {
 	this.stuckTimer = 0;
 	this.stuckEmitter = null;
 	 
+	this.stunTimer = 0;
+	this.stunEmitter = null;
+	 
 	this.voices = null;
 	
 	this.maySpeak = false;
@@ -305,6 +308,7 @@ Player.prototype.update = function(dt){
 	if(!this.updatedOnce)
 	{
 		this.stuckEmitter = ParticleManager.create(Enum.Particles.STUCK, this.x, this.y, Client.game.layer);
+		this.stunEmitter = ParticleManager.create(Enum.Particles.STUN, this.x, this.y, Client.game.layer);
 		this.updatedOnce = true;
 	}
 	
@@ -314,10 +318,20 @@ Player.prototype.update = function(dt){
 		this.stuckEmitter.x = this.x - 18;
 		this.stuckEmitter.y = this.y;
 	
+		this.stunEmitter.x = this.x;
+		this.stunEmitter.y = this.y + 20;
+	
+		//Handle stuck emitter.
 		if(this.stuckTimer > 0 && !this.stuckEmitter.isRunning)
 			this.stuckEmitter.run();
 		else if(this.stuckTimer <= 0 && this.stuckEmitter.isRunning)
 			this.stuckEmitter.stop(false);
+			
+		//Handle stun emitter.
+		if(this.stunTimer > 0 && !this.stunEmitter.isRunning)
+			this.stunEmitter.run();
+		else if(this.stunTimer <= 0 && this.stunEmitter.isRunning)
+			this.stunEmitter.stop(false);
 	}
 	
 	//Block inputs during warmup phase.
@@ -437,6 +451,7 @@ Player.prototype.fromServer = function(data){
 		
 	this.pickAxeCount = data.pickAxeCount;
 	this.stuckTimer = data.stuckTimer;
+	this.stunTimer = data.stunTimer;
 	
 	if(data.facing != this.facing)
 	{
@@ -457,6 +472,9 @@ Player.prototype.die = function() {
 	
 	if(this.stuckEmitter.isRunning)
 		this.stuckEmitter.stop(false);
+	
+	if(this.stunEmitter.isRunning)
+		this.stunEmitter.stop(false);
 	
 	this.isAlive = false;
 	this.maySpeak = false;
