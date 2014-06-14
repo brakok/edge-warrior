@@ -223,13 +223,18 @@ Block.prototype.spawn = function(){
 			var launchPowerX = Constants.Spawn.MAXLAUNCHING_X*Math.sin(factor);
 			var launchPowerY = Math.abs(Constants.Spawn.MAXLAUNCHING_Y*Math.cos(factor));
 			
+			
 			//Prevent block to spawn player on the world edges.
 			if((pos.x < Constants.Spawn.Limit.OFFSET && launchPowerX < 0)
 			|| (pos.x > this.currentGame.world.width - Constants.Spawn.Limit.OFFSET && launchPowerX > 0))
 				launchPowerX *= -1;
 	
-			var varX = (Constants.Block.WIDTH*0.5 - Constants.Player.WIDTH*0.5) * (launchPowerX < 0 ? -1 : 1);
-					
+			var varX = launchPowerX*0.02;
+			
+			//If X variation is too far from middle...
+			if(Math.abs(varX) >  Constants.Block.WIDTH*0.5 - Constants.Player.WIDTH*0.5)
+				varX = (Constants.Block.WIDTH*0.5 - Constants.Player.WIDTH*0.5) * (launchPowerX < 0 ? -1 : 1);
+		
 			//Spawn the player.
 			this.currentGame.players[i].spawn(pos.x + varX, pos.y + posY);
 			
