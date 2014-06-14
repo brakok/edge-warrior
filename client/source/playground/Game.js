@@ -569,6 +569,9 @@ Game.prototype.addElement = function(remoteElement){
 		case Enum.Element.Type.TELEPORT:
 			EffectManager.create(Enum.Effect.Type.TELEPORT, remoteElement.x, remoteElement.y);
 			return;
+		case Enum.Element.Type.CANCEL_DROP:
+			EffectManager.create(Enum.Effect.Type.CANCEL_DROP, remoteElement.x, remoteElement.y);
+			return;
 	}
 	
 	ElementManager.launch(element);

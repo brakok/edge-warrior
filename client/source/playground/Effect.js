@@ -143,6 +143,14 @@ Effect.prototype.init = function(){
 			this.sprite = cc.Sprite.createWithSpriteFrameName('VenomBall_end.0006.png');
 			this.animation = AnimationManager.create('VenomBall_end', 0, 6, 24);
 			break;
+		case Enum.Effect.Type.CANCEL_DROP:
+		
+			//Effect created when player can't drop a block.
+			this.sprite = cc.Sprite.createWithSpriteFrameName('CancelDrop.0000.png');
+			this.animation = AnimationManager.create('CancelDrop', 0, 14, 24);
+			
+			AudioManager.playEffect(Constants.Sound.File.Player.DOUBLE_JUMP);
+			break;
 	}
 	
 	this.sprite.setZOrder(Constants.Effect.Z_INDEX);

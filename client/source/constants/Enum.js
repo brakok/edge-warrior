@@ -30,7 +30,8 @@ var Enum = {
 		SMOKE: 0,
 		SAND: 1,
 		LIL_BEAM: 2,
-		STUCK: 3
+		STUCK: 3,
+		STUN: 4
 	},
 	World: {
 		Type: {
@@ -156,13 +157,15 @@ var Enum = {
 			SAND_SPIRIT_DISAPPEARING: 16,
 			VENOM_WAVE_END: 17,
 			VENOM_BALL_THROW: 18,
-			VENOM_BALL_END: 19
+			VENOM_BALL_END: 19,
+			CANCEL_DROP: 20
 		}
 	},
 	Element: {
 		Type: {
 			ECLIPSE: 0,
-			TELEPORT: 1
+			TELEPORT: 1,
+			CANCEL_DROP: 2
 		}
 	},
 	Voice: {

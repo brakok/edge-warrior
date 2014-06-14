@@ -43,7 +43,7 @@ Particle.prototype.render = function(){
 		scaleY = height/this.sprite.getTextureRect().height;
 	}
 	
-	Client.game.camera.project(this.sprite, this.x, this.y, scaleX, scaleY);
+	Client.game.camera.project(this.sprite, this.x + (this.emitter.isRelative ? this.emitter.x : 0), this.y + (this.emitter.isRelative ? this.emitter.y : 0), scaleX, scaleY);
 };
 
 Particle.prototype.update = function(dt){
@@ -62,7 +62,7 @@ Particle.prototype.update = function(dt){
 		this.y += this.speed.y;
 	if(this.speed.rotation != 0)
 		this.angle += this.speed.rotation;
-
+		
 	this.sprite.setRotation(this.angle);
 	this.sprite.setOpacity(this.life/this.originalLife*255);
 	this.life -= dt;
