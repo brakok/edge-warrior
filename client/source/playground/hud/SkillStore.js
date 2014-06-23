@@ -6,6 +6,9 @@ var SkillStore = function(x, y, layer){
 	this.x = x;
 	this.y = y;
 
+	this.hasFreeBlock = true;
+	this.needUpdate = false;
+	
 	//Load locks.
 	this.skillItem1 = null;
 	this.skillItem2 = null;
@@ -37,7 +40,7 @@ var SkillStore = function(x, y, layer){
 
 SkillStore.prototype.update = function(units){
 
-	if(this.currentUnits == units)
+	if(this.currentUnits == units && !this.needUpdate)
 		return;
 
 	//Refresh units number.
@@ -45,6 +48,9 @@ SkillStore.prototype.update = function(units){
 
 	//Lock/unlock skills.
 	this.lockSkills();
+	
+	if(this.needUpdate)
+		this.needUpdate = false;
 };
 
 SkillStore.prototype.lockSkills = function(){
