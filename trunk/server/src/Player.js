@@ -72,8 +72,8 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	killed.toBeDestroy = true;
 	
 	//Assign spawn block.
-	if(this.currentBlock.type != Enum.Block.Type.SPAWN && blockType != Enum.Block.Type.SPAWN)
-	{
+	if(this.currentBlock.type != Enum.Block.Type.SPAWN && blockType != Enum.Block.Type.SPAWN && (!this.currentGame.winner || this.currentGame.winner.id != this.id))
+	{	
 		this.currentBlock = {
 			type: Enum.Block.Type.SPAWN,
 			skill: null
