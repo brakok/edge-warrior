@@ -81,11 +81,11 @@ SkillItem.prototype.update = function(){
 	}
 
 	//Lock.
-	if(!this.isGolden && !this.isLocked && this.parent.currentUnits < this.skill.cost)
+	if(!this.isGolden && !this.isLocked && (this.parent.currentUnits < this.skill.cost && !this.parent.hasFreeBlock))
 		this.lock();
 	
 	//Unlock.
-	if(!this.isGolden && this.isLocked && this.parent.currentUnits >= this.skill.cost)
+	if(!this.isGolden && this.isLocked && (this.parent.currentUnits >= this.skill.cost || this.parent.hasFreeBlock))
 		this.unlock();
 	
 	if(!this.levelAdded && this.skill.level > 0)

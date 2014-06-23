@@ -11,7 +11,7 @@ var Player = function (x, y, color, isControlled, username) {
 	this.isAlive = true;
 	this.hasWon = false;
 	
-	this.units = 0;
+	this.units = 0;	
 	this.pickAxeCount = 0;
 	
 	Smoothering.init(this, x, y);
@@ -63,7 +63,7 @@ Player.prototype.buySkill = function(number){
 	if(skill != null)
 	{
 		//Can't exceed buy limit.
-		if(skill.cost > this.units || skill.level >= Constants.Block.Skill.MAX_LEVEL)
+		if((!Client.game.hud.skillStore.hasFreeBlock && skill.cost > this.units) || skill.level >= Constants.Block.Skill.MAX_LEVEL)
 		{
 			AudioManager.playEffect(Constants.Sound.File.Common.DENY_ACTION, false);
 			return;
@@ -91,9 +91,18 @@ Player.prototype.buySkill = function(number){
 		//Trigger buy sound.
 		AudioManager.playEffect(Constants.Sound.File.Common.BUY, false);
 		skill.level++;
-		
+
 		this.units -= skill.cost;
 		skill.cost += skill.costStep;
+
+		if(this.units < 0)
+			this.units = 0;
+		
+		if(Client.game.hud.skillStore.hasFreeBlock)
+		{
+			Client.game.hud.skillStore.hasFreeBlock = false;
+			Client.game.hud.skillStore.needUpdate = true;
+		}
 	}
 };
 
