@@ -1,10 +1,10 @@
 
 //Ground listener.
-var GroundListener = function(game){
+cd.Server.GroundListener = function(game){
 	this.currentGame = game;
 };
 
-GroundListener.prototype.begin = function(arbiter, space){
+cd.Server.GroundListener.prototype.begin = function(arbiter, space){
 
 	var player = null;
 	var sensorIsB = arbiter.b.sensor;
@@ -30,7 +30,7 @@ GroundListener.prototype.begin = function(arbiter, space){
 	}
 };
 
-GroundListener.prototype.separate = function(arbiter, space){
+cd.Server.GroundListener.prototype.separate = function(arbiter, space){
 	var player = null;
 	var sensorIsB = arbiter.b.sensor;
 	

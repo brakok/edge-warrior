@@ -1,10 +1,10 @@
 
 //Goal listener.
-var GoalListener = function(game){
+cd.Server.GoalListener = function(game){
 	this.currentGame = game;
 };
 
-GoalListener.prototype.begin = function(arbiter, space){
+cd.Server.GoalListener.prototype.begin = function(arbiter, space){
 
 	var player = null;
 	

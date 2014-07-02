@@ -1,10 +1,10 @@
 
 //Mortal things listener.
-var DeathZoneListener = function(game){
+cd.Server.DeathZoneListener = function(game){
 	this.currentGame = game;
 };
 
-DeathZoneListener.prototype.begin = function(arbiter, space){
+cd.Server.DeathZoneListener.prototype.begin = function(arbiter, space){
 	
 	var player = null;
 	var block = null;

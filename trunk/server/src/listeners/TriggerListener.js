@@ -1,9 +1,9 @@
 
-var TriggerListener = function(game){
+cd.Server.TriggerListener = function(game){
 	this.currentGame = game;
 };
 
-TriggerListener.prototype.begin = function(arbiter, space){
+cd.Server.TriggerListener.prototype.begin = function(arbiter, space){
 	
 	var player = null;
 	var trigger = null;
@@ -34,7 +34,7 @@ TriggerListener.prototype.begin = function(arbiter, space){
 		trigger.onBegin(player, block);
 };
 
-TriggerListener.prototype.separate = function(arbiter, space){
+cd.Server.TriggerListener.prototype.separate = function(arbiter, space){
 	
 	var player = null;
 	var trigger = null;

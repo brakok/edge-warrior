@@ -1,9 +1,9 @@
 
-var NpcManager = function(game){
+cd.Server.NpcManager = function(game){
 	this.currentGame = game;
 };
 
-NpcManager.prototype.add = function(npc){
+cd.Server.NpcManager.prototype.add = function(npc){
 	
 	npc.id = this.currentGame.npcSequence;
 	this.currentGame.npcSequence++;

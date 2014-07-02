@@ -1,5 +1,5 @@
 
-WorldInfo.Pit = function(width, height, game){
+cd.Server.WorldInfo.Pit = function(width, height, game){
 	
 	this.type = Enum.World.Type.PIT;
 	
@@ -14,7 +14,7 @@ WorldInfo.Pit = function(width, height, game){
 	this.eventTimer = Constants.World.Pit.Event.TIMER_MIN + Math.random()*Constants.World.Pit.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
-WorldInfo.Pit.prototype.load = function(){
+cd.Server.WorldInfo.Pit.prototype.load = function(){
 	
 	//Create floor and walls.
 	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
@@ -40,7 +40,7 @@ WorldInfo.Pit.prototype.load = function(){
 	this.currentGame.space.addShape(rightWall);	
 };
 
-WorldInfo.Pit.prototype.update = function(){
+cd.Server.WorldInfo.Pit.prototype.update = function(){
 	
 	this.eventTimer -= this.currentGame.dt;
 	
@@ -51,15 +51,15 @@ WorldInfo.Pit.prototype.update = function(){
 	}
 };
 
-WorldInfo.Pit.prototype.triggerEvent = function(){
+cd.Server.WorldInfo.Pit.prototype.triggerEvent = function(){
 	
 	//Release a sand spirit.
-	this.currentGame.managers.NpcManager.add(new SandSpirit(Math.random()*this.width,
-														   -Constants.NPC.SandSpirit.HEIGHT*2,
-														   Constants.NPC.SandSpirit.WIDTH,
-														   Constants.NPC.SandSpirit.HEIGHT,
-														   Constants.NPC.SandSpirit.SPEED_X,
-														   Constants.NPC.SandSpirit.SPEED_Y,
-														   Constants.NPC.SandSpirit.DURATION,																   
-														   this.currentGame));
+	this.currentGame.managers.NpcManager.add(new cd.Server.SandSpirit(Math.random()*this.width,
+																	   -Constants.NPC.SandSpirit.HEIGHT*2,
+																	   Constants.NPC.SandSpirit.WIDTH,
+																	   Constants.NPC.SandSpirit.HEIGHT,
+																	   Constants.NPC.SandSpirit.SPEED_X,
+																	   Constants.NPC.SandSpirit.SPEED_Y,
+																	   Constants.NPC.SandSpirit.DURATION,																   
+																	   this.currentGame));
 };

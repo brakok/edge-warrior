@@ -1,4 +1,4 @@
-SkillInfo.Eclipse = {
+cd.Server.SkillInfo.Eclipse = {
 	COUNT: 1,
 	TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 	SELF_DESTROY: false,

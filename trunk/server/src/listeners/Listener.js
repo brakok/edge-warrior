@@ -1,19 +1,19 @@
 
-var Listeners = function(game){
+cd.Server.Listeners = function(game){
 	this.currentGame = game;
 	
 	//All listeners.
-	this.DeathZoneListener = new DeathZoneListener(this.currentGame);
-	this.GoalListener = new GoalListener(this.currentGame);
-	this.DropListener = new DropListener(this.currentGame);
-	this.GroundListener = new GroundListener(this.currentGame);
-	this.BlockListener = new BlockListener(this.currentGame);
-	this.NpcListener = new NpcListener(this.currentGame);
-	this.TriggerListener = new TriggerListener(this.currentGame);
+	this.DeathZoneListener = new cd.Server.DeathZoneListener(this.currentGame);
+	this.GoalListener = new cd.Server.GoalListener(this.currentGame);
+	this.DropListener = new cd.Server.DropListener(this.currentGame);
+	this.GroundListener = new cd.Server.GroundListener(this.currentGame);
+	this.BlockListener = new cd.Server.BlockListener(this.currentGame);
+	this.NpcListener = new cd.Server.NpcListener(this.currentGame);
+	this.TriggerListener = new cd.Server.TriggerListener(this.currentGame);
 	
 };
 
-Listeners.prototype.registerHandlers = function(){
+cd.Server.Listeners.prototype.registerHandlers = function(){
 
 	var currentListeners = this;
 

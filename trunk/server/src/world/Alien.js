@@ -1,5 +1,5 @@
 
-WorldInfo.Alien = function(width, height, game){
+cd.Server.WorldInfo.Alien = function(width, height, game){
 	
 	this.type = Enum.World.Type.ALIEN;
 	
@@ -15,7 +15,7 @@ WorldInfo.Alien = function(width, height, game){
 	this.eventRunning = false;
 };
 
-WorldInfo.Alien.prototype.load = function(){
+cd.Server.WorldInfo.Alien.prototype.load = function(){
 	
 	//Create floor and walls.
 	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
@@ -42,7 +42,7 @@ WorldInfo.Alien.prototype.load = function(){
 };
 
 
-WorldInfo.Alien.prototype.update = function(){
+cd.Server.WorldInfo.Alien.prototype.update = function(){
 
 	this.eventTimer -= this.currentGame.dt;
 	
@@ -53,37 +53,37 @@ WorldInfo.Alien.prototype.update = function(){
 	}
 };
 
-WorldInfo.Alien.prototype.triggerEvent = function(){
+cd.Server.WorldInfo.Alien.prototype.triggerEvent = function(){
 	
 	//Create two venom waves.
-	this.currentGame.managers.TriggerManager.add(new VenomWave(0, 
-															   this.height, 
-															   Constants.Trigger.VenomWave.SPEED_X, 
-															   Constants.Trigger.VenomWave.SPEED_Y, 
-															   this.height, 
-															   Constants.Trigger.VenomWave.COOLDOWN, 
-															   Constants.Trigger.VenomWave.VAR_COOLDOWN,
-															   Constants.Trigger.VenomWave.VEL_MIN_X, 
-															   Constants.Trigger.VenomWave.VEL_RANGE_X, 
-															   Constants.Trigger.VenomWave.VEL_MIN_Y, 
-															   Constants.Trigger.VenomWave.VEL_RANGE_Y,
-															   Constants.Trigger.VenomWave.WIDTH, 
-															   Constants.Trigger.VenomWave.HEIGHT,
-															   this.currentGame));
+	this.currentGame.managers.TriggerManager.add(new cd.Server.VenomWave(0, 
+																	   this.height, 
+																	   Constants.Trigger.VenomWave.SPEED_X, 
+																	   Constants.Trigger.VenomWave.SPEED_Y, 
+																	   this.height, 
+																	   Constants.Trigger.VenomWave.COOLDOWN, 
+																	   Constants.Trigger.VenomWave.VAR_COOLDOWN,
+																	   Constants.Trigger.VenomWave.VEL_MIN_X, 
+																	   Constants.Trigger.VenomWave.VEL_RANGE_X, 
+																	   Constants.Trigger.VenomWave.VEL_MIN_Y, 
+																	   Constants.Trigger.VenomWave.VEL_RANGE_Y,
+																	   Constants.Trigger.VenomWave.WIDTH, 
+																	   Constants.Trigger.VenomWave.HEIGHT,
+																	   this.currentGame));
 
-	this.currentGame.managers.TriggerManager.add(new VenomWave(this.width, 
-															   this.height, 
-															   Constants.Trigger.VenomWave.SPEED_X, 
-															   Constants.Trigger.VenomWave.SPEED_Y, 
-															   this.height, 
-															   Constants.Trigger.VenomWave.COOLDOWN, 
-															   Constants.Trigger.VenomWave.VAR_COOLDOWN,
-															   -Constants.Trigger.VenomWave.VEL_MIN_X, 
-															   -Constants.Trigger.VenomWave.VEL_RANGE_X, 
-															   Constants.Trigger.VenomWave.VEL_MIN_Y, 
-															   Constants.Trigger.VenomWave.VEL_RANGE_Y,
-															   Constants.Trigger.VenomWave.WIDTH, 
-															   Constants.Trigger.VenomWave.HEIGHT,
-															   this.currentGame));
+	this.currentGame.managers.TriggerManager.add(new cd.Server.VenomWave(this.width, 
+																	   this.height, 
+																	   Constants.Trigger.VenomWave.SPEED_X, 
+																	   Constants.Trigger.VenomWave.SPEED_Y, 
+																	   this.height, 
+																	   Constants.Trigger.VenomWave.COOLDOWN, 
+																	   Constants.Trigger.VenomWave.VAR_COOLDOWN,
+																	   -Constants.Trigger.VenomWave.VEL_MIN_X, 
+																	   -Constants.Trigger.VenomWave.VEL_RANGE_X, 
+																	   Constants.Trigger.VenomWave.VEL_MIN_Y, 
+																	   Constants.Trigger.VenomWave.VEL_RANGE_Y,
+																	   Constants.Trigger.VenomWave.WIDTH, 
+																	   Constants.Trigger.VenomWave.HEIGHT,
+																	   this.currentGame));
 	
 };

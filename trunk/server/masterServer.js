@@ -445,25 +445,25 @@ var Constants = {
 	Regex: {
 		EMAIL: /^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/
 	}
-};
+};//Modules.var http = require('http');var chipmunk = require('chipmunk');var os = require('os');//Namespace for server objects.var cd = {	Server: {}};
 var Config = {
 	CreateCouchDbViews: true
 };
-var Listeners = function(game){
+cd.Server.Listeners = function(game){
 	this.currentGame = game;
 	
 	//All listeners.
-	this.DeathZoneListener = new DeathZoneListener(this.currentGame);
-	this.GoalListener = new GoalListener(this.currentGame);
-	this.DropListener = new DropListener(this.currentGame);
-	this.GroundListener = new GroundListener(this.currentGame);
-	this.BlockListener = new BlockListener(this.currentGame);
-	this.NpcListener = new NpcListener(this.currentGame);
-	this.TriggerListener = new TriggerListener(this.currentGame);
+	this.DeathZoneListener = new cd.Server.DeathZoneListener(this.currentGame);
+	this.GoalListener = new cd.Server.GoalListener(this.currentGame);
+	this.DropListener = new cd.Server.DropListener(this.currentGame);
+	this.GroundListener = new cd.Server.GroundListener(this.currentGame);
+	this.BlockListener = new cd.Server.BlockListener(this.currentGame);
+	this.NpcListener = new cd.Server.NpcListener(this.currentGame);
+	this.TriggerListener = new cd.Server.TriggerListener(this.currentGame);
 	
 };
 
-Listeners.prototype.registerHandlers = function(){
+cd.Server.Listeners.prototype.registerHandlers = function(){
 
 	var currentListeners = this;
 
@@ -578,11 +578,11 @@ Listeners.prototype.registerHandlers = function(){
 											   function(arbiter, space){ currentListeners.DropListener.separate(arbiter, space);});
 };
 //Block listener.
-var BlockListener = function(game){
+cd.Server.BlockListener = function(game){
 	this.currentGame = game;
 };
 
-BlockListener.prototype.begin = function(arbiter, space){
+cd.Server.BlockListener.prototype.begin = function(arbiter, space){
 	
 	var block1 = null;
 	var block2 = null;
@@ -708,7 +708,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 	}
 };
 	
-BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
+cd.Server.BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 	
 	switch(skillBlock.skill.trigger){
 		case Enum.Block.Skill.Trigger.ON_LANDING:
@@ -722,7 +722,7 @@ BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 	}
 };
 	
-BlockListener.prototype.destroyLeaves = function(blockId, previousId){
+cd.Server.BlockListener.prototype.destroyLeaves = function(blockId, previousId){
 		
 	var block = this.currentGame.blocks[blockId];
 	
@@ -734,11 +734,11 @@ BlockListener.prototype.destroyLeaves = function(blockId, previousId){
 			this.destroyLeaves(block.linkedBlockId, blockId);
 	}
 };
-var NpcListener = function(game){
+cd.Server.NpcListener = function(game){
 	this.currentGame = game;
 };
 
-NpcListener.prototype.begin = function(arbiter, space){
+cd.Server.NpcListener.prototype.begin = function(arbiter, space){
 	
 	var player = null;
 	var npc = null;
@@ -769,7 +769,7 @@ NpcListener.prototype.begin = function(arbiter, space){
 		npc.onBegin(player);
 };
 
-NpcListener.prototype.separate = function(arbiter, space){
+cd.Server.NpcListener.prototype.separate = function(arbiter, space){
 	
 	var player = null;
 	var npc = null;
@@ -800,11 +800,11 @@ NpcListener.prototype.separate = function(arbiter, space){
 		npc.onEnd(player);
 };
 //Mortal things listener.
-var DeathZoneListener = function(game){
+cd.Server.DeathZoneListener = function(game){
 	this.currentGame = game;
 };
 
-DeathZoneListener.prototype.begin = function(arbiter, space){
+cd.Server.DeathZoneListener.prototype.begin = function(arbiter, space){
 	
 	var player = null;
 	var block = null;
@@ -903,11 +903,11 @@ DeathZoneListener.prototype.begin = function(arbiter, space){
 	}
 };
 //Drop listener.
-var DropListener = function(game){
+cd.Server.DropListener = function(game){
 	this.currentGame = game;
 };
 
-DropListener.prototype.begin = function(arbiter, space){
+cd.Server.DropListener.prototype.begin = function(arbiter, space){
 	var player = null;
 	
 	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
@@ -920,7 +920,7 @@ DropListener.prototype.begin = function(arbiter, space){
 		player.obstruction++;
 };
 		
-DropListener.prototype.separate = function(arbiter, space){
+cd.Server.DropListener.prototype.separate = function(arbiter, space){
 	var player = null;
 	
 	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
@@ -933,11 +933,11 @@ DropListener.prototype.separate = function(arbiter, space){
 		player.obstruction--;
 };
 //Goal listener.
-var GoalListener = function(game){
+cd.Server.GoalListener = function(game){
 	this.currentGame = game;
 };
 
-GoalListener.prototype.begin = function(arbiter, space){
+cd.Server.GoalListener.prototype.begin = function(arbiter, space){
 
 	var player = null;
 	
@@ -953,11 +953,11 @@ GoalListener.prototype.begin = function(arbiter, space){
 		player.toBeDestroy = true;
 };
 //Ground listener.
-var GroundListener = function(game){
+cd.Server.GroundListener = function(game){
 	this.currentGame = game;
 };
 
-GroundListener.prototype.begin = function(arbiter, space){
+cd.Server.GroundListener.prototype.begin = function(arbiter, space){
 
 	var player = null;
 	var sensorIsB = arbiter.b.sensor;
@@ -983,7 +983,7 @@ GroundListener.prototype.begin = function(arbiter, space){
 	}
 };
 
-GroundListener.prototype.separate = function(arbiter, space){
+cd.Server.GroundListener.prototype.separate = function(arbiter, space){
 	var player = null;
 	var sensorIsB = arbiter.b.sensor;
 	
@@ -1004,11 +1004,11 @@ GroundListener.prototype.separate = function(arbiter, space){
 			player.groundContact--;	
 	}
 };
-var TriggerListener = function(game){
+cd.Server.TriggerListener = function(game){
 	this.currentGame = game;
 };
 
-TriggerListener.prototype.begin = function(arbiter, space){
+cd.Server.TriggerListener.prototype.begin = function(arbiter, space){
 	
 	var player = null;
 	var trigger = null;
@@ -1039,7 +1039,7 @@ TriggerListener.prototype.begin = function(arbiter, space){
 		trigger.onBegin(player, block);
 };
 
-TriggerListener.prototype.separate = function(arbiter, space){
+cd.Server.TriggerListener.prototype.separate = function(arbiter, space){
 	
 	var player = null;
 	var trigger = null;
@@ -1069,13 +1069,13 @@ TriggerListener.prototype.separate = function(arbiter, space){
 	if(trigger && trigger.onEnd)
 		trigger.onEnd(player, block);
 };
-var Managers = function(game){
+cd.Server.Managers = function(game){
 	this.currentGame = game;
 
-	this.BlockManager = new BlockManager(this.currentGame);
-	this.DeathZoneManager = new DeathZoneManager(this.currentGame);
-	this.NpcManager = new NpcManager(this.currentGame);
-	this.TriggerManager = new TriggerManager(this.currentGame);
+	this.BlockManager = new cd.Server.BlockManager(this.currentGame);
+	this.DeathZoneManager = new cd.Server.DeathZoneManager(this.currentGame);
+	this.NpcManager = new cd.Server.NpcManager(this.currentGame);
+	this.TriggerManager = new cd.Server.TriggerManager(this.currentGame);
 };
 var Account = new function(){
 	var cradle = require('cradle');
@@ -1478,7 +1478,7 @@ var Account = new function(){
 		});
 	};
 };
-var SkillInfo = {
+cd.Server.SkillInfo = {
 	load: function(skill){
 		
 		var tmpSkill = null;
@@ -1516,7 +1516,7 @@ var SkillInfo = {
 		
 		return skill;
 	}
-};SkillInfo.Eclipse = {
+};cd.Server.SkillInfo.Eclipse = {
 	COUNT: 1,
 	TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 	SELF_DESTROY: false,
@@ -1543,7 +1543,7 @@ var SkillInfo = {
 		block.skill.count--;
 		block.mustTrigger = false;
 	}
-};SkillInfo.FirePulse = {
+};cd.Server.SkillInfo.FirePulse = {
 	COUNT: 1,
 	TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 	SELF_DESTROY: true,
@@ -1554,29 +1554,29 @@ var SkillInfo = {
 		if(block.landingTimer <= 0 && block.skill.count > 0)
 		{
 			//Launch one fireball for both sides.
-			block.currentGame.managers.DeathZoneManager.launch(new Missile(block.owner,
-																		  null,
-																		  Enum.DeathZone.Type.FIREBALL,
-																		  block.x,
-																		  block.y, 
-																		  Constants.DeathZone.Fireball.SPEED_MIN + Constants.DeathZone.Fireball.SPEED_STEP*block.skill.power,
-																		  0,
-																		  Constants.DeathZone.Fireball.DISTANCE_MIN + Constants.DeathZone.Fireball.DISTANCE_STEP*block.skill.power,
-																		  Constants.DeathZone.Fireball.WIDTH,
-																		  Constants.DeathZone.Fireball.HEIGHT,
-																		  block.currentGame));
+			block.currentGame.managers.DeathZoneManager.launch(new cd.Server.Missile(block.owner,
+																				  null,
+																				  Enum.DeathZone.Type.FIREBALL,
+																				  block.x,
+																				  block.y, 
+																				  Constants.DeathZone.Fireball.SPEED_MIN + Constants.DeathZone.Fireball.SPEED_STEP*block.skill.power,
+																				  0,
+																				  Constants.DeathZone.Fireball.DISTANCE_MIN + Constants.DeathZone.Fireball.DISTANCE_STEP*block.skill.power,
+																				  Constants.DeathZone.Fireball.WIDTH,
+																				  Constants.DeathZone.Fireball.HEIGHT,
+																				  block.currentGame));
 			
-			block.currentGame.managers.DeathZoneManager.launch(new Missile(block.owner,
-																		  null,
-																		  Enum.DeathZone.Type.FIREBALL,
-																		  block.x,
-																		  block.y, 
-																		  (Constants.DeathZone.Fireball.SPEED_MIN + Constants.DeathZone.Fireball.SPEED_STEP*block.skill.power)*-1,
-																		  0,
-																		  Constants.DeathZone.Fireball.DISTANCE_MIN + Constants.DeathZone.Fireball.DISTANCE_STEP*block.skill.power,
-																		  Constants.DeathZone.Fireball.WIDTH,
-																		  Constants.DeathZone.Fireball.HEIGHT,
-																		  block.currentGame));
+			block.currentGame.managers.DeathZoneManager.launch(new cd.Server.Missile(block.owner,
+																				  null,
+																				  Enum.DeathZone.Type.FIREBALL,
+																				  block.x,
+																				  block.y, 
+																				  (Constants.DeathZone.Fireball.SPEED_MIN + Constants.DeathZone.Fireball.SPEED_STEP*block.skill.power)*-1,
+																				  0,
+																				  Constants.DeathZone.Fireball.DISTANCE_MIN + Constants.DeathZone.Fireball.DISTANCE_STEP*block.skill.power,
+																				  Constants.DeathZone.Fireball.WIDTH,
+																				  Constants.DeathZone.Fireball.HEIGHT,
+																				  block.currentGame));
 		
 			block.skill.count--;
 			block.mustTrigger = false;
@@ -1584,7 +1584,7 @@ var SkillInfo = {
 		}
 	}
 };
-SkillInfo.JawFall = {
+cd.Server.SkillInfo.JawFall = {
 	COUNT: 1,
 	TRIGGER: Enum.Block.Skill.Trigger.ON_LAUNCHING,
 	SELF_DESTROY: false,
@@ -1594,19 +1594,19 @@ SkillInfo.JawFall = {
 	
 		//Add jaw to falling block.
 		if(block.skill.count > 0)
-			block.currentGame.managers.DeathZoneManager.launch(new Jaw(block, 
-																	   0, 
-																	   (Constants.Block.HEIGHT*0.33 + Constants.DeathZone.Jaw.HEIGHT*0.5)*-1, 
-																	   Constants.DeathZone.Jaw.INITIAL_COUNT + Constants.DeathZone.Jaw.STEP*block.skill.power, 
-																	   Constants.DeathZone.Jaw.WIDTH, 
-																	   Constants.DeathZone.Jaw.HEIGHT, 
-																	   block.currentGame));
+			block.currentGame.managers.DeathZoneManager.launch(new cd.Server.Jaw(block, 
+																				   0, 
+																				   (Constants.Block.HEIGHT*0.33 + Constants.DeathZone.Jaw.HEIGHT*0.5)*-1, 
+																				   Constants.DeathZone.Jaw.INITIAL_COUNT + Constants.DeathZone.Jaw.STEP*block.skill.power, 
+																				   Constants.DeathZone.Jaw.WIDTH, 
+																				   Constants.DeathZone.Jaw.HEIGHT, 
+																				   block.currentGame));
 
 		block.skill.count--;
 		block.mustTrigger = false;
 	}
 };
-SkillInfo.PeskyBox = {
+cd.Server.SkillInfo.PeskyBox = {
 	COUNT: 1,
 	TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 	SELF_DESTROY: false,
@@ -1634,24 +1634,24 @@ SkillInfo.PeskyBox = {
 			}
 			
 			if(targetPlayer && !targetPlayer.hasWon)
-				block.currentGame.managers.NpcManager.add(new PeskyBox(block.x,
-																	   block.y - Constants.NPC.PeskyBox.HEIGHT*0.5,
-																	   Constants.NPC.PeskyBox.WIDTH,
-																	   Constants.NPC.PeskyBox.HEIGHT,
-																	   Constants.NPC.PeskyBox.SPEED + Constants.NPC.PeskyBox.SPEED_STEP*block.skill.power,
-																	   Constants.NPC.PeskyBox.DURATION + Constants.NPC.PeskyBox.DURATION_STEP*block.skill.power,
-																	   Constants.NPC.PeskyBox.FLEE_TIMER - Constants.NPC.PeskyBox.FLEE_STEP*block.skill.power,
-																	   Constants.NPC.PeskyBox.PUSH_X + Constants.NPC.PeskyBox.PUSH_X_STEP*block.skill.power,
-																	   Constants.NPC.PeskyBox.PUSH_Y + Constants.NPC.PeskyBox.PUSH_Y_STEP*block.skill.power,
-																	   targetPlayer,																	   
-																	   block.currentGame));
+				block.currentGame.managers.NpcManager.add(new cd.Server.PeskyBox(block.x,
+																			   block.y - Constants.NPC.PeskyBox.HEIGHT*0.5,
+																			   Constants.NPC.PeskyBox.WIDTH,
+																			   Constants.NPC.PeskyBox.HEIGHT,
+																			   Constants.NPC.PeskyBox.SPEED + Constants.NPC.PeskyBox.SPEED_STEP*block.skill.power,
+																			   Constants.NPC.PeskyBox.DURATION + Constants.NPC.PeskyBox.DURATION_STEP*block.skill.power,
+																			   Constants.NPC.PeskyBox.FLEE_TIMER - Constants.NPC.PeskyBox.FLEE_STEP*block.skill.power,
+																			   Constants.NPC.PeskyBox.PUSH_X + Constants.NPC.PeskyBox.PUSH_X_STEP*block.skill.power,
+																			   Constants.NPC.PeskyBox.PUSH_Y + Constants.NPC.PeskyBox.PUSH_Y_STEP*block.skill.power,
+																			   targetPlayer,																	   
+																			   block.currentGame));
 		}
 		
 		block.skill.count--;
 		block.mustTrigger = false;
 	}
 };
-SkillInfo.Deflector = {
+cd.Server.SkillInfo.Deflector = {
 	COUNT: 1,
 	TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 	SELF_DESTROY: false,
@@ -1661,19 +1661,19 @@ SkillInfo.Deflector = {
 	
 		//Add jaw to falling block.
 		if(block.skill.count > 0)
-			block.currentGame.managers.TriggerManager.add(new Deflector(block.x, 
-																		   block.y + Constants.Trigger.Deflector.REL_Y, 
-																		   Constants.Trigger.Deflector.DURATION + Constants.Trigger.Deflector.DURATION_STEP*block.skill.power, 
-																		   Constants.Trigger.Deflector.PUSH + Constants.Trigger.Deflector.PUSH_STEP*block.skill.power, 
-																		   Constants.Trigger.Deflector.WIDTH, 
-																		   Constants.Trigger.Deflector.HEIGHT, 
-																		   block.currentGame));
+			block.currentGame.managers.TriggerManager.add(new cd.Server.Deflector(block.x, 
+																				   block.y + Constants.Trigger.Deflector.REL_Y, 
+																				   Constants.Trigger.Deflector.DURATION + Constants.Trigger.Deflector.DURATION_STEP*block.skill.power, 
+																				   Constants.Trigger.Deflector.PUSH + Constants.Trigger.Deflector.PUSH_STEP*block.skill.power, 
+																				   Constants.Trigger.Deflector.WIDTH, 
+																				   Constants.Trigger.Deflector.HEIGHT, 
+																				   block.currentGame));
 
 		block.skill.count--;
 		block.mustTrigger = false;
 	}
 };
-SkillInfo.TimeZone = {
+cd.Server.SkillInfo.TimeZone = {
 	COUNT: 1,
 	TRIGGER: Enum.Block.Skill.Trigger.ON_LANDING,
 	SELF_DESTROY: false,
@@ -1683,20 +1683,20 @@ SkillInfo.TimeZone = {
 	
 		//Create time zone on landing.
 		if(block.skill.count > 0)
-			block.currentGame.managers.TriggerManager.add(new TimeZone(block.x, 
-																	   block.y, 
-																	   block.id,
-																	   block.owner,
-																	   Constants.Trigger.TimeZone.DURATION + Constants.Trigger.TimeZone.DURATION_STEP*block.skill.power, 
-																	   Constants.Trigger.TimeZone.WIDTH,
-																	   Constants.Trigger.TimeZone.HEIGHT,
-																	   block.currentGame));
+			block.currentGame.managers.TriggerManager.add(new cd.Server.TimeZone(block.x, 
+																			   block.y, 
+																			   block.id,
+																			   block.owner,
+																			   Constants.Trigger.TimeZone.DURATION + Constants.Trigger.TimeZone.DURATION_STEP*block.skill.power, 
+																			   Constants.Trigger.TimeZone.WIDTH,
+																			   Constants.Trigger.TimeZone.HEIGHT,
+																			   block.currentGame));
 
 		block.skill.count--;
 		block.mustTrigger = false;
 	}
 };
-var SpawnZone = function(x, y, width, height, game){
+cd.Server.SpawnZone = function(x, y, width, height, game){
 	this.x = x;
 	this.y = y;
 	this.width = width;
@@ -1704,7 +1704,7 @@ var SpawnZone = function(x, y, width, height, game){
 	this.currentGame = game;
 };
 
-SpawnZone.prototype.init = function(){
+cd.Server.SpawnZone.prototype.init = function(){
 
 	this.body = new chipmunk.Body(Infinity, Infinity);
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
@@ -1720,27 +1720,27 @@ SpawnZone.prototype.init = function(){
 	this.shape.setCollisionType(Enum.Collision.Type.SPAWN);
 	this.shape.sensor = true;
 };
-var WorldInfo = {
+cd.Server.WorldInfo = {
 	create: function(type, width, height, game){
 	
 		var world = null;
 		
 		switch(type){
 			case Enum.World.Type.CHURCH:
-				world = new WorldInfo.Church(width, height, game);
+				world = new cd.Server.WorldInfo.Church(width, height, game);
 				break;
 			case Enum.World.Type.ALIEN:
-				world = new WorldInfo.Alien(width, height, game);
+				world = new cd.Server.WorldInfo.Alien(width, height, game);
 				break;
 			case Enum.World.Type.PIT:
-				world = new WorldInfo.Pit(width, height, game);
+				world = new cd.Server.WorldInfo.Pit(width, height, game);
 				break;
 		}
 		
 		return world;
 	}
 };
-WorldInfo.Alien = function(width, height, game){
+cd.Server.WorldInfo.Alien = function(width, height, game){
 	
 	this.type = Enum.World.Type.ALIEN;
 	
@@ -1756,7 +1756,7 @@ WorldInfo.Alien = function(width, height, game){
 	this.eventRunning = false;
 };
 
-WorldInfo.Alien.prototype.load = function(){
+cd.Server.WorldInfo.Alien.prototype.load = function(){
 	
 	//Create floor and walls.
 	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
@@ -1783,7 +1783,7 @@ WorldInfo.Alien.prototype.load = function(){
 };
 
 
-WorldInfo.Alien.prototype.update = function(){
+cd.Server.WorldInfo.Alien.prototype.update = function(){
 
 	this.eventTimer -= this.currentGame.dt;
 	
@@ -1794,41 +1794,41 @@ WorldInfo.Alien.prototype.update = function(){
 	}
 };
 
-WorldInfo.Alien.prototype.triggerEvent = function(){
+cd.Server.WorldInfo.Alien.prototype.triggerEvent = function(){
 	
 	//Create two venom waves.
-	this.currentGame.managers.TriggerManager.add(new VenomWave(0, 
-															   this.height, 
-															   Constants.Trigger.VenomWave.SPEED_X, 
-															   Constants.Trigger.VenomWave.SPEED_Y, 
-															   this.height, 
-															   Constants.Trigger.VenomWave.COOLDOWN, 
-															   Constants.Trigger.VenomWave.VAR_COOLDOWN,
-															   Constants.Trigger.VenomWave.VEL_MIN_X, 
-															   Constants.Trigger.VenomWave.VEL_RANGE_X, 
-															   Constants.Trigger.VenomWave.VEL_MIN_Y, 
-															   Constants.Trigger.VenomWave.VEL_RANGE_Y,
-															   Constants.Trigger.VenomWave.WIDTH, 
-															   Constants.Trigger.VenomWave.HEIGHT,
-															   this.currentGame));
+	this.currentGame.managers.TriggerManager.add(new cd.Server.VenomWave(0, 
+																	   this.height, 
+																	   Constants.Trigger.VenomWave.SPEED_X, 
+																	   Constants.Trigger.VenomWave.SPEED_Y, 
+																	   this.height, 
+																	   Constants.Trigger.VenomWave.COOLDOWN, 
+																	   Constants.Trigger.VenomWave.VAR_COOLDOWN,
+																	   Constants.Trigger.VenomWave.VEL_MIN_X, 
+																	   Constants.Trigger.VenomWave.VEL_RANGE_X, 
+																	   Constants.Trigger.VenomWave.VEL_MIN_Y, 
+																	   Constants.Trigger.VenomWave.VEL_RANGE_Y,
+																	   Constants.Trigger.VenomWave.WIDTH, 
+																	   Constants.Trigger.VenomWave.HEIGHT,
+																	   this.currentGame));
 
-	this.currentGame.managers.TriggerManager.add(new VenomWave(this.width, 
-															   this.height, 
-															   Constants.Trigger.VenomWave.SPEED_X, 
-															   Constants.Trigger.VenomWave.SPEED_Y, 
-															   this.height, 
-															   Constants.Trigger.VenomWave.COOLDOWN, 
-															   Constants.Trigger.VenomWave.VAR_COOLDOWN,
-															   -Constants.Trigger.VenomWave.VEL_MIN_X, 
-															   -Constants.Trigger.VenomWave.VEL_RANGE_X, 
-															   Constants.Trigger.VenomWave.VEL_MIN_Y, 
-															   Constants.Trigger.VenomWave.VEL_RANGE_Y,
-															   Constants.Trigger.VenomWave.WIDTH, 
-															   Constants.Trigger.VenomWave.HEIGHT,
-															   this.currentGame));
+	this.currentGame.managers.TriggerManager.add(new cd.Server.VenomWave(this.width, 
+																	   this.height, 
+																	   Constants.Trigger.VenomWave.SPEED_X, 
+																	   Constants.Trigger.VenomWave.SPEED_Y, 
+																	   this.height, 
+																	   Constants.Trigger.VenomWave.COOLDOWN, 
+																	   Constants.Trigger.VenomWave.VAR_COOLDOWN,
+																	   -Constants.Trigger.VenomWave.VEL_MIN_X, 
+																	   -Constants.Trigger.VenomWave.VEL_RANGE_X, 
+																	   Constants.Trigger.VenomWave.VEL_MIN_Y, 
+																	   Constants.Trigger.VenomWave.VEL_RANGE_Y,
+																	   Constants.Trigger.VenomWave.WIDTH, 
+																	   Constants.Trigger.VenomWave.HEIGHT,
+																	   this.currentGame));
 	
 };
-WorldInfo.Church = function(width, height, game){
+cd.Server.WorldInfo.Church = function(width, height, game){
 	
 	this.type = Enum.World.Type.CHURCH;
 	
@@ -1843,7 +1843,7 @@ WorldInfo.Church = function(width, height, game){
 	this.eventTimer = Constants.World.Church.Event.TIMER_MIN + Math.random()*Constants.World.Church.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
-WorldInfo.Church.prototype.load = function(){
+cd.Server.WorldInfo.Church.prototype.load = function(){
 	
 	//Create floor and walls.
 	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
@@ -1869,7 +1869,7 @@ WorldInfo.Church.prototype.load = function(){
 	this.currentGame.space.addShape(rightWall);	
 };
 
-WorldInfo.Church.prototype.update = function(){
+cd.Server.WorldInfo.Church.prototype.update = function(){
 
 	this.eventTimer -= this.currentGame.dt;
 	
@@ -1880,21 +1880,21 @@ WorldInfo.Church.prototype.update = function(){
 	}
 };
 
-WorldInfo.Church.prototype.triggerEvent = function(){
+cd.Server.WorldInfo.Church.prototype.triggerEvent = function(){
 	
 	//Create a gravity beam.
-	this.currentGame.managers.TriggerManager.add(new GravityBeam(Constants.Trigger.GravityBeam.WIDTH*0.5 + Math.random()*(this.currentGame.world.width - Constants.Trigger.GravityBeam.WIDTH), 
-															     Constants.Trigger.GravityBeam.HEIGHT*0.5, 
-																 Constants.Trigger.GravityBeam.WIDTH,
-																 Constants.Trigger.GravityBeam.HEIGHT,
-																 Constants.Trigger.GravityBeam.DURATION,
-																 Constants.Trigger.GravityBeam.MAX_LIFT_HEIGHT,
-																 Constants.Trigger.GravityBeam.TIME_ALLOWED,
-																 Constants.Trigger.GravityBeam.IMPULSE,
-																 this.currentGame));
+	this.currentGame.managers.TriggerManager.add(new cd.Server.GravityBeam(Constants.Trigger.GravityBeam.WIDTH*0.5 + Math.random()*(this.currentGame.world.width - Constants.Trigger.GravityBeam.WIDTH), 
+																			 Constants.Trigger.GravityBeam.HEIGHT*0.5, 
+																			 Constants.Trigger.GravityBeam.WIDTH,
+																			 Constants.Trigger.GravityBeam.HEIGHT,
+																			 Constants.Trigger.GravityBeam.DURATION,
+																			 Constants.Trigger.GravityBeam.MAX_LIFT_HEIGHT,
+																			 Constants.Trigger.GravityBeam.TIME_ALLOWED,
+																			 Constants.Trigger.GravityBeam.IMPULSE,
+																			 this.currentGame));
 	
 };
-WorldInfo.Pit = function(width, height, game){
+cd.Server.WorldInfo.Pit = function(width, height, game){
 	
 	this.type = Enum.World.Type.PIT;
 	
@@ -1909,7 +1909,7 @@ WorldInfo.Pit = function(width, height, game){
 	this.eventTimer = Constants.World.Pit.Event.TIMER_MIN + Math.random()*Constants.World.Pit.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
-WorldInfo.Pit.prototype.load = function(){
+cd.Server.WorldInfo.Pit.prototype.load = function(){
 	
 	//Create floor and walls.
 	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
@@ -1935,7 +1935,7 @@ WorldInfo.Pit.prototype.load = function(){
 	this.currentGame.space.addShape(rightWall);	
 };
 
-WorldInfo.Pit.prototype.update = function(){
+cd.Server.WorldInfo.Pit.prototype.update = function(){
 	
 	this.eventTimer -= this.currentGame.dt;
 	
@@ -1946,19 +1946,19 @@ WorldInfo.Pit.prototype.update = function(){
 	}
 };
 
-WorldInfo.Pit.prototype.triggerEvent = function(){
+cd.Server.WorldInfo.Pit.prototype.triggerEvent = function(){
 	
 	//Release a sand spirit.
-	this.currentGame.managers.NpcManager.add(new SandSpirit(Math.random()*this.width,
-														   -Constants.NPC.SandSpirit.HEIGHT*2,
-														   Constants.NPC.SandSpirit.WIDTH,
-														   Constants.NPC.SandSpirit.HEIGHT,
-														   Constants.NPC.SandSpirit.SPEED_X,
-														   Constants.NPC.SandSpirit.SPEED_Y,
-														   Constants.NPC.SandSpirit.DURATION,																   
-														   this.currentGame));
+	this.currentGame.managers.NpcManager.add(new cd.Server.SandSpirit(Math.random()*this.width,
+																	   -Constants.NPC.SandSpirit.HEIGHT*2,
+																	   Constants.NPC.SandSpirit.WIDTH,
+																	   Constants.NPC.SandSpirit.HEIGHT,
+																	   Constants.NPC.SandSpirit.SPEED_X,
+																	   Constants.NPC.SandSpirit.SPEED_Y,
+																	   Constants.NPC.SandSpirit.DURATION,																   
+																	   this.currentGame));
 };//Server version of the player.
-var Player = function(id, username, x, y, color, game){
+cd.Server.Player = function(id, username, x, y, color, game){
 
 	this.currentGame = game;
 	this.username = username;
@@ -2026,7 +2026,7 @@ var Player = function(id, username, x, y, color, game){
 	this.body = null;	
 };
 
-Player.prototype.kill = function(killed, blockType, mustStealList){
+cd.Server.Player.prototype.kill = function(killed, blockType, mustStealList){
 
 	killed.toBeDestroy = true;
 	
@@ -2071,7 +2071,7 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	}
 };
 
-Player.prototype.spawn = function(x, y){
+cd.Server.Player.prototype.spawn = function(x, y){
 
 	//Set new position.
 	this.body.setPos(new chipmunk.Vect(x, y));
@@ -2092,7 +2092,7 @@ Player.prototype.spawn = function(x, y){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
 };
 
-Player.prototype.win = function(){
+cd.Server.Player.prototype.win = function(){
 	
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
@@ -2104,7 +2104,7 @@ Player.prototype.win = function(){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.AT_GOAL, this.toClient());
 };
 
-Player.prototype.die = function(){
+cd.Server.Player.prototype.die = function(){
 
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
@@ -2155,7 +2155,7 @@ Player.prototype.die = function(){
 };
 
 //Leave current game.
-Player.prototype.leave = function(){
+cd.Server.Player.prototype.leave = function(){
 	
 	if(this.isAlive && !this.isRemoved)
 	{
@@ -2174,12 +2174,12 @@ Player.prototype.leave = function(){
 	}
 };
 
-Player.prototype.getPosition = function(){
+cd.Server.Player.prototype.getPosition = function(){
 	
 	return (this.body != null ? this.body.getPos() : new chipmunk.Vect(this.x, this.y));
 };
 
-Player.prototype.update = function(){
+cd.Server.Player.prototype.update = function(){
 	
 	//Can't allow a player from falling down the map.
 	if(this.y < 0)
@@ -2342,25 +2342,25 @@ Player.prototype.update = function(){
 		this.checkTimers();
 };
 
-Player.prototype.throwPickAxe = function(){
+cd.Server.Player.prototype.throwPickAxe = function(){
 
 	//Launch pickaxe.
-	this.currentGame.managers.DeathZoneManager.launch(new Missile(this,
-																  null,
-																  Enum.DeathZone.Type.PICK_AXE,
-																  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
-																  this.y + Constants.Player.PickAxe.OFFSET_Y, 
-																  Constants.Player.PickAxe.VEL_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1),
-																  Constants.Player.PickAxe.VEL_Y,
-																  Constants.Player.PickAxe.DISTANCE,
-																  Constants.Player.PickAxe.WIDTH, 
-																  Constants.Player.PickAxe.HEIGHT,
-																  this.currentGame));
+	this.currentGame.managers.DeathZoneManager.launch(new cd.Server.Missile(this,
+																		  null,
+																		  Enum.DeathZone.Type.PICK_AXE,
+																		  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
+																		  this.y + Constants.Player.PickAxe.OFFSET_Y, 
+																		  Constants.Player.PickAxe.VEL_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1),
+																		  Constants.Player.PickAxe.VEL_Y,
+																		  Constants.Player.PickAxe.DISTANCE,
+																		  Constants.Player.PickAxe.WIDTH, 
+																		  Constants.Player.PickAxe.HEIGHT,
+																		  this.currentGame));
 	
 	this.pickAxeCount--;
 };
 
-Player.prototype.checkTimers = function(){
+cd.Server.Player.prototype.checkTimers = function(){
 
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
 	if(this.currentBlock.type == Enum.Block.Type.SPAWN && this.isAlive)
@@ -2398,11 +2398,11 @@ Player.prototype.checkTimers = function(){
 	
 };
 
-Player.prototype.turn = function(){
+cd.Server.Player.prototype.turn = function(){
 	//Nothing.
 };
 
-Player.prototype.jump = function(isDoubleJumping){
+cd.Server.Player.prototype.jump = function(isDoubleJumping){
 
 	if(this.jumpCooldown <= 0)
 	{
@@ -2417,7 +2417,7 @@ Player.prototype.jump = function(isDoubleJumping){
 	
 };
 
-Player.prototype.doubleJump = function(){
+cd.Server.Player.prototype.doubleJump = function(){
 
 	if(this.jumpCooldown <= 0)
 	{
@@ -2430,7 +2430,7 @@ Player.prototype.doubleJump = function(){
 	}
 };
 
-Player.prototype.dropBlock = function(x, y, checkDropzone){
+cd.Server.Player.prototype.dropBlock = function(x, y, checkDropzone){
 
 	//minor adjust from smoothering.
 	var tmpX = (x != null ? x : this.getPosition().x);
@@ -2441,13 +2441,13 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		&& this.y < this.currentGame.world.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
 	{
 		//Create a block and launch it.
-		this.currentGame.managers.BlockManager.launch(new Block(tmpX, 
-															  tmpY, 
-															  this.currentBlock.type, 
-															  this.color,
-															  this,
-															  this.currentGame,
-															  this.currentBlock.skill));
+		this.currentGame.managers.BlockManager.launch(new cd.Server.Block(tmpX, 
+																		  tmpY, 
+																		  this.currentBlock.type, 
+																		  this.color,
+																		  this,
+																		  this.currentGame,
+																		  this.currentBlock.skill));
 		
 		this.hasGivenBlock = false;
 		
@@ -2467,13 +2467,13 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 	}
 };
 
-Player.prototype.changeMass = function(factor){
+cd.Server.Player.prototype.changeMass = function(factor){
 	this.mass *= factor;
 	this.body.setMass(this.mass);
 };
 
 //Init the physical part of the player.
-Player.prototype.initBody = function(){
+cd.Server.Player.prototype.initBody = function(){
 	
 	var groundSensorHalfWidth = Constants.Player.WIDTH*0.25;
 	var playerHalfHeight = Constants.Player.HEIGHT*0.5;
@@ -2513,7 +2513,7 @@ Player.prototype.initBody = function(){
 	this.dropSensor.sensor = true;
 };
 
-Player.prototype.execute = function(action){
+cd.Server.Player.prototype.execute = function(action){
 	this.currentAction = action;
 	
 	var data = {
@@ -2524,7 +2524,7 @@ Player.prototype.execute = function(action){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_ACTION, data);
 };
 
-Player.prototype.stuck = function(time){
+cd.Server.Player.prototype.stuck = function(time){
 	this.stuckTimer = time;
 	
 	if(!this.isStuck)
@@ -2534,7 +2534,7 @@ Player.prototype.stuck = function(time){
 	}
 };
 
-Player.prototype.unstuck = function(){
+cd.Server.Player.prototype.unstuck = function(){
 	this.stuckTimer = 0;
 	
 	if(this.isStuck)
@@ -2545,7 +2545,7 @@ Player.prototype.unstuck = function(){
 };
 
 //Format for client.
-Player.prototype.toClient = function(){
+cd.Server.Player.prototype.toClient = function(){
 	return {
 		x: this.getPosition().x,
 		y: this.getPosition().y,
@@ -2556,20 +2556,20 @@ Player.prototype.toClient = function(){
 		stunTimer: this.stunTimer
 	};
 };
-var Lobby = function(id, hostId, username){
+cd.Server.Lobby = function(id, hostId, username){
 	this.id = id;
 	this.name = 'Lobby of ' + username;
 	
 	this.hostId = hostId;
 	this.connectedPlayers = 1;
-	this.settings = new GameSettings(id, 1200, 800, 2, username);
+	this.settings = new cd.Server.GameSettings(id, 1200, 800, 2, username);
 };
 
-Lobby.prototype.update = function(data){
+cd.Server.Lobby.prototype.update = function(data){
 	this.name = data.name;
 };
 
-Lobby.prototype.toClient = function(){
+cd.Server.Lobby.prototype.toClient = function(){
 
 	return {
 		id: this.id,
@@ -2579,7 +2579,7 @@ Lobby.prototype.toClient = function(){
 		maxPlayers: Constants.Game.MAX_PLAYERS
 	};
 };//Server version of the block.
-var Block = function(x, y, type, color, owner, game, skill){
+cd.Server.Block = function(x, y, type, color, owner, game, skill){
 	
 	this.currentGame = game;
 	
@@ -2605,7 +2605,7 @@ var Block = function(x, y, type, color, owner, game, skill){
 	this.type = type;
 	
 	//Set skill information.
-	this.skill = (type == Enum.Block.Type.SKILLED ? SkillInfo.load(skill) : null);	
+	this.skill = (type == Enum.Block.Type.SKILLED ? cd.Server.SkillInfo.load(skill) : null);	
 	this.color = color;
 	
 	//Used to prevent a block from staying in a active state.
@@ -2644,12 +2644,12 @@ var Block = function(x, y, type, color, owner, game, skill){
 	this.blockSensor.sensor = true;
 };
 
-Block.prototype.markToDestroy = function(cause){
+cd.Server.Block.prototype.markToDestroy = function(cause){
 	this.toBeDestroy = true;
 	this.destroyCause = cause;
 };
 
-Block.prototype.launch = function(){
+cd.Server.Block.prototype.launch = function(){
 	this.landed = false;
 	this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
 	
@@ -2658,7 +2658,7 @@ Block.prototype.launch = function(){
 		this.trigger();
 };
 
-Block.prototype.active = function(flag){
+cd.Server.Block.prototype.active = function(flag){
 	
 	if(flag)
 	{
@@ -2688,7 +2688,7 @@ Block.prototype.active = function(flag){
 	}
 };
 
-Block.prototype.update = function(dt){
+cd.Server.Block.prototype.update = function(dt){
 	
 	if(this.stillExists && !this.landed){
 	
@@ -2758,7 +2758,7 @@ Block.prototype.update = function(dt){
 	}
 };
 
-Block.prototype.toClient = function(){
+cd.Server.Block.prototype.toClient = function(){
 	return {
 		id: this.id,
 		x: this.body.getPos().x,
@@ -2769,7 +2769,8 @@ Block.prototype.toClient = function(){
 	};
 };
 
-Block.prototype.trigger = function(){
+//Trigger skill or effect.
+cd.Server.Block.prototype.trigger = function(){
 
 	if(this.stillExists)
 	{
@@ -2787,7 +2788,8 @@ Block.prototype.trigger = function(){
 	
 };
 
-Block.prototype.spawn = function(){
+//Spawn players.
+cd.Server.Block.prototype.spawn = function(){
 
 	var killerId = this.owner ? this.owner.id : null;
 	var posY = Constants.Player.HEIGHT*0.75;
@@ -2840,7 +2842,8 @@ Block.prototype.spawn = function(){
 	this.explode(Enum.Block.Destruction.SPAWN);
 };
 
-Block.prototype.explode = function(cause){
+//Destroy block.
+cd.Server.Block.prototype.explode = function(cause){
 	
 	var data = {
 		cause: cause,
@@ -2858,7 +2861,7 @@ Block.prototype.explode = function(cause){
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_BLOCK, data);
 };
-var GameSettings = function(id, width, height, maxPlayers, username){
+cd.Server.GameSettings = function(id, width, height, maxPlayers, username){
 
 	//Assign when game is created by the server.
 	this.id = id;
@@ -2873,13 +2876,13 @@ var GameSettings = function(id, width, height, maxPlayers, username){
 	this.maxPlayers = maxPlayers;
 };
 
-GameSettings.prototype.update = function(settings){
+cd.Server.GameSettings.prototype.update = function(settings){
 	this.width = settings.width;
 	this.height = settings.height;
 	this.worldType = settings.type;
 };
 
-GameSettings.prototype.getPlayer = function(username){
+cd.Server.GameSettings.prototype.getPlayer = function(username){
 	for(var i in this.players)
 		if(this.players[i] != null && this.players[i].username == username)
 			return this.players[i];
@@ -2887,13 +2890,13 @@ GameSettings.prototype.getPlayer = function(username){
 	return null;
 };
 
-GameSettings.prototype.updatePlayer = function(username, color, ready){
+cd.Server.GameSettings.prototype.updatePlayer = function(username, color, ready){
 	var player = this.getPlayer(username);
 	player.color = color;
 	player.ready = ready;
 };
 
-GameSettings.prototype.addPlayer = function(username, color){
+cd.Server.GameSettings.prototype.addPlayer = function(username, color){
 	this.players.push({
 		username: username,
 		color: color,
@@ -2901,7 +2904,7 @@ GameSettings.prototype.addPlayer = function(username, color){
 	});
 };
 
-GameSettings.prototype.removePlayer = function(username){
+cd.Server.GameSettings.prototype.removePlayer = function(username){
 	
 	var index = null;
 	for(var i in this.players)	
@@ -2916,7 +2919,7 @@ GameSettings.prototype.removePlayer = function(username){
 };
 
 //Assign good color to duplicata.
-GameSettings.prototype.validateColors = function(){
+cd.Server.GameSettings.prototype.validateColors = function(){
 		
 	//Find duplicated colors.
 	var usedColors = {};
@@ -2949,7 +2952,7 @@ GameSettings.prototype.validateColors = function(){
 		}
 	}
 };//Game container server-side.
-var Game = function(settings){
+cd.Server.Game = function(settings){
 	
 	//Members
 	this.id = settings.id;
@@ -2983,7 +2986,7 @@ var Game = function(settings){
 	this.connectingPlayers = 0;
 	
 	//Create world.
-	this.world = WorldInfo.create(settings.worldType, settings.width, settings.height, this);
+	this.world = cd.Server.WorldInfo.create(settings.worldType, settings.width, settings.height, this);
 	
 	this.state = false;
 	this.space = null;
@@ -2991,16 +2994,16 @@ var Game = function(settings){
 	this.unitTimer = Constants.Game.UNIT_TIMER;
 	
 	//Create listeners.
-	this.listeners = new Listeners(this);
+	this.listeners = new cd.Server.Listeners(this);
 	
 	//Managers.
-	this.managers = new Managers(this);
+	this.managers = new cd.Server.Managers(this);
 	
 	//Create Overlord.
-	this.overlord = new Overlord(this);
+	this.overlord = new cd.Server.Overlord(this);
 };
 
-Game.prototype.createWorld = function(){
+cd.Server.Game.prototype.createWorld = function(){
 
 	if(this.space == null || this.space == 'undefined')
 	{
@@ -3022,11 +3025,11 @@ Game.prototype.createWorld = function(){
 			this.players[i].initBody();
 		
 		//Add the goal. TODO: Random between multiples goals.
-		this.goal = new FloatingBall(this.world.width*0.5, this.world.goalStartPosition, this);
+		this.goal = new cd.Server.FloatingBall(this.world.width*0.5, this.world.goalStartPosition, this);
 	}
 };
 
-Game.prototype.update = function(){
+cd.Server.Game.prototype.update = function(){
 
 	//Get delta.
 	var currentTime = new Date();
@@ -3169,12 +3172,12 @@ Game.prototype.update = function(){
 	}
 };
 
-Game.prototype.electWinner = function(winner){
+cd.Server.Game.prototype.electWinner = function(winner){
 	this.winner = winner;
 	this.winner.hasWon = true;
 };
 
-Game.prototype.end = function(){
+cd.Server.Game.prototype.end = function(){
 	var survivors = [];
 	var playerCount = 0;
 	
@@ -3183,31 +3186,44 @@ Game.prototype.end = function(){
 	{
 		playerCount++;
 		
-		if(i != this.winner.id)
+		if(i != this.winner.id && this.players[i].isAlive)
 		{
-			Account.lose(this.players[i].username);
-		
-			if(this.players[i].isAlive)
-			{
-				this.players[i].die();
-				survivors.push(this.players[i].toClient());
-			}
+			this.players[i].die();
+			survivors.push(this.players[i].toClient());
 		}
 	}
 
 	//Calculate new scores.
 	var winnerScore = playerCount-1 + (survivors.length < 1 ? Math.floor(playerCount*0.5) : 0);
-	Account.win(this.winner.username, winnerScore);
 	
 	var scores = {};
+	var losers = [];
 	
+	//Create scoreboard and find losers.
 	for(var i in this.players)
 	{
 		if(i != this.winner.id)
+		{
 			scores[this.players[i].username] = -1;
+			
+			losers.push({
+				username: this.players[i].username
+			});
+		}
 		else
 			scores[this.players[i].username] = winnerScore;
 	}
+	
+	var toMasterData = {
+		winner: {
+			username: this.winner.username,
+			score: winnerScore
+		},
+		losers: losers
+	};
+	
+	//Send information to master server to update new scores.
+	Server.socket.emit(Constants.Message.WIN, toMasterData);
 	
 	var data = {
 		winner: this.winner.toClient(),
@@ -3221,16 +3237,17 @@ Game.prototype.end = function(){
 };
 
 //Interrupt game to be removed.
-Game.prototype.trash = function(){
+cd.Server.Game.prototype.trash = function(){
 	clearInterval(this.intervalId);
 };
 
-Game.prototype.push = function(inputs, id){
+//Get info from client.
+cd.Server.Game.prototype.push = function(inputs, id){
 	this.players[id].keys = inputs;
 };
 
-
-Game.prototype.pull = function(){
+//Send info to client.
+cd.Server.Game.prototype.pull = function(){
 		
 	var players = [];
 	
@@ -3281,7 +3298,8 @@ Game.prototype.pull = function(){
 	io.sockets.in(this.id).emit(Constants.Message.PULL, data);
 };
 
-Game.prototype.launch = function(){
+//Launch the game.
+cd.Server.Game.prototype.launch = function(){
 
 	var GameInstance = this;
 	var updateFunc = function(){
@@ -3291,12 +3309,12 @@ Game.prototype.launch = function(){
 	//17 milliseconds = 60 FPS
 	this.intervalId = setInterval(updateFunc, 25);
 };
-var Overlord = function(game){
+cd.Server.Overlord = function(game){
 	this.currentGame = game;
 	this.hasActiveSpawnBlock = false;
 };
 
-Overlord.prototype.assignKill = function(killed, keepList){
+cd.Server.Overlord.prototype.assignKill = function(killed, keepList){
 	
 	var otherPlayers = [];
 	for(var i in this.currentGame.players)
@@ -3317,7 +3335,8 @@ Overlord.prototype.assignKill = function(killed, keepList){
 	otherPlayers[killerIndex].kill(killed, Enum.Block.Type.NEUTRAL, (keepList == null || !keepList));
 };
 
-Overlord.prototype.launch = function(blockType){
+//Launch a block.
+cd.Server.Overlord.prototype.launch = function(blockType){
 		
 	if(blockType == Enum.Block.Type.SPAWN)
 	{
@@ -3337,19 +3356,20 @@ Overlord.prototype.launch = function(blockType){
 			}
 			
 			//Create a block and launch it.
-			this.currentGame.managers.BlockManager.launch(new Block(spawnX, 
-																  spawnY, 
-																  Enum.Block.Type.SPAWN, 
-																  null,
-																  null, 
-																  this.currentGame));
+			this.currentGame.managers.BlockManager.launch(new cd.Server.Block(spawnX, 
+																		  spawnY, 
+																		  Enum.Block.Type.SPAWN, 
+																		  null,
+																		  null, 
+																		  this.currentGame));
 			
 			this.hasActiveSpawnBlock = true;
 		}
 	}
 };
 
-Overlord.prototype.kill = function(killed, cause){
+//Kill a player.
+cd.Server.Overlord.prototype.kill = function(killed, cause){
 		
 	//Steal killed's list.
 	for(var i in this.currentGame.players)
@@ -3358,7 +3378,7 @@ Overlord.prototype.kill = function(killed, cause){
 	
 	//Force player to die.
 	killed.toBeDestroy = true;
-};//Modules.var http = require('http');var chipmunk = require('chipmunk');var os = require('os');//Create server.
+};//Create server.
 var masterServer = {
 	client: null,
 	server: null
@@ -3525,15 +3545,17 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Send game id to player.
 	socket.on(Constants.Message.CREATE_LOBBY, function(username){
 		console.log('Lobby created (' + MasterServer.gameSequenceId + ') : ' + username);
-		MasterServer.lobbies[MasterServer.gameSequenceId] = new Lobby(MasterServer.gameSequenceId, socket.id, username);
 		
-		socket.emit(Constants.Message.CREATE_LOBBY, MasterServer.gameSequenceId);
-		socket.join(MasterServer.gameSequenceId);
+		var gameId = MasterServer.gameSequenceId;
+		MasterServer.gameSequenceId++;
+		
+		MasterServer.lobbies[gameId] = new cd.Server.Lobby(gameId, socket.id, username);
+		
+		socket.emit(Constants.Message.CREATE_LOBBY, gameId);
+		socket.join(gameId);
 		
 		//Set game id into socket userdata.
-		socket.userdata.gameId = MasterServer.gameSequenceId;
-		
-		MasterServer.gameSequenceId++;
+		socket.userdata.gameId = gameId;
 	});
 	
 	//Join a lobby.
@@ -3658,10 +3680,21 @@ ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 		delete MasterServer.lobbies[data.gameId];
 		ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.GAME_CREATED, 'http://' + data.address + ':' + Constants.Network.SERVER_PORT);
 	});
+	
+	//Update players' scores.
+	socket.on(Constants.Message.WIN, function(data){
+		
+		//Winner
+		Account.win(data.winner.username, data.winner.score);
+		
+		//Losers
+		for(var i = 0; i < data.losers.length; i++)
+			Account.lose(data.losers[i].username);
+	});
 });
 
-console.log('Master server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED * this.y,		direction: Enum.Direction.UP,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.x, 																  0, 																  Constants.DeathZone.EnergySpike.WIDTH, 																  this.y, 																  this.currentGame.winner,																  Enum.DeathZone.Type.ENERGY_SPIKE,																  this.spikeStats, 																  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.world.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.world.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
-var Missile = function(owner, blockId, type, x, y, velX, velY, distance, width, height, game){
+console.log('Master server created');cd.Server.FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED * this.y,		direction: Enum.Direction.UP,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};cd.Server.FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};cd.Server.FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new cd.Server.Spike(this.x, 																		  0, 																		  Constants.DeathZone.EnergySpike.WIDTH, 																		  this.y, 																		  this.currentGame.winner,																		  Enum.DeathZone.Type.ENERGY_SPIKE,																		  this.spikeStats, 																		  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};cd.Server.FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.world.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.world.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};cd.Server.FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};cd.Server.FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+cd.Server.Missile = function(owner, blockId, type, x, y, velX, velY, distance, width, height, game){
 	
 	this.currentGame = game;
 	this.id = -1;
@@ -3717,7 +3750,7 @@ var Missile = function(owner, blockId, type, x, y, velX, velY, distance, width, 
 	this.shape.sensor = true;
 };
 
-Missile.prototype.toClient = function(){
+cd.Server.Missile.prototype.toClient = function(){
 	return {
 		x: this.x,
 		y: this.y,
@@ -3725,7 +3758,7 @@ Missile.prototype.toClient = function(){
 	};
 };
 
-Missile.prototype.explode = function(){
+cd.Server.Missile.prototype.explode = function(){
 
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
@@ -3739,7 +3772,7 @@ Missile.prototype.explode = function(){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);
 };
 
-Missile.prototype.update = function(){
+cd.Server.Missile.prototype.update = function(){
 
 	this.x += this.vel.x;
 	this.y += this.vel.y;
@@ -3758,11 +3791,11 @@ Missile.prototype.update = function(){
 };
 
 
-var DeathZoneManager = function(game){
+cd.Server.DeathZoneManager = function(game){
 	this.currentGame = game;
 };
 
-DeathZoneManager.prototype.launch = function(deathZone){
+cd.Server.DeathZoneManager.prototype.launch = function(deathZone){
 	
 	deathZone.id = this.currentGame.deathZoneSequence;
 	this.currentGame.deathZoneSequence++;
@@ -3787,11 +3820,11 @@ DeathZoneManager.prototype.launch = function(deathZone){
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_DEATHZONE, data);
 };
-var NpcManager = function(game){
+cd.Server.NpcManager = function(game){
 	this.currentGame = game;
 };
 
-NpcManager.prototype.add = function(npc){
+cd.Server.NpcManager.prototype.add = function(npc){
 	
 	npc.id = this.currentGame.npcSequence;
 	this.currentGame.npcSequence++;
@@ -3814,11 +3847,11 @@ NpcManager.prototype.add = function(npc){
 	
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_NPC, data);
 };
-var BlockManager = function(game){
+cd.Server.BlockManager = function(game){
 	this.currentGame = game;
 };
 
-BlockManager.prototype.launch = function(block){
+cd.Server.BlockManager.prototype.launch = function(block){
 			
 	block.id = this.currentGame.blockSequence;
 	this.currentGame.blockSequence++;
@@ -3830,11 +3863,11 @@ BlockManager.prototype.launch = function(block){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_BLOCK, block.toClient());
 };
 
-var TriggerManager = function(game){
+cd.Server.TriggerManager = function(game){
 	this.currentGame = game;
 };
 
-TriggerManager.prototype.add = function(trigger){
+cd.Server.TriggerManager.prototype.add = function(trigger){
 	
 	//Assign id.
 	trigger.id = this.currentGame.triggerSequence;
@@ -3853,8 +3886,8 @@ TriggerManager.prototype.add = function(trigger){
 		data.vel = trigger.vel;
 		
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_TRIGGER, data);
-};var Spike = function(x, y, width, height, owner, type, stats, game){		this.currentGame = game;		this.stillExists = true;	this.mustMove = true;		this.enabled = true;	this.type = type;	this.stats = stats;		this.owner = owner;	this.id = -1;	this.distance = stats.distance;		//Get original X and Y.	var degree = null;	switch(stats.direction)	{		case Enum.Direction.UP:			degree = 0;			break;		case Enum.Direction.LEFT:			degree = 270;			break;		case Enum.Direction.DOWN:			degree = 180;			break;		case Enum.Direction.RIGHT:			degree = 90;			break;	}		this.x = x - (this.distance*0.5*Math.sin(degree));	this.y = y - (this.distance*0.5*Math.cos(degree));		this.finalX = this.x + (this.distance*Math.sin(degree));	this.finalY = this.y + (this.distance*Math.cos(degree));		this.originalX = this.x;	this.originalY = this.y;		this.velocity = {x:0, y:0};		this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		var userDataType = null;		//Find good type for association.	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:			userDataType = Enum.UserData.Type.ENERGY_SPIKE;			break;	}		//Assign custom data to body.	this.body.userdata = {		type: userDataType,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};Spike.prototype.move = function(){		this.x += this.velocity.x;	this.y += this.velocity.y;		this.body.setPos(new chipmunk.Vect(this.x, this.y));};Spike.prototype.toClient = function(){	return {		x: this.x,		y: this.y,		id: this.id	};};Spike.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};Spike.prototype.endProcess = function(){	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:						for(var i in this.currentGame.players)			{				if(this.currentGame.players[i] != null && this.currentGame.players[i].isAlive && !this.currentGame.players[i].isRemoved)				{					var factor = 1;										if(this.currentGame.players[i].body.getPos().x < this.x)						factor = -1;											this.currentGame.players[i].body.applyImpulse(new chipmunk.Vect(factor*Constants.DeathZone.EnergySpike.IMPULSE_X, 																					Constants.DeathZone.EnergySpike.IMPULSE_Y),																  new chipmunk.Vect(0,0));																  					this.currentGame.players[i].stunTimer = Constants.DeathZone.EnergySpike.STUN_TIME;				}			}						break;	}};Spike.prototype.update = function(){	if(this.stillExists && this.mustMove)	{		var push = {x:0, y:0};		var degree = 0;				switch(this.stats.direction)		{			case Enum.Direction.UP:				degree = 0;				break;			case Enum.Direction.LEFT:				degree = 270;				break;			case Enum.Direction.DOWN:				degree = 180;				break;			case Enum.Direction.RIGHT:				degree = 90;				break;		}				if(this.stats.acceleration != null)		{			var tmpVelY = this.velocity.y;			var tmpVelX = this.velocity.x;						tmpVelX += this.stats.acceleration.x;			tmpVelY += this.stats.acceleration.y;						if((tmpVelX*tmpVelX)+(tmpVelY*tmpVelY) > (this.stats.maxspeed*this.stats.maxspeed))			{				this.velocity.x = this.stats.maxspeed*Math.sin(degree);				this.velocity.y = this.stats.maxspeed*Math.cos(degree);			}			else			{				this.velocity.x += this.stats.acceleration.x*Math.sin(degree);				this.velocity.y += this.stats.acceleration.y*Math.cos(degree);			}		}		else		{			this.velocity.x = this.stats.speed*Math.sin(degree);			this.velocity.y = this.stats.speed*Math.cos(degree);		}				var tmpX = this.x + this.velocity.x;		var tmpY = this.y + this.velocity.y;				var distX = (tmpX - this.originalX);		var distY = (tmpY - this.originalY);							//If distance has been reached or surpassed, spike stops moving.		if((distX*distX)+(distY*distY) >= this.stats.distance*this.stats.distance)		{			this.mustMove = false;			this.x = this.finalX;			this.y = this.finalY;						//Set new position and trigger effect when spike is set.			this.body.setPos(new chipmunk.Vect(this.x, this.y));			this.endProcess();		}			else			this.move();	}};var Jaw = function(parent, relX, relY, count, width, height, game){		this.currentGame = game;		this.stillExists = true;	this.blockDestroyed = {};			this.enabled = true;	this.parent = parent;	this.id = -1;		this.blockId = this.parent.id;	this.owner = this.parent.owner;		this.type = Enum.DeathZone.Type.JAW;	this.count = count;			//Position relative to parent.	this.relX = relX;	this.relY = relY;	this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.parent.x + this.relX, this.parent.y + this.relY));			//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.JAW,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};Jaw.prototype.toClient = function(){	return {		x: this.parent.x + this.relX,		y: this.parent.y + this.relY,		id: this.id	};};Jaw.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);			var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};Jaw.prototype.update = function(){	this.body.setPos(new chipmunk.Vect(this.parent.x + this.relX, this.parent.y + this.relY));	this.blockDestroyed = {};		if(this.parent.landed)		this.stillExists = false;};
-var PeskyBox = function(x, y, width, height, speed, duration, maxFleeTime, pushX, pushY, target, game){
+};cd.Server.Spike = function(x, y, width, height, owner, type, stats, game){		this.currentGame = game;		this.stillExists = true;	this.mustMove = true;		this.enabled = true;	this.type = type;	this.stats = stats;		this.owner = owner;	this.id = -1;	this.distance = stats.distance;		//Get original X and Y.	var degree = null;	switch(stats.direction)	{		case Enum.Direction.UP:			degree = 0;			break;		case Enum.Direction.LEFT:			degree = 270;			break;		case Enum.Direction.DOWN:			degree = 180;			break;		case Enum.Direction.RIGHT:			degree = 90;			break;	}		this.x = x - (this.distance*0.5*Math.sin(degree));	this.y = y - (this.distance*0.5*Math.cos(degree));		this.finalX = this.x + (this.distance*Math.sin(degree));	this.finalY = this.y + (this.distance*Math.cos(degree));		this.originalX = this.x;	this.originalY = this.y;		this.velocity = {x:0, y:0};		this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		var userDataType = null;		//Find good type for association.	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:			userDataType = Enum.UserData.Type.ENERGY_SPIKE;			break;	}		//Assign custom data to body.	this.body.userdata = {		type: userDataType,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};cd.Server.Spike.prototype.move = function(){		this.x += this.velocity.x;	this.y += this.velocity.y;		this.body.setPos(new chipmunk.Vect(this.x, this.y));};cd.Server.Spike.prototype.toClient = function(){	return {		x: this.x,		y: this.y,		id: this.id	};};cd.Server.Spike.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};cd.Server.Spike.prototype.endProcess = function(){	switch(this.type)	{		case Enum.DeathZone.Type.ENERGY_SPIKE:						for(var i in this.currentGame.players)			{				if(this.currentGame.players[i] != null && this.currentGame.players[i].isAlive && !this.currentGame.players[i].isRemoved)				{					var factor = 1;										if(this.currentGame.players[i].body.getPos().x < this.x)						factor = -1;											this.currentGame.players[i].body.applyImpulse(new chipmunk.Vect(factor*Constants.DeathZone.EnergySpike.IMPULSE_X, 																					Constants.DeathZone.EnergySpike.IMPULSE_Y),																  new chipmunk.Vect(0,0));																  					this.currentGame.players[i].stunTimer = Constants.DeathZone.EnergySpike.STUN_TIME;				}			}						break;	}};cd.Server.Spike.prototype.update = function(){	if(this.stillExists && this.mustMove)	{		var push = {x:0, y:0};		var degree = 0;				switch(this.stats.direction)		{			case Enum.Direction.UP:				degree = 0;				break;			case Enum.Direction.LEFT:				degree = 270;				break;			case Enum.Direction.DOWN:				degree = 180;				break;			case Enum.Direction.RIGHT:				degree = 90;				break;		}				if(this.stats.acceleration != null)		{			var tmpVelY = this.velocity.y;			var tmpVelX = this.velocity.x;						tmpVelX += this.stats.acceleration.x;			tmpVelY += this.stats.acceleration.y;						if((tmpVelX*tmpVelX)+(tmpVelY*tmpVelY) > (this.stats.maxspeed*this.stats.maxspeed))			{				this.velocity.x = this.stats.maxspeed*Math.sin(degree);				this.velocity.y = this.stats.maxspeed*Math.cos(degree);			}			else			{				this.velocity.x += this.stats.acceleration.x*Math.sin(degree);				this.velocity.y += this.stats.acceleration.y*Math.cos(degree);			}		}		else		{			this.velocity.x = this.stats.speed*Math.sin(degree);			this.velocity.y = this.stats.speed*Math.cos(degree);		}				var tmpX = this.x + this.velocity.x;		var tmpY = this.y + this.velocity.y;				var distX = (tmpX - this.originalX);		var distY = (tmpY - this.originalY);							//If distance has been reached or surpassed, spike stops moving.		if((distX*distX)+(distY*distY) >= this.stats.distance*this.stats.distance)		{			this.mustMove = false;			this.x = this.finalX;			this.y = this.finalY;						//Set new position and trigger effect when spike is set.			this.body.setPos(new chipmunk.Vect(this.x, this.y));			this.endProcess();		}			else			this.move();	}};cd.Server.Jaw = function(parent, relX, relY, count, width, height, game){		this.currentGame = game;		this.stillExists = true;	this.blockDestroyed = {};			this.enabled = true;	this.parent = parent;	this.id = -1;		this.blockId = this.parent.id;	this.owner = this.parent.owner;		this.type = Enum.DeathZone.Type.JAW;	this.count = count;			//Position relative to parent.	this.relX = relX;	this.relY = relY;	this.width = width;	this.height = height;		this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.parent.x + this.relX, this.parent.y + this.relY));			//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.JAW,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.DEATH_ZONE);	this.shape.sensor = true;};cd.Server.Jaw.prototype.toClient = function(){	return {		x: this.parent.x + this.relX,		y: this.parent.y + this.relY,		id: this.id	};};cd.Server.Jaw.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);			var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);};cd.Server.Jaw.prototype.update = function(){	this.body.setPos(new chipmunk.Vect(this.parent.x + this.relX, this.parent.y + this.relY));	this.blockDestroyed = {};		if(this.parent.landed)		this.stillExists = false;};
+cd.Server.PeskyBox = function(x, y, width, height, speed, duration, maxFleeTime, pushX, pushY, target, game){
 	
 	this.id = -1;
 	this.x = x;
@@ -3902,7 +3935,7 @@ var PeskyBox = function(x, y, width, height, speed, duration, maxFleeTime, pushX
 	this.shape.sensor = true;
 };
 
-PeskyBox.prototype.toClient = function(){
+cd.Server.PeskyBox.prototype.toClient = function(){
 
 	return {
 		id: this.id,
@@ -3913,7 +3946,7 @@ PeskyBox.prototype.toClient = function(){
 };
 
 //Called when contact begins.
-PeskyBox.prototype.onBegin = function(player){
+cd.Server.PeskyBox.prototype.onBegin = function(player){
 
 	if(player.id == this.target.id)
 	{
@@ -3928,12 +3961,12 @@ PeskyBox.prototype.onBegin = function(player){
 };
 
 //Called when contact ends.
-PeskyBox.prototype.onEnd = function(player){
+cd.Server.PeskyBox.prototype.onEnd = function(player){
 	if(player.id == this.target.id)
 		this.fleeTimer = this.maxFleeTime;
 };
 
-PeskyBox.prototype.update = function(){
+cd.Server.PeskyBox.prototype.update = function(){
 	
 	if(this.target && !this.target.isRemoved)
 	{
@@ -3985,7 +4018,7 @@ PeskyBox.prototype.update = function(){
 		this.stillExists = false;
 };
 
-PeskyBox.prototype.explode = function(){
+cd.Server.PeskyBox.prototype.explode = function(){
 
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
@@ -3998,7 +4031,7 @@ PeskyBox.prototype.explode = function(){
 	this.stillExists = false;
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_NPC, data);
 };
-var SandSpirit = function(x, y, width, height, speedX, speedY, duration, game){
+cd.Server.SandSpirit = function(x, y, width, height, speedX, speedY, duration, game){
 	
 	this.id = -1;
 	this.x = x;
@@ -4050,7 +4083,7 @@ var SandSpirit = function(x, y, width, height, speedX, speedY, duration, game){
 	this.shape.sensor = true;
 };
 
-SandSpirit.prototype.toClient = function(){
+cd.Server.SandSpirit.prototype.toClient = function(){
 
 	return {
 		id: this.id,
@@ -4061,7 +4094,7 @@ SandSpirit.prototype.toClient = function(){
 };
 
 //Called when contact begins.
-SandSpirit.prototype.onBegin = function(player){
+cd.Server.SandSpirit.prototype.onBegin = function(player){
 
 	if(!this.hasReached)
 	{
@@ -4075,11 +4108,11 @@ SandSpirit.prototype.onBegin = function(player){
 };
 
 //Called when contact ends.
-SandSpirit.prototype.onEnd = function(player){
+cd.Server.SandSpirit.prototype.onEnd = function(player){
 
 };
 
-SandSpirit.prototype.update = function(){
+cd.Server.SandSpirit.prototype.update = function(){
 			
 	//If target reached, give spirit target position.
 	if(this.hasReached)
@@ -4144,7 +4177,7 @@ SandSpirit.prototype.update = function(){
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 };
 
-SandSpirit.prototype.explode = function(){
+cd.Server.SandSpirit.prototype.explode = function(){
 
 	if(this.target)
 		this.target.changeMass(1/Constants.NPC.SandSpirit.MASS_FACTOR);
@@ -4159,4 +4192,4 @@ SandSpirit.prototype.explode = function(){
 	//Send info to client.
 	this.stillExists = false;
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_NPC, data);
-};var Deflector = function(x, y, duration, push, width, height, game){		this.id = -1;		this.type = Enum.Trigger.Type.DEFLECTOR;	this.x = x;	this.y = y;		this.players = {};		this.duration = duration;	this.push = push;		this.width = width;	this.height = height;		this.presenceTimer = Constants.Trigger.Deflector.PRESENCE_TIMER;		this.currentGame = game;	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.DEFLECTOR,		object: this	};		this.shape = null;};Deflector.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.Deflector.prototype.onBegin = function(player, block){	if(player == null)		return;	this.players[player.id] = player;	io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });};//Called when contact ends.Deflector.prototype.onEnd = function(player, block){	if(player == null)		return;	delete this.players[player.id];};Deflector.prototype.update = function(){		//Add presence after timer.	if(this.shape == null)	{		this.presenceTimer -= this.currentGame.dt;				if(this.presenceTimer <= 0)		{			//Create a shape associated with the body.			this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));			this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);			this.shape.sensor = true;		}	}		//Bump players touching Deflector.	for(var i in this.players)	{		var player = this.players[i];		var distX = player.x - this.x;		var distY = player.y - this.y;				var hypo = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));				var impulseX = 0;		var impulseY = distY/hypo*this.push;				if(impulseY > Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*this.push)		{			impulseY = Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*this.push;			impulseX = (distX < 0 ? -1 : 1)*(Math.sqrt(Math.pow(hypo,2)-Math.pow(Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*hypo,2))/hypo)*this.push;		}		else			impulseX = distX/hypo*this.push;				//Push and stun player.		player.body.setVel(new chipmunk.Vect(impulseX,impulseY));		player.stunTimer = Constants.Trigger.Deflector.STUN_TIME;	}		this.duration -= this.currentGame.dt;		if(this.duration <= 0)		this.stillExists = false;};Deflector.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};var TimeZone = function(x, y, blockId, owner, duration, width, height, game){		this.id = -1;		this.owner = owner;	this.blockId = blockId;		this.type = Enum.Trigger.Type.TIME_ZONE;	this.x = x;	this.y = y;		this.players = {};	this.blocks = {};		this.duration = duration;		this.width = width;	this.height = height;		this.currentGame = game;	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.TIME_ZONE,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};TimeZone.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.TimeZone.prototype.onBegin = function(player, block){	if(player != null && player.id != this.owner.id && this.players[player.id] == null)	{		this.players[player.id] = {			target: player,			x: player.x,			y: player.y		};		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}	if(block != null && block.id != this.blockId && block.type != Enum.Block.Type.SPAWN && !block.landed && this.blocks[block.id] == null)	{		this.blocks[block.id] = block;		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}};//Called when contact ends.TimeZone.prototype.onEnd = function(player, block){};TimeZone.prototype.update = function(){	this.duration -= this.currentGame.dt;		//Backtrack.	if(this.duration <= 0 && this.stillExists)	{		//Destroy blocks.		for(var i in this.blocks)			if(this.blocks[i] != null && !this.blocks[i].toBeDestroy && this.blocks[i].stillExists)				this.blocks[i].markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);				//Teleport players.		for(var i in this.players)			if(this.players[i].target.isAlive && !this.players[i].target.isRemoved)			{				//Send teleport effect to players.				io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, 														{ 															x: this.players[i].target.x, 															y: this.players[i].target.y, 															type: Enum.Element.Type.TELEPORT														});																		this.players[i].target.body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));			}				this.stillExists = false;	}};TimeZone.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};var GravityBeam = function(x, y, width, height, duration, maxLiftHeight, timeAllowed, impulse, game){		this.id = -1;		this.type = Enum.Trigger.Type.GRAVITY_BEAM;	this.x = x;	this.y = y;	this.width = width;	this.height = height;		this.duration = duration;	this.maxLiftHeight = maxLiftHeight;	this.timeAllowed = timeAllowed;		this.impulse = impulse;	this.currentGame = game;		this.players = {};	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.GRAVITY_BEAM,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};GravityBeam.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.GravityBeam.prototype.onBegin = function(player, block){	//Prevent player to abuse the gravity beam.	if(player != null && this.players[player.id] != null)	{		var currentTime = new Date();		var dt = (currentTime - this.players[player.id].cooldown)*0.001;				if(dt < Constants.Trigger.GravityBeam.COOLDOWN)		{			this.players[player.id].lift = true;			return;		}					delete this.players[player.id];	}	//Keep track.	if(player != null && this.players[player.id] == null)	{		this.players[player.id] = {			target: player,			x: player.x,			y: player.y,			timer: this.timeAllowed,			cooldown: new Date(),			lift: true		};	}};//Called when contact ends.GravityBeam.prototype.onEnd = function(player, block){		if(player != null && this.players[player.id] != null)		this.players[player.id].lift = false;};GravityBeam.prototype.update = function(){	for(var i in this.players)		if(this.players[i] && this.players[i].lift)		{			//Continue if player is removed.			if(this.players[i].target.isRemoved)			{				delete this.players[i];				continue;			}					this.players[i].timer -= this.currentGame.dt;			var dt = this.players[i].target.y - this.players[i].y;									if(this.players[i].timer <= 0 || dt >= this.maxLiftHeight)			{				this.currentGame.overlord.assignKill(this.players[i].target);				delete this.players[i];			}			else			{				if(this.players[i].target.body.getVel().y < Constants.Trigger.GravityBeam.MAX_VEL_Y)					this.players[i].target.body.applyImpulse(new chipmunk.Vect(0, this.impulse), new chipmunk.Vect(0,0));				else					this.players[i].target.body.setVel(new chipmunk.Vect(this.players[i].target.body.getVel().x, Constants.Trigger.GravityBeam.MAX_VEL_Y));			}		}	this.duration -= this.currentGame.dt;		if(this.duration <= 0)		this.stillExists = false;};GravityBeam.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};var VenomWave = function(x, y, speedX, speedY, distance, cooldown, varCooldown, ballMinVelX, ballRangeVelX, ballMinVelY, ballRangeVelY, width, height, game){		this.id = -1;		this.type = Enum.Trigger.Type.VENOM_WAVE;	this.x = x;	this.y = y;		this.speed = {		x: speedX,		y: speedY	};		this.cooldown = cooldown;	this.varCooldown = varCooldown;	this.timer = this.cooldown + Math.random()*this.varCooldown;		//Velocity for balls.	this.vel = {		x: ballMinVelX,		y: ballMinVelY,		variation: {			x: ballRangeVelX,			y: ballRangeVelY		}	};		//Compute finalX and finalY.	var velHypo = Math.sqrt(Math.pow(this.speed.x,2)+Math.pow(this.speed.y,2));	this.finalX = this.x + (this.speed.y == 0 ? (distance * (this.speed.x < 0 ? -1 : 1)) : this.speed.x/velHypo*distance);	this.finalY = this.y + (this.speed.x == 0 ? (distance * (this.speed.y < 0 ? -1 : 1)) : this.speed.y/velHypo*distance);		this.width = width;	this.height = height;			this.currentGame = game;	this.stillExists = true;		//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.VENOM_WAVE,		object: this	};		this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};VenomWave.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.VenomWave.prototype.onBegin = function(player, block){	if(player != null && player.stuckTimer < Constants.Trigger.VenomWave.STUCK_TIME)		player.stuck(Constants.Trigger.VenomWave.STUCK_TIME);};//Called when contact ends.VenomWave.prototype.onEnd = function(player, block){};VenomWave.prototype.update = function(){		this.timer -= this.currentGame.dt;		//Throw a venom ball.	if(this.timer <= 0)	{		var hypo = Math.sqrt(Math.pow(this.speed.x,2) + Math.pow(this.speed.y,2));		var offset = this.width*0.5 + Constants.Trigger.VenomBall.WIDTH*0.5;			var velX = this.vel.x + Math.random()*this.vel.variation.x;		var velY = this.vel.y + Math.random()*this.vel.variation.y;			this.currentGame.managers.TriggerManager.add(new VenomBall(this.x + -(this.speed.y/hypo)*offset*(velX < 0 ? -1 : 1), 																   this.y + this.speed.x/hypo*offset*(velY < 0 ? -1 : 1), 																   velX, 																   velY, 																   Constants.Trigger.VenomBall.WIDTH, 																   Constants.Trigger.VenomBall.HEIGHT, 																   this.currentGame));				this.timer = this.cooldown + Math.random()*this.varCooldown;	}		this.x += this.speed.x;	this.y += this.speed.y;		if((this.speed.x < 0 && this.x < this.finalX) || (this.speed.x > 0 && this.x > this.finalX))		this.x = this.finalX;	if((this.speed.y < 0 && this.y < this.finalY) || (this.speed.y > 0 && this.y > this.finalY))		this.y = this.finalY;	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Destroyed if it reaches his maximum distance.	if(this.x == this.finalX && this.y == this.finalY)		this.stillExists = false;};VenomWave.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};var VenomBall = function(x, y, velX, velY, width, height, game){		this.id = -1;		this.type = Enum.Trigger.Type.VENOM_BALL;	this.x = x;	this.y = y;		this.sendVel = true;		this.width = width;	this.height = height;		this.currentGame = game;	this.stillExists = true;	this.vel = {		x: velX,		y: velY	};		//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.VENOM_BALL,		object: this	};		this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};VenomBall.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y,		vel: this.vel	};};//Called when contact begins.VenomBall.prototype.onBegin = function(player, block){	if(player != null && player.stuckTimer < Constants.Trigger.VenomBall.STUCK_TIME)		player.stuck(Constants.Trigger.VenomBall.STUCK_TIME);			this.stillExists = false;};//Called when contact ends.VenomBall.prototype.onEnd = function(player, block){};VenomBall.prototype.update = function(){	this.x += this.vel.x;	this.y += this.vel.y;		this.vel.y -= Constants.Trigger.VenomBall.GRAVITY;	this.body.setPos(new chipmunk.Vect(this.x, this.y));};VenomBall.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);		var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};
+};cd.Server.Deflector = function(x, y, duration, push, width, height, game){		this.id = -1;		this.type = Enum.Trigger.Type.DEFLECTOR;	this.x = x;	this.y = y;		this.players = {};		this.duration = duration;	this.push = push;		this.width = width;	this.height = height;		this.presenceTimer = Constants.Trigger.Deflector.PRESENCE_TIMER;		this.currentGame = game;	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.DEFLECTOR,		object: this	};		this.shape = null;};cd.Server.Deflector.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.cd.Server.Deflector.prototype.onBegin = function(player, block){	if(player == null)		return;	this.players[player.id] = player;	io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });};//Called when contact ends.cd.Server.Deflector.prototype.onEnd = function(player, block){	if(player == null)		return;	delete this.players[player.id];};cd.Server.Deflector.prototype.update = function(){		//Add presence after timer.	if(this.shape == null)	{		this.presenceTimer -= this.currentGame.dt;				if(this.presenceTimer <= 0)		{			//Create a shape associated with the body.			this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));			this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);			this.shape.sensor = true;		}	}		//Bump players touching Deflector.	for(var i in this.players)	{		var player = this.players[i];		var distX = player.x - this.x;		var distY = player.y - this.y;				var hypo = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));				var impulseX = 0;		var impulseY = distY/hypo*this.push;				if(impulseY > Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*this.push)		{			impulseY = Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*this.push;			impulseX = (distX < 0 ? -1 : 1)*(Math.sqrt(Math.pow(hypo,2)-Math.pow(Constants.Trigger.Deflector.MAX_PUSH_Y_FACTOR*hypo,2))/hypo)*this.push;		}		else			impulseX = distX/hypo*this.push;				//Push and stun player.		player.body.setVel(new chipmunk.Vect(impulseX,impulseY));		player.stunTimer = Constants.Trigger.Deflector.STUN_TIME;	}		this.duration -= this.currentGame.dt;		if(this.duration <= 0)		this.stillExists = false;};cd.Server.Deflector.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};cd.Server.TimeZone = function(x, y, blockId, owner, duration, width, height, game){		this.id = -1;		this.owner = owner;	this.blockId = blockId;		this.type = Enum.Trigger.Type.TIME_ZONE;	this.x = x;	this.y = y;		this.players = {};	this.blocks = {};		this.duration = duration;		this.width = width;	this.height = height;		this.currentGame = game;	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.TIME_ZONE,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};cd.Server.TimeZone.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.cd.Server.TimeZone.prototype.onBegin = function(player, block){	if(player != null && player.id != this.owner.id && this.players[player.id] == null)	{		this.players[player.id] = {			target: player,			x: player.x,			y: player.y		};		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}	if(block != null && block.id != this.blockId && block.type != Enum.Block.Type.SPAWN && !block.landed && this.blocks[block.id] == null)	{		this.blocks[block.id] = block;		io.sockets.in(this.currentGame.id).emit(Constants.Message.ACTION_TRIGGER, { id: this.id, type: Enum.Trigger.Action.Type.COMMON });	}};//Called when contact ends.cd.Server.TimeZone.prototype.onEnd = function(player, block){};cd.Server.TimeZone.prototype.update = function(){	this.duration -= this.currentGame.dt;		//Backtrack.	if(this.duration <= 0 && this.stillExists)	{		//Destroy blocks.		for(var i in this.blocks)			if(this.blocks[i] != null && !this.blocks[i].toBeDestroy && this.blocks[i].stillExists)				this.blocks[i].markToDestroy(Enum.Block.Destruction.COLOR_CONTACT);				//Teleport players.		for(var i in this.players)			if(this.players[i].target.isAlive && !this.players[i].target.isRemoved)			{				//Send teleport effect to players.				io.sockets.in(this.currentGame.id).emit(Constants.Message.NEW_ELEMENT, 														{ 															x: this.players[i].target.x, 															y: this.players[i].target.y, 															type: Enum.Element.Type.TELEPORT														});																		this.players[i].target.body.setPos(new chipmunk.Vect(this.players[i].x, this.players[i].y));			}				this.stillExists = false;	}};cd.Server.TimeZone.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};cd.Server.GravityBeam = function(x, y, width, height, duration, maxLiftHeight, timeAllowed, impulse, game){		this.id = -1;		this.type = Enum.Trigger.Type.GRAVITY_BEAM;	this.x = x;	this.y = y;	this.width = width;	this.height = height;		this.duration = duration;	this.maxLiftHeight = maxLiftHeight;	this.timeAllowed = timeAllowed;		this.impulse = impulse;	this.currentGame = game;		this.players = {};	this.stillExists = true;	//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.GRAVITY_BEAM,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};cd.Server.GravityBeam.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.cd.Server.GravityBeam.prototype.onBegin = function(player, block){	//Prevent player to abuse the gravity beam.	if(player != null && this.players[player.id] != null)	{		var currentTime = new Date();		var dt = (currentTime - this.players[player.id].cooldown)*0.001;				if(dt < Constants.Trigger.GravityBeam.COOLDOWN)		{			this.players[player.id].lift = true;			return;		}					delete this.players[player.id];	}	//Keep track.	if(player != null && this.players[player.id] == null)	{		this.players[player.id] = {			target: player,			x: player.x,			y: player.y,			timer: this.timeAllowed,			cooldown: new Date(),			lift: true		};	}};//Called when contact ends.cd.Server.GravityBeam.prototype.onEnd = function(player, block){		if(player != null && this.players[player.id] != null)		this.players[player.id].lift = false;};cd.Server.GravityBeam.prototype.update = function(){	for(var i in this.players)		if(this.players[i] && this.players[i].lift)		{			//Continue if player is removed.			if(this.players[i].target.isRemoved)			{				delete this.players[i];				continue;			}					this.players[i].timer -= this.currentGame.dt;			var dt = this.players[i].target.y - this.players[i].y;									if(this.players[i].timer <= 0 || dt >= this.maxLiftHeight)			{				this.currentGame.overlord.assignKill(this.players[i].target);				delete this.players[i];			}			else			{				if(this.players[i].target.body.getVel().y < Constants.Trigger.GravityBeam.MAX_VEL_Y)					this.players[i].target.body.applyImpulse(new chipmunk.Vect(0, this.impulse), new chipmunk.Vect(0,0));				else					this.players[i].target.body.setVel(new chipmunk.Vect(this.players[i].target.body.getVel().x, Constants.Trigger.GravityBeam.MAX_VEL_Y));			}		}	this.duration -= this.currentGame.dt;		if(this.duration <= 0)		this.stillExists = false;};cd.Server.GravityBeam.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};cd.Server.VenomWave = function(x, y, speedX, speedY, distance, cooldown, varCooldown, ballMinVelX, ballRangeVelX, ballMinVelY, ballRangeVelY, width, height, game){		this.id = -1;		this.type = Enum.Trigger.Type.VENOM_WAVE;	this.x = x;	this.y = y;		this.speed = {		x: speedX,		y: speedY	};		this.cooldown = cooldown;	this.varCooldown = varCooldown;	this.timer = this.cooldown + Math.random()*this.varCooldown;		//Velocity for balls.	this.vel = {		x: ballMinVelX,		y: ballMinVelY,		variation: {			x: ballRangeVelX,			y: ballRangeVelY		}	};		//Compute finalX and finalY.	var velHypo = Math.sqrt(Math.pow(this.speed.x,2)+Math.pow(this.speed.y,2));	this.finalX = this.x + (this.speed.y == 0 ? (distance * (this.speed.x < 0 ? -1 : 1)) : this.speed.x/velHypo*distance);	this.finalY = this.y + (this.speed.x == 0 ? (distance * (this.speed.y < 0 ? -1 : 1)) : this.speed.y/velHypo*distance);		this.width = width;	this.height = height;			this.currentGame = game;	this.stillExists = true;		//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.VENOM_WAVE,		object: this	};		this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};cd.Server.VenomWave.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y	};};//Called when contact begins.cd.Server.VenomWave.prototype.onBegin = function(player, block){	if(player != null && player.stuckTimer < Constants.Trigger.VenomWave.STUCK_TIME)		player.stuck(Constants.Trigger.VenomWave.STUCK_TIME);};//Called when contact ends.cd.Server.VenomWave.prototype.onEnd = function(player, block){};cd.Server.VenomWave.prototype.update = function(){		this.timer -= this.currentGame.dt;		//Throw a venom ball.	if(this.timer <= 0)	{		var hypo = Math.sqrt(Math.pow(this.speed.x,2) + Math.pow(this.speed.y,2));		var offset = this.width*0.5 + Constants.Trigger.VenomBall.WIDTH*0.5;			var velX = this.vel.x + Math.random()*this.vel.variation.x;		var velY = this.vel.y + Math.random()*this.vel.variation.y;			this.currentGame.managers.TriggerManager.add(new cd.Server.VenomBall(this.x + -(this.speed.y/hypo)*offset*(velX < 0 ? -1 : 1), 																			   this.y + this.speed.x/hypo*offset*(velY < 0 ? -1 : 1), 																			   velX, 																			   velY, 																			   Constants.Trigger.VenomBall.WIDTH, 																			   Constants.Trigger.VenomBall.HEIGHT, 																			   this.currentGame));				this.timer = this.cooldown + Math.random()*this.varCooldown;	}		this.x += this.speed.x;	this.y += this.speed.y;		if((this.speed.x < 0 && this.x < this.finalX) || (this.speed.x > 0 && this.x > this.finalX))		this.x = this.finalX;	if((this.speed.y < 0 && this.y < this.finalY) || (this.speed.y > 0 && this.y > this.finalY))		this.y = this.finalY;	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Destroyed if it reaches his maximum distance.	if(this.x == this.finalX && this.y == this.finalY)		this.stillExists = false;};cd.Server.VenomWave.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);				var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};cd.Server.VenomBall = function(x, y, velX, velY, width, height, game){		this.id = -1;		this.type = Enum.Trigger.Type.VENOM_BALL;	this.x = x;	this.y = y;		this.sendVel = true;		this.width = width;	this.height = height;		this.currentGame = game;	this.stillExists = true;	this.vel = {		x: velX,		y: velY	};		//Create body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.VENOM_BALL,		object: this	};		this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, this.width, this.height));	this.shape.setCollisionType(Enum.Collision.Type.TRIGGER);	this.shape.sensor = true;};cd.Server.VenomBall.prototype.toClient = function(){	return {		id: this.id,		x: this.x,		y: this.y,		vel: this.vel	};};//Called when contact begins.cd.Server.VenomBall.prototype.onBegin = function(player, block){	if(player != null && player.stuckTimer < Constants.Trigger.VenomBall.STUCK_TIME)		player.stuck(Constants.Trigger.VenomBall.STUCK_TIME);			this.stillExists = false;};//Called when contact ends.cd.Server.VenomBall.prototype.onEnd = function(player, block){};cd.Server.VenomBall.prototype.update = function(){	this.x += this.vel.x;	this.y += this.vel.y;		this.vel.y -= Constants.Trigger.VenomBall.GRAVITY;	this.body.setPos(new chipmunk.Vect(this.x, this.y));};cd.Server.VenomBall.prototype.explode = function(){	//Remove physical presence.	this.currentGame.space.removeShape(this.shape);		var data = {		id: this.id	};		//Send info to client.	this.stillExists = false;	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_TRIGGER, data);};

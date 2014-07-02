@@ -1,1 +1,1 @@
-//Modules.var http = require('http');var chipmunk = require('chipmunk');var os = require('os');
+//Modules.var http = require('http');var chipmunk = require('chipmunk');var os = require('os');//Namespace for server objects.var cd = {	Server: {}};

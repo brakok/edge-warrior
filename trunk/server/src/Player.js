@@ -1,5 +1,5 @@
 //Server version of the player.
-var Player = function(id, username, x, y, color, game){
+cd.Server.Player = function(id, username, x, y, color, game){
 
 	this.currentGame = game;
 	this.username = username;
@@ -67,7 +67,7 @@ var Player = function(id, username, x, y, color, game){
 	this.body = null;	
 };
 
-Player.prototype.kill = function(killed, blockType, mustStealList){
+cd.Server.Player.prototype.kill = function(killed, blockType, mustStealList){
 
 	killed.toBeDestroy = true;
 	
@@ -112,7 +112,7 @@ Player.prototype.kill = function(killed, blockType, mustStealList){
 	}
 };
 
-Player.prototype.spawn = function(x, y){
+cd.Server.Player.prototype.spawn = function(x, y){
 
 	//Set new position.
 	this.body.setPos(new chipmunk.Vect(x, y));
@@ -133,7 +133,7 @@ Player.prototype.spawn = function(x, y){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_SPAWNED, this.toClient());
 };
 
-Player.prototype.win = function(){
+cd.Server.Player.prototype.win = function(){
 	
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
@@ -145,7 +145,7 @@ Player.prototype.win = function(){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.AT_GOAL, this.toClient());
 };
 
-Player.prototype.die = function(){
+cd.Server.Player.prototype.die = function(){
 
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
@@ -196,7 +196,7 @@ Player.prototype.die = function(){
 };
 
 //Leave current game.
-Player.prototype.leave = function(){
+cd.Server.Player.prototype.leave = function(){
 	
 	if(this.isAlive && !this.isRemoved)
 	{
@@ -215,12 +215,12 @@ Player.prototype.leave = function(){
 	}
 };
 
-Player.prototype.getPosition = function(){
+cd.Server.Player.prototype.getPosition = function(){
 	
 	return (this.body != null ? this.body.getPos() : new chipmunk.Vect(this.x, this.y));
 };
 
-Player.prototype.update = function(){
+cd.Server.Player.prototype.update = function(){
 	
 	//Can't allow a player from falling down the map.
 	if(this.y < 0)
@@ -383,25 +383,25 @@ Player.prototype.update = function(){
 		this.checkTimers();
 };
 
-Player.prototype.throwPickAxe = function(){
+cd.Server.Player.prototype.throwPickAxe = function(){
 
 	//Launch pickaxe.
-	this.currentGame.managers.DeathZoneManager.launch(new Missile(this,
-																  null,
-																  Enum.DeathZone.Type.PICK_AXE,
-																  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
-																  this.y + Constants.Player.PickAxe.OFFSET_Y, 
-																  Constants.Player.PickAxe.VEL_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1),
-																  Constants.Player.PickAxe.VEL_Y,
-																  Constants.Player.PickAxe.DISTANCE,
-																  Constants.Player.PickAxe.WIDTH, 
-																  Constants.Player.PickAxe.HEIGHT,
-																  this.currentGame));
+	this.currentGame.managers.DeathZoneManager.launch(new cd.Server.Missile(this,
+																		  null,
+																		  Enum.DeathZone.Type.PICK_AXE,
+																		  this.x + Constants.Player.PickAxe.OFFSET_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1), 
+																		  this.y + Constants.Player.PickAxe.OFFSET_Y, 
+																		  Constants.Player.PickAxe.VEL_X*(this.facing == Enum.Facing.RIGHT ? 1 : -1),
+																		  Constants.Player.PickAxe.VEL_Y,
+																		  Constants.Player.PickAxe.DISTANCE,
+																		  Constants.Player.PickAxe.WIDTH, 
+																		  Constants.Player.PickAxe.HEIGHT,
+																		  this.currentGame));
 	
 	this.pickAxeCount--;
 };
 
-Player.prototype.checkTimers = function(){
+cd.Server.Player.prototype.checkTimers = function(){
 
 	//Prevent player to keep a spawn block (kill him and drop spawn block). 
 	if(this.currentBlock.type == Enum.Block.Type.SPAWN && this.isAlive)
@@ -439,11 +439,11 @@ Player.prototype.checkTimers = function(){
 	
 };
 
-Player.prototype.turn = function(){
+cd.Server.Player.prototype.turn = function(){
 	//Nothing.
 };
 
-Player.prototype.jump = function(isDoubleJumping){
+cd.Server.Player.prototype.jump = function(isDoubleJumping){
 
 	if(this.jumpCooldown <= 0)
 	{
@@ -458,7 +458,7 @@ Player.prototype.jump = function(isDoubleJumping){
 	
 };
 
-Player.prototype.doubleJump = function(){
+cd.Server.Player.prototype.doubleJump = function(){
 
 	if(this.jumpCooldown <= 0)
 	{
@@ -471,7 +471,7 @@ Player.prototype.doubleJump = function(){
 	}
 };
 
-Player.prototype.dropBlock = function(x, y, checkDropzone){
+cd.Server.Player.prototype.dropBlock = function(x, y, checkDropzone){
 
 	//minor adjust from smoothering.
 	var tmpX = (x != null ? x : this.getPosition().x);
@@ -482,13 +482,13 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 		&& this.y < this.currentGame.world.goalStartPosition + Constants.Game.OFFSET_Y_ALLOWED_FOR_PLAYERS)
 	{
 		//Create a block and launch it.
-		this.currentGame.managers.BlockManager.launch(new Block(tmpX, 
-															  tmpY, 
-															  this.currentBlock.type, 
-															  this.color,
-															  this,
-															  this.currentGame,
-															  this.currentBlock.skill));
+		this.currentGame.managers.BlockManager.launch(new cd.Server.Block(tmpX, 
+																		  tmpY, 
+																		  this.currentBlock.type, 
+																		  this.color,
+																		  this,
+																		  this.currentGame,
+																		  this.currentBlock.skill));
 		
 		this.hasGivenBlock = false;
 		
@@ -508,13 +508,13 @@ Player.prototype.dropBlock = function(x, y, checkDropzone){
 	}
 };
 
-Player.prototype.changeMass = function(factor){
+cd.Server.Player.prototype.changeMass = function(factor){
 	this.mass *= factor;
 	this.body.setMass(this.mass);
 };
 
 //Init the physical part of the player.
-Player.prototype.initBody = function(){
+cd.Server.Player.prototype.initBody = function(){
 	
 	var groundSensorHalfWidth = Constants.Player.WIDTH*0.25;
 	var playerHalfHeight = Constants.Player.HEIGHT*0.5;
@@ -554,7 +554,7 @@ Player.prototype.initBody = function(){
 	this.dropSensor.sensor = true;
 };
 
-Player.prototype.execute = function(action){
+cd.Server.Player.prototype.execute = function(action){
 	this.currentAction = action;
 	
 	var data = {
@@ -565,7 +565,7 @@ Player.prototype.execute = function(action){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.PLAYER_ACTION, data);
 };
 
-Player.prototype.stuck = function(time){
+cd.Server.Player.prototype.stuck = function(time){
 	this.stuckTimer = time;
 	
 	if(!this.isStuck)
@@ -575,7 +575,7 @@ Player.prototype.stuck = function(time){
 	}
 };
 
-Player.prototype.unstuck = function(){
+cd.Server.Player.prototype.unstuck = function(){
 	this.stuckTimer = 0;
 	
 	if(this.isStuck)
@@ -586,7 +586,7 @@ Player.prototype.unstuck = function(){
 };
 
 //Format for client.
-Player.prototype.toClient = function(){
+cd.Server.Player.prototype.toClient = function(){
 	return {
 		x: this.getPosition().x,
 		y: this.getPosition().y,
