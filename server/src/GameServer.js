@@ -17,7 +17,7 @@ var Server = new function(){
 	var previousIdleTime = 0;
 	
 	this.addGame = function(settings){	
-		this.gameList[settings.id] = new Game(settings);
+		this.gameList[settings.id] = new cd.Server.Game(settings);
 	};
 		
 	this.register = function(){
@@ -169,12 +169,12 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 				color = Server.gameList[data.gameId].playerInfos[i].color-1;
 		
 		//Create connecting player.
-		var player = new Player(socket.id, 
-								data.username,
-								Server.gameList[data.gameId].world.width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
-								Server.gameList[data.gameId].spawnY, 
-								color,
-								Server.gameList[data.gameId]);
+		var player = new cd.Server.Player(socket.id, 
+											data.username,
+											Server.gameList[data.gameId].world.width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
+											Server.gameList[data.gameId].spawnY, 
+											color,
+											Server.gameList[data.gameId]);
 		
 		var playerToClient = player.toClient();
 		playerToClient.username = data.username;

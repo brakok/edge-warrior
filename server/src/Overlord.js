@@ -1,10 +1,10 @@
 
-var Overlord = function(game){
+cd.Server.Overlord = function(game){
 	this.currentGame = game;
 	this.hasActiveSpawnBlock = false;
 };
 
-Overlord.prototype.assignKill = function(killed, keepList){
+cd.Server.Overlord.prototype.assignKill = function(killed, keepList){
 	
 	var otherPlayers = [];
 	for(var i in this.currentGame.players)
@@ -25,7 +25,8 @@ Overlord.prototype.assignKill = function(killed, keepList){
 	otherPlayers[killerIndex].kill(killed, Enum.Block.Type.NEUTRAL, (keepList == null || !keepList));
 };
 
-Overlord.prototype.launch = function(blockType){
+//Launch a block.
+cd.Server.Overlord.prototype.launch = function(blockType){
 		
 	if(blockType == Enum.Block.Type.SPAWN)
 	{
@@ -45,19 +46,20 @@ Overlord.prototype.launch = function(blockType){
 			}
 			
 			//Create a block and launch it.
-			this.currentGame.managers.BlockManager.launch(new Block(spawnX, 
-																  spawnY, 
-																  Enum.Block.Type.SPAWN, 
-																  null,
-																  null, 
-																  this.currentGame));
+			this.currentGame.managers.BlockManager.launch(new cd.Server.Block(spawnX, 
+																		  spawnY, 
+																		  Enum.Block.Type.SPAWN, 
+																		  null,
+																		  null, 
+																		  this.currentGame));
 			
 			this.hasActiveSpawnBlock = true;
 		}
 	}
 };
 
-Overlord.prototype.kill = function(killed, cause){
+//Kill a player.
+cd.Server.Overlord.prototype.kill = function(killed, cause){
 		
 	//Steal killed's list.
 	for(var i in this.currentGame.players)

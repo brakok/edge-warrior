@@ -1,10 +1,10 @@
 
 
-var TriggerManager = function(game){
+cd.Server.TriggerManager = function(game){
 	this.currentGame = game;
 };
 
-TriggerManager.prototype.add = function(trigger){
+cd.Server.TriggerManager.prototype.add = function(trigger){
 	
 	//Assign id.
 	trigger.id = this.currentGame.triggerSequence;

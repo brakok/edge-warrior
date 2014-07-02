@@ -1,5 +1,5 @@
 
-var GameSettings = function(id, width, height, maxPlayers, username){
+cd.Server.GameSettings = function(id, width, height, maxPlayers, username){
 
 	//Assign when game is created by the server.
 	this.id = id;
@@ -14,13 +14,13 @@ var GameSettings = function(id, width, height, maxPlayers, username){
 	this.maxPlayers = maxPlayers;
 };
 
-GameSettings.prototype.update = function(settings){
+cd.Server.GameSettings.prototype.update = function(settings){
 	this.width = settings.width;
 	this.height = settings.height;
 	this.worldType = settings.type;
 };
 
-GameSettings.prototype.getPlayer = function(username){
+cd.Server.GameSettings.prototype.getPlayer = function(username){
 	for(var i in this.players)
 		if(this.players[i] != null && this.players[i].username == username)
 			return this.players[i];
@@ -28,13 +28,13 @@ GameSettings.prototype.getPlayer = function(username){
 	return null;
 };
 
-GameSettings.prototype.updatePlayer = function(username, color, ready){
+cd.Server.GameSettings.prototype.updatePlayer = function(username, color, ready){
 	var player = this.getPlayer(username);
 	player.color = color;
 	player.ready = ready;
 };
 
-GameSettings.prototype.addPlayer = function(username, color){
+cd.Server.GameSettings.prototype.addPlayer = function(username, color){
 	this.players.push({
 		username: username,
 		color: color,
@@ -42,7 +42,7 @@ GameSettings.prototype.addPlayer = function(username, color){
 	});
 };
 
-GameSettings.prototype.removePlayer = function(username){
+cd.Server.GameSettings.prototype.removePlayer = function(username){
 	
 	var index = null;
 	for(var i in this.players)	
@@ -57,7 +57,7 @@ GameSettings.prototype.removePlayer = function(username){
 };
 
 //Assign good color to duplicata.
-GameSettings.prototype.validateColors = function(){
+cd.Server.GameSettings.prototype.validateColors = function(){
 		
 	//Find duplicated colors.
 	var usedColors = {};

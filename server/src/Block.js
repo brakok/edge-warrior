@@ -1,5 +1,5 @@
 //Server version of the block.
-var Block = function(x, y, type, color, owner, game, skill){
+cd.Server.Block = function(x, y, type, color, owner, game, skill){
 	
 	this.currentGame = game;
 	
@@ -25,7 +25,7 @@ var Block = function(x, y, type, color, owner, game, skill){
 	this.type = type;
 	
 	//Set skill information.
-	this.skill = (type == Enum.Block.Type.SKILLED ? SkillInfo.load(skill) : null);	
+	this.skill = (type == Enum.Block.Type.SKILLED ? cd.Server.SkillInfo.load(skill) : null);	
 	this.color = color;
 	
 	//Used to prevent a block from staying in a active state.
@@ -64,12 +64,12 @@ var Block = function(x, y, type, color, owner, game, skill){
 	this.blockSensor.sensor = true;
 };
 
-Block.prototype.markToDestroy = function(cause){
+cd.Server.Block.prototype.markToDestroy = function(cause){
 	this.toBeDestroy = true;
 	this.destroyCause = cause;
 };
 
-Block.prototype.launch = function(){
+cd.Server.Block.prototype.launch = function(){
 	this.landed = false;
 	this.body.setVel(new chipmunk.Vect(0, Constants.Block.LAUNCHING_SPEED));
 	
@@ -78,7 +78,7 @@ Block.prototype.launch = function(){
 		this.trigger();
 };
 
-Block.prototype.active = function(flag){
+cd.Server.Block.prototype.active = function(flag){
 	
 	if(flag)
 	{
@@ -108,7 +108,7 @@ Block.prototype.active = function(flag){
 	}
 };
 
-Block.prototype.update = function(dt){
+cd.Server.Block.prototype.update = function(dt){
 	
 	if(this.stillExists && !this.landed){
 	
@@ -178,7 +178,7 @@ Block.prototype.update = function(dt){
 	}
 };
 
-Block.prototype.toClient = function(){
+cd.Server.Block.prototype.toClient = function(){
 	return {
 		id: this.id,
 		x: this.body.getPos().x,
@@ -189,7 +189,8 @@ Block.prototype.toClient = function(){
 	};
 };
 
-Block.prototype.trigger = function(){
+//Trigger skill or effect.
+cd.Server.Block.prototype.trigger = function(){
 
 	if(this.stillExists)
 	{
@@ -207,7 +208,8 @@ Block.prototype.trigger = function(){
 	
 };
 
-Block.prototype.spawn = function(){
+//Spawn players.
+cd.Server.Block.prototype.spawn = function(){
 
 	var killerId = this.owner ? this.owner.id : null;
 	var posY = Constants.Player.HEIGHT*0.75;
@@ -260,7 +262,8 @@ Block.prototype.spawn = function(){
 	this.explode(Enum.Block.Destruction.SPAWN);
 };
 
-Block.prototype.explode = function(cause){
+//Destroy block.
+cd.Server.Block.prototype.explode = function(cause){
 	
 	var data = {
 		cause: cause,

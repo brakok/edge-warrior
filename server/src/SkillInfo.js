@@ -1,5 +1,5 @@
 
-var SkillInfo = {
+cd.Server.SkillInfo = {
 	load: function(skill){
 		
 		var tmpSkill = null;

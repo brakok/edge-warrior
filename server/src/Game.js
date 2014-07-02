@@ -1,5 +1,5 @@
 //Game container server-side.
-var Game = function(settings){
+cd.Server.Game = function(settings){
 	
 	//Members
 	this.id = settings.id;
@@ -33,7 +33,7 @@ var Game = function(settings){
 	this.connectingPlayers = 0;
 	
 	//Create world.
-	this.world = WorldInfo.create(settings.worldType, settings.width, settings.height, this);
+	this.world = cd.Server.WorldInfo.create(settings.worldType, settings.width, settings.height, this);
 	
 	this.state = false;
 	this.space = null;
@@ -41,16 +41,16 @@ var Game = function(settings){
 	this.unitTimer = Constants.Game.UNIT_TIMER;
 	
 	//Create listeners.
-	this.listeners = new Listeners(this);
+	this.listeners = new cd.Server.Listeners(this);
 	
 	//Managers.
-	this.managers = new Managers(this);
+	this.managers = new cd.Server.Managers(this);
 	
 	//Create Overlord.
-	this.overlord = new Overlord(this);
+	this.overlord = new cd.Server.Overlord(this);
 };
 
-Game.prototype.createWorld = function(){
+cd.Server.Game.prototype.createWorld = function(){
 
 	if(this.space == null || this.space == 'undefined')
 	{
@@ -72,11 +72,11 @@ Game.prototype.createWorld = function(){
 			this.players[i].initBody();
 		
 		//Add the goal. TODO: Random between multiples goals.
-		this.goal = new FloatingBall(this.world.width*0.5, this.world.goalStartPosition, this);
+		this.goal = new cd.Server.FloatingBall(this.world.width*0.5, this.world.goalStartPosition, this);
 	}
 };
 
-Game.prototype.update = function(){
+cd.Server.Game.prototype.update = function(){
 
 	//Get delta.
 	var currentTime = new Date();
@@ -219,12 +219,12 @@ Game.prototype.update = function(){
 	}
 };
 
-Game.prototype.electWinner = function(winner){
+cd.Server.Game.prototype.electWinner = function(winner){
 	this.winner = winner;
 	this.winner.hasWon = true;
 };
 
-Game.prototype.end = function(){
+cd.Server.Game.prototype.end = function(){
 	var survivors = [];
 	var playerCount = 0;
 	
@@ -233,31 +233,44 @@ Game.prototype.end = function(){
 	{
 		playerCount++;
 		
-		if(i != this.winner.id)
+		if(i != this.winner.id && this.players[i].isAlive)
 		{
-			Account.lose(this.players[i].username);
-		
-			if(this.players[i].isAlive)
-			{
-				this.players[i].die();
-				survivors.push(this.players[i].toClient());
-			}
+			this.players[i].die();
+			survivors.push(this.players[i].toClient());
 		}
 	}
 
 	//Calculate new scores.
 	var winnerScore = playerCount-1 + (survivors.length < 1 ? Math.floor(playerCount*0.5) : 0);
-	Account.win(this.winner.username, winnerScore);
 	
 	var scores = {};
+	var losers = [];
 	
+	//Create scoreboard and find losers.
 	for(var i in this.players)
 	{
 		if(i != this.winner.id)
+		{
 			scores[this.players[i].username] = -1;
+			
+			losers.push({
+				username: this.players[i].username
+			});
+		}
 		else
 			scores[this.players[i].username] = winnerScore;
 	}
+	
+	var toMasterData = {
+		winner: {
+			username: this.winner.username,
+			score: winnerScore
+		},
+		losers: losers
+	};
+	
+	//Send information to master server to update new scores.
+	Server.socket.emit(Constants.Message.WIN, toMasterData);
 	
 	var data = {
 		winner: this.winner.toClient(),
@@ -271,16 +284,17 @@ Game.prototype.end = function(){
 };
 
 //Interrupt game to be removed.
-Game.prototype.trash = function(){
+cd.Server.Game.prototype.trash = function(){
 	clearInterval(this.intervalId);
 };
 
-Game.prototype.push = function(inputs, id){
+//Get info from client.
+cd.Server.Game.prototype.push = function(inputs, id){
 	this.players[id].keys = inputs;
 };
 
-
-Game.prototype.pull = function(){
+//Send info to client.
+cd.Server.Game.prototype.pull = function(){
 		
 	var players = [];
 	
@@ -331,7 +345,8 @@ Game.prototype.pull = function(){
 	io.sockets.in(this.id).emit(Constants.Message.PULL, data);
 };
 
-Game.prototype.launch = function(){
+//Launch the game.
+cd.Server.Game.prototype.launch = function(){
 
 	var GameInstance = this;
 	var updateFunc = function(){

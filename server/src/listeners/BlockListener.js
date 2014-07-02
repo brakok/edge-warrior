@@ -1,10 +1,10 @@
 
 //Block listener.
-var BlockListener = function(game){
+cd.Server.BlockListener = function(game){
 	this.currentGame = game;
 };
 
-BlockListener.prototype.begin = function(arbiter, space){
+cd.Server.BlockListener.prototype.begin = function(arbiter, space){
 	
 	var block1 = null;
 	var block2 = null;
@@ -130,7 +130,7 @@ BlockListener.prototype.begin = function(arbiter, space){
 	}
 };
 	
-BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
+cd.Server.BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 	
 	switch(skillBlock.skill.trigger){
 		case Enum.Block.Skill.Trigger.ON_LANDING:
@@ -144,7 +144,7 @@ BlockListener.prototype.resolve = function(skillBlock, otherUserdata){
 	}
 };
 	
-BlockListener.prototype.destroyLeaves = function(blockId, previousId){
+cd.Server.BlockListener.prototype.destroyLeaves = function(blockId, previousId){
 		
 	var block = this.currentGame.blocks[blockId];
 	

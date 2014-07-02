@@ -1,9 +1,9 @@
 
-var NpcListener = function(game){
+cd.Server.NpcListener = function(game){
 	this.currentGame = game;
 };
 
-NpcListener.prototype.begin = function(arbiter, space){
+cd.Server.NpcListener.prototype.begin = function(arbiter, space){
 	
 	var player = null;
 	var npc = null;
@@ -34,7 +34,7 @@ NpcListener.prototype.begin = function(arbiter, space){
 		npc.onBegin(player);
 };
 
-NpcListener.prototype.separate = function(arbiter, space){
+cd.Server.NpcListener.prototype.separate = function(arbiter, space){
 	
 	var player = null;
 	var npc = null;

@@ -1,5 +1,5 @@
 
-var SandSpirit = function(x, y, width, height, speedX, speedY, duration, game){
+cd.Server.SandSpirit = function(x, y, width, height, speedX, speedY, duration, game){
 	
 	this.id = -1;
 	this.x = x;
@@ -51,7 +51,7 @@ var SandSpirit = function(x, y, width, height, speedX, speedY, duration, game){
 	this.shape.sensor = true;
 };
 
-SandSpirit.prototype.toClient = function(){
+cd.Server.SandSpirit.prototype.toClient = function(){
 
 	return {
 		id: this.id,
@@ -62,7 +62,7 @@ SandSpirit.prototype.toClient = function(){
 };
 
 //Called when contact begins.
-SandSpirit.prototype.onBegin = function(player){
+cd.Server.SandSpirit.prototype.onBegin = function(player){
 
 	if(!this.hasReached)
 	{
@@ -76,11 +76,11 @@ SandSpirit.prototype.onBegin = function(player){
 };
 
 //Called when contact ends.
-SandSpirit.prototype.onEnd = function(player){
+cd.Server.SandSpirit.prototype.onEnd = function(player){
 
 };
 
-SandSpirit.prototype.update = function(){
+cd.Server.SandSpirit.prototype.update = function(){
 			
 	//If target reached, give spirit target position.
 	if(this.hasReached)
@@ -145,7 +145,7 @@ SandSpirit.prototype.update = function(){
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));
 };
 
-SandSpirit.prototype.explode = function(){
+cd.Server.SandSpirit.prototype.explode = function(){
 
 	if(this.target)
 		this.target.changeMass(1/Constants.NPC.SandSpirit.MASS_FACTOR);

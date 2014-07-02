@@ -1,5 +1,5 @@
 
-WorldInfo.Church = function(width, height, game){
+cd.Server.WorldInfo.Church = function(width, height, game){
 	
 	this.type = Enum.World.Type.CHURCH;
 	
@@ -14,7 +14,7 @@ WorldInfo.Church = function(width, height, game){
 	this.eventTimer = Constants.World.Church.Event.TIMER_MIN + Math.random()*Constants.World.Church.Event.TIMER_RANGE + Constants.Warmup.PHASE_TIME;
 };
 
-WorldInfo.Church.prototype.load = function(){
+cd.Server.WorldInfo.Church.prototype.load = function(){
 	
 	//Create floor and walls.
 	var ground = new chipmunk.SegmentShape(this.currentGame.space.staticBody,
@@ -40,7 +40,7 @@ WorldInfo.Church.prototype.load = function(){
 	this.currentGame.space.addShape(rightWall);	
 };
 
-WorldInfo.Church.prototype.update = function(){
+cd.Server.WorldInfo.Church.prototype.update = function(){
 
 	this.eventTimer -= this.currentGame.dt;
 	
@@ -51,17 +51,17 @@ WorldInfo.Church.prototype.update = function(){
 	}
 };
 
-WorldInfo.Church.prototype.triggerEvent = function(){
+cd.Server.WorldInfo.Church.prototype.triggerEvent = function(){
 	
 	//Create a gravity beam.
-	this.currentGame.managers.TriggerManager.add(new GravityBeam(Constants.Trigger.GravityBeam.WIDTH*0.5 + Math.random()*(this.currentGame.world.width - Constants.Trigger.GravityBeam.WIDTH), 
-															     Constants.Trigger.GravityBeam.HEIGHT*0.5, 
-																 Constants.Trigger.GravityBeam.WIDTH,
-																 Constants.Trigger.GravityBeam.HEIGHT,
-																 Constants.Trigger.GravityBeam.DURATION,
-																 Constants.Trigger.GravityBeam.MAX_LIFT_HEIGHT,
-																 Constants.Trigger.GravityBeam.TIME_ALLOWED,
-																 Constants.Trigger.GravityBeam.IMPULSE,
-																 this.currentGame));
+	this.currentGame.managers.TriggerManager.add(new cd.Server.GravityBeam(Constants.Trigger.GravityBeam.WIDTH*0.5 + Math.random()*(this.currentGame.world.width - Constants.Trigger.GravityBeam.WIDTH), 
+																			 Constants.Trigger.GravityBeam.HEIGHT*0.5, 
+																			 Constants.Trigger.GravityBeam.WIDTH,
+																			 Constants.Trigger.GravityBeam.HEIGHT,
+																			 Constants.Trigger.GravityBeam.DURATION,
+																			 Constants.Trigger.GravityBeam.MAX_LIFT_HEIGHT,
+																			 Constants.Trigger.GravityBeam.TIME_ALLOWED,
+																			 Constants.Trigger.GravityBeam.IMPULSE,
+																			 this.currentGame));
 	
 };

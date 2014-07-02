@@ -1,9 +1,9 @@
 
-var DeathZoneManager = function(game){
+cd.Server.DeathZoneManager = function(game){
 	this.currentGame = game;
 };
 
-DeathZoneManager.prototype.launch = function(deathZone){
+cd.Server.DeathZoneManager.prototype.launch = function(deathZone){
 	
 	deathZone.id = this.currentGame.deathZoneSequence;
 	this.currentGame.deathZoneSequence++;

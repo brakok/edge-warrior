@@ -1,5 +1,5 @@
 
-var PeskyBox = function(x, y, width, height, speed, duration, maxFleeTime, pushX, pushY, target, game){
+cd.Server.PeskyBox = function(x, y, width, height, speed, duration, maxFleeTime, pushX, pushY, target, game){
 	
 	this.id = -1;
 	this.x = x;
@@ -47,7 +47,7 @@ var PeskyBox = function(x, y, width, height, speed, duration, maxFleeTime, pushX
 	this.shape.sensor = true;
 };
 
-PeskyBox.prototype.toClient = function(){
+cd.Server.PeskyBox.prototype.toClient = function(){
 
 	return {
 		id: this.id,
@@ -58,7 +58,7 @@ PeskyBox.prototype.toClient = function(){
 };
 
 //Called when contact begins.
-PeskyBox.prototype.onBegin = function(player){
+cd.Server.PeskyBox.prototype.onBegin = function(player){
 
 	if(player.id == this.target.id)
 	{
@@ -73,12 +73,12 @@ PeskyBox.prototype.onBegin = function(player){
 };
 
 //Called when contact ends.
-PeskyBox.prototype.onEnd = function(player){
+cd.Server.PeskyBox.prototype.onEnd = function(player){
 	if(player.id == this.target.id)
 		this.fleeTimer = this.maxFleeTime;
 };
 
-PeskyBox.prototype.update = function(){
+cd.Server.PeskyBox.prototype.update = function(){
 	
 	if(this.target && !this.target.isRemoved)
 	{
@@ -130,7 +130,7 @@ PeskyBox.prototype.update = function(){
 		this.stillExists = false;
 };
 
-PeskyBox.prototype.explode = function(){
+cd.Server.PeskyBox.prototype.explode = function(){
 
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);

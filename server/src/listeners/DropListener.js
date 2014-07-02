@@ -1,10 +1,10 @@
 
 //Drop listener.
-var DropListener = function(game){
+cd.Server.DropListener = function(game){
 	this.currentGame = game;
 };
 
-DropListener.prototype.begin = function(arbiter, space){
+cd.Server.DropListener.prototype.begin = function(arbiter, space){
 	var player = null;
 	
 	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)
@@ -17,7 +17,7 @@ DropListener.prototype.begin = function(arbiter, space){
 		player.obstruction++;
 };
 		
-DropListener.prototype.separate = function(arbiter, space){
+cd.Server.DropListener.prototype.separate = function(arbiter, space){
 	var player = null;
 	
 	if(arbiter.body_a.userdata != null && arbiter.body_a.userdata.type == Enum.UserData.Type.PLAYER)

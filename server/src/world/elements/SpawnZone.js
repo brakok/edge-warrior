@@ -1,5 +1,5 @@
 
-var SpawnZone = function(x, y, width, height, game){
+cd.Server.SpawnZone = function(x, y, width, height, game){
 	this.x = x;
 	this.y = y;
 	this.width = width;
@@ -7,7 +7,7 @@ var SpawnZone = function(x, y, width, height, game){
 	this.currentGame = game;
 };
 
-SpawnZone.prototype.init = function(){
+cd.Server.SpawnZone.prototype.init = function(){
 
 	this.body = new chipmunk.Body(Infinity, Infinity);
 	this.body.setPos(new chipmunk.Vect(this.x, this.y));

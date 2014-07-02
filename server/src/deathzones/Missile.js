@@ -1,5 +1,5 @@
 
-var Missile = function(owner, blockId, type, x, y, velX, velY, distance, width, height, game){
+cd.Server.Missile = function(owner, blockId, type, x, y, velX, velY, distance, width, height, game){
 	
 	this.currentGame = game;
 	this.id = -1;
@@ -55,7 +55,7 @@ var Missile = function(owner, blockId, type, x, y, velX, velY, distance, width, 
 	this.shape.sensor = true;
 };
 
-Missile.prototype.toClient = function(){
+cd.Server.Missile.prototype.toClient = function(){
 	return {
 		x: this.x,
 		y: this.y,
@@ -63,7 +63,7 @@ Missile.prototype.toClient = function(){
 	};
 };
 
-Missile.prototype.explode = function(){
+cd.Server.Missile.prototype.explode = function(){
 
 	//Remove physical presence.
 	this.currentGame.space.removeShape(this.shape);
@@ -77,7 +77,7 @@ Missile.prototype.explode = function(){
 	io.sockets.in(this.currentGame.id).emit(Constants.Message.DELETE_DEATHZONE, data);
 };
 
-Missile.prototype.update = function(){
+cd.Server.Missile.prototype.update = function(){
 
 	this.x += this.vel.x;
 	this.y += this.vel.y;

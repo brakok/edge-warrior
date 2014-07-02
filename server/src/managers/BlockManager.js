@@ -1,9 +1,9 @@
 
-var BlockManager = function(game){
+cd.Server.BlockManager = function(game){
 	this.currentGame = game;
 };
 
-BlockManager.prototype.launch = function(block){
+cd.Server.BlockManager.prototype.launch = function(block){
 			
 	block.id = this.currentGame.blockSequence;
 	this.currentGame.blockSequence++;

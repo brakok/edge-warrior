@@ -165,15 +165,17 @@ ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
 	//Send game id to player.
 	socket.on(Constants.Message.CREATE_LOBBY, function(username){
 		console.log('Lobby created (' + MasterServer.gameSequenceId + ') : ' + username);
-		MasterServer.lobbies[MasterServer.gameSequenceId] = new Lobby(MasterServer.gameSequenceId, socket.id, username);
 		
-		socket.emit(Constants.Message.CREATE_LOBBY, MasterServer.gameSequenceId);
-		socket.join(MasterServer.gameSequenceId);
+		var gameId = MasterServer.gameSequenceId;
+		MasterServer.gameSequenceId++;
+		
+		MasterServer.lobbies[gameId] = new cd.Server.Lobby(gameId, socket.id, username);
+		
+		socket.emit(Constants.Message.CREATE_LOBBY, gameId);
+		socket.join(gameId);
 		
 		//Set game id into socket userdata.
-		socket.userdata.gameId = MasterServer.gameSequenceId;
-		
-		MasterServer.gameSequenceId++;
+		socket.userdata.gameId = gameId;
 	});
 	
 	//Join a lobby.
@@ -297,6 +299,17 @@ ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
 		delete MasterServer.lobbies[data.gameId];
 		ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.GAME_CREATED, 'http://' + data.address + ':' + Constants.Network.SERVER_PORT);
+	});
+	
+	//Update players' scores.
+	socket.on(Constants.Message.WIN, function(data){
+		
+		//Winner
+		Account.win(data.winner.username, data.winner.score);
+		
+		//Losers
+		for(var i = 0; i < data.losers.length; i++)
+			Account.lose(data.losers[i].username);
 	});
 });
 
