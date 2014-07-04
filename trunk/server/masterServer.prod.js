@@ -70,9 +70,7 @@ var Constants = {
 	Regex: {
 		EMAIL: /^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/
 	}
-};//Modules.var http = require('http');var chipmunk = require('chipmunk');var os = require('os');//Namespace for server objects.var cd = {	Server: {}};
-Constants.Database.ADDRESS = 'http://crusheddb.cloudapp.net';
-Constants.Network.ADDRESS = 'http://crushedmaster.cloudapp.net:1060';
+};//Modules.var http = require('http');var chipmunk = require('chipmunk');var os = require('os');//Namespace for server objects.var cd = {	Server: {}};Constants.Database.ADDRESS = 'http://crusheddb.cloudapp.net';
 var Config = {
 	CreateCouchDbViews: true
 };
