@@ -17,6 +17,25 @@ var Enum = {
 		PURPLE: 6,
 		BLACK: 7
 	},
+	UserData: {
+		Type: {
+			PLAYER: 0,
+			BLOCK: 1,
+			WINNING_GOAL: 2,
+			FIREBALL: 3,
+			ENERGY_SPIKE: 4,
+			JAW: 5,
+			PESKY_BOX: 6,
+			PICK_AXE: 7,
+			DEFLECTOR: 8,
+			TIME_ZONE: 9,
+			SPAWN_ZONE: 10,
+			SAND_SPIRIT: 11,
+			GRAVITY_BEAM: 12,
+			VENOM_BALL: 13,
+			VENOM_WAVE: 14
+		}
+	},
 	Slot: {
 		Color: {
 			UNASSIGNED: 0,
@@ -48,12 +67,20 @@ var Enum = {
 			SKILLED: 3
 		},
 		Skill: {
+			Trigger: {
+				ON_LANDING: 0,
+				ON_LAUNCHING: 1
+			},
 			FIRE_PULSE: 0,
 			JAW_FALL: 1,
 			ECLIPSE: 2,
 			PESKY_BOX: 3,
 			DEFLECTOR: 4,
 			TIME_ZONE: 5
+		},
+		State: {
+			STATIC: 0,
+			DYNAMIC: 1
 		},
 		Destruction: {
 			COLOR_CONTACT: 0,
@@ -73,6 +100,7 @@ var Enum = {
 	},
 	Action: {
 		Type: {
+			NONE: -1,
 			STANDING: 0,
 			RUNNING: 1,
 			JUMPING: 2,
@@ -159,6 +187,21 @@ var Enum = {
 			VENOM_BALL_THROW: 18,
 			VENOM_BALL_END: 19,
 			CANCEL_DROP: 20
+		}
+	},
+	Collision: {
+		Type: {
+			STATIC: 0,
+			PLAYER: 1,
+			GROUND_SENSOR: 2,
+			BLOCK: 3,
+			DROP_SENSOR: 4,
+			WINNING_GOAL: 5,
+			DEATH_ZONE: 6,
+			SKILL: 7,
+			NPC: 8,
+			TRIGGER: 9,
+			SPAWN: 10
 		}
 	},
 	Element: {

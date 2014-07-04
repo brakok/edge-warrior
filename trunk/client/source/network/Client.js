@@ -221,7 +221,7 @@ var Client = new function(){
 			'force new connection': true
 		};
 		
-		var masterSocket = io.connect(Constants.Network.ADDRESS, socketOptions);
+		var masterSocket = io.connect(Constants.Network.ADDRESS + ':' + Constants.Network.MASTER_PORT, socketOptions);
 		
 		//Chat.
 		masterSocket.on(Constants.Message.CHAT, function(data){

@@ -9,7 +9,9 @@
 		frameRate:60,
 		tag:'gameCanvas',
 		engineDir:'source/lib/Cocos2d/cocos2d/',
-		appFiles:['source/constants/Constant.js',
+		appFiles:[
+				  //Client
+				  'source/constants/Constant.js',
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
 				  
@@ -20,19 +22,19 @@
 				  'source/common/Util.js',
 				  'source/common/Smoothering.js',
 				  
-				  'source/playground/Block.js',
-				  'source/playground/Player.js',
-				  'source/playground/world/Wall.js',
-				  'source/playground/world/Floor.js',
-				  'source/playground/winnerGoal/FloatingBall.js',
-				  'source/playground/Eclipse.js',
+				  'source/playground/client/Block.js',
+				  'source/playground/client/Player.js',
+				  'source/playground/client/world/Wall.js',
+				  'source/playground/client/world/Floor.js',
+				  'source/playground/client/winnerGoal/FloatingBall.js',
+				  'source/playground/client/Eclipse.js',
 				  
-				  'source/playground/skills/SkillInfo.js',
-				  'source/playground/skills/SkillDescription.js',
+				  'source/playground/client/skills/SkillInfo.js',
+				  'source/playground/client/skills/SkillDescription.js',
 				  
 				  'source/settings/GameSettings.js',
 				  'source/settings/Keys.js',
-				  'source/playground/skills/SkillSet.js',
+				  'source/playground/client/skills/SkillSet.js',
 				  'source/settings/Options.js',
 				  'source/menu/elements/SkillList.js',
 				  'source/menu/elements/SkillSummary.js',
@@ -43,8 +45,8 @@
 				  'source/menu/elements/LobbyList.js',
 				  'source/menu/elements/KeyForm.js',
 				  'source/menu/elements/KeyInput.js',
-				  'source/playground/BlockOption.js',
-				  'source/playground/Camera.js',
+				  'source/playground/client/BlockOption.js',
+				  'source/playground/client/Camera.js',
 				  
 				  'source/network/client.js',
 				  'source/network/Profile.js',
@@ -69,47 +71,50 @@
 				  'source/menu/SkillScreen.js',
 				  'source/menu/LoadingScreen.js',
 				  
-				  'source/playground/Game.js',
-				  'source/playground/hud/Inventory.js',
-				  'source/playground/manager/AnimationManager.js',
-				  'source/playground/manager/AudioManager.js',
+				  'source/playground/client/Game.js',
+				  'source/playground/client/hud/Inventory.js',
+				  'source/playground/client/manager/AnimationManager.js',
+				  'source/playground/client/manager/AudioManager.js',
 				  
-				  'source/playground/hud/KillCommand.js',
-				  'source/playground/hud/SkillStore.js',
-				  'source/playground/hud/SkillItem.js',
-				  'source/playground/hud/PickAxeCounter.js',
+				  'source/playground/client/hud/KillCommand.js',
+				  'source/playground/client/hud/SkillStore.js',
+				  'source/playground/client/hud/SkillItem.js',
+				  'source/playground/client/hud/PickAxeCounter.js',
 				  
-				  'source/playground/particles/ChargingDot.js',
-				  'source/playground/particles/Particle.js',
-				  'source/playground/particles/ParticleEmitter.js',
+				  'source/playground/client/particles/ChargingDot.js',
+				  'source/playground/client/particles/Particle.js',
+				  'source/playground/client/particles/ParticleEmitter.js',
 				  
-				  'source/playground/deathzones/Missile.js',
-				  'source/playground/deathzones/Spike.js',
-				  'source/playground/deathzones/Jaw.js',
+				  'source/playground/client/deathzones/Missile.js',
+				  'source/playground/client/deathzones/Spike.js',
+				  'source/playground/client/deathzones/Jaw.js',
 				  
-				  'source/playground/triggers/Deflector.js',
-				  'source/playground/triggers/TimeZone.js',
-				  'source/playground/triggers/GravityBeam.js',
-				  'source/playground/triggers/VenomWave.js',
-				  'source/playground/triggers/VenomBall.js',
+				  'source/playground/client/triggers/Deflector.js',
+				  'source/playground/client/triggers/TimeZone.js',
+				  'source/playground/client/triggers/GravityBeam.js',
+				  'source/playground/client/triggers/VenomWave.js',
+				  'source/playground/client/triggers/VenomBall.js',
 				  
-				  'source/playground/npc/PeskyBox.js',
-				  'source/playground/npc/SandSpirit.js',
+				  'source/playground/client/npc/PeskyBox.js',
+				  'source/playground/client/npc/SandSpirit.js',
 				  
 				  'source/text/AppearingLabel.js',
 				  'source/text/FallingLabel.js',
 				  
-				  'source/playground/manager/EffectManager.js',
-				  'source/playground/manager/ElementManager.js',
-				  'source/playground/manager/ParticleManager.js',
-				  'source/playground/Effect.js',
-				  'source/playground/world/BlackBox.js',
-				  'source/playground/world/World.js',
-				  'source/playground/world/WorldInfo.js',
-				  'source/playground/LightBall.js',
-				  'source/playground/Voice.js',
-				  'source/playground/hud/Hud.js',
-				  'source/playground/world/Background.js']
+				  'source/playground/client/manager/EffectManager.js',
+				  'source/playground/client/manager/ElementManager.js',
+				  'source/playground/client/manager/ParticleManager.js',
+				  'source/playground/client/Effect.js',
+				  'source/playground/client/world/BlackBox.js',
+				  'source/playground/client/world/World.js',
+				  'source/playground/client/world/WorldInfo.js',
+				  'source/playground/client/LightBall.js',
+				  'source/playground/client/Voice.js',
+				  'source/playground/client/hud/Hud.js',
+				  'source/playground/client/world/Background.js'
+				  
+				  //Server
+				  ]
 	};
 	
 	//Add event that load everything needed by Cocos2d.
