@@ -111,10 +111,61 @@
 				  'source/playground/client/LightBall.js',
 				  'source/playground/client/Voice.js',
 				  'source/playground/client/hud/Hud.js',
-				  'source/playground/client/world/Background.js'
+				  'source/playground/client/world/Background.js',
 				  
 				  //Server
-				  ]
+				  'source/network/Lobby.js',
+				  'source/network/GameSettings.js'
+				  'source/network/Server.js',
+				  
+				 'source/playground/server/deathzones/Jaw.js',
+				 'source/playground/server/deathzones/Missile.js',
+				 'source/playground/server/deathzones/Spike.js',
+				 
+				 'source/playground/server/listeners/Listener.js',
+				 'source/playground/server/listeners/BlockListener.js',
+				 'source/playground/server/listeners/DeathZoneListener.js',
+				 'source/playground/server/listeners/DropListener.js',
+				 'source/playground/server/listeners/GoalListener.js',
+				 'source/playground/server/listeners/GroundListener.js',
+				 'source/playground/server/listeners/NpcListener.js',
+				 'source/playground/server/listeners/TriggerListener.js',
+				 
+				 'source/playground/server/managers/Manager.js',
+				 'source/playground/server/managers/BlockManager.js',
+				 'source/playground/server/managers/DeathZoneManager.js',
+				 'source/playground/server/managers/NpcManager.js',
+				 'source/playground/server/managers/TriggerManager.js',
+				 
+				 'source/playground/server/npc/PeskyBox.js',
+				 'source/playground/server/npc/SandSpirit.js',
+				 
+				 'source/playground/server/skills/SkillInfo.js',
+				 'source/playground/server/skills/Deflector.js',
+				 'source/playground/server/skills/Eclipse.js',
+				 'source/playground/server/skills/FirePulse.js',
+				 'source/playground/server/skills/JawFall.js',
+				 'source/playground/server/skills/PeskyBox.js',
+				 'source/playground/server/skills/TimeZone.js',
+				 
+				 'source/playground/server/triggers/Deflector.js',
+				 'source/playground/server/triggers/GravityBeam.js',
+				 'source/playground/server/triggers/TimeZone.js',
+				 'source/playground/server/triggers/VenomBall.js',
+				 'source/playground/server/triggers/VenomWave.js',
+				 
+				 'source/playground/server/winnerGoal/floatingBall.js',
+				 
+				 'source/playground/server/world/elements/SpawnZone.js',
+				 'source/playground/server/world/WorldInfo.js',
+				 'source/playground/server/world/Alien.js',
+				 'source/playground/server/world/Church.js',
+				 'source/playground/server/world/Pit.js',
+				 
+				 'source/playground/server/Block.js',
+				 'source/playground/server/Game.js',
+				 'source/playground/server/Overlord.js',
+				 'source/playground/server/Player.js']
 	};
 	
 	//Add event that load everything needed by Cocos2d.
