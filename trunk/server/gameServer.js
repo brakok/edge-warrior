@@ -3609,7 +3609,7 @@ io.sockets.on(Constants.Message.CONNECTION, function (socket){
 			(function(gameId){
 				setTimeout(function(){ 
 					io.sockets.in(gameId).emit(Constants.Message.GO); 
-				}, Constants.Warmup.PHASE_TIME*1000);
+				}, Constants.Game.Phase.Warmup.PHASE_TIME*1000);
 			})(gameId);
 			
 			Server.gameList[gameId].ready = true;
