@@ -7,6 +7,13 @@ var Enum = {
 			ENDING: 3
 		}
 	},
+	Server: {
+		Phase: {
+			STAND_BY: 0,
+			LOBBY: 1,
+			IN_GAME: 2
+		}
+	},
 	Color: {
 		RED: 0,
 		BLUE: 1,

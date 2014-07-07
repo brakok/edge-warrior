@@ -9,6 +9,10 @@
 	};
 })();
 
+requirejs.config({
+    baseUrl: 'source'
+});
+
 //Cocos2d configuration and instanciation.
 var cocosApp = cc.Application.extend({
 	config:document.ccConfig,

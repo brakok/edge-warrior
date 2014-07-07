@@ -1,8 +1,5 @@
 
-cd.Server.GameSettings = function(id, width, height, maxPlayers, username){
-
-	//Assign when game is created by the server.
-	this.id = id;
+cd.Server.GameSettings = function(width, height, maxPlayers, username){
 	
 	this.players = [];
 	this.addPlayer(username, Enum.Slot.Color.UNASSIGNED);
