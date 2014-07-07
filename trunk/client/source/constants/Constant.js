@@ -1,6 +1,7 @@
 var Constants = {
 	Network: {
-		ADDRESS: 'http://crushedmaster.cloudapp.net',
+		//ADDRESS: 'http://crushedmaster.cloudapp.net',
+		ADDRESS: 'http://localhost',
 		SERVER_PORT: 1051,
 		MASTER_PORT: 1050,
 		SERVER_TO_SERVER_PORT: 1060

@@ -1,3 +1,7 @@
+var cd = {
+	Server: {}
+};
+
 (function () {
 	var doc = document;
 	
@@ -15,6 +19,7 @@
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
 				  
+				  'source/require.js',
 				  'source/Resources.js',
 				  
 				  'source/common/HtmlHelper.js',
@@ -115,7 +120,7 @@
 				  
 				  //Server
 				  'source/network/Lobby.js',
-				  'source/network/GameSettings.js'
+				  'source/network/GameSettings.js',
 				  'source/network/Server.js',
 				  
 				 'source/playground/server/deathzones/Jaw.js',

@@ -48,7 +48,7 @@ var ServerList = cc.LayerColor.extend({
 	},
 	join: function(){
 		if(this.list.selectedValue != null)
-			Client.joinLobby(this.list.selectedValue);
+			Client.joinLobby(this.list.lobbies[this.list.selectedValue].address);
 		else
 		{
 			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
@@ -60,7 +60,7 @@ var ServerList = cc.LayerColor.extend({
 		var lobby = this.list.random();
 		
 		if(lobby != null)
-			Client.joinLobby(lobby.id);
+			Client.joinLobby(lobby.address);
 		else
 		{
 			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
