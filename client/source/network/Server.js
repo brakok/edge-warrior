@@ -37,8 +37,14 @@ var Server = new function(){
 		
 		this.masterSocket = masterSocket;
 		
+		console.log(chrome.sockets);
+		
 		//Wait for client to connect.
-		var clientSockets = io.listen(Constants.Network.SERVER_PORT);
+		var clientSockets = requirejs(['lib/socket.io/lib/socket.io', 'lib/socket.io/lib/transports/http'], function(io, http){
+			srv = http.createServer(function(req, res){});
+			srv.listen(Constants.Network.SERVER_PORT);
+			return io.listen(srv);
+		}); 
 	
 		clientSockets.sockets.on(Constants.Message.CONNECTION, function (socket){
 		
