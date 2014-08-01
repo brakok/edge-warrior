@@ -18,6 +18,7 @@ var cd = {
 				  'source/constants/Constant.js',
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
+				  'source/network/P2PSocket.js',
 				  
 				  'source/require.js',
 				  'source/Resources.js',
