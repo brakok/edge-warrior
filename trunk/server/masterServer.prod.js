@@ -588,10 +588,10 @@ ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
 	
 	//Return lobby to client.
 	socket.emit(Constants.Message.SEARCH_LOBBY, function(data){
-		ioMasterClient.sockets.sockets[data.id].emit(Constants.Message.SEARCH_LOBBY, {
-			lobby: data.lobby, 
-			address: 'http://' + socket.manager.handshaken[socket.id].address.address + ':' + Constants.Network.SERVER_PORT
-		});
+	
+		data.lobby.address = 'http://' + socket.manager.handshaken[socket.id].address.address;
+	
+		ioMasterClient.sockets.sockets[data.id].emit(Constants.Message.SEARCH_LOBBY, lobby);
 	});
 	
 	//Update players' scores.
