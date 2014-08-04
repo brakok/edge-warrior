@@ -13,6 +13,7 @@ requirejs.config({
     baseUrl: 'source'
 });
 
+/*
 var s = new P2PServer(Constants.Network.SERVER_UDP_PORT,Constants.Network.UDP_PORT, Constants.Network.SERVER_TCP_PORT);
 s.register(function(socket){
 	socket.on('test', function(data){
@@ -32,6 +33,7 @@ setTimeout(function(){
 
 	
 }, 2000);
+*/
 
 //Cocos2d configuration and instanciation.
 var cocosApp = cc.Application.extend({
