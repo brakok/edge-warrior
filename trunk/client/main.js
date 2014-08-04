@@ -13,6 +13,26 @@ requirejs.config({
     baseUrl: 'source'
 });
 
+var s = new P2PServer(Constants.Network.SERVER_UDP_PORT,Constants.Network.UDP_PORT, Constants.Network.SERVER_TCP_PORT);
+s.register(function(socket){
+	socket.on('test', function(data){
+		console.log('test :');
+		console.log(data);
+	});
+});
+
+setTimeout(function(){
+	var cs  = new P2PSocket(Constants.Network.UDP_PORT);
+	cs.connect("127.0.0.1", Constants.Network.SERVER_UDP_PORT, Constants.Network.SERVER_TCP_PORT);
+	
+
+	setTimeout(function(){
+		cs.emit('test', {bonjour: 1});
+	}, 500);
+
+	
+}, 2000);
+
 //Cocos2d configuration and instanciation.
 var cocosApp = cc.Application.extend({
 	config:document.ccConfig,
