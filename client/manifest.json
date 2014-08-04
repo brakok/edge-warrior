@@ -15,9 +15,9 @@
 	"offline_enabled": false,
 	"sockets": {
 		"tcp": {
-			"connect": ":1052",
-			"send": ":1052",
-			"bind": ""
+			"connect": [":1053"],
+			"send": [":1051", ":1053"],
+			"bind": [":1051", ":1053"]
 		},
 		"udp": { 
 			"connect": ":1051",
