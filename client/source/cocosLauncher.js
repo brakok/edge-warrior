@@ -18,12 +18,15 @@ var cd = {
 				  'source/constants/Constant.js',
 				  'source/constants/Enum.js',
 				  'source/network/socket.io.js',
+				  
+				  'source/network/P2PServer.js',
 				  'source/network/P2PSocket.js',
 				  
 				  'source/require.js',
 				  'source/Resources.js',
 				  
 				  'source/common/HtmlHelper.js',
+				  'source/common/NetworkHelper.js',
 				  'source/common/Chat.js',
 				  'source/common/Util.js',
 				  'source/common/Smoothering.js',

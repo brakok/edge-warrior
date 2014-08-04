@@ -14,15 +14,18 @@
 	},	
 	"offline_enabled": false,
 	"sockets": {
-		"tcp": { 
-			"connect": [":1050", ":1051"],
-			"send": [":1050", ":1051"],
-			"bind": [":1050", ":1051"]
+		"tcp": {
+			"connect": ":1052",
+			"send": ":1052",
+			"bind": ""
 		},
 		"udp": { 
-			"connect": [":1050", ":1051"],
-			"send": [":1050", ":1051"],
-			"bind": [":1050", ":1051"]
+			"connect": ":1051",
+			"send": ":1051",
+			"bind": ":1051"
+		},
+		"tcpServer": {
+			"listen": "127.0.0.1:1052"
 		}
 	},
 	"permissions": ["storage","unlimitedStorage", "fullscreen"]
