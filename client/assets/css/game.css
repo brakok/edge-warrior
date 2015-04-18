@@ -233,8 +233,12 @@ div.lobbyList th {
 	text-align: left;
 }
 
+div.lobbyList .th_id {
+	width: 15%;
+}
+
 div.lobbyList .th_name {
-	width: 80%;
+	width: 65%;
 }
 
 div.lobbyList .th_num {
