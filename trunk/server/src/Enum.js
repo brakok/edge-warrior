@@ -1,0 +1,165 @@
+//Enums
+var Enum = {
+	Color: {
+		RED: 0,
+		BLUE: 1,
+		YELLOW: 2,
+		WHITE: 3,
+		GREEN: 4,
+		ORANGE: 5,
+		PURPLE: 6,
+		BLACK: 7
+	},
+	Slot: {
+		Color: {
+			UNASSIGNED: 0,
+			RED: 1,
+			BLUE: 2,
+			YELLOW: 3,
+			WHITE: 4
+		}
+	},
+	UserData: {
+		Type: {
+			PLAYER: 0,
+			BLOCK: 1,
+			WINNING_GOAL: 2,
+			FIREBALL: 3,
+			ENERGY_SPIKE: 4,
+			JAW: 5,
+			PESKY_BOX: 6,
+			PICK_AXE: 7,
+			DEFLECTOR: 8,
+			TIME_ZONE: 9,
+			SPAWN_ZONE: 10,
+			SAND_SPIRIT: 11,
+			GRAVITY_BEAM: 12,
+			VENOM_BALL: 13,
+			VENOM_WAVE: 14
+		}
+	},
+	Block: {
+		Type: {
+			NEUTRAL: 0,
+			COLORED: 1,
+			SPAWN: 2,
+			SKILLED: 3
+		},
+		Skill: {
+			Trigger: {
+				ON_LANDING: 0,
+				ON_LAUNCHING: 1
+			},
+			FIRE_PULSE: 0,
+			JAW_FALL: 1,
+			ECLIPSE: 2,
+			PESKY_BOX: 3,
+			DEFLECTOR: 4,
+			TIME_ZONE: 5
+		},
+		State: {
+			STATIC: 0,
+			DYNAMIC: 1
+		},
+		Destruction: {
+			COLOR_CONTACT: 0,
+			SPAWN: 1,
+			CRUSHED: 2
+		}
+	},
+	World: {
+		Type: {
+			PIT: 0,
+			CHURCH: 1,
+			ALIEN: 2
+		}
+	},
+	NPC: {
+		Action: {
+			Type: {
+				COMMON: 0
+			}
+		},
+		Type: {
+			PESKY_BOX: 0,
+			SAND_SPIRIT: 1
+		}
+	},
+	Trigger: {
+		Action: {
+			Type: {
+				COMMON: 0
+			}
+		},
+		Type: {
+			DEFLECTOR: 0,
+			TIME_ZONE: 1,
+			GRAVITY_BEAM: 2,
+			VENOM_BALL: 3,
+			VENOM_WAVE: 4
+		}
+	},
+	Element: {
+		Type: {
+			ECLIPSE: 0,
+			TELEPORT: 1,
+			CANCEL_DROP: 2
+		}
+	},
+	Collision: {
+		Type: {
+			STATIC: 0,
+			PLAYER: 1,
+			GROUND_SENSOR: 2,
+			BLOCK: 3,
+			DROP_SENSOR: 4,
+			WINNING_GOAL: 5,
+			DEATH_ZONE: 6,
+			SKILL: 7,
+			NPC: 8,
+			TRIGGER: 9,
+			SPAWN: 10
+		}
+	},
+	Facing: {
+		RIGHT:  0,
+		LEFT: 1
+	},
+	StepReached: {
+		NONE: 0,
+		STANDING: 1,
+		PLAYER: 2,
+		OVERLORD: 3
+	},
+	Direction: {
+		UP: 0,
+		LEFT: 1,
+		DOWN: 2,
+		RIGHT: 3
+	},
+	Action: {
+		Type: {
+			NONE: -1,
+			STANDING: 0,
+			RUNNING: 1,
+			JUMPING: 2,
+			FALLING: 3,
+			DOUBLE_JUMPING: 4,
+			SUMMONING: 5,
+			LANDING: 6
+		}
+	},
+	DeathZone: {
+		Type: {
+			FIREBALL: 0,
+			ENERGY_SPIKE: 1,
+			JAW: 2,
+			PICK_AXE: 3
+		}
+	},
+	WinningGoal: {
+		Type: {
+			FLOATING_BALL: 1
+		}
+	}
+};

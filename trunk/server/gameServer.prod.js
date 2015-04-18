@@ -446,8 +446,10 @@ var Constants = {
 		EMAIL: /^\S{0,}@\S{0,}[.]{1}[a-zA-Z0-9]{2,}$/
 	}
 };
+Constants.Database.ADDRESS = 'http://crusheddb.cloudapp.net';
+Constants.Network.ADDRESS = 'http://crushedmaster.cloudapp.net:1060';
 var Config = {
-	CreateCouchDbViews: true
+	CreateCouchDbViews: false
 };
 var Listeners = function(game){
 	this.currentGame = game;
@@ -3359,308 +3361,257 @@ Overlord.prototype.kill = function(killed, cause){
 	//Force player to die.
 	killed.toBeDestroy = true;
 };//Modules.var http = require('http');var chipmunk = require('chipmunk');var os = require('os');//Create server.
-var masterServer = {
-	client: null,
-	server: null
-};
-
-masterServer.client = http.createServer(function(req, res){});
-masterServer.server = http.createServer(function(req, res){});
+var server = http.createServer(function(req, res){});
 
 //Port.
-masterServer.client.listen(Constants.Network.MASTER_PORT); //localhost
-masterServer.server.listen(Constants.Network.SERVER_TO_SERVER_PORT);
+server.listen(Constants.Network.SERVER_PORT);
 
 //Remove log level or adjust it to have every log in console.
-var ioMasterClient = require('socket.io').listen(masterServer.client).set('log level', 1);
-var ioMasterServer = require('socket.io').listen(masterServer.server).set('log level', 1);
+var io = require('socket.io').listen(server).set('log level', 1);
 
-var MasterServer = new function(){
-	this.lobbies = {};
-	this.gameSequenceId = 1;
+//Server object.
+var Server = new function(){
+	this.gameList = {};
+	this.address = null;
 	
-	this.closeLobby = function(socket){
-		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.CLOSE_LOBBY, socket.userdata.gameId);
-		
-		//Disconnect all players from game room.
-		for(var i in ioMasterClient.sockets.in(socket.userdata.gameId).sockets)			
-			ioMasterClient.sockets.sockets[i].leave(socket.userdata.gameId);
-		
-		delete this.lobbies[socket.userdata.gameId];
-	};
+	var previousUserTime = 0;
+	var previousSysTime = 0;
+	var previousIdleTime = 0;
 	
-	//Search socket bound to a player currently logged in.
-	this.searchPlayer = function(username){
-	
-		for(var i in ioMasterClient.sockets.sockets)
-		{
-			var currentSocket = ioMasterClient.sockets.sockets[i];
-			
-			if(currentSocket.userdata && currentSocket.userdata.username == username)
-				return currentSocket;
-		}
-			
-		return null;
+	this.addGame = function(settings){	
+		this.gameList[settings.id] = new Game(settings);
 	};
 		
-	this.disconnectPlayer = function(socket){
-		if(socket.userdata.gameId != null)
-		{			
-			//Remove player from lobby.
-			this.lobbies[socket.userdata.gameId].settings.removePlayer(socket.userdata.username);
-			this.lobbies[socket.userdata.gameId].connectedPlayers--;
-			
-			socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.LEAVE_LOBBY, socket.userdata.username);
-			socket.leave(socket.userdata.gameId);
-		}
-	};
-	
-	//Check for game servers.
-	setInterval(function(){
+	this.register = function(){
+		var socket = require('socket.io-client').connect(Constants.Network.ADDRESS);
 
-		for(var i in ioMasterServer.sockets.sockets)
-		{
-			var serverSocket = ioMasterServer.sockets.sockets[i];
-			var timeElapsed = new Date() - serverSocket.lastPresence;
+		//Notify master server that this server is still running.
+		setInterval(function(){
+		
+			//Process cpu usage for load balacing between game servers.
+			var cpuUsage = 0;
+			var cpus = os.cpus();
+			var cpuCount = 0;
 			
-			if(timeElapsed > Constants.Network.SERVER_THRESHOLD)
+			var userTime = 0;
+			var sysTime = 0;
+			var idleTime = 0;
+			
+			for(var i in cpus)
 			{
-				console.log('Server kicked out : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
-				ioMasterServer.sockets.sockets[i].disconnect();
-			}
+				cpuCount++;
+				var cpu = cpus[i];
 				
-		}
+				userTime += cpu.times.user;
+				sysTime += cpu.times.sys;
+				idleTime += cpu.times.idle;
+			}
 			
+			userTime /= cpuCount;
+			sysTime /= cpuCount;
+			idleTime /= cpuCount;
+			
+			var tmpUserTime = userTime - previousUserTime;
+			var tmpSysTime = sysTime - previousSysTime;
+			var tmpIdleTime = idleTime - previousIdleTime;
+			
+			//Get cpu usage in percent.
+			cpuUsage = parseInt((tmpUserTime + tmpSysTime)/(tmpUserTime + tmpSysTime + tmpIdleTime)*100);
+			
+			previousUserTime = userTime;
+			previousSysTime = sysTime;
+			previousIdleTime = idleTime;
+			
+			socket.emit(Constants.Message.KEEP_SERVER_ALIVE, { cpuUsage: cpuUsage });
+			
+		}, Constants.Network.REFRESH_PRESENCE);
+				
+		//Get external ip from master server.
+		socket.on(Constants.Message.HANDSHAKE_INFO, function(data){
+			console.log('External IP : ' + data.address);
+			Server.address = data.address;
+		});
+				
+		//Lobby to game.
+		socket.on(Constants.Message.START_GAME, function(settings){
+					
+			var data = {
+				gameId: settings.id,
+				address: Server.address
+			};
+			
+			//Create game.
+			Server.addGame(settings);
+			socket.emit(Constants.Message.GAME_CREATED, data);
+		});
 		
-	}, Constants.Network.CHECK_GAME_SERVER);
+		this.socket = socket;
+	};
+	
+	//Disconnect player.
+	this.disconnectPlayer = function(socket){
+		
+		var game = this.gameList[socket.userdata.gameId];
+		var index = null;
+		
+		for(var i in game.players)
+			if(game.players[i].username == socket.userdata.username)
+			{
+				index = i;
+				break;
+			}
+			
+		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.DISCONNECT_PLAYER, socket.userdata.username);	
+		
+		if(index != null)
+		{
+			var disconnectingPlayer = this.gameList[socket.userdata.gameId].players[index]
+			disconnectingPlayer.leave();
+			io.sockets.sockets[disconnectingPlayer.id].gameId = null;
+			
+			delete this.gameList[socket.userdata.gameId].players[index];
+			
+			var hasPlayers = false;
+			
+			//Check if game has players.
+			for(var i in this.gameList[socket.userdata.gameId].players)
+				if(this.gameList[socket.userdata.gameId].players[i] != null)
+				{
+					hasPlayers = true;
+					break;
+				}
+			
+			//Remove game instance if empty.
+			if(!hasPlayers)
+			{
+				this.gameList[socket.userdata.gameId].trash();
+				delete this.gameList[socket.userdata.gameId];
+			}
+		}
+		
+		socket.leave(socket.userdata.gameId);
+	};
+	
+	this.register();
 };
 
 //Bind listeners on sockets.
-//Server to client.
-ioMasterClient.sockets.on(Constants.Message.CONNECTION, function (socket){
+io.sockets.on(Constants.Message.CONNECTION, function (socket){
 	socket.set("heartbeat interval", 20);
 	socket.set("heartbeat timeout", 60);
-
-	//Authenticate.
-	socket.on(Constants.Message.LOGIN, function(profile){
 		
-		Account.authenticate(profile, function(errors){
-			
-			var player = MasterServer.searchPlayer(profile.username);
-			
-			if(player != null)
-				errors.push('User already logged in.');
-			
-			//Set userdata.
-			if(!errors || errors.length == 0)
-				socket.userdata = {
-					username: profile.username,
-					gameId: null
-				};
-
-			socket.emit(Constants.Message.LOGIN, errors);
-		});
-	});
-	
-	//Send user stats to client.
-	socket.on(Constants.Message.REFRESH_STATS, function(username){
-
-		Account.getStats(username, function(stats){
-			socket.emit(Constants.Message.GET_STATS, stats);
-		});
-	});
-	
-	//Logout.
-	socket.on(Constants.Message.LOGOUT, function(username){
-		delete socket.userdata;	
-	});
-	
-	//Create an account.
-	socket.on(Constants.Message.CREATE_ACCOUNT, function(profile){
-			
-		Account.create(profile, function(errors){
-			socket.emit(Constants.Message.CREATE_ACCOUNT, errors);
-		});
-	});
-	
-	//Change password.
-	socket.on(Constants.Message.CHANGE_PASSWORD, function(data){
-			
-		Account.changePassword(data.profile, data.oldPassword, data.newPassword, data.confirmation, function(errors){
-			socket.emit(Constants.Message.CHANGE_PASSWORD, errors);
-		});
-	});
-	
-	//Reset password.
-	socket.on(Constants.Message.RESET_PASSWORD, function(data){
-		
-		Account.resetPassword(data.profile, data.email, function(errors){
-			socket.emit(Constants.Message.RESET_PASSWORD, errors);
-		});
-	});
-	
 	//Socket disconnected.
 	socket.on(Constants.Message.DISCONNECT, function(){
-		if(socket.userdata != null && socket.userdata.gameId != null && MasterServer.lobbies[socket.userdata.gameId] != null)
+		if(socket.userdata != null && socket.userdata.gameId != null && Server.gameList[socket.userdata.gameId] != null)
+			Server.disconnectPlayer(socket);
+	});
+		
+	//Send information about enemies to the connecting player.
+	socket.on(Constants.Message.JOIN_GAME, function(data){
+	
+		socket.join(data.gameId);
+		
+		socket.userdata = {
+			gameId: data.gameId,
+			username: data.username
+		};
+		
+		var players = [];
+		
+		for(var i in Server.gameList[data.gameId].players)
 		{
-			if(MasterServer.lobbies[socket.userdata.gameId].hostId == socket.id)
-				MasterServer.closeLobby(socket);
-			else
-				MasterServer.disconnectPlayer(socket);
-		}
-	});
-	
-	//Return lobbies to client.
-	socket.on(Constants.Message.SEARCH_LOBBY, function(){
-	
-		var lobbies = [];
-		
-		for(var i in MasterServer.lobbies)
-			if(MasterServer.lobbies[i] != null)
-				lobbies.push(MasterServer.lobbies[i].toClient());
-	
-		socket.emit(Constants.Message.SEARCH_LOBBY, lobbies);
-	});
-	
-	//Send game id to player.
-	socket.on(Constants.Message.CREATE_LOBBY, function(username){
-		console.log('Lobby created (' + MasterServer.gameSequenceId + ') : ' + username);
-		MasterServer.lobbies[MasterServer.gameSequenceId] = new Lobby(MasterServer.gameSequenceId, socket.id, username);
-		
-		socket.emit(Constants.Message.CREATE_LOBBY, MasterServer.gameSequenceId);
-		socket.join(MasterServer.gameSequenceId);
-		
-		//Set game id into socket userdata.
-		socket.userdata.gameId = MasterServer.gameSequenceId;
-		
-		MasterServer.gameSequenceId++;
-	});
-	
-	//Join a lobby.
-	socket.on(Constants.Message.JOIN_LOBBY, function(data){
-		
-		//If lobby no more exists, prevent from joining.
-		if(MasterServer.lobbies[data.gameId] == null)
-		{
-			socket.emit(Constants.Message.ERROR, Constants.ErrorMessage.INVALID_LOBBY);
-			return;
+			var enemy = Server.gameList[data.gameId].players[i].toClient();
+			enemy.username = Server.gameList[data.gameId].players[i].username;
+			players.push(enemy);
 		}
 		
-		if(MasterServer.lobbies[data.gameId].connectedPlayers < Constants.Game.MAX_PLAYERS)
-		{
-			MasterServer.lobbies[data.gameId].connectedPlayers++;
-			MasterServer.lobbies[data.gameId].settings.addPlayer(data.username, Enum.Slot.Color.UNASSIGNED);
-			
-			ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.JOIN_LOBBY, data.username);
-						
-			var returnData = {
-				gameId: data.gameId,
-				name: MasterServer.lobbies[data.gameId].name,
-				players: MasterServer.lobbies[data.gameId].settings.players
+		var color = null;
+		for(var i in Server.gameList[data.gameId].playerInfos)
+			if(Server.gameList[data.gameId].playerInfos[i].username == data.username)
+				color = Server.gameList[data.gameId].playerInfos[i].color-1;
+		
+		//Create connecting player.
+		var player = new Player(socket.id, 
+								data.username,
+								Server.gameList[data.gameId].world.width*0.2*(Server.gameList[data.gameId].connectingPlayers+1), 
+								Server.gameList[data.gameId].spawnY, 
+								color,
+								Server.gameList[data.gameId]);
+		
+		var playerToClient = player.toClient();
+		playerToClient.username = data.username;
+		
+		//Send last player connected.
+		players.push(playerToClient);
+		
+		//Value initiating a player.
+		var initData = {
+			players: players
+		};
+		
+		Server.gameList[data.gameId].players[socket.id] = player;
+		Server.gameList[data.gameId].connectingPlayers++;
+
+		//Start initiation.
+		if(Server.gameList[data.gameId].connectingPlayers == Server.gameList[data.gameId].maxPlayers)
+			io.sockets.in(data.gameId).emit(Constants.Message.INIT, initData);
+	});
+	
+	//Disconnect player.
+	socket.on(Constants.Message.DISCONNECT_PLAYER, function(){
+		Server.disconnectPlayer(socket);
+	});
+
+	//When player ready, refresh information of his opponents about his existence.
+	socket.on(Constants.Message.PLAYER_READY, function(){
+		var gameId = socket.userdata.gameId;
+				
+		Server.gameList[gameId].connectedPlayers++;		
+		
+		var player = Server.gameList[gameId].players[socket.id].toClient();
+		player.username = Server.gameList[gameId].players[socket.id].username;
+				
+		if(Server.gameList[gameId].connectedPlayers == Server.gameList[gameId].maxPlayers)
+		{			
+			//Init physic world.
+			Server.gameList[gameId].createWorld();
+			Server.gameList[gameId].launch();
+		
+			var data = {
+				goal: Server.gameList[gameId].goal.toClient(),
+				width: Server.gameList[gameId].world.width,
+				height: Server.gameList[gameId].world.height,
+				worldType: Server.gameList[gameId].world.type
 			};
 			
-			//Join the room.
-			socket.join(data.gameId);
-			socket.userdata.gameId = data.gameId;
+			data.goal.type = Server.gameList[gameId].goal.type;
+			io.sockets.in(gameId).emit(Constants.Message.LAUNCH, data);
 			
-			socket.emit(Constants.Message.CONNECTED_LOBBY, returnData);
+			//Launch warmup!
+			(function(gameId){
+				setTimeout(function(){ 
+					io.sockets.in(gameId).emit(Constants.Message.GO); 
+				}, Constants.Warmup.PHASE_TIME*1000);
+			})(gameId);
+			
+			Server.gameList[gameId].ready = true;
 		}
-		else
-			socket.emit(Constants.Message.ERROR, Constants.ErrorMessage.INVALID_LOBBY);
 	});
 	
-	//Chat.
-	socket.on(Constants.Message.CHAT, function(data){
-		ioMasterClient.sockets.in(socket.userdata.gameId).emit(Constants.Message.CHAT, data);
+	socket.on(Constants.Message.NEXT_BLOCK, function(command){
+		//Do not override if server has given a special block to player (as a Spawn Block).
+		if(!Server.gameList[socket.userdata.gameId].players[socket.id].hasGivenBlock)
+			Server.gameList[socket.userdata.gameId].players[socket.id].currentBlock = command;
 	});
 	
-	//Disconnect from lobby.
-	socket.on(Constants.Message.LEAVE_LOBBY, function(){
-		MasterServer.disconnectPlayer(socket);
-	});
-	
-	//Close lobby.
-	socket.on(Constants.Message.CLOSE_LOBBY, function() {
-		MasterServer.closeLobby(socket);
-	});
-	
-	//When player updates his slot info.
-	socket.on(Constants.Message.UPDATE_SLOT, function(data){
-		MasterServer.lobbies[socket.userdata.gameId].settings.updatePlayer(socket.userdata.username, data.color, data.ready);
-		
-		data.username = socket.userdata.username;
-		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.UPDATE_SLOT, data);
-	});
-	
-	//Update lobby informations.
-	socket.on(Constants.Message.UPDATE_LOBBY, function(data){
-		var lobby = MasterServer.lobbies[socket.userdata.gameId];
-		lobby.update(data);
-		
-		socket.broadcast.to(socket.userdata.gameId).emit(Constants.Message.UPDATE_LOBBY, data);
-	});
-	
-	//Lobby to game.
-	socket.on(Constants.Message.START_GAME, function(gameSettings){
-		
-		//Tweaks some informations.
-		MasterServer.lobbies[socket.userdata.gameId].settings.maxPlayers = MasterServer.lobbies[socket.userdata.gameId].connectedPlayers;
-		MasterServer.lobbies[socket.userdata.gameId].settings.validateColors();	
-		MasterServer.lobbies[socket.userdata.gameId].settings.update(gameSettings);
-		
-		if(ioMasterServer.sockets.clients().length > 0)
-		{
-			var lowestPercent = 110;
-			var serverSocket = null;
-
-			//Find socket with lowest cpu usage.
-			for(var i in ioMasterServer.sockets.sockets)
-				if(ioMasterServer.sockets.sockets[i].cpuUsage < lowestPercent)
-				{
-					lowestPercent = ioMasterServer.sockets.sockets[i].cpuUsage;
-					serverSocket = ioMasterServer.sockets.sockets[i];
-				}
-								
-			//Ask specified server to create a game.
-			if(serverSocket != null)
-			{
-				console.log('Server found : ' + serverSocket.manager.handshaken[serverSocket.id].address.address);
-				serverSocket.emit(Constants.Message.START_GAME, MasterServer.lobbies[socket.userdata.gameId].settings);
-			}
-			else
-				console.log('No server found');
-		}
-		else
-			console.log('No server found');
+	//Retrieving information from players.
+	socket.on(Constants.Message.PUSH, function(inputs){
+		if(socket.userdata.gameId != null)
+			Server.gameList[socket.userdata.gameId].push(inputs, socket.id);
 	});
 });
 
-//Server to server.
-ioMasterServer.sockets.on(Constants.Message.CONNECTION, function (socket){
-	
-	console.log('Server connected : ' + socket.manager.handshaken[socket.id].address.address);
-	
-	//Send external ip address to game server.
-	socket.emit(Constants.Message.HANDSHAKE_INFO, { address: socket.manager.handshaken[socket.id].address.address });
-	
-	socket.lastPresence = new Date();
-	
-	//Get pinged from game server.
-	socket.on(Constants.Message.KEEP_SERVER_ALIVE, function(data){
-		socket.lastPresence = new Date();
-		socket.cpuUsage = data.cpuUsage;
-	});
-	
-	//Send to client ip address for their game server.
-	socket.on(Constants.Message.GAME_CREATED, function(data){
-		console.log('Game created : ' + data.gameId);
-		
-		delete MasterServer.lobbies[data.gameId];
-		ioMasterClient.sockets.in(data.gameId).emit(Constants.Message.GAME_CREATED, 'http://' + data.address + ':' + Constants.Network.SERVER_PORT);
-	});
-});
-
-console.log('Master server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED * this.y,		direction: Enum.Direction.UP,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.x, 																  0, 																  Constants.DeathZone.EnergySpike.WIDTH, 																  this.y, 																  this.currentGame.winner,																  Enum.DeathZone.Type.ENERGY_SPIKE,																  this.spikeStats, 																  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.world.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.world.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
+console.log('Server created');var FloatingBall = function(x, y, game){		this.currentGame = game;	this.x = x;	this.y = y;		this.velocity = 0;	this.orbitTime = 0;		this.cooldown = 0;	this.stuckTime = 0;		this.jumpPressed = false;		this.type = Enum.WinningGoal.Type.FLOATING_BALL;		this.spikeStats = {		speed: Constants.DeathZone.EnergySpike.SPEED * this.y,		direction: Enum.Direction.UP,		distance: this.y	};		//Make a static body.	this.body = new chipmunk.Body(Infinity, Infinity);	this.body.setPos(new chipmunk.Vect(this.x, this.y));		//Assign custom data to body.	this.body.userdata = {		type: Enum.UserData.Type.WINNING_GOAL,		object: this	};		//Create a shape associated with the body.	this.shape = this.currentGame.space.addShape(chipmunk.BoxShape(this.body, Constants.WinningGoal.FloatingBall.WIDTH, Constants.WinningGoal.FloatingBall.HEIGHT));	this.shape.setCollisionType(Enum.Collision.Type.WINNING_GOAL);	this.shape.sensor = true;};FloatingBall.prototype.update = function(inputs){		if(this.stuckTime <= 0)	{		var nextX = 0;				if(inputs.right)			nextX += Constants.WinningGoal.FloatingBall.SPEED;		if(inputs.left)			nextX -= Constants.WinningGoal.FloatingBall.SPEED;					if(nextX != 0)		{			//Turn.			if((nextX > 0 && this.velocity < 0) ||(nextX < 0 && this.velocity > 0))				this.velocity *= Constants.WinningGoal.FloatingBall.TURN_FRICTION_FACTOR;							this.velocity += nextX;		}		else		{			if(this.velocity != 0)			{				//Artificial friction.				if(Math.abs(this.velocity) < Constants.WinningGoal.FloatingBall.SPEED*0.25)					this.velocity = 0;				else					this.velocity *= Constants.WinningGoal.FloatingBall.FRICTION_FACTOR;			}		}	}		//Trigger action on jump command.	if(inputs.jump && this.cooldown <= 0 && !this.jumpPressed)	{		this.launch();		this.cooldown = Constants.DeathZone.EnergySpike.COOLDOWN;		this.jumpPressed = true;	}	if(!inputs.jump && this.jumpPressed)		this.jumpPressed = false;			if(this.cooldown > 0)		this.cooldown -= this.currentGame.dt;		if(this.stuckTime > 0)		this.stuckTime -= this.currentGame.dt;		//Velocity can't be higher than max speed.	if(this.velocity < -(Constants.WinningGoal.FloatingBall.MAX_SPEED))		this.velocity = -(Constants.WinningGoal.FloatingBall.MAX_SPEED);	if(this.velocity > Constants.WinningGoal.FloatingBall.MAX_SPEED)		this.velocity = Constants.WinningGoal.FloatingBall.MAX_SPEED;		//Calculate ball's orbit.	this.orbitTime += Constants.WinningGoal.FloatingBall.ORBIT_SPEED;	var nextY = Math.sin(this.orbitTime)*Constants.WinningGoal.FloatingBall.ORBIT_RADIUS;		if(this.orbitTime >= 360)		this.orbitTime = 0;		this.translate(this.velocity, nextY);};FloatingBall.prototype.launch = function(){	this.currentGame.managers.DeathZoneManager.launch(new Spike(this.x, 																  0, 																  Constants.DeathZone.EnergySpike.WIDTH, 																  this.y, 																  this.currentGame.winner,																  Enum.DeathZone.Type.ENERGY_SPIKE,																  this.spikeStats, 																  this.currentGame));		//Resets velocity and immobilizes the curse ball for a moment.	this.velocity = 0;	this.stuckTime = Constants.WinningGoal.FloatingBall.STUCK_TIME;		io.sockets.in(this.currentGame.id).emit(Constants.Message.GOAL_ACTION, Enum.Action.Type.SUMMONING);};FloatingBall.prototype.translate = function(velX, velY) {	this.x += velX;	var tmpY = this.y + velY;		if(this.x > this.currentGame.world.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = this.currentGame.world.width - Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}	else if(this.x < Constants.WinningGoal.FloatingBall.WIDTH*0.5)	{		this.x = Constants.WinningGoal.FloatingBall.WIDTH*0.5;		this.velocity = 0;	}			this.body.setPos(new chipmunk.Vect(this.x, tmpY));};FloatingBall.prototype.getPosition = function(){	return this.body.getPos();};FloatingBall.prototype.toClient = function(){	return {		x: this.getPosition().x,		y: this.getPosition().y	};};
 var Missile = function(owner, blockId, type, x, y, velX, velY, distance, width, height, game){
 	
 	this.currentGame = game;
