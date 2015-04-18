@@ -17,7 +17,9 @@ var Client = new function(){
 	//Members.
 	this.keys = {};
 	this.pressedKeys = {};
-
+	
+	//Connected game id.
+	this.currentGameId = null;
 	this.isHost = false;
 		
 	this.init = function(data){
@@ -154,9 +156,7 @@ var Client = new function(){
 		
 	//Create a lobby.
 	this.createLobby = function(){
-		Server.connect();
-		this.connect('http://localhost:' + Constants.Network.SERVER_PORT);
-		this.socket.emit(Constants.Message.CREATE_LOBBY, this.username);
+		this.masterSocket.emit(Constants.Message.CREATE_LOBBY, this.username);
 	};
 	
 	//Close lobby.
@@ -164,11 +164,13 @@ var Client = new function(){
 	
 		if(this.isHost)
 		{
-			this.socket.emit(Constants.Message.CLOSE_LOBBY);
+			this.masterSocket.emit(Constants.Message.CLOSE_LOBBY);
 			this.isHost = false;
 		}
 		else
-			this.socket.emit(Constants.Message.LEAVE_LOBBY);
+			this.masterSocket.emit(Constants.Message.LEAVE_LOBBY);	
+		
+		this.currentGameId = null;
 	};
 	
 	//Disconnect from a game.
@@ -181,11 +183,12 @@ var Client = new function(){
 	};
 	
 	//Join a lobby.
-	this.joinLobby = function(address){
-		this.connect(address);
-		this.socket.emit(Constants.Message.JOIN_LOBBY, {
-			username: this.username
-		});
+	this.joinLobby = function(gameId){
+		this.masterSocket.emit(Constants.Message.JOIN_LOBBY, {
+																gameId: gameId,
+																username: this.username
+															});
+		this.currentGameId = gameId;
 	};
 	
 	//Join a game.
@@ -195,18 +198,17 @@ var Client = new function(){
 	
 	//Start game.
 	this.startGame = function(settings){
-		this.socket.emit(Constants.Message.START_GAME, settings);
+		this.masterSocket.emit(Constants.Message.START_GAME, settings);
 	};
 	
 	//Search lobbies.
 	this.search = function(){
-		MenuScreens.serverList.list.lobbies.clear();
 		this.masterSocket.emit(Constants.Message.SEARCH_LOBBY);
 	};	
 	
 	//Send message for chat.
 	this.sendMessage = function(value){
-		this.socket.emit(Constants.Message.CHAT, {
+		this.masterSocket.emit(Constants.Message.CHAT, {
 			username: this.username,
 			value: value
 		});
@@ -219,7 +221,15 @@ var Client = new function(){
 			'force new connection': true
 		};
 		
-		var masterSocket = io.connect(Constants.Network.ADDRESS + ':' + Constants.Network.MASTER_PORT, socketOptions);
+		var masterSocket = io.connect(Constants.Network.ADDRESS, socketOptions);
+		
+		//Chat.
+		masterSocket.on(Constants.Message.CHAT, function(data){
+			Chat.addLine(data.username, data.value);
+			
+			if(Client.game != null)
+				Chat.poke();
+		});
 		
 		//Result from account creation.
 		masterSocket.on(Constants.Message.CREATE_ACCOUNT, function(errors){
@@ -240,12 +250,26 @@ var Client = new function(){
 		masterSocket.on(Constants.Message.RESET_PASSWORD, function(errors){
 			MenuScreens.resetPassword.result(errors);
 		});
-				
+		
+		//Create lobby and receive game id.
+		masterSocket.on(Constants.Message.CREATE_LOBBY, function(gameId){
+			console.log('Lobby created');
+			Client.currentGameId = gameId;
+			Client.isHost = true;
+			
+			MenuScreens.lobbyScreen.addSlot(Client.username, Enum.Slot.Color.UNASSIGNED, false);
+			MenuScreens.lobbyScreen.update({name: 'Lobby of ' + Client.username });
+			
+			//Set current lobby online when ID received.
+			MenuScreens.lobbyScreen.setOnline();
+		});
+		
 		//Show error message sent by server.
 		masterSocket.on(Constants.Message.ERROR, function(msg){
 			HtmlHelper.showError(msg);
 			
 			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
+			Client.currentGameId = null;
 		});
 		
 		//Set new stats gained from server.
@@ -261,14 +285,78 @@ var Client = new function(){
 			}
 		});
 		
+		masterSocket.on(Constants.Message.UPDATE_LOBBY, function(data){
+			MenuScreens.lobbyScreen.update(data);
+		});
 		
+		//Join game when game is created.
+		masterSocket.on(Constants.Message.GAME_CREATED, function(ipAddress){
+			console.log('Game created');
+			
+			//Change to game scene.
+			cc.Director.getInstance().replaceScene(myApp.GameScene);
+			
+			Client.connect(ipAddress);
+			
+			var data = {
+				gameId: Client.currentGameId, 
+				username: Client.username
+			 };
+			
+			console.log('Joining... ' + Client.currentGameId);
+			Client.joinGame(data);
+		});
 		
 		//Get lobbies' list.
-		masterSocket.on(Constants.Message.SEARCH_LOBBY, function(data){
-			MenuScreens.serverList.list.lobbies.addLine(data.lobby);
+		masterSocket.on(Constants.Message.SEARCH_LOBBY, function(lobbies){
+			MenuScreens.serverList.list.lobbies = lobbies;
+			MenuScreens.serverList.list.refresh();
 		});
-
 		
+		//Add user to lobby.
+		masterSocket.on(Constants.Message.JOIN_LOBBY, function(username){
+			console.log('Lobby joined');
+			MenuScreens.lobbyScreen.addSlot(username, Enum.Slot.Color.UNASSIGNED, false);
+		});
+		
+		//When correctly connected to lobby.
+		masterSocket.on(Constants.Message.CONNECTED_LOBBY, function(data){
+			console.log('Connected to lobby');
+			
+			for(var i in data.players)
+				MenuScreens.lobbyScreen.addSlot(data.players[i].username, data.players[i].color, data.players[i].ready);
+				
+			MenuScreens.lobbyScreen.update({ name: data.name });
+			MenuScreens.switchTo(MenuScreens.lobbyScreen);
+			
+			Client.currentGameId = data.gameId;
+			MenuScreens.lobbyScreen.setOnline();
+		});
+		
+		//Player leaving...
+		masterSocket.on(Constants.Message.LEAVE_LOBBY, function(username){
+			MenuScreens.lobbyScreen.removeSlot(username);
+		});
+		
+		//Update slot's informations from server.
+		masterSocket.on(Constants.Message.UPDATE_SLOT, function(data){
+			var slot = MenuScreens.lobbyScreen.getSlot(data.username);
+			
+			if(slot != null)
+				slot.fromServer(data);
+		});
+		
+		//When lobby is closing...
+		masterSocket.on(Constants.Message.CLOSE_LOBBY, function(gameId){
+			console.log('Lobby closed (' + gameId + ')');
+			if(Client.currentGameId == gameId)
+			{
+				Client.currentGameId = null;
+				Client.isHost = false;
+				
+				MenuScreens.switchTo(MenuScreens.mainMenu);
+			}
+		});
 		
 		this.masterSocket = masterSocket;
 	};	
@@ -291,70 +379,6 @@ var Client = new function(){
 			socket.emit(Constants.Message.PLAYER_READY);
 		});
 		
-		//Chat.
-		socket.on(Constants.Message.CHAT, function(data){
-			Chat.addLine(data.username, data.value);
-			
-			if(Client.game != null)
-				Chat.poke();
-		});
-		
-		//Show error message sent by server.
-		socket.on(Constants.Message.ERROR, function(msg){
-			HtmlHelper.showError(msg);
-			AudioManager.playEffect(Constants.Menu.ACTION_EFFECT);
-		});
-		
-		//Create lobby and receive game id.
-		socket.on(Constants.Message.CREATE_LOBBY, function(){
-			console.log('Lobby created');
-			Client.isHost = true;
-			
-			MenuScreens.lobbyScreen.addSlot(Client.username, Enum.Slot.Color.UNASSIGNED, false);
-			MenuScreens.lobbyScreen.update({name: 'Lobby of ' + Client.username });
-			
-			//Set current lobby online when ID received.
-			MenuScreens.lobbyScreen.setOnline();
-		});
-		
-		socket.on(Constants.Message.UPDATE_LOBBY, function(data){
-			MenuScreens.lobbyScreen.update(data);
-		});
-		
-		//Add user to lobby.
-		socket.on(Constants.Message.JOIN_LOBBY, function(username){
-			console.log('Lobby joined');
-			MenuScreens.lobbyScreen.addSlot(username, Enum.Slot.Color.UNASSIGNED, false);
-		});
-		
-		//When correctly connected to lobby.
-		socket.on(Constants.Message.CONNECTED_LOBBY, function(data){
-			console.log('Connected to lobby');
-			
-			for(var i in data.players)
-				MenuScreens.lobbyScreen.addSlot(data.players[i].username, data.players[i].color, data.players[i].ready);
-				
-			MenuScreens.lobbyScreen.update({ name: data.name });
-			MenuScreens.switchTo(MenuScreens.lobbyScreen);
-
-			MenuScreens.lobbyScreen.setOnline();
-		});
-		
-		//Join game when game is created.
-		socket.on(Constants.Message.GAME_CREATED, function(){
-			console.log('Game created');
-			
-			//Change to game scene.
-			cc.Director.getInstance().replaceScene(myApp.GameScene);
-			
-			var data = {
-				username: Client.username
-			 };
-			
-			console.log('Joining... ');
-			Client.joinGame(data);
-		});
-		
 		//Incoming enemy.
 		socket.on(Constants.Message.NEW_PLAYER, function(data){
 			console.log('New player...');
@@ -365,27 +389,6 @@ var Client = new function(){
 												   data.color,
 												   false,
 												   data.username));
-		});
-		
-		//Player leaving...
-		socket.on(Constants.Message.LEAVE_LOBBY, function(username){
-			MenuScreens.lobbyScreen.removeSlot(username);
-		});
-		
-		//Update slot's informations from server.
-		socket.on(Constants.Message.UPDATE_SLOT, function(data){
-			var slot = MenuScreens.lobbyScreen.getSlot(data.username);
-			
-			if(slot != null)
-				slot.fromServer(data);
-		});
-		
-		//When lobby is closing...
-		socket.on(Constants.Message.CLOSE_LOBBY, function(){
-			console.log('Lobby closed');
-
-			Client.isHost = false;
-			MenuScreens.switchTo(MenuScreens.mainMenu);
 		});
 		
 		//Disconnecting player.

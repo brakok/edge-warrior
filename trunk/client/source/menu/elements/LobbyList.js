@@ -32,9 +32,11 @@ LobbyList.prototype.setVisible = function(isVisible){
 
 LobbyList.prototype.addLine = function(lobby){
 	var row = this.table.insertRow(this.table.rows.length);
-	var tdName = row.insertCell(0);
-	var tdPlayers = row.insertCell(1);
+	var tdId = row.insertCell(0)
+	var tdName = row.insertCell(1);
+	var tdPlayers = row.insertCell(2);
 	
+	tdId.innerHTML = '<span>' + lobby.id + '</span>';
 	tdName.innerHTML = '<span>' + lobby.name + '</span>';
 	tdPlayers.innerHTML = '<span>' + lobby.connectedPlayers + '/' + lobby.maxPlayers + '</span>';
 	
@@ -44,13 +46,13 @@ LobbyList.prototype.addLine = function(lobby){
 	//Add onclick event.
 	(function(list, row, lobby){
 		var rowIndex = list.table.rows.length - 1;
-		row.onclick = function() { list.selectLobby(rowIndex); };
+		row.onclick = function() { list.selectLobby(lobby.id, rowIndex); };
 	})(this, row, lobby);	
 };
 
 //Select lobby.
-LobbyList.prototype.selectLobby = function(rowIndex){
-	this.selectedValue = rowIndex;
+LobbyList.prototype.selectLobby = function(lobbyId, rowIndex){
+	this.selectedValue = lobbyId;
 	
 	//Join selected lobby.
 	if(this.firstClickTimespan != null && new Date() - this.firstClickTimespan < Constants.Mouse.DOUBLE_CLICK_THRESHOLD)
@@ -75,7 +77,7 @@ LobbyList.prototype.random = function(){
 	var lobby = null;
 	
 	if(this.lobbies != null && this.lobbies.length > 0)
-		lobby = this.lobbies[Math.floor(this.lobbies.length*Math.random())];
+		lobby = this.lobbies[Math.round((this.lobbies.length-1)*Math.random())];
 			
 	return lobby;
 };
@@ -86,4 +88,14 @@ LobbyList.prototype.clear = function(){
 	var end = this.table.rows.length;
 	for(var i = 1; i < end; i++)
 		this.table.deleteRow(1);
+};
+
+//Refresh lobbies list.
+LobbyList.prototype.refresh = function(){
+
+	this.clear();
+
+	for(var i in this.lobbies)
+		if(this.lobbies[i] != null)
+			this.addLine(this.lobbies[i]);
 };

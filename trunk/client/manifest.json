@@ -13,20 +13,5 @@
 		}
 	},	
 	"offline_enabled": false,
-	"sockets": {
-		"tcp": {
-			"connect": [":1053"],
-			"send": [":1051", ":1053"],
-			"bind": [":1051", ":1053"]
-		},
-		"udp": { 
-			"connect": ":1051",
-			"send": ":1051",
-			"bind": ":1051"
-		},
-		"tcpServer": {
-			"listen": "127.0.0.1:1052"
-		}
-	},
 	"permissions": ["storage","unlimitedStorage", "fullscreen"]
 }
